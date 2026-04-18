@@ -1,7 +1,7 @@
 # Wireframe — Onboarding
 
 > **Route:** `/welcome`, `/welcome/:step`
-> **Spec ref:** `05-web-app/onboarding.md`
+> **Spec ref:** `05-web-app/04-onboarding.md`
 
 Five steps; user can skip individual steps but completion is tracked for the activation funnel.
 
@@ -53,7 +53,7 @@ No "Back" button on step 1.
 
 ## 3. Step 2 — Install browser extension
 
-> **v1 (Chrome-only):** Render only the Chrome card. The Edge / Firefox cards shown in the Phase 4 layout below are postponed — **do not render in v1**. See `00-overview/browser-scope.md`.
+> **v1 (Chrome-only):** Render only the Chrome card. The Edge / Firefox cards shown in the Phase 4 layout below are postponed — **do not render in v1**. See `00-overview/05-browser-scope.md`.
 
 ### v1 layout (Chrome only)
 

@@ -6,43 +6,43 @@ This folder is the **single source of truth** for both the extension (`04-extens
 
 ## Reading order
 
-1. `design-tokens.md` — colors (HSL), typography, spacing, radius, shadow, motion.
-2. `theming.md` — light/dark/system, org accent, custom branding for shared views.
-3. `component-library.md` — shadcn baseline + custom components inventory.
-4. `layout-grid.md` — breakpoints, container widths, gutters, density modes.
-5. `iconography.md` — icon set, sizing, semantic mapping.
-6. `illustration.md` — empty states, error pages, onboarding art style.
-7. `motion.md` — animation tokens, easings, durations, reduced-motion rules.
-8. `keyboard-input.md` — global keymap, focus order, key conflicts.
-9. `drag-and-drop.md` — DnD grammar (cards, sidebar tree, file uploads).
-10. `forms.md` — form patterns, validation, autosave, dirty-state UX.
-11. `feedback.md` — toasts, banners, modals, confirms, error surfaces.
-12. `empty-error-loading.md` — three-state guarantee for every async surface.
-13. `navigation-patterns.md` — breadcrumbs, tabs, command palette, back-stack.
-14. `copy-voice.md` — tone, terminology, microcopy patterns, error wording.
-15. `data-density.md` — Comfortable / Cozy / Compact density across surfaces.
-16. `print-stylesheet.md` — printable Collection / Item / Share viewer.
+1. `01-design-tokens.md` — colors (HSL), typography, spacing, radius, shadow, motion.
+2. `02-theming.md` — light/dark/system, org accent, custom branding for shared views.
+3. `03-component-library.md` — shadcn baseline + custom components inventory.
+4. `04-layout-grid.md` — breakpoints, container widths, gutters, density modes.
+5. `05-iconography.md` — icon set, sizing, semantic mapping.
+6. `06-illustration.md` — empty states, error pages, onboarding art style.
+7. `07-motion.md` — animation tokens, easings, durations, reduced-motion rules.
+8. `08-keyboard-input.md` — global keymap, focus order, key conflicts.
+9. `09-drag-and-drop.md` — DnD grammar (cards, sidebar tree, file uploads).
+10. `10-forms.md` — form patterns, validation, autosave, dirty-state UX.
+11. `11-feedback.md` — toasts, banners, modals, confirms, error surfaces.
+12. `12-empty-error-loading.md` — three-state guarantee for every async surface.
+13. `13-navigation-patterns.md` — breadcrumbs, tabs, command palette, back-stack.
+14. `14-copy-voice.md` — tone, terminology, microcopy patterns, error wording.
+15. `15-data-density.md` — Comfortable / Cozy / Compact density across surfaces.
+16. `16-print-stylesheet.md` — printable Collection / Item / Share viewer.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `design-tokens.md` | All design primitives |
-| `theming.md` | Theme system |
-| `component-library.md` | Component inventory + variants |
-| `layout-grid.md` | Responsive scaffolding |
-| `iconography.md` | Icons |
-| `illustration.md` | Hand-drawn assets |
-| `motion.md` | Animation system |
-| `keyboard-input.md` | Keyboard UX |
-| `drag-and-drop.md` | DnD UX |
-| `forms.md` | Form UX |
-| `feedback.md` | Toasts/banners/modals |
-| `empty-error-loading.md` | Three-state guarantee |
-| `navigation-patterns.md` | Nav primitives |
-| `copy-voice.md` | Voice & tone |
-| `data-density.md` | Density modes |
-| `print-stylesheet.md` | Print CSS |
+| `01-design-tokens.md` | All design primitives |
+| `02-theming.md` | Theme system |
+| `03-component-library.md` | Component inventory + variants |
+| `04-layout-grid.md` | Responsive scaffolding |
+| `05-iconography.md` | Icons |
+| `06-illustration.md` | Hand-drawn assets |
+| `07-motion.md` | Animation system |
+| `08-keyboard-input.md` | Keyboard UX |
+| `09-drag-and-drop.md` | DnD UX |
+| `10-forms.md` | Form UX |
+| `11-feedback.md` | Toasts/banners/modals |
+| `12-empty-error-loading.md` | Three-state guarantee |
+| `13-navigation-patterns.md` | Nav primitives |
+| `14-copy-voice.md` | Voice & tone |
+| `15-data-density.md` | Density modes |
+| `16-print-stylesheet.md` | Print CSS |
 
 ## Locked rules
 

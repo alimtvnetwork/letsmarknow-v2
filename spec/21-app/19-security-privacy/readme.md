@@ -4,21 +4,21 @@ Threat model, data handling, encryption, GDPR/CCPA compliance, share-link securi
 
 ## Reading order
 
-1. `threat-model.md` — STRIDE analysis + adversaries.
-2. `data-handling.md` — Classification, retention, residency.
-3. `encryption.md` — At-rest and in-transit.
-4. `gdpr-ccpa.md` — Compliance posture.
-5. `share-link-security.md` — Public/password/invite-only specifics.
+1. `01-threat-model.md` — STRIDE analysis + adversaries.
+2. `02-data-handling.md` — Classification, retention, residency.
+3. `03-encryption.md` — At-rest and in-transit.
+4. `04-gdpr-ccpa.md` — Compliance posture.
+5. `05-share-link-security.md` — Public/password/invite-only specifics.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `threat-model.md` | Adversaries, attack surfaces, mitigations |
-| `data-handling.md` | Data classification + lifecycle |
-| `encryption.md` | Crypto choices |
-| `gdpr-ccpa.md` | Legal compliance posture |
-| `share-link-security.md` | Share-specific threats |
+| `01-threat-model.md` | Adversaries, attack surfaces, mitigations |
+| `02-data-handling.md` | Data classification + lifecycle |
+| `03-encryption.md` | Crypto choices |
+| `04-gdpr-ccpa.md` | Legal compliance posture |
+| `05-share-link-security.md` | Share-specific threats |
 
 ## Locked rules
 

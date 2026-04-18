@@ -4,21 +4,21 @@ Phased delivery plan from MVP to future. Each phase is shippable, valuable on it
 
 ## Reading order
 
-1. `phase-0-mvp.md` — minimum lovable product.
-2. `phase-1-v1.md` — public launch baseline.
-3. `phase-2-collab.md` — sharing + multiplayer.
-4. `phase-3-mindmap-ai.md` — visualization + intelligence.
-5. `phase-4-cross-browser.md` — Firefox / Safari / Edge parity, mobile.
+1. `01-phase-0-mvp.md` — minimum lovable product.
+2. `02-phase-1-v1.md` — public launch baseline.
+3. `03-phase-2-collab.md` — sharing + multiplayer.
+4. `04-phase-3-mindmap-ai.md` — visualization + intelligence.
+5. `05-phase-4-cross-browser.md` — Firefox / Safari / Edge parity, mobile.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `phase-0-mvp.md` | Internal alpha |
-| `phase-1-v1.md` | Public v1 |
-| `phase-2-collab.md` | Team plan launch |
-| `phase-3-mindmap-ai.md` | Mind-map + AI features |
-| `phase-4-cross-browser.md` | Multi-browser + mobile |
+| `01-phase-0-mvp.md` | Internal alpha |
+| `02-phase-1-v1.md` | Public v1 |
+| `03-phase-2-collab.md` | Team plan launch |
+| `04-phase-3-mindmap-ai.md` | Mind-map + AI features |
+| `05-phase-4-cross-browser.md` | Multi-browser + mobile |
 
 ## Locked rules
 

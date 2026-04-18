@@ -4,36 +4,36 @@
 
 ## Reading order
 
-1. `conventions.md` — read **first**. Defines base URL, versioning, auth headers, error envelope, pagination, idempotency, rate limits, ETag/concurrency, common types. Every other file in this folder assumes these.
-2. `public-share-viewer.md` — unauthenticated `/t/{slug}` endpoints. Read second because they have the loosest auth model.
-3. `auth.md` — sign-up, sign-in, OAuth, magic links, sessions, password reset.
-4. `organizations.md` → `spaces.md` → `collections.md` → `groups.md` → `items.md` — the core CRUD ladder.
-5. `tags.md`, `shares.md`, `members-invites.md` — cross-cutting collaboration.
-6. `sessions-save.md` — Save Session to Collection (extension-driven).
-7. `search.md`, `history.md` — power features.
-8. `import-export.md` — bulk operations.
-9. `licenses.md`, `billing-webhooks.md` — entitlements.
+1. `01-conventions.md` — read **first**. Defines base URL, versioning, auth headers, error envelope, pagination, idempotency, rate limits, ETag/concurrency, common types. Every other file in this folder assumes these.
+2. `02-public-share-viewer.md` — unauthenticated `/t/{slug}` endpoints. Read second because they have the loosest auth model.
+3. `03-auth.md` — sign-up, sign-in, OAuth, magic links, sessions, password reset.
+4. `04-organizations.md` → `05-spaces.md` → `collections.md` → `groups.md` → `08-items.md` — the core CRUD ladder.
+5. `tags.md`, `10-shares.md`, `11-members-invites.md` — cross-cutting collaboration.
+6. `12-sessions-save.md` — Save Session to Collection (extension-driven).
+7. `13-search.md`, `14-history.md` — power features.
+8. `15-import-export.md` — bulk operations.
+9. `16-licenses.md`, `billing-webhooks.md` — entitlements.
 
 ## Files
 
 | File | Endpoints (count) | Auth |
 |---|---|---|
-| `conventions.md` | — | — |
-| `public-share-viewer.md` | 5 | none / share-cookie / OAuth |
-| `auth.md` | 14 | mixed |
-| `organizations.md` | 9 | bearer |
-| `spaces.md` | 9 | bearer |
+| `01-conventions.md` | — | — |
+| `02-public-share-viewer.md` | 5 | none / share-cookie / OAuth |
+| `03-auth.md` | 14 | mixed |
+| `04-organizations.md` | 9 | bearer |
+| `05-spaces.md` | 9 | bearer |
 | `collections.md` | 11 | bearer |
 | `groups.md` | 9 | bearer |
-| `items.md` | 13 | bearer |
+| `08-items.md` | 13 | bearer |
 | `tags.md` | 7 | bearer |
-| `shares.md` | 9 | bearer (mgmt) / public (viewer) |
-| `members-invites.md` | 11 | bearer |
-| `sessions-save.md` | 4 | bearer |
-| `search.md` | 4 | bearer |
-| `history.md` | 6 | bearer |
-| `import-export.md` | 8 | bearer |
-| `licenses.md` | 7 | bearer |
+| `10-shares.md` | 9 | bearer (mgmt) / public (viewer) |
+| `11-members-invites.md` | 11 | bearer |
+| `12-sessions-save.md` | 4 | bearer |
+| `13-search.md` | 4 | bearer |
+| `14-history.md` | 6 | bearer |
+| `15-import-export.md` | 8 | bearer |
+| `16-licenses.md` | 7 | bearer |
 | `billing-webhooks.md` | 4 | webhook signature |
 
 Total: ~130 endpoints.
@@ -80,6 +80,6 @@ Every endpoint in every file uses this exact format:
 - **JSON only:** request and response are `application/json; charset=utf-8`. Never form-encoded except OAuth callbacks and webhooks.
 - **UTC always:** all timestamps in ISO-8601 UTC with milliseconds.
 - **IDs are UUIDv7 strings.**
-- **Error envelope is uniform** (see `conventions.md`).
+- **Error envelope is uniform** (see `01-conventions.md`).
 - **No PATCH on parent fields that change tree shape** — those are dedicated actions like `POST /collections/:id/move`.
 - **Idempotency-Key header** required on POST endpoints that create resources, optional elsewhere.

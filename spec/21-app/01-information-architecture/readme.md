@@ -8,7 +8,7 @@ Every other folder (data model, API, extension, UI) MUST conform to this structu
 
 | File | Purpose |
 |---|---|
-| `hierarchy.md` | The full hierarchy with rules, diagrams, sharing-scope table, counting rules, and edge cases. |
+| `01-hierarchy.md` | The full hierarchy with rules, diagrams, sharing-scope table, counting rules, and edge cases. |
 
 ## Quick reference
 

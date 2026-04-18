@@ -1,7 +1,7 @@
 # Wireframe — Dashboard
 
 > **Route:** `/` (authenticated), `/dashboard`
-> **Spec ref:** `05-web-app/dashboard.md`, `05-web-app/shell.md`
+> **Spec ref:** `05-web-app/03-dashboard.md`, `05-web-app/02-shell.md`
 > **Viewport baseline:** 1280×800, "Cozy" density.
 
 ---
@@ -46,7 +46,7 @@
 - **TopBar** — fixed, 56px tall, `--background` with `--border` bottom 1px
 - **Sidebar** — 240px wide, collapsible to 56px, scrollable independent of content
 - **Content area** — max-width 1200px, padding 32px, scrollable
-- **ItemCard** — 200×140, see `15-visualization/grid-view.md`
+- **ItemCard** — 200×140, see `15-visualization/02-grid-view.md`
 - **CollectionCard** — 240×120
 - **SharedCard** — 240×140 with sharer avatar overlay
 
@@ -97,9 +97,9 @@
 
 ## 4. Interaction notes
 
-- **⌘K / Ctrl+K** opens command palette (see `07-features/command-palette.md`).
-- **Drag-and-drop** items between sections obeys `06-ui-ux/drag-and-drop.md`.
-- **Right-click** any card opens context menu (see `06-ui-ux/navigation-patterns.md`).
+- **⌘K / Ctrl+K** opens command palette (see `07-features/13-command-palette.md`).
+- **Drag-and-drop** items between sections obeys `06-ui-ux/09-drag-and-drop.md`.
+- **Right-click** any card opens context menu (see `06-ui-ux/13-navigation-patterns.md`).
 - **Hover** on item card reveals quick actions (open, share, move, delete) — must also be reachable via keyboard.
 
 ---

@@ -4,15 +4,15 @@ How we learn what's working without violating user trust.
 
 ## Reading order
 
-1. `opt-in-analytics.md` — product analytics events, opt-in model.
-2. `error-reporting.md` — crash + exception capture.
+1. `01-opt-in-analytics.md` — product analytics events, opt-in model.
+2. `02-error-reporting.md` — crash + exception capture.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `opt-in-analytics.md` | Product event telemetry |
-| `error-reporting.md` | Crash + exception capture |
+| `01-opt-in-analytics.md` | Product event telemetry |
+| `02-error-reporting.md` | Crash + exception capture |
 
 ## Locked rules
 

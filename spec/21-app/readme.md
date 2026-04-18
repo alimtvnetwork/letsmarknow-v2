@@ -5,7 +5,7 @@
 > **Domain:** `letsmarknow.com`
 > **Public share URL pattern:** `letsmarknow.com/t/{slug}`
 > **Primary surface (v1, LOCKED):** **Google Chrome only** — extension (MV3) New Tab override + toolbar popup
-> **Future surfaces (Phase 4, postponed):** Edge, Brave, Arc, Opera (Chromium parity), then Firefox, then Safari — see `00-overview/browser-scope.md`
+> **Future surfaces (Phase 4, postponed):** Edge, Brave, Arc, Opera (Chromium parity), then Firefox, then Safari — see `00-overview/05-browser-scope.md`
 > **Inspiration:** [Toby](https://www.gettoby.com) (hierarchy, sharing, collaboration) + [Tab Extend](https://tabextend.com) (typography, column layout, group-in-group)
 > **Goal:** Build the most powerful, beautiful, AI-era replacement for Toby and Tab Extend — fixing every flaw in both, with no artificial limits in paid tiers.
 
@@ -91,47 +91,47 @@ spec/21-app/
 ├── README.md                              ← this file (master index)
 ├── 00-overview/
 │   ├── README.md
-│   ├── vision.md
-│   ├── glossary.md
-│   ├── personas.md
-│   └── competitive-analysis.md            (Toby vs Tab Extend vs us)
+│   ├── 01-vision.md
+│   ├── 02-glossary.md
+│   ├── 03-personas.md
+│   └── 04-competitive-analysis.md            (Toby vs Tab Extend vs us)
 ├── 01-information-architecture/
 │   ├── README.md
-│   └── hierarchy.md
+│   └── 01-hierarchy.md
 ├── 02-data-model/
 │   ├── README.md
-│   ├── organization.md
-│   ├── space.md
-│   ├── collection.md
-│   ├── group.md
-│   ├── item.md
-│   ├── tag.md
-│   ├── share.md
-│   ├── member.md
-│   ├── history-event.md
-│   └── license.md
+│   ├── 01-organization.md
+│   ├── 02-space.md
+│   ├── 03-collection.md
+│   ├── 04-group.md
+│   ├── 05-item.md
+│   ├── 06-tag.md
+│   ├── 07-share.md
+│   ├── 08-member.md
+│   ├── 09-history-event.md
+│   └── 10-license.md
 ├── 03-api-endpoints/
 │   ├── README.md
-│   ├── conventions.md                     (auth headers, errors, pagination, idempotency)
-│   ├── auth.md
-│   ├── organizations.md
-│   ├── spaces.md
+│   ├── 01-conventions.md                     (auth headers, errors, pagination, idempotency)
+│   ├── 03-auth.md
+│   ├── 04-organizations.md
+│   ├── 05-spaces.md
 │   ├── collections.md
 │   ├── groups.md
-│   ├── items.md
+│   ├── 08-items.md
 │   ├── tags.md
-│   ├── shares.md
-│   ├── members-invites.md
-│   ├── sessions-save.md                   (Save Session to Collection)
-│   ├── search.md
-│   ├── history.md                         (undo/redo backend support)
-│   ├── import-export.md
-│   ├── licenses.md
+│   ├── 10-shares.md
+│   ├── 11-members-invites.md
+│   ├── 12-sessions-save.md                   (Save Session to Collection)
+│   ├── 13-search.md
+│   ├── 14-history.md                         (undo/redo backend support)
+│   ├── 15-import-export.md
+│   ├── 16-licenses.md
 │   ├── billing-webhooks.md
-│   └── public-share-viewer.md             (unauthenticated /t/{slug} endpoints)
+│   └── 02-public-share-viewer.md             (unauthenticated /t/{slug} endpoints)
 ├── 04-extension/
 │   ├── README.md
-│   ├── manifest.md                        (MV3 manifest fields, permissions justified)
+│   ├── 01-manifest.md                        (MV3 manifest fields, permissions justified)
 │   ├── new-tab-override.md
 │   ├── toolbar-popup.md
 │   ├── background-service-worker.md
@@ -146,19 +146,19 @@ spec/21-app/
 │   └── packaging-distribution.md          (zip, store listing, updates)
 ├── 05-web-app/
 │   ├── README.md
-│   ├── routes.md
-│   ├── marketing-site.md                  (letsmarknow.com)
+│   ├── 01-routes.md
+│   ├── 13-marketing-site.md                  (letsmarknow.com)
 │   ├── pricing-page.md
-│   ├── dashboard.md                       (full app on web, mirrors extension)
-│   ├── share-viewer.md                    (/t/{slug} public viewer)
-│   ├── account-settings.md
+│   ├── 03-dashboard.md                       (full app on web, mirrors extension)
+│   ├── 14-share-viewer.md                    (/t/{slug} public viewer)
+│   ├── 05-account-settings.md
 │   ├── billing-portal.md
 │   └── support-portal.md
 ├── 06-ui-ux/
 │   ├── README.md
-│   ├── design-tokens.md                   (color, spacing, radius, shadow)
+│   ├── 01-design-tokens.md                   (color, spacing, radius, shadow)
 │   ├── typography.md                      (Apple system + Ubuntu stack)
-│   ├── theming.md                         (Pink default, dark/light, accent themes)
+│   ├── 02-theming.md                         (Pink default, dark/light, accent themes)
 │   ├── components.md                      (button, card, modal, popover, toast, etc.)
 │   ├── layout-shell.md                    (left rail + sidebar + main + open tabs panel)
 │   ├── workspace-bubbles.md               (left avatar rail UX)
@@ -186,32 +186,32 @@ spec/21-app/
 │   ├── descriptions.md
 │   ├── expand-collapse.md
 │   ├── sort.md
-│   ├── view-modes.md
+│   ├── 08-view-modes.md
 │   ├── open-all-in-group.md
 │   ├── copy-share-link.md
 │   ├── edit-title-inline.md
-│   ├── delete-with-undo.md
+│   ├── 16-delete-with-undo.md
 │   └── bulk-select.md
 ├── 08-sharing-collab/
 │   ├── README.md
-│   ├── share-link.md                      (public, custom slug Pro+)
+│   ├── 13-share-link.md                      (public, custom slug Pro+)
 │   ├── password-protection.md
 │   ├── expiry.md
 │   ├── invite-only.md
-│   ├── permissions-matrix.md
+│   ├── 05-permissions-matrix.md
 │   ├── realtime-collab.md                 (presence, live updates)
-│   └── share-analytics.md                 (views, opens — Pro+)
+│   └── 11-share-analytics.md                 (views, opens — Pro+)
 ├── 09-auth-accounts/
 │   ├── README.md
 │   ├── signup-login.md
 │   ├── magic-link.md
 │   ├── oauth-google-apple-github.md
-│   ├── sso-saml.md                        (Team plan)
+│   ├── 05-sso-saml.md                        (Team plan)
 │   ├── sessions-devices.md
 │   └── password-reset.md
 ├── 10-licensing-billing/
 │   ├── README.md
-│   ├── plans-matrix.md                    (Free / Pro / Team / Lifetime feature matrix)
+│   ├── 01-plans-matrix.md                    (Free / Pro / Team / Lifetime feature matrix)
 │   ├── pricing.md
 │   ├── license-manager.md                 (key validation, device limits)
 │   ├── payments-integration.md            (Stripe/Paddle abstraction)
@@ -219,17 +219,17 @@ spec/21-app/
 │   ├── trials.md
 │   ├── invoices-receipts.md
 │   ├── seat-management.md                 (Team plan)
-│   └── support-system.md                  (ticketing, contact, SLA)
+│   └── 14-support-system.md                  (ticketing, contact, SLA)
 ├── 11-shortcuts/
 │   ├── README.md
 │   ├── global-shortcuts.md
-│   ├── command-palette.md                 (Ctrl+K)
+│   ├── 13-command-palette.md                 (Ctrl+K)
 │   └── workspace-switching.md             (Ctrl+Up / Ctrl+Down)
 ├── 12-history-undo/
 │   ├── README.md
-│   ├── event-log.md
-│   ├── undo-redo.md
-│   └── conflict-resolution.md
+│   ├── 01-event-log.md
+│   ├── 02-undo-redo.md
+│   └── 03-conflict-resolution.md
 ├── 11-import-export/
 │   ├── README.md
 │   ├── import-toby.md
@@ -241,49 +241,49 @@ spec/21-app/
 │   └── export-csv.md
 ├── 14-search/
 │   ├── README.md
-│   ├── global-search.md
-│   ├── item-search.md
-│   ├── workspace-search.md
-│   ├── filters.md
-│   └── jump-to-result.md
+│   ├── 01-global-search.md
+│   ├── 02-item-search.md
+│   ├── 03-workspace-search.md
+│   ├── 04-filters.md
+│   └── 05-jump-to-result.md
 ├── 15-visualization/
 │   ├── README.md
-│   ├── list-view.md
-│   ├── grid-view.md
-│   ├── compact-view.md
-│   ├── mindmap-view.md                    (bubble graph of workspaces/spaces)
-│   ├── tabextend-column-view.md
-│   └── resizable-sections.md
+│   ├── 01-list-view.md
+│   ├── 02-grid-view.md
+│   ├── 03-compact-view.md
+│   ├── 04-mindmap-view.md                    (bubble graph of workspaces/spaces)
+│   ├── 05-tabextend-column-view.md
+│   └── 06-resizable-sections.md
 ├── 16-notifications-updates/
 │   ├── README.md
-│   ├── in-app-updates-feed.md
-│   ├── app-updater.md                     (extension auto-update + manual check)
-│   └── release-channels.md                (stable / beta)
+│   ├── 01-in-app-updates-feed.md
+│   ├── 02-app-updater.md                     (extension auto-update + manual check)
+│   └── 03-release-channels.md                (stable / beta)
 ├── 17-admin-org/
 │   ├── README.md
-│   ├── organization-settings.md
-│   ├── members-management.md
-│   ├── roles.md
+│   ├── 01-organization-settings.md
+│   ├── 02-members-management.md
+│   ├── 03-roles.md
 │   ├── audit-log.md
-│   └── data-export-delete.md
+│   └── 05-data-export-delete.md
 ├── 18-analytics-telemetry/
 │   ├── README.md
-│   ├── opt-in-analytics.md
-│   └── error-reporting.md
+│   ├── 01-opt-in-analytics.md
+│   └── 02-error-reporting.md
 ├── 19-security-privacy/
 │   ├── README.md
-│   ├── threat-model.md
-│   ├── data-handling.md
-│   ├── encryption.md
-│   ├── gdpr-ccpa.md
-│   └── share-link-security.md
+│   ├── 01-threat-model.md
+│   ├── 02-data-handling.md
+│   ├── 03-encryption.md
+│   ├── 04-gdpr-ccpa.md
+│   └── 05-share-link-security.md
 └── 20-roadmap/
     ├── README.md
-    ├── phase-0-mvp.md
-    ├── phase-1-v1.md
-    ├── phase-2-collab.md
-    ├── phase-3-mindmap-ai.md
-    └── phase-4-cross-browser.md
+    ├── 01-phase-0-mvp.md
+    ├── 02-phase-1-v1.md
+    ├── 03-phase-2-collab.md
+    ├── 04-phase-3-mindmap-ai.md
+    └── 05-phase-4-cross-browser.md
 ```
 
 ---
@@ -323,11 +323,11 @@ These problems from the references are **must-fix** and tracked across the spec:
 1. **Tab Extend can't share groups** → we share at every level (Space, Collection, Group, even single Item).
 2. **Tab Extend's search is slow & broken** → we ship instant fuzzy search with jump-to-result (`14-search/`).
 3. **Tab Extend has no undo/redo** → every mutation is an event in history; Ctrl+Z always works (`12-history-undo/`).
-4. **Tab Extend caps at 8 categories / 12-15 groups** → no caps in any paid tier; Free tier limits documented in `10-licensing-billing/plans-matrix.md`.
+4. **Tab Extend caps at 8 categories / 12-15 groups** → no caps in any paid tier; Free tier limits documented in `10-licensing-billing/01-plans-matrix.md`.
 5. **Toby's free tier caps at 60 saved tabs** → we set a different free cap (TBD in plans matrix) and remove all paid caps.
 6. **Toby has no per-item edit-mode for tags inline** → inline tag editor on every item card.
 7. **Both lack a true "+" hover-add button** → spec'd in `07-features/add-item-hover-button.md`.
-8. **Both lack mind-map / bubble visualization** → spec'd in `15-visualization/mindmap-view.md`.
+8. **Both lack mind-map / bubble visualization** → spec'd in `15-visualization/04-mindmap-view.md`.
 9. **Both lack proper licensing/support infra** → `10-licensing-billing/` covers it end-to-end.
 10. **Both lack a real app updater & release channel** → `16-notifications-updates/`.
 

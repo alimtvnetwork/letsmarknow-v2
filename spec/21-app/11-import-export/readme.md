@@ -4,31 +4,31 @@ How users get data INTO Lets Mark Now and OUT of it. First-class concern: portab
 
 ## Reading order
 
-1. `formats.md` — supported file formats (HTML, JSON, CSV, OPML, Markdown).
-2. `importers.md` — per-source importers (Chrome, Raindrop, Pocket, Pinboard, etc.).
-3. `import-pipeline.md` — upload → parse → preview → commit flow.
-4. `export-pipeline.md` — request → render → deliver flow.
-5. `mapping-and-dedup.md` — how external structures map to our model; dedup rules.
-6. `large-imports.md` — chunking, streaming, resumability for 50k+ items.
-7. `webhooks-and-api-imports.md` — programmatic ingestion.
-8. `email-in.md` — `save@user.lmn.email` capture address.
-9. `gdpr-export.md` — full account data export (legal compliance).
-10. `migration-out.md` — exporters for users leaving (we make this easy on purpose).
+1. `01-formats.md` — supported file formats (HTML, JSON, CSV, OPML, Markdown).
+2. `02-importers.md` — per-source importers (Chrome, Raindrop, Pocket, Pinboard, etc.).
+3. `03-import-pipeline.md` — upload → parse → preview → commit flow.
+4. `04-export-pipeline.md` — request → render → deliver flow.
+5. `05-mapping-and-dedup.md` — how external structures map to our model; dedup rules.
+6. `06-large-imports.md` — chunking, streaming, resumability for 50k+ items.
+7. `07-webhooks-and-api-imports.md` — programmatic ingestion.
+8. `08-email-in.md` — `save@user.lmn.email` capture address.
+9. `09-gdpr-export.md` — full account data export (legal compliance).
+10. `10-migration-out.md` — exporters for users leaving (we make this easy on purpose).
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `formats.md` | File format specs |
-| `importers.md` | Source-specific adapters |
-| `import-pipeline.md` | Upload → commit |
-| `export-pipeline.md` | Request → deliver |
-| `mapping-and-dedup.md` | Model translation |
-| `large-imports.md` | Scale & resumability |
-| `webhooks-and-api-imports.md` | Programmatic |
-| `email-in.md` | Email capture |
-| `gdpr-export.md` | Full data export |
-| `migration-out.md` | Leaving Lets Mark Now |
+| `01-formats.md` | File format specs |
+| `02-importers.md` | Source-specific adapters |
+| `03-import-pipeline.md` | Upload → commit |
+| `04-export-pipeline.md` | Request → deliver |
+| `05-mapping-and-dedup.md` | Model translation |
+| `06-large-imports.md` | Scale & resumability |
+| `07-webhooks-and-api-imports.md` | Programmatic |
+| `08-email-in.md` | Email capture |
+| `09-gdpr-export.md` | Full data export |
+| `10-migration-out.md` | Leaving Lets Mark Now |
 
 ## Locked rules
 

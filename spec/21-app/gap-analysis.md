@@ -12,7 +12,7 @@
 
 ## 1. TL;DR scorecard
 
-> **Updated 2026-04-18 (v2):** Closed B1 (wireframes), B2 (error codes), B3 (copy strings), B5 (MV3 manifest literal), B6 (infrastructure), and M13 (machine-readable permissions matrix). Remaining open: B4 (test plan), B7 (seed data), and majors M1–M12, M14.
+> **Updated 2026-04-18 (v3):** Closed B1, B2, B3, B5, B6, M11, M13. Remaining open: B4 (test plan), B7 (seed data), and majors M1–M10, M12, M14.
 
 | Target AI | v1 score (baseline) | **v2 score (now)** | Will it ship a usable product? | Main failure mode |
 |---|---|---|---|---|
@@ -78,7 +78,7 @@ Ranked by **severity × frequency**.
 | M8 | **Storage bucket layout undefined.** No path convention for favicons, exports, attachments. | AI invents naming; cleanup jobs break. |
 | M9 | **Mobile breakpoints implied, not enumerated.** `04-layout-grid.md` mentions responsive but no `sm/md/lg` token mapping with intended layouts. | AI ships desktop-first; mobile broken. |
 | M10 | **Accessibility (a11y) not gated.** No WCAG 2.1 AA target stated, no per-component a11y checklist. | AI skips ARIA; legal risk in EU. |
-| M11 | **Analytics events listed per feature but no taxonomy file.** Each `07-features/*.md` mentions events; no master `events.md`. | AI emits inconsistent event names; dashboards broken. |
+| ~~M11~~ | ~~Analytics events listed per feature but no taxonomy file.~~ **CLOSED** — see `18-analytics-telemetry/03-events.md` (canonical event catalog: 80+ events across 14 sub-domains, props schemas, owners, sampling rates). | — |
 | M12 | **Migration / import dedup algorithm hand-waved.** `05-mapping-and-dedup.md` says "fuzzy match" without algorithm or threshold. | AI picks Levenshtein > 0.8 arbitrarily; users complain. |
 | ~~M13~~ | ~~Permissions matrix references roles but no machine-readable matrix.~~ **CLOSED** — `08-sharing-collab/permissions-matrix.json` ships a typed schema with 8 roles, ~50 actions across 17 entities, qualifiers (`own`/`pro_plus`/`team_only`/`enabled`), edge cases, and 4 enforcement layers. RLS policies and middleware checks can be codegen'd directly. |
 | M14 | **No definition of "Done."** No checklist per feature: "ship when X, Y, Z true." | AI declares features complete that aren't. |
@@ -123,7 +123,7 @@ For each of the 21 folders, three numbers: **Lovable / Cursor / Raw chat**, scal
 | 15-visualization | 45 | 45 | 55 | 55 | 25 | 25 | Mind-map math missing |
 | 16-notifications-updates | 65 | 65 | 70 | 70 | 45 | 45 | Email provider missing (M7) |
 | 17-admin-org | 70 | **85** | 75 | **90** | 50 | **65** | M13 closed → RLS codegen-ready |
-| 18-analytics-telemetry | 60 | 60 | 65 | 65 | 40 | 40 | Event taxonomy fragmented (M11) |
+| 18-analytics-telemetry | 60 | **85** | 65 | **90** | 40 | **60** | M11 closed — canonical event taxonomy in `03-events.md` |
 | 19-security-privacy | 75 | 75 | 80 | 80 | 55 | 55 | Rate limits still soft (M4) |
 | 20-roadmap | 100 | 100 | 100 | 100 | 100 | 100 | Pure planning, no impl needed |
 | 22-infrastructure | n/a | **85** | n/a | **90** | n/a | **60** | New folder; B6 closed |
@@ -153,7 +153,7 @@ Ordered by ROI:
 5. ~~**`22-infrastructure/`** — hosting, env vars, secrets, queues, cron, CDN, domains.~~ ✅ **DONE** (closes B6).
 6. ~~**Machine-readable permissions matrix** under `08-sharing-collab/permissions-matrix.json`.~~ ✅ **DONE** (closes M13 → enables RLS codegen).
 7. **`10-licensing-billing/sku-map.md`** — Paddle/Stripe product+price IDs per tier per currency. *Still open — closes M1.*
-8. **`18-analytics-telemetry/events.md`** — single event taxonomy with name, props schema. *Still open — closes M11.*
+8. ~~`18-analytics-telemetry/events.md`~~ **DONE** — `18-analytics-telemetry/03-events.md` is the canonical event taxonomy. *Closes M11.*
 9. ~~**`04-extension/01-manifest.md` finalized** — actual `manifest.json` literal.~~ ✅ **DONE** (closes B5).
 10. **Seed data** under `99-fixtures/` (one JSON per entity). *Still open — closes B7.*
 

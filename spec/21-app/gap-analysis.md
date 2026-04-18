@@ -46,9 +46,9 @@ Ranked by **severity × frequency**.
 
 | # | Gap | Where it hurts | What AI will do instead | Fix effort |
 |---|---|---|---|---|
-| B1 | **No wireframes / Figma / pixel mockups.** Layouts described in prose + ASCII boxes only (e.g. `dashboard.md` § 2). | Every screen — dashboard, popup, share viewer, onboarding, billing | Invent its own layout. Looks generic. **Will not match your vision.** | High — needs design system in Figma OR annotated screenshots |
-| B2 | **No enumerated error code catalog.** `conventions.md` mentions error envelope but the table of `error_code` strings doesn't exist. Grep returned 0 hits. | Every API endpoint, every toast, every retry path | Make up codes per file → inconsistent → frontend can't switch on them | Medium — one new file `03-api-endpoints/error-codes.md` |
-| B3 | **No copy strings catalog.** `copy-voice.md` (161 lines) gives tone, not actual button labels, empty-state text, error messages, email subjects. | Every UI surface, every email, every push notification | Write its own copy. Tone drifts. **Translation/i18n impossible.** | High — needs `06-ui-ux/copy-strings.md` with full key→EN map |
+| ~~B1~~ | ~~No wireframes / Figma / pixel mockups.~~ **CLOSED** — see `06-ui-ux/wireframes/` (dashboard, popup, share-viewer, onboarding, billing) | — | — | Done |
+| ~~B2~~ | ~~No enumerated error code catalog.~~ **CLOSED** — see `03-api-endpoints/error-codes.md` (60+ codes across 10 domains) | — | — | Done |
+| ~~B3~~ | ~~No copy strings catalog.~~ **CLOSED** — see `06-ui-ux/copy-strings.md` (full key→EN map across 17 sections) | — | — | Done |
 | B4 | **No test plan / acceptance criteria.** Zero files matching `test|qa|acceptance`. | Every feature | AI ships untested code → you find bugs in week 2 | High — `21-testing/` folder with Gherkin-style scenarios per feature |
 | B5 | **Chrome extension MV3 manifest not finalized.** `04-extension/manifest.md` exists but permissions, host patterns, OAuth client IDs are TBD. | Extension build + Chrome Web Store submission | AI invents permissions → store rejection | Medium — fill manifest.json template literally |
 | B6 | **No infrastructure / deployment spec.** No file describes: hosting, CI/CD, env var inventory, secrets vault, domains, SSL, CDN, queues, cron. | Day 1 of deploy | AI defaults to Vercel + Supabase free tier → won't scale, no Redis for share-revocation 5s SLA | Medium — `22-infrastructure/` folder |

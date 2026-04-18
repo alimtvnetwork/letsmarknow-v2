@@ -47,7 +47,7 @@ The membership record linking an Account to an Organization with a Role. One Acc
 - **Suspend / Re-activate:** Admin/Owner only. Suspended Members keep data references but cannot sign in to that Org.
 - **Remove:** sets `status=removed`, `removed_at`. Member's data references preserved.
 
-## Permission checks (summary — full matrix in `08-sharing-collab/roles-permissions.md`)
+## Permission checks (summary — full matrix in `08-sharing-collab/permissions-matrix.md`)
 
 | Action | Owner | Admin | Editor | Viewer |
 |---|---|---|---|---|

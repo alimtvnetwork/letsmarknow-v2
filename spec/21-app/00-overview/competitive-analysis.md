@@ -93,7 +93,7 @@ These are the flaws the user identified verbatim during requirements gathering. 
 | 14 | Neither tool has mind-map / bubble visualization | `15-visualization/mindmap-view.md` |
 | 15 | Neither tool has resizable / split panels | `15-visualization/resizable-sections.md` |
 | 16 | Neither tool has a real audit log | `17-admin-org/audit-log.md` |
-| 17 | Neither tool has a proper support portal | `10-licensing-billing/support-system.md` |
+| 17 | Neither tool has a proper support portal | `10-licensing-billing/cancellations-and-refunds.md` |
 | 18 | Neither tool offers a Lifetime plan | `10-licensing-billing/plans-matrix.md` |
 | 19 | Neither tool ships SSO for individuals/teams cheaply | `09-auth-accounts/sso-saml.md` |
 | 20 | Neither tool has a release channel / updater UX | `16-notifications-updates/` |

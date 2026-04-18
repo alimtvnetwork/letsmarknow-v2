@@ -10,7 +10,7 @@ Both ultimately produce **entitlements** consumed by the rest of the app.
 
 ## Reading order
 
-1. `pricing-and-plans.md` — canonical plan matrix (what each tier includes).
+1. `plans-matrix.md` — canonical plan matrix (what each tier includes).
 2. `entitlements-engine.md` — how entitlements are computed & cached.
 3. `stripe-integration.md` — Stripe products, prices, checkout, customer portal.
 4. `paddle-integration.md` — Paddle as alternative for VAT-heavy markets.
@@ -28,7 +28,7 @@ Both ultimately produce **entitlements** consumed by the rest of the app.
 
 | File | Purpose |
 |---|---|
-| `pricing-and-plans.md` | Plan matrix |
+| `plans-matrix.md` | Plan matrix |
 | `entitlements-engine.md` | Capability resolution |
 | `stripe-integration.md` | Stripe primary |
 | `paddle-integration.md` | Paddle alt |

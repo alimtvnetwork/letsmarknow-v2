@@ -83,7 +83,7 @@ Account (alim@example.com)
 | Entity | Can be shared via `letsmarknow.com/t/{slug}` | Notes |
 |---|---|---|
 | Account | ❌ | never shared |
-| Organization | ❌ | shared via Member invites only (`08-sharing-collab/invite-only.md`) |
+| Organization | ❌ | shared via Member invites only (`08-sharing-collab/invite-only-shares.md`) |
 | Space | ✅ | yes |
 | Collection | ✅ | yes |
 | Group | ✅ | yes — fixes Tab Extend's #1 flaw |
@@ -94,7 +94,7 @@ When a parent is shared, the share recursively exposes all descendants (read-onl
 ### 3.5 Soft delete
 
 - Delete on any entity is soft (sets `deleted_at`). Hard delete happens after **30 days** in trash, or immediately on user-initiated "Empty Trash".
-- Soft-deleted entities are restorable via Undo or via the Trash UI (see `12-history-undo/` and `07-features/delete-with-undo.md`).
+- Soft-deleted entities are restorable via Undo or via the Trash UI (see `12-history-undo/` and `12-history-undo/undo-redo.md`).
 - Soft-deleting a parent soft-deletes all descendants atomically. Restoring a parent restores all descendants that were soft-deleted in the same operation.
 
 ### 3.6 Counting toward plan limits
@@ -122,7 +122,7 @@ Per Organization (Free tier limits — exact numbers in `10-licensing-billing/pl
 ### 3.8 Identifiers
 
 - All entities use UUIDv7 (`id`). Reason: time-ordered, sortable, unguessable.
-- Public Share slugs are separate from `id` (see `08-sharing-collab/share-link.md`).
+- Public Share slugs are separate from `id` (see `08-sharing-collab/share-model.md`).
 
 ### 3.9 Timestamps
 

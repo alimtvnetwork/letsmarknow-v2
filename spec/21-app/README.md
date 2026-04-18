@@ -198,7 +198,7 @@ spec/21-app/
 │   ├── password-protection.md
 │   ├── expiry.md
 │   ├── invite-only.md
-│   ├── roles-permissions.md
+│   ├── permissions-matrix.md
 │   ├── realtime-collab.md                 (presence, live updates)
 │   └── share-analytics.md                 (views, opens — Pro+)
 ├── 09-auth-accounts/

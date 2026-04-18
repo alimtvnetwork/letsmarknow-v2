@@ -1,6 +1,8 @@
 # 04 — Extension (Chrome MV3)
 
-The Chrome extension is the primary surface for **Lets Mark Now**. Priority: Chrome first, Edge/Brave/Arc/Opera next (Chromium-compatible), Firefox later.
+> **v1 scope (LOCKED):** Chrome only. Edge / Brave / Arc / Opera / Firefox are **postponed to Phase 4**. See `00-overview/browser-scope.md`.
+
+The Chrome extension is the primary surface for **Lets Mark Now**. **v1 ships for Google Chrome only.** Edge, Brave, Arc, Opera (Chromium siblings) and Firefox are explicitly postponed — do not implement, test, or ship for them in v1.
 
 ## Reading order
 

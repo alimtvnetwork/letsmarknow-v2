@@ -70,15 +70,17 @@ How Lets Mark Now plugs into the operating system and other apps without leaving
 
 ## 11. Browser-specific notes
 
-| Browser | Support |
-|---|---|
-| Chrome | Full (extension + PWA) |
-| Edge | Full (extension via CWS port) |
-| Brave | Full (extension via CWS) |
-| Arc | Extension works; PWA install limited |
-| Firefox | Extension MV3-port planned post-launch; PWA partial |
-| Safari macOS | PWA only; Safari extension planned year 2 |
-| Safari iOS | PWA + Shortcut recipe |
+> **v1 scope (LOCKED):** Only the Chrome row ships in v1. All other rows are **postponed to Phase 4**. See `00-overview/browser-scope.md`.
+
+| Browser | v1 status | Future support |
+|---|---|---|
+| Chrome | ✅ Full (extension + PWA) | — |
+| Edge | ⏭ Postponed (Phase 4) | Full (extension via CWS port) |
+| Brave | ⏭ Postponed (Phase 4) | Full (extension via CWS) |
+| Arc | ⏭ Postponed (Phase 4) | Extension works; PWA install limited |
+| Firefox | ⏭ Postponed (Phase 4) | Extension MV3-port; PWA partial |
+| Safari macOS | ⏭ Postponed (Phase 4+) | PWA only; Safari extension year 2 |
+| Safari iOS | ⏭ Postponed (Phase 4+) | PWA + Shortcut recipe |
 
 ## 12. Webhooks (Team)
 

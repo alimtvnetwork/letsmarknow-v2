@@ -53,19 +53,36 @@ No "Back" button on step 1.
 
 ## 3. Step 2 — Install browser extension
 
+> **v1 (Chrome-only):** Render only the Chrome card. The Edge / Firefox cards shown in the Phase 4 layout below are postponed — **do not render in v1**. See `00-overview/browser-scope.md`.
+
+### v1 layout (Chrome only)
+
 ```
        ┌────────────────────────────────────────────────────────────┐
        │       {onboarding.step.install_extension.title}            │
        │       {onboarding.step.install_extension.body}             │
        │                                                            │
+       │              ┌─────────────────┐                           │
+       │              │     Chrome      │                           │
+       │              │  [Add to Chrome]│                           │
+       │              └─────────────────┘                           │
+       │                                                            │
+       │   ✓ Detected: Chrome                                       │
+       │                                                            │
+       │   Coming soon for Edge, Brave, Arc, Firefox, and Safari.   │
+       │                                                            │
+       │   [Skip — I'll do this later]                              │
+       └────────────────────────────────────────────────────────────┘
+```
+
+### Phase 4 layout (cross-browser — POSTPONED)
+
+```
+       ┌────────────────────────────────────────────────────────────┐
        │   ┌─────────┐  ┌─────────┐  ┌─────────┐                    │
        │   │ Chrome  │  │  Edge   │  │ Firefox │  ← detected first  │
        │   │  [Add]  │  │  [Add]  │  │  [Add]  │                    │
        │   └─────────┘  └─────────┘  └─────────┘                    │
-       │                                                            │
-       │   ✓ Detected: Chrome                                       │
-       │                                                            │
-       │   [Skip — I'll do this later]                              │
        └────────────────────────────────────────────────────────────┘
 ```
 

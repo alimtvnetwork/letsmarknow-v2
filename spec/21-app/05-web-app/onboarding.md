@@ -39,7 +39,7 @@ detect state:
 ### Step 3 — "Install the extension" (if not detected)
 - Animated GIF of save-tab flow.
 - Big "Add to Chrome" button → CWS listing.
-- "I use Edge/Brave/Firefox" → respective store links (Firefox shows "Coming soon — get notified").
+- **v1 (Chrome-only):** No per-browser CTAs for Edge/Brave/Firefox. Single line: "Coming soon for Edge, Brave, Arc, Firefox, and Safari." See `00-overview/browser-scope.md`.
 - Skip → "Use the bookmarklet instead" with drag-to-bar instruction.
 
 ### Step 4 — "Try it" (fully optional)

@@ -4,8 +4,8 @@
 > **Product name:** Lets Mark Now
 > **Domain:** `letsmarknow.com`
 > **Public share URL pattern:** `letsmarknow.com/t/{slug}`
-> **Primary surface:** Chrome Extension (MV3) — New Tab override **+** toolbar popup
-> **Future surfaces:** Edge, Brave, Arc, Opera (Chromium parity), then Firefox
+> **Primary surface (v1, LOCKED):** **Google Chrome only** — extension (MV3) New Tab override + toolbar popup
+> **Future surfaces (Phase 4, postponed):** Edge, Brave, Arc, Opera (Chromium parity), then Firefox, then Safari — see `00-overview/browser-scope.md`
 > **Inspiration:** [Toby](https://www.gettoby.com) (hierarchy, sharing, collaboration) + [Tab Extend](https://tabextend.com) (typography, column layout, group-in-group)
 > **Goal:** Build the most powerful, beautiful, AI-era replacement for Toby and Tab Extend — fixing every flaw in both, with no artificial limits in paid tiers.
 

@@ -1,25 +1,28 @@
 # Importers
 
+> **v1 scope (LOCKED):** Browser-extension auto-pull works in **Chrome only**. Bookmark **HTML file uploads** from any browser remain supported (uploading a file is browser-agnostic). See `00-overview/browser-scope.md`.
+
 Per-source adapters that take a foreign format and produce LMN-shaped data.
 
 ---
 
 ## 1. Supported sources (v1)
 
-| Source | Method | Auth |
-|---|---|---|
-| Chrome / Edge / Brave | HTML upload OR extension auto-pull | none / extension |
-| Firefox | HTML upload | none |
-| Safari | HTML upload | none |
-| Arc | HTML upload | none |
-| Raindrop.io | CSV/JSON upload OR OAuth | none / OAuth |
-| Pocket | HTML/JSON upload OR OAuth | none / OAuth |
-| Pinboard | JSON upload OR API token | none / token |
-| Instapaper | CSV upload | none |
-| Diigo | CSV upload | none |
-| Notion | Markdown zip upload | none |
-| LMN JSON | JSON upload | none |
-| Generic CSV | CSV upload (with mapping UI) | none |
+| Source | Method | Auth | v1 status |
+|---|---|---|---|
+| Chrome | HTML upload OR extension auto-pull | none / extension | ✅ full |
+| Edge / Brave | HTML upload only (extension auto-pull postponed → Phase 4) | none | ✅ HTML only |
+| Firefox | HTML upload only | none | ✅ HTML only |
+| Safari | HTML upload only | none | ✅ HTML only |
+| Arc | HTML upload only | none | ✅ HTML only |
+| Raindrop.io | CSV/JSON upload OR OAuth | none / OAuth | ✅ |
+| Pocket | HTML/JSON upload OR OAuth | none / OAuth | ✅ |
+| Pinboard | JSON upload OR API token | none / token | ✅ |
+| Instapaper | CSV upload | none | ✅ |
+| Diigo | CSV upload | none | ✅ |
+| Notion | Markdown zip upload | none | ✅ |
+| LMN JSON | JSON upload | none | ✅ |
+| Generic CSV | CSV upload (with mapping UI) | none | ✅ |
 
 ## 2. Adapter interface
 
@@ -37,7 +40,7 @@ interface Importer {
 
 Each importer is a stateless module; new ones add by dropping a file in `importers/`.
 
-## 3. Chrome / Edge / Brave (HTML)
+## 3. Chrome (HTML + extension auto-pull)
 
 - File: `bookmarks.html` (Netscape format).
 - Folder structure → Collections (1st level) and Groups (2nd level).
@@ -46,14 +49,21 @@ Each importer is a stateless module; new ones add by dropping a file in `importe
 - "Other bookmarks" → renamed "Other" Collection.
 - `ICON` data-URLs preserved as favicon cache.
 
-### Browser extension auto-pull
-- With our extension installed, can pull live bookmarks via `chrome.bookmarks.getTree()`.
+### Browser extension auto-pull (Chrome only in v1)
+- With our Chrome extension installed, can pull live bookmarks via `chrome.bookmarks.getTree()`.
 - Initial sync = one-shot import; subsequent pulls offered as opt-in (NOT continuous sync — risk of unwanted churn).
+- Edge / Brave / Arc auto-pull: **postponed to Phase 4** even though they are Chromium-based.
 
-## 4. Firefox
+## 3a. Edge / Brave / Arc (HTML upload only in v1)
+
+- Same Netscape HTML format as Chrome — upload works identically.
+- Extension auto-pull **not available in v1** (Phase 4).
+
+## 4. Firefox (HTML upload only in v1)
 
 - Same HTML format as Chrome; just slightly different folder defaults ("Bookmarks Toolbar", "Bookmarks Menu").
 - Tags: Firefox bookmarks support tags natively; preserved as our tags.
+- No Firefox extension in v1 → upload only.
 
 ## 5. Safari
 

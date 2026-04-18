@@ -58,7 +58,7 @@ A single tool that:
 - ❌ Built-in browser (we are an extension, not a browser).
 - ❌ Note-taking app (notes per Item/Collection are short, not a Notion replacement).
 - ❌ AI summarization of pages (deferred to v2 — see `20-roadmap/phase-3-mindmap-ai.md`).
-- ❌ Firefox / Safari support at v1 launch (Chrome-first, then Chromium siblings, then Firefox — see roadmap).
+- ❌ **Any browser other than Google Chrome at v1 launch.** Edge / Brave / Arc / Opera / Firefox / Safari are all postponed to Phase 4. See `00-overview/browser-scope.md`.
 
 ## Success looks like
 

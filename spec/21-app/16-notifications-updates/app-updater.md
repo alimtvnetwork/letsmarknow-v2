@@ -1,20 +1,23 @@
 # App Updater
 
+> **v1 scope (LOCKED):** Chrome Web Store update path **only**. Edge / Firefox / Brave update paths are **postponed to Phase 4**. See `00-overview/browser-scope.md`.
+
 How the extension and web app receive new versions — and how users find out.
 
 ---
 
 ## 1. Extension update mechanism
 
-### Default path: Chrome Web Store
+### Default path: Chrome Web Store (v1)
 
 - Chrome auto-checks every ~5 hours.
 - New version installed silently when extension is idle.
 - Service worker restarts on next activation; UI surfaces detect via `chrome.runtime.onUpdateAvailable`.
 
-### Edge / Firefox / Brave
+### Edge / Firefox / Brave — POSTPONED (Phase 4)
 
-- Same pattern via their respective stores.
+- ⏭ **Not implemented in v1.** Documented for future reference only.
+- Same pattern via their respective stores when implemented.
 - Manifest v3 update_url default; no self-hosted updates.
 
 ### Self-hosted (enterprise, Pro+)

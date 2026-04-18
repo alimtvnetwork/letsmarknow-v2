@@ -1,6 +1,6 @@
 # Licenses & Entitlements Endpoints
 
-Read-only entitlement queries + checkout/portal links + lifetime-license redemption. The actual subscription state changes happen via `billing-webhooks.md`.
+Read-only entitlement queries + checkout/portal links + lifetime-license redemption. The actual subscription state changes happen via `17-billing-webhooks.md`.
 
 All require bearer auth + `X-Organization-Id` (except `/me`).
 

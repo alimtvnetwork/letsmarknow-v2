@@ -61,7 +61,7 @@ State is **derived from Stripe**; webhooks keep it in sync.
 
 ## 6. Webhooks
 
-Listened events (handled in `billing-webhooks.md`):
+Listened events (handled in `12-billing-webhooks.md`):
 - `checkout.session.completed`
 - `customer.subscription.created` / `_updated` / `_deleted`
 - `customer.subscription.trial_will_end`

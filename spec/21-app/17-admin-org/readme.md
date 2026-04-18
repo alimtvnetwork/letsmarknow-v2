@@ -7,7 +7,7 @@ Org-level controls: settings, members, roles, audit log, data export/delete.
 1. `01-organization-settings.md` — Org profile, defaults, security policies.
 2. `02-members-management.md` — Invite, suspend, remove, transfer ownership.
 3. `03-roles.md` — Role definitions + permission matrix.
-4. `audit-log.md` — Immutable record of admin-relevant actions.
+4. `04-audit-log.md` — Immutable record of admin-relevant actions.
 5. `05-data-export-delete.md` — GDPR-grade export + Org deletion.
 
 ## Files
@@ -17,7 +17,7 @@ Org-level controls: settings, members, roles, audit log, data export/delete.
 | `01-organization-settings.md` | Org-wide preferences |
 | `02-members-management.md` | Member CRUD + invites |
 | `03-roles.md` | Roles + permissions |
-| `audit-log.md` | Audit trail |
+| `04-audit-log.md` | Audit trail |
 | `05-data-export-delete.md` | Export + delete entire Org |
 
 ## Locked rules

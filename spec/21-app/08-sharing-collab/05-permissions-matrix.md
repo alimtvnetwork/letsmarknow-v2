@@ -107,7 +107,7 @@ Any action MUST pass all three (1–3); client guard alone never sufficient.
 
 ## 11. Audit (Team)
 
-Every permission-affecting action emits a `member.role_changed` / `share.created` / `space.acl_changed` etc. event in `audit-log.md`.
+Every permission-affecting action emits a `member.role_changed` / `share.created` / `space.acl_changed` etc. event in `09-audit-log.md`.
 
 ## 12. Telemetry
 

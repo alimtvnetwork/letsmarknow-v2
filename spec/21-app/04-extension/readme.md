@@ -14,7 +14,7 @@ The Chrome extension is the primary surface for **Lets Mark Now**. **v1 ships fo
 6. `06-omnibox.md` — `lmn ` keyword search in the URL bar.
 7. `07-context-menu.md` — right-click → Save link / Save page / Save selection to ….
 8. `08-keyboard-shortcuts.md` — `commands` block, default bindings, conflict handling.
-9. `save-session.md` — extension side of the Save Session flow (window scan, tab filter, dedupe, undo).
+9. `09-save-session.md` — extension side of the Save Session flow (window scan, tab filter, dedupe, undo).
 10. `10-sync-and-offline.md` — local cache, optimistic mutations, conflict resolution, offline queue.
 11. `11-auth-bridge.md` — how the extension authenticates against `api.letsmarknow.com` (PKCE on `chrome.identity` flow + refresh-cookie trick).
 12. `12-messaging.md` — typed message contracts between popup ↔ SW ↔ new-tab ↔ content script.
@@ -34,7 +34,7 @@ The Chrome extension is the primary surface for **Lets Mark Now**. **v1 ships fo
 | `06-omnibox.md` | URL-bar keyword |
 | `07-context-menu.md` | Right-click integration |
 | `08-keyboard-shortcuts.md` | `commands` API |
-| `save-session.md` | Window → Collection flow |
+| `09-save-session.md` | Window → Collection flow |
 | `10-sync-and-offline.md` | Caching & offline queue |
 | `11-auth-bridge.md` | OAuth/PKCE for extension |
 | `12-messaging.md` | Internal message protocol |

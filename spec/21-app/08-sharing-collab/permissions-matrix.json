@@ -1,0 +1,487 @@
+{
+  "$schema": "https://letsmarknow.com/schemas/permissions-matrix.v1.json",
+  "version": "1.0.0",
+  "spec_version": "21-app/v1",
+  "generated_from": "spec/21-app/08-sharing-collab/05-permissions-matrix.md",
+  "description": "Machine-readable permissions matrix. Single source of truth for RLS policy codegen, server middleware checks, and client UX guards. Server enforces; client mirrors. Drift = bug.",
+  "notes": [
+    "Roles are exhaustive and locked (see 00-overview/02-glossary.md).",
+    "An action MUST pass: (1) JWT claim role check, (2) server middleware, (3) database RLS. Client guard alone is never sufficient.",
+    "'own' qualifier means the actor created the entity; checked via created_by = auth.uid().",
+    "'pro_plus' qualifier means action requires Pro / Team / Lifetime entitlement.",
+    "'team_only' qualifier means action requires Team entitlement.",
+    "'enabled' on share-viewer means the Share's per-feature flag is on.",
+    "Boolean false = always denied for that role. Conditions narrow an otherwise-true grant."
+  ],
+
+  "roles": {
+    "owner":        { "scope": "org",   "billable": true,  "description": "Created the Org. Exactly one per Org. Full control including delete + ownership transfer." },
+    "admin":        { "scope": "org",   "billable": true,  "description": "Full control except delete-org and transfer-ownership and billing." },
+    "editor":       { "scope": "org",   "billable": true,  "description": "Read/write content. Cannot manage members or billing." },
+    "viewer":       { "scope": "org",   "billable": true,  "description": "Read-only across the Org or a specific Space they were invited to." },
+    "billing":      { "scope": "org",   "billable": false, "description": "Billing + invoices only. No content access. Does not consume a content seat." },
+    "share_viewer": { "scope": "share", "billable": false, "description": "Per-share guest. Read-only by default; comment/react if Share opts in." },
+    "guest":        { "scope": "share", "billable": false, "description": "Anonymous public-link viewer. Same caps as share_viewer minus comments unless explicitly enabled." },
+    "system":       { "scope": "internal", "billable": false, "description": "Synthetic actor for cron, webhooks, API tokens. Not a Member." }
+  },
+
+  "qualifiers": {
+    "own":      "created_by = auth.uid()",
+    "pro_plus": "org.entitlement IN ('pro','team','lifetime')",
+    "team_only":"org.entitlement = 'team'",
+    "enabled":  "share.feature_flag = true"
+  },
+
+  "entities": [
+    "organization",
+    "space",
+    "collection",
+    "group",
+    "item",
+    "tag",
+    "share",
+    "share_link",
+    "comment",
+    "reaction",
+    "member",
+    "invite",
+    "audit_log",
+    "billing",
+    "webhook",
+    "feature_flag",
+    "trash"
+  ],
+
+  "actions": [
+    {
+      "id": "org.view_dashboard",
+      "entity": "organization",
+      "verb": "read",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": true, "billing": true, "share_viewer": false, "guest": false }
+    },
+    {
+      "id": "org.update",
+      "entity": "organization",
+      "verb": "update",
+      "description": "Edit Org name, logo, defaults",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "org.delete",
+      "entity": "organization",
+      "verb": "delete",
+      "description": "Soft-delete the entire Org (30 d grace)",
+      "permissions": { "owner": true, "admin": false, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "org.transfer_ownership",
+      "entity": "organization",
+      "verb": "transfer",
+      "permissions": { "owner": true, "admin": false, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "org.configure_brand",
+      "entity": "organization",
+      "verb": "update",
+      "qualifiers": ["pro_plus"],
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "org.configure_sso",
+      "entity": "organization",
+      "verb": "update",
+      "qualifiers": ["team_only"],
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "org.configure_webhooks",
+      "entity": "webhook",
+      "verb": "manage",
+      "qualifiers": ["team_only"],
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "org.configure_feature_flags",
+      "entity": "feature_flag",
+      "verb": "manage",
+      "description": "Internal LMN staff only via console — no Org role can do this",
+      "permissions": { "owner": false, "admin": false, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "member.invite",
+      "entity": "invite",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "member.remove",
+      "entity": "member",
+      "verb": "delete",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "member.change_role",
+      "entity": "member",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "billing.view_invoices",
+      "entity": "billing",
+      "verb": "read",
+      "permissions": { "owner": true, "admin": false, "editor": false, "viewer": false, "billing": true }
+    },
+    {
+      "id": "billing.manage_subscription",
+      "entity": "billing",
+      "verb": "manage",
+      "permissions": { "owner": true, "admin": false, "editor": false, "viewer": false, "billing": true }
+    },
+
+    {
+      "id": "audit_log.read",
+      "entity": "audit_log",
+      "verb": "read",
+      "qualifiers": ["team_only"],
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "space.create",
+      "entity": "space",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "space.update",
+      "entity": "space",
+      "verb": "update",
+      "description": "Rename, recolor, change icon",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "space.delete",
+      "entity": "space",
+      "verb": "delete",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "space.set_visibility",
+      "entity": "space",
+      "verb": "update",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "space.manage_members",
+      "entity": "space",
+      "verb": "manage",
+      "qualifiers": ["pro_plus"],
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "collection.create",
+      "entity": "collection",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "collection.update",
+      "entity": "collection",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "collection.delete",
+      "entity": "collection",
+      "verb": "delete",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "collection.move",
+      "entity": "collection",
+      "verb": "move",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "group.create",
+      "entity": "group",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "group.update",
+      "entity": "group",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "group.delete",
+      "entity": "group",
+      "verb": "delete",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "group.move",
+      "entity": "group",
+      "verb": "move",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "item.create",
+      "entity": "item",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "item.update",
+      "entity": "item",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "item.delete",
+      "entity": "item",
+      "verb": "delete",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "item.move",
+      "entity": "item",
+      "verb": "move",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "item.read",
+      "entity": "item",
+      "verb": "read",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": true, "billing": false, "share_viewer": true, "guest": true }
+    },
+    {
+      "id": "item.star",
+      "entity": "item",
+      "verb": "update",
+      "description": "Personal favorite flag — does not affect other members",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": true, "billing": false }
+    },
+    {
+      "id": "item.pin",
+      "entity": "item",
+      "verb": "update",
+      "description": "Collaborative pin — visible to whole Org",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "item.tag",
+      "entity": "item",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "item.add_note",
+      "entity": "item",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "tag.create",
+      "entity": "tag",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "tag.update",
+      "entity": "tag",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "tag.delete",
+      "entity": "tag",
+      "verb": "delete",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "tag.merge",
+      "entity": "tag",
+      "verb": "update",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "trash.restore",
+      "entity": "trash",
+      "verb": "update",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "trash.purge",
+      "entity": "trash",
+      "verb": "delete",
+      "description": "Permanent delete bypassing 30 d grace",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "share.create",
+      "entity": "share",
+      "verb": "create",
+      "permissions": { "owner": true, "admin": true, "editor": true, "viewer": false, "billing": false }
+    },
+    {
+      "id": "share.update_own",
+      "entity": "share",
+      "verb": "update",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "share.revoke_own",
+      "entity": "share",
+      "verb": "delete",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "share.revoke_any",
+      "entity": "share",
+      "verb": "delete",
+      "description": "Override another member's share",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "share.configure_custom_domain",
+      "entity": "share",
+      "verb": "update",
+      "qualifiers": ["pro_plus"],
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+
+    {
+      "id": "comment.read",
+      "entity": "comment",
+      "verb": "read",
+      "qualifiers": ["pro_plus"],
+      "permissions": {
+        "owner": true, "admin": true, "editor": true, "viewer": true,
+        "billing": false,
+        "share_viewer": { "allowed": true, "qualifiers": ["enabled"] },
+        "guest":        { "allowed": true, "qualifiers": ["enabled"] }
+      }
+    },
+    {
+      "id": "comment.create",
+      "entity": "comment",
+      "verb": "create",
+      "qualifiers": ["pro_plus"],
+      "permissions": {
+        "owner": true, "admin": true, "editor": true, "viewer": false,
+        "billing": false,
+        "share_viewer": { "allowed": true, "qualifiers": ["enabled"] }
+      }
+    },
+    {
+      "id": "comment.update_own",
+      "entity": "comment",
+      "verb": "update",
+      "permissions": {
+        "owner":  { "allowed": true, "qualifiers": ["own"] },
+        "admin":  { "allowed": true, "qualifiers": ["own"] },
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false,
+        "share_viewer": { "allowed": true, "qualifiers": ["own"] }
+      }
+    },
+    {
+      "id": "comment.delete_own",
+      "entity": "comment",
+      "verb": "delete",
+      "permissions": {
+        "owner":  { "allowed": true, "qualifiers": ["own"] },
+        "admin":  { "allowed": true, "qualifiers": ["own"] },
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false,
+        "share_viewer": { "allowed": true, "qualifiers": ["own"] }
+      }
+    },
+    {
+      "id": "comment.delete_any",
+      "entity": "comment",
+      "verb": "delete",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
+      "id": "reaction.create",
+      "entity": "reaction",
+      "verb": "create",
+      "qualifiers": ["pro_plus"],
+      "permissions": {
+        "owner": true, "admin": true, "editor": true, "viewer": true,
+        "billing": false,
+        "share_viewer": { "allowed": true, "qualifiers": ["enabled"] }
+      }
+    }
+  ],
+
+  "edge_cases": [
+    { "case": "last_owner_leave",         "behavior": "Block; require ownership transfer first" },
+    { "case": "demoted_mid_edit",         "behavior": "Save returns 403; UI banner explains; draft preserved locally" },
+    { "case": "demoted_after_share_create","behavior": "Share remains active; only owner/admin can revoke" },
+    { "case": "plan_downgrade_loses_billing_role", "behavior": "Billing-role users converted to viewer; emailed" },
+    { "case": "member_removed_mid_session","behavior": "All requests 401; client signs out gracefully" }
+  ],
+
+  "enforcement_layers": [
+    { "layer": 1, "name": "jwt_claims",     "description": "Role per Org embedded; refreshed on change" },
+    { "layer": 2, "name": "server_middleware", "description": "Per-route role + ownership check before handler" },
+    { "layer": 3, "name": "database_rls",   "description": "auth.uid() + has_role() security-definer function" },
+    { "layer": 4, "name": "client_guards",  "description": "Disabled buttons + tooltips; UX hint only" }
+  ],
+
+  "telemetry_events": [
+    { "name": "permission.denied_client", "props": ["action", "role"] },
+    { "name": "permission.denied_server", "props": ["action", "role"] },
+    { "name": "permission.role_changed",  "props": ["from", "to", "actor_id", "target_id"] }
+  ]
+}

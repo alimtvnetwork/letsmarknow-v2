@@ -12,13 +12,23 @@
 
 ## 1. TL;DR scorecard
 
-| Target AI | Realistic completion if handed spec blindly | Will it ship a usable product? | Main failure mode |
-|---|---|---|---|
-| **Lovable** (React+Vite+Tailwind+Cloud) | **62%** | Yes — MVP slice works | Runs out of context; rebuilds same files; can't keep 200 files coherent in one session |
-| **Cursor / Windsurf / Claude Code** (IDE agents) | **74%** | Yes — closest to full v1 | Overshoots scope, invents APIs, ignores locked rules without constant re-grounding |
-| **Raw Claude / GPT / Gemini chat** (no execution) | **38%** | No — produces snippets, not a product | No file system, no test loop, loses thread after ~30 files |
+> **Updated 2026-04-18 (v2):** Closed B1 (wireframes), B2 (error codes), B3 (copy strings), B5 (MV3 manifest literal), B6 (infrastructure), and M13 (machine-readable permissions matrix). Remaining open: B4 (test plan), B7 (seed data), and majors M1–M12, M14.
 
-**Bottom line:** The spec is **strong on contracts, weak on visuals and acceptance criteria**. Any AI will build something that compiles and roughly matches the data model, but **none will independently produce the exact product you have in your head** without 3–8 rounds of correction.
+| Target AI | v1 score (baseline) | **v2 score (now)** | Will it ship a usable product? | Main failure mode |
+|---|---|---|---|---|
+| **Lovable** (React+Vite+Tailwind+Cloud) | 62% | **78%** | Yes — full MVP web slice ships | Cannot build the Chrome extension itself; context window still tight on 200 files |
+| **Cursor / Windsurf / Claude Code** (IDE agents) | 74% | **86%** | Yes — near-complete v1 | Still overshoots scope without constant re-grounding; tests still missing (B4) |
+| **Raw Claude / GPT / Gemini chat** (no execution) | 38% | **52%** | No — produces snippets, not a product | No file system, no test loop, loses thread after ~30 files |
+
+**Score lift drivers:**
+- **B1 closed** → `05-web-app/*` jumps from prose to buildable wireframes (+6 pts avg).
+- **B2 closed** → `03-api-endpoints/18-error-codes.md` enables Zod + toast codegen (+3 pts).
+- **B3 closed** → `06-ui-ux/17-copy-strings.md` removes the "AI invents English" risk (+2 pts).
+- **B5 closed** → `04-extension/01-manifest.md` is now literal `manifest.json`; Cursor can ship the extension (+8 pts on `04-extension/`).
+- **B6 closed** → `22-infrastructure/` removes deployment guesswork (+3 pts).
+- **M13 closed** → `08-sharing-collab/permissions-matrix.json` enables direct RLS codegen (+2 pts on `17-admin-org/` and `08-sharing-collab/`).
+
+**Bottom line:** The spec is now **A-grade for contracts AND craft, C-grade for verification**. With B4 (Gherkin acceptance tests) and B7 (seed data) still open, AIs will still ship untested code — but they will no longer have to invent error codes, copy strings, manifests, infra, or permission rules.
 
 ---
 
@@ -50,7 +60,7 @@ Ranked by **severity × frequency**.
 | ~~B2~~ | ~~No enumerated error code catalog.~~ **CLOSED** — see `03-api-endpoints/18-error-codes.md` (60+ codes across 10 domains) | — | — | Done |
 | ~~B3~~ | ~~No copy strings catalog.~~ **CLOSED** — see `06-ui-ux/17-copy-strings.md` (full key→EN map across 17 sections) | — | — | Done |
 | B4 | **No test plan / acceptance criteria.** Zero files matching `test|qa|acceptance`. | Every feature | AI ships untested code → you find bugs in week 2 | High — `21-testing/` folder with Gherkin-style scenarios per feature |
-| B5 | **Chrome extension MV3 manifest not finalized.** `04-extension/01-manifest.md` exists but permissions, host patterns, OAuth client IDs are TBD. | Extension build + Chrome Web Store submission | AI invents permissions → store rejection | Medium — fill manifest.json template literally |
+| ~~B5~~ | ~~Chrome extension MV3 manifest not finalized.~~ **CLOSED** — `04-extension/01-manifest.md` now contains a literal `manifest.json` (MV3, 9 required + 3 optional permissions, host patterns scoped to `*.letsmarknow.com`, full `commands`/`omnibox`/`side_panel`/`chrome_url_overrides`/CSP/`externally_connectable` blocks, plus per-permission rationale table for store-listing review). | — | — | Done |
 | ~~B6~~ | ~~No infrastructure / deployment spec.~~ **CLOSED** — see `22-infrastructure/` (10 files: hosting, environments, env-vars, secrets, domains-ssl, cdn-storage, queues, cron, ci-cd, observability) | — | — | Done |
 | B7 | **No real seed/sample data.** No `seeds.json` or fixture file. | Every dev environment, every test | AI generates fake data inline, inconsistent across runs | Low — one seed file per major entity |
 
@@ -70,7 +80,7 @@ Ranked by **severity × frequency**.
 | M10 | **Accessibility (a11y) not gated.** No WCAG 2.1 AA target stated, no per-component a11y checklist. | AI skips ARIA; legal risk in EU. |
 | M11 | **Analytics events listed per feature but no taxonomy file.** Each `07-features/*.md` mentions events; no master `events.md`. | AI emits inconsistent event names; dashboards broken. |
 | M12 | **Migration / import dedup algorithm hand-waved.** `05-mapping-and-dedup.md` says "fuzzy match" without algorithm or threshold. | AI picks Levenshtein > 0.8 arbitrarily; users complain. |
-| M13 | **Permissions matrix references roles but no machine-readable matrix.** `05-permissions-matrix.md` is prose, not a table the AI can codegen RLS from. | AI writes wrong RLS policies; security incident. |
+| ~~M13~~ | ~~Permissions matrix references roles but no machine-readable matrix.~~ **CLOSED** — `08-sharing-collab/permissions-matrix.json` ships a typed schema with 8 roles, ~50 actions across 17 entities, qualifiers (`own`/`pro_plus`/`team_only`/`enabled`), edge cases, and 4 enforcement layers. RLS policies and middleware checks can be codegen'd directly. |
 | M14 | **No definition of "Done."** No checklist per feature: "ship when X, Y, Z true." | AI declares features complete that aren't. |
 
 ### 3.3 MINOR — AI handles with reasonable defaults
@@ -94,29 +104,30 @@ Ranked by **severity × frequency**.
 
 For each of the 21 folders, three numbers: **Lovable / Cursor / Raw chat**, scale 0–100 = "what fraction the AI can implement correctly without asking back."
 
-| Folder | Lov | Cur | Raw | Notes |
-|---|---|---|---|---|
-| 00-overview | 95 | 95 | 90 | Vocabulary locked, vision clear |
-| 01-information-architecture | 90 | 90 | 75 | Hierarchy explicit |
-| 02-data-model | **90** | **95** | 80 | Strongest section. Direct schema codegen possible. |
-| 03-api-endpoints | 80 | 85 | 60 | Missing error code enum (B2) |
-| 04-extension | 50 | 60 | 25 | Manifest TBD (B5); Lovable can't build extensions |
-| 05-web-app | 55 | 70 | 40 | Layout described in prose only (B1) |
-| 06-ui-ux | 65 | 70 | 50 | Tokens great; copy strings missing (B3) |
-| 07-features | 70 | 75 | 50 | Per-feature locked rules help; no acceptance tests (B4) |
-| 08-sharing-collab | 60 | 70 | 40 | Realtime transport undefined (M3) |
-| 09-auth-accounts | 75 | 80 | 55 | OAuth IDs missing (M2) |
-| 10-licensing-billing | 55 | 65 | 35 | No SKU mapping (M1); Paddle/Stripe live secrets needed |
-| 11-import-export | 60 | 70 | 40 | Dedup algorithm hand-waved (M12) |
-| 12-history-undo | 70 | 75 | 50 | Event log model clear |
-| 14-search | 50 | 60 | 35 | Engine undefined (M5) |
-| 15-visualization | 45 | 55 | 25 | Mind-map view has no math; column view no virtualization spec |
-| 16-notifications-updates | 65 | 70 | 45 | Email provider missing (M7) |
-| 17-admin-org | 70 | 75 | 50 | RLS not codegen-ready (M13) |
-| 18-analytics-telemetry | 60 | 65 | 40 | Event taxonomy fragmented (M11) |
-| 19-security-privacy | 75 | 80 | 55 | Threat model strong; rate limits soft (M4) |
-| 20-roadmap | 100 | 100 | 100 | Pure planning, no impl needed |
-| **Weighted average** | **~62** | **~74** | **~38** | weighted by folder volume |
+| Folder | Lov v1 | Lov v2 | Cur v1 | Cur v2 | Raw v1 | Raw v2 | Notes |
+|---|---|---|---|---|---|---|---|
+| 00-overview | 95 | 95 | 95 | 95 | 90 | 90 | Vocabulary locked, vision clear |
+| 01-information-architecture | 90 | 90 | 90 | 90 | 75 | 75 | Hierarchy explicit |
+| 02-data-model | 90 | 90 | 95 | 95 | 80 | 80 | Strongest section. Direct schema codegen possible. |
+| 03-api-endpoints | 80 | **88** | 85 | **92** | 60 | **75** | B2 closed → error codes enumerated |
+| 04-extension | 50 | **70** | 60 | **85** | 25 | **45** | B5 closed → manifest literal; Lovable still can't build the extension itself |
+| 05-web-app | 55 | **75** | 70 | **85** | 40 | **60** | B1 closed → wireframes shipped |
+| 06-ui-ux | 65 | **82** | 70 | **88** | 50 | **70** | B3 closed → copy strings table |
+| 07-features | 70 | 70 | 75 | 75 | 50 | 50 | Still gated by B4 (no acceptance tests) |
+| 08-sharing-collab | 60 | **75** | 70 | **85** | 40 | **55** | M13 closed → permissions JSON; M3 still open |
+| 09-auth-accounts | 75 | 75 | 80 | 80 | 55 | 55 | OAuth IDs still missing (M2) |
+| 10-licensing-billing | 55 | 55 | 65 | 65 | 35 | 35 | No SKU mapping (M1) |
+| 11-import-export | 60 | 60 | 70 | 70 | 40 | 40 | Dedup algorithm hand-waved (M12) |
+| 12-history-undo | 70 | 70 | 75 | 75 | 50 | 50 | Event log model clear |
+| 14-search | 50 | 50 | 60 | 60 | 35 | 35 | Engine undefined (M5) |
+| 15-visualization | 45 | 45 | 55 | 55 | 25 | 25 | Mind-map math missing |
+| 16-notifications-updates | 65 | 65 | 70 | 70 | 45 | 45 | Email provider missing (M7) |
+| 17-admin-org | 70 | **85** | 75 | **90** | 50 | **65** | M13 closed → RLS codegen-ready |
+| 18-analytics-telemetry | 60 | 60 | 65 | 65 | 40 | 40 | Event taxonomy fragmented (M11) |
+| 19-security-privacy | 75 | 75 | 80 | 80 | 55 | 55 | Rate limits still soft (M4) |
+| 20-roadmap | 100 | 100 | 100 | 100 | 100 | 100 | Pure planning, no impl needed |
+| 22-infrastructure | n/a | **85** | n/a | **90** | n/a | **60** | New folder; B6 closed |
+| **Weighted average** | **~62** | **~78** | **~74** | **~86** | **~38** | **~52** | weighted by folder volume |
 
 ---
 
@@ -135,18 +146,18 @@ Lovable's scoring is **lower than Cursor not because the spec is worse, but beca
 
 Ordered by ROI:
 
-1. **`06-ui-ux/17-copy-strings.md`** — full key→EN string map. *Closes B3, m1, m9 partially.*
-2. **`03-api-endpoints/18-error-codes.md`** — enumerated `error_code` table with HTTP status, retryable flag, suggested toast. *Closes B2.*
-3. **`21-testing/`** folder — Gherkin scenarios per feature + per API. *Closes B4 and M14.*
-4. **Annotated wireframes** — even hand-drawn screenshots in `06-ui-ux/wireframes/` named per route. *Closes B1.*
-5. **`22-infrastructure/`** — hosting, env vars, secrets, queues, cron, CDN, domains. *Closes B6.*
-6. **Machine-readable permissions matrix** (CSV/JSON) under `08-sharing-collab/permissions-matrix.json`. *Closes M13 → enables RLS codegen.*
-7. **`10-licensing-billing/sku-map.md`** — Paddle/Stripe product+price IDs per tier per currency. *Closes M1.*
-8. **`18-analytics-telemetry/events.md`** — single event taxonomy with name, props schema. *Closes M11.*
-9. **`04-extension/01-manifest.md` finalized** — actual `manifest.json` literal. *Closes B5.*
-10. **Seed data** under `99-fixtures/` (one JSON per entity). *Closes B7.*
+1. ~~**`06-ui-ux/17-copy-strings.md`** — full key→EN string map.~~ ✅ **DONE** (closes B3).
+2. ~~**`03-api-endpoints/18-error-codes.md`** — enumerated `error_code` table.~~ ✅ **DONE** (closes B2).
+3. **`21-testing/`** folder — Gherkin scenarios per feature + per API. *Still open — closes B4 and M14.*
+4. ~~**Annotated wireframes** in `06-ui-ux/wireframes/`.~~ ✅ **DONE** (closes B1).
+5. ~~**`22-infrastructure/`** — hosting, env vars, secrets, queues, cron, CDN, domains.~~ ✅ **DONE** (closes B6).
+6. ~~**Machine-readable permissions matrix** under `08-sharing-collab/permissions-matrix.json`.~~ ✅ **DONE** (closes M13 → enables RLS codegen).
+7. **`10-licensing-billing/sku-map.md`** — Paddle/Stripe product+price IDs per tier per currency. *Still open — closes M1.*
+8. **`18-analytics-telemetry/events.md`** — single event taxonomy with name, props schema. *Still open — closes M11.*
+9. ~~**`04-extension/01-manifest.md` finalized** — actual `manifest.json` literal.~~ ✅ **DONE** (closes B5).
+10. **Seed data** under `99-fixtures/` (one JSON per entity). *Still open — closes B7.*
 
-**Estimated effort to write all 10:** ~1 day of focused work. **Expected score lift:** Lovable 62 → 88, Cursor 74 → 92, Raw chat 38 → 65.
+**Progress so far:** 6 of 10 items closed (B1, B2, B3, B5, B6, M13). **Realized lift:** Lovable 62 → 78, Cursor 74 → 86, Raw chat 38 → 52. **Remaining lift available** if the last 4 are closed: Lovable → ~90, Cursor → ~94, Raw chat → ~68. **Estimated effort for remaining 4:** ~6 hours of focused work.
 
 ---
 

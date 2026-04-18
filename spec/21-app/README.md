@@ -28,7 +28,7 @@ This spec is written so **any AI implementer can build the product blindly**. Ev
 11. `10-licensing-billing/` — Free / Pro / Team / Lifetime tiers, license manager, payments, discounts, support
 12. `11-shortcuts/` — full keyboard shortcut map, command palette (Ctrl+K)
 13. `12-history-undo/` — action history, undo/redo semantics, conflict resolution
-14. `13-import-export/` — Toby/Tab Extend/Chrome bookmarks/JSON/CSV import + export
+14. `11-import-export/` — Toby/Tab Extend/Chrome bookmarks/JSON/CSV import + export
 15. `14-search/` — workspace search, item search, fuzzy, filters, jump-to
 16. `15-visualization/` — list, grid, compact, mind-map, Tab Extend column mode
 17. `16-notifications-updates/` — in-app updates feed, app updater, release channel
@@ -230,7 +230,7 @@ spec/21-app/
 │   ├── event-log.md
 │   ├── undo-redo.md
 │   └── conflict-resolution.md
-├── 13-import-export/
+├── 11-import-export/
 │   ├── README.md
 │   ├── import-toby.md
 │   ├── import-tabextend.md
@@ -305,7 +305,7 @@ spec/21-app/
 | **10-licensing-billing** | Free/Pro/Team/Lifetime matrix, license manager, payments, discounts, support. |
 | **11-shortcuts** | Full shortcut map and Ctrl+K command palette. |
 | **12-history-undo** | Event log, undo/redo, multi-user conflict resolution. |
-| **13-import-export** | All importers (Toby, Tab Extend, Chrome bookmarks, JSON) and exporters. |
+| **11-import-export** | All importers (Toby, Tab Extend, Chrome bookmarks, JSON) and exporters. |
 | **14-search** | Fast fuzzy search across workspaces and items, with jump-to. |
 | **15-visualization** | List / Grid / Compact / Mind-map / Tab Extend column modes + resizable panels. |
 | **16-notifications-updates** | In-app updates feed and the app updater (versioning, channels). |

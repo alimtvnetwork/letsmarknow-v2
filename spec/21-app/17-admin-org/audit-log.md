@@ -38,7 +38,7 @@ What's NOT logged: routine reads, individual item edits, search queries, presenc
 }
 ```
 
-- `id` = ULID (sortable).
+- `id` = UUIDv7 (sortable).
 - `action` = dot-namespaced verb in past tense.
 - `before`/`after` = minimal diffs; secrets redacted server-side.
 - `metadata` = free-form; small (< 1 KB).

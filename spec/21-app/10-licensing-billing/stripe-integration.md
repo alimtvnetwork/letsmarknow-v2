@@ -45,7 +45,7 @@ Price IDs configured via env vars per environment; never hardcoded.
 `org_subscription` table:
 | Field | Type | Notes |
 |---|---|---|
-| `org_id` | ULID | |
+| `org_id` | UUIDv7 | |
 | `processor` | enum | `stripe` |
 | `processor_subscription_id` | text | |
 | `processor_customer_id` | text | |

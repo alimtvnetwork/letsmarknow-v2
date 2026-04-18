@@ -15,8 +15,8 @@ Invoice generation, tax handling, and receipt delivery.
 `invoice`:
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `org_id` | ULID | |
+| `id` | UUIDv7 | |
+| `org_id` | UUIDv7 | |
 | `processor` | enum | stripe \| paddle |
 | `processor_invoice_id` | text | |
 | `number` | text | human-readable (e.g., `LMN-2026-000123`) |

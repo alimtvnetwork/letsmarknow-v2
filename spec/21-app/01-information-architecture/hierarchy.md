@@ -75,7 +75,7 @@ Account (alim@example.com)
 ### 3.3 Ownership
 
 - Every entity has exactly one **Organization** as its root owner.
-- Moving an entity across Organizations is **not** a regular move — it is an **export-then-import** operation (see `13-import-export/`).
+- Moving an entity across Organizations is **not** a regular move — it is an **export-then-import** operation (see `11-import-export/`).
 - Within an Organization, entities can be moved freely (Space ↔ Space, Collection ↔ Collection, Item ↔ Group ↔ Collection) by users with Editor+ role.
 
 ### 3.4 Sharing scope

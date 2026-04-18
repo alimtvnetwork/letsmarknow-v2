@@ -82,7 +82,7 @@ These are the flaws the user identified verbatim during requirements gathering. 
 | 3 | Tab Extend has no undo / redo | `12-history-undo/` |
 | 4 | Tab Extend caps at 8 categories, ~12 groups each | `10-licensing-billing/plans-matrix.md` |
 | 5 | Toby's free tier caps at 60 saved tabs | `10-licensing-billing/plans-matrix.md` |
-| 6 | Tab Extend cannot export properly (text only) | `13-import-export/` |
+| 6 | Tab Extend cannot export properly (text only) | `11-import-export/` |
 | 7 | Tab Extend's calendar / reminders are broken | dropped from v1 |
 | 8 | Tab Extend's workspace search shows everything always | `15-visualization/` + `14-search/` |
 | 9 | Tab Extend has no jump-to-result from search | `14-search/jump-to-result.md` |

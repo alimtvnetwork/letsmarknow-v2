@@ -29,7 +29,7 @@ Use cases: "Quick Tools", "Reading List - Q2", "Onboarding videos".
 
 | Field | Notes |
 |---|---|
-| `id` | ULID |
+| `id` | UUIDv7 |
 | `slug` | optional, used for `/g/:slug` deep links |
 | `name` | 1–80 chars |
 | `emoji` | optional |

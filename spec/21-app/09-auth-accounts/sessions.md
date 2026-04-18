@@ -10,8 +10,8 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 - Algorithm: EdDSA (Ed25519).
 - TTL: 15 minutes.
 - Claims:
-  - `sub` — `account_id` (ULID)
-  - `org` — active `org_id` (ULID)
+  - `sub` — `account_id` (UUIDv7)
+  - `org` — active `org_id` (UUIDv7)
   - `roles` — `{ "<org_id>": "owner" | "admin" | ... }` cached for active Org only
   - `tv` — token_version (incremented on global revoke)
   - `ent_h` — entitlements hash (for change detection)
@@ -30,8 +30,8 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `account_id` | ULID | |
+| `id` | UUIDv7 | |
+| `account_id` | UUIDv7 | |
 | `refresh_hash` | bytea | sha256 |
 | `created_at` | timestamptz | |
 | `last_used_at` | timestamptz | |

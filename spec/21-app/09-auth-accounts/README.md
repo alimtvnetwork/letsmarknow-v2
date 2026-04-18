@@ -40,5 +40,5 @@ How identity, sessions, and Org membership work across web app, extension, and P
 - **MFA available for all plans, required for Team Owners.**
 - **Server-side validation only** — client checks are UX hints. Never trust client-stored role claims.
 - **No password storage in localStorage / sessionStorage / extension storage.**
-- **Email is the canonical identifier** but Account ID (ULID) is the primary key everywhere internally.
+- **Email is the canonical identifier** but Account ID (UUIDv7) is the primary key everywhere internally.
 - **Deletion is soft for 30 days, then hard.** GDPR export available before deletion.

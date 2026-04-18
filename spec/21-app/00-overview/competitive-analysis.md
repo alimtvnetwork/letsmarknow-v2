@@ -82,18 +82,18 @@ These are the flaws the user identified verbatim during requirements gathering. 
 | 3 | Tab Extend has no undo / redo | `12-history-undo/` |
 | 4 | Tab Extend caps at 8 categories, ~12 groups each | `10-licensing-billing/plans-matrix.md` |
 | 5 | Toby's free tier caps at 60 saved tabs | `10-licensing-billing/plans-matrix.md` |
-| 6 | Tab Extend cannot export properly (text only) | `13-import-export/` |
+| 6 | Tab Extend cannot export properly (text only) | `11-import-export/` |
 | 7 | Tab Extend's calendar / reminders are broken | dropped from v1 |
 | 8 | Tab Extend's workspace search shows everything always | `15-visualization/` + `14-search/` |
 | 9 | Tab Extend has no jump-to-result from search | `14-search/jump-to-result.md` |
 | 10 | Toby has no hover-add "+" button on Collections | `07-features/add-item-hover-button.md` |
-| 11 | Toby's share URLs are not customizable | `08-sharing-collab/share-link.md` |
+| 11 | Toby's share URLs are not customizable | `08-sharing-collab/share-model.md` |
 | 12 | Toby has no password / expiry on shares | `08-sharing-collab/` |
 | 13 | Neither tool has a real Ctrl+K palette | `11-shortcuts/command-palette.md` |
 | 14 | Neither tool has mind-map / bubble visualization | `15-visualization/mindmap-view.md` |
 | 15 | Neither tool has resizable / split panels | `15-visualization/resizable-sections.md` |
 | 16 | Neither tool has a real audit log | `17-admin-org/audit-log.md` |
-| 17 | Neither tool has a proper support portal | `10-licensing-billing/support-system.md` |
+| 17 | Neither tool has a proper support portal | `10-licensing-billing/cancellations-and-refunds.md` |
 | 18 | Neither tool offers a Lifetime plan | `10-licensing-billing/plans-matrix.md` |
 | 19 | Neither tool ships SSO for individuals/teams cheaply | `09-auth-accounts/sso-saml.md` |
 | 20 | Neither tool has a release channel / updater UX | `16-notifications-updates/` |

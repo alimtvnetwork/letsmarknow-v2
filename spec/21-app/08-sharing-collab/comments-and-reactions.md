@@ -15,21 +15,21 @@ Lightweight discussion attached to Items.
 ### `Comment`
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `item_id` | ULID | |
-| `author_account_id` | ULID? | null for invited share viewer |
+| `id` | UUIDv7 | |
+| `item_id` | UUIDv7 | |
+| `author_account_id` | UUIDv7? | null for invited share viewer |
 | `author_invite_email` | citext? | for invited shares |
 | `body` | text | Markdown-lite, 4 KB |
-| `parent_comment_id` | ULID? | one level of threading |
+| `parent_comment_id` | UUIDv7? | one level of threading |
 | `created_at`, `updated_at`, `deleted_at?` | | |
 
 ### `Reaction`
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
+| `id` | UUIDv7 | |
 | `target_type` | `item \| comment` | |
-| `target_id` | ULID | |
-| `account_id` | ULID? | |
+| `target_id` | UUIDv7 | |
+| `account_id` | UUIDv7? | |
 | `invite_email` | citext? | |
 | `emoji` | string | one of allowed set (~30) |
 | `created_at` | | |

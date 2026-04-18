@@ -16,23 +16,23 @@ A `HistoryEvent` is the immutable record of one mutation. It is:
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | sortable; primary key |
-| `org_id` | ULID | scope |
-| `actor_account_id` | ULID? | null for system events |
-| `actor_session_id` | ULID? | which session caused it |
+| `id` | UUIDv7 | sortable; primary key |
+| `org_id` | UUIDv7 | scope |
+| `actor_account_id` | UUIDv7? | null for system events |
+| `actor_session_id` | UUIDv7? | which session caused it |
 | `client` | text | `web@2.4.1`, `chrome-ext@1.0.3`, `api@token:abc`, `system` |
 | `ip_truncated` | text | `/24` for IPv4, `/48` for IPv6 |
 | `kind` | text | dot-namespaced verb (see § 4) |
 | `target_type` | enum | `item \| collection \| group \| space \| share \| tag \| member \| org \| ...` |
-| `target_id` | ULID | the thing changed |
-| `parent_target_id` | ULID? | e.g., Collection ID for an Item move |
-| `prev_event_id` | ULID? | last event for this `(target_type, target_id)` |
+| `target_id` | UUIDv7 | the thing changed |
+| `parent_target_id` | UUIDv7? | e.g., Collection ID for an Item move |
+| `prev_event_id` | UUIDv7? | last event for this `(target_type, target_id)` |
 | `payload` | jsonb | event-specific (see § 5) |
 | `before` | jsonb? | minimal snapshot of changed fields pre-mutation (for undo) |
 | `after` | jsonb? | snapshot of changed fields post-mutation |
 | `inverse_recipe` | jsonb? | computed inverse mutation for undo (faster than diffing) |
-| `correlation_id` | ULID | groups related events (one user action → many events) |
-| `tx_id` | ULID | DB transaction ID; events in same tx are atomic |
+| `correlation_id` | UUIDv7 | groups related events (one user action → many events) |
+| `tx_id` | UUIDv7 | DB transaction ID; events in same tx are atomic |
 | `created_at` | timestamptz | server-assigned |
 
 Indexed: `(org_id, created_at desc)`, `(target_type, target_id, created_at desc)`, `(actor_account_id, created_at desc)`, `(correlation_id)`.

@@ -39,7 +39,7 @@ Convergence > correctness-by-fiat. We pick deterministic merge rules biased towa
 Items / Groups / Collections use fractional position keys (e.g., `0.5`, `0.75`).
 - Insert between A (`0.5`) and B (`0.75`) → new key `0.625`.
 - No global re-numbering needed.
-- Ties (rare) broken by ULID lexicographic order.
+- Ties (rare) broken by UUIDv7 lexicographic order.
 - Keys serialized as base-62 strings for compact storage and arbitrary precision.
 - Periodic rebalance job runs when key length > 32 chars (offline maintenance).
 
@@ -115,7 +115,7 @@ Hard delete only happens after 30-day soft-delete grace; window is large enough 
 
 For any sequence of events on any starting state, every client converges to the SAME state.
 - Server sequence is canonical.
-- Tie-breakers documented (ULID order).
+- Tie-breakers documented (UUIDv7 order).
 - No floating-point math in merge logic.
 
 ## 13. Versioning of merge rules

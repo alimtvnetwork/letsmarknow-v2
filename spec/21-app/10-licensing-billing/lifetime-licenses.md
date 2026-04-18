@@ -15,14 +15,14 @@ One-time-purchase keys redeemed against an Account. Used for AppSumo, ProductHun
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
+| `id` | UUIDv7 | |
 | `code` | text | URL-safe; 4-4-4-4 format (`AB12-CD34-EF56-GH78`) |
 | `code_hash` | bytea | sha256 of code (lookup key) |
 | `tier` | enum | `lifetime_pro \| lifetime_team` |
 | `seats` | int | Team only; default 5 |
 | `source` | text | `appsumo`, `producthunt`, `founder`, `partner_<name>`, `internal` |
-| `batch_id` | ULID? | for bulk-issued |
-| `redeemed_by_account_id` | ULID? | null when unredeemed |
+| `batch_id` | UUIDv7? | for bulk-issued |
+| `redeemed_by_account_id` | UUIDv7? | null when unredeemed |
 | `redeemed_at` | timestamptz? | |
 | `revoked_at` | timestamptz? | refunds, fraud |
 | `created_at` | timestamptz | |

@@ -11,7 +11,7 @@ The human (or service principal). One per real person.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | primary key everywhere |
+| `id` | UUIDv7 | primary key everywhere |
 | `email` | citext | unique; canonical identifier |
 | `email_verified_at` | timestamptz? | |
 | `display_name` | text | optional; falls back to email local-part |
@@ -28,12 +28,12 @@ A workspace. Either Personal (auto-created) or Team.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
+| `id` | UUIDv7 | |
 | `name` | text | |
 | `slug` | text | unique; URL component |
 | `kind` | `personal \| team` | |
 | `plan_id` | enum | free / pro / team / lifetime |
-| `owner_account_id` | ULID | exactly one |
+| `owner_account_id` | UUIDv7 | exactly one |
 | `brand` | jsonb? | colors, logo (Pro+) |
 | `domain` | text? | claimed domain (Team) |
 | `created_at`, `updated_at`, `deleted_at?` | | |
@@ -43,9 +43,9 @@ The role binding of one Account to one Org.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `org_id` | ULID | |
-| `account_id` | ULID | |
+| `id` | UUIDv7 | |
+| `org_id` | UUIDv7 | |
+| `account_id` | UUIDv7 | |
 | `role` | `owner \| admin \| editor \| viewer \| billing` | |
 | `invited_by` | account_id? | |
 | `joined_at` | timestamptz | |

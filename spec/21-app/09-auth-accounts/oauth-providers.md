@@ -59,8 +59,8 @@ Microsoft and others deferred until demand justifies.
 `account_oauth_links`:
 | Field | Type |
 |---|---|
-| `id` | ULID |
-| `account_id` | ULID |
+| `id` | UUIDv7 |
+| `account_id` | UUIDv7 |
 | `provider` | enum |
 | `provider_sub` | text |
 | `email_at_link` | citext |

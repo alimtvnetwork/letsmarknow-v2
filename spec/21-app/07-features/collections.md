@@ -26,7 +26,7 @@ The primary container of items. Live inside a Space.
 
 | Field | Notes |
 |---|---|
-| `id` | ULID |
+| `id` | UUIDv7 |
 | `slug` | URL-safe; auto from name; user-editable |
 | `name` | 1–120 chars |
 | `description` | 4 KB Markdown-lite (optional) |

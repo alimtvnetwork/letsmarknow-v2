@@ -68,13 +68,13 @@ Append-only history of who did what for compliance and forensics.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | sortable |
-| `org_id` | ULID | |
-| `actor_account_id` | ULID? | null for system events |
+| `id` | UUIDv7 | sortable |
+| `org_id` | UUIDv7 | |
+| `actor_account_id` | UUIDv7? | null for system events |
 | `actor_kind` | `member \| api_token \| system \| webhook` | |
 | `event_type` | text | dotted name |
 | `target_type` | text? | `item`, `share`, etc. |
-| `target_id` | ULID? | |
+| `target_id` | UUIDv7? | |
 | `payload` | jsonb | event-specific (PII-minimized) |
 | `ip` | inet? | actor IP |
 | `user_agent` | text? | actor UA |

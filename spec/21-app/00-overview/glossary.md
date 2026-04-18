@@ -24,7 +24,9 @@
 | **Admin** | Full control except delete-organization and transfer-ownership. |
 | **Editor** | Can create/update/delete Spaces, Collections, Groups, Items they have access to. |
 | **Viewer** | Read-only across the Organization or a specific Space they were invited to. |
-| **Guest** | A non-Member who accesses content via a Share link (may be authenticated or anonymous). |
+| **Billing** | Access only to billing, invoices, and seat management. No content access. Counts as a Member but does not consume a content seat. |
+| **Guest** | A non-Member who accesses content via a Share link (may be authenticated or anonymous). NOT stored as a Member. |
+| **System** | Synthetic actor used in audit/history logs for cron jobs, webhooks, and API tokens. Never a Member. |
 
 ## Sharing
 

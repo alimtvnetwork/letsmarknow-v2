@@ -75,7 +75,7 @@ Account (alim@example.com)
 ### 3.3 Ownership
 
 - Every entity has exactly one **Organization** as its root owner.
-- Moving an entity across Organizations is **not** a regular move — it is an **export-then-import** operation (see `13-import-export/`).
+- Moving an entity across Organizations is **not** a regular move — it is an **export-then-import** operation (see `11-import-export/`).
 - Within an Organization, entities can be moved freely (Space ↔ Space, Collection ↔ Collection, Item ↔ Group ↔ Collection) by users with Editor+ role.
 
 ### 3.4 Sharing scope
@@ -83,7 +83,7 @@ Account (alim@example.com)
 | Entity | Can be shared via `letsmarknow.com/t/{slug}` | Notes |
 |---|---|---|
 | Account | ❌ | never shared |
-| Organization | ❌ | shared via Member invites only (`08-sharing-collab/invite-only.md`) |
+| Organization | ❌ | shared via Member invites only (`08-sharing-collab/invite-only-shares.md`) |
 | Space | ✅ | yes |
 | Collection | ✅ | yes |
 | Group | ✅ | yes — fixes Tab Extend's #1 flaw |
@@ -94,8 +94,9 @@ When a parent is shared, the share recursively exposes all descendants (read-onl
 ### 3.5 Soft delete
 
 - Delete on any entity is soft (sets `deleted_at`). Hard delete happens after **30 days** in trash, or immediately on user-initiated "Empty Trash".
-- Soft-deleted entities are restorable via Undo or via the Trash UI (see `12-history-undo/` and `07-features/delete-with-undo.md`).
+- Soft-deleted entities are restorable via Undo or via the Trash UI (see `12-history-undo/` and `12-history-undo/undo-redo.md`).
 - Soft-deleting a parent soft-deletes all descendants atomically. Restoring a parent restores all descendants that were soft-deleted in the same operation.
+- **GDPR / DSR override:** a verified Data Subject Request (right-to-erasure) bypasses the 30-day grace and triggers immediate hard-delete of the requesting Account's PII and any Org where they are sole Owner. See `19-security-privacy/gdpr-ccpa.md` and `17-admin-org/data-export-delete.md` for the precedence chain.
 
 ### 3.6 Counting toward plan limits
 
@@ -122,7 +123,7 @@ Per Organization (Free tier limits — exact numbers in `10-licensing-billing/pl
 ### 3.8 Identifiers
 
 - All entities use UUIDv7 (`id`). Reason: time-ordered, sortable, unguessable.
-- Public Share slugs are separate from `id` (see `08-sharing-collab/share-link.md`).
+- Public Share slugs are separate from `id` (see `08-sharing-collab/share-model.md`).
 
 ### 3.9 Timestamps
 

@@ -12,7 +12,7 @@ The membership record linking an Account to an Organization with a Role. One Acc
 | `organization_id` | uuid (Organization.id) | no | — | — | — |
 | `account_id` | uuid (Account.id) | yes | null until accepted | — | Null until invitee signs up / accepts. |
 | `invited_email` | email | no | — | lowercased | Email used for invite. Stays even after accept. |
-| `role` | enum(`owner`\|`admin`\|`editor`\|`viewer`) | no | `viewer` | — | — |
+| `role` | enum(`owner`\|`admin`\|`editor`\|`viewer`\|`billing`) | no | `viewer` | — | `billing` = access to billing/invoices only, no content access. `guest` is NOT a Member role — guests are tracked via Share access, not Membership. |
 | `status` | enum(`pending`\|`active`\|`suspended`\|`removed`) | no | `pending` | — | `pending` until accept; `active` after; `suspended` by Admin; `removed` is hard tombstone. |
 | `invited_by` | uuid (Account.id) | no | — | — | Who sent the invite. |
 | `invited_at` | timestamp | no | — | — | — |
@@ -47,7 +47,7 @@ The membership record linking an Account to an Organization with a Role. One Acc
 - **Suspend / Re-activate:** Admin/Owner only. Suspended Members keep data references but cannot sign in to that Org.
 - **Remove:** sets `status=removed`, `removed_at`. Member's data references preserved.
 
-## Permission checks (summary — full matrix in `08-sharing-collab/roles-permissions.md`)
+## Permission checks (summary — full matrix in `08-sharing-collab/permissions-matrix.md`)
 
 | Action | Owner | Admin | Editor | Viewer |
 |---|---|---|---|---|

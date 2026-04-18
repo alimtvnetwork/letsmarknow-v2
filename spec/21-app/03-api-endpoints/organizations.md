@@ -231,4 +231,4 @@ All data deleted permanently; cannot be undone.
   }
 }
 ```
-Polled via `GET /v1/organizations/:id/data-export/:export_id` (see `13-import-export/`).
+Polled via `GET /v1/organizations/:id/data-export/:export_id` (see `11-import-export/`).

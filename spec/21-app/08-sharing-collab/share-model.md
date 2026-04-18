@@ -1,4 +1,6 @@
-# Share Model
+# Share Model (v2 design note — NOT shipped in v1)
+
+> ⚠️ **STATUS: v2 future design.** The shipping v1 contract is the **single-table** model in `02-data-model/share.md`. This file documents a richer multi-table design (`Share` + `ShareLink` + `ShareInvite` + `ShareView`) intended for a later release when multiple links per share, embed URLs, and custom domains land. **Do not implement against this file for v1.**
 
 The data model and lifecycle for every shareable surface.
 
@@ -11,10 +13,10 @@ One per shareable scope (Collection, Group, or Item). Bag of policy.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `org_id` | ULID | |
+| `id` | UUIDv7 | |
+| `org_id` | UUIDv7 | |
 | `scope_type` | `collection \| group \| item` | |
-| `scope_id` | ULID | the shared entity |
+| `scope_id` | UUIDv7 | the shared entity |
 | `created_by` | account_id | |
 | `is_active` | bool | revoked = false |
 | `include_notes` | bool | default false |
@@ -32,8 +34,8 @@ A specific URL to a Share. Multiple per Share.
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `share_id` | ULID | |
+| `id` | UUIDv7 | |
+| `share_id` | UUIDv7 | |
 | `slug` | string | URL-safe; 8–32 chars; user-customizable |
 | `mode` | `public \| password \| invite` | |
 | `password_hash` | string? | argon2id |
@@ -48,8 +50,8 @@ A specific URL to a Share. Multiple per Share.
 ### `ShareInvite` (mode = invite)
 | Field | Type | Notes |
 |---|---|---|
-| `id` | ULID | |
-| `share_link_id` | ULID | |
+| `id` | UUIDv7 | |
+| `share_link_id` | UUIDv7 | |
 | `email` | citext | |
 | `token_hash` | string | one-time magic-link token (hashed) |
 | `accepted_at` | timestamptz? | |
@@ -60,7 +62,7 @@ Append-only ring buffer per ShareLink for last 90 days.
 
 | Field | Type | Notes |
 |---|---|---|
-| `share_link_id` | ULID | |
+| `share_link_id` | UUIDv7 | |
 | `viewed_at` | timestamptz | |
 | `country` | iso2 | from CDN headers |
 | `referrer_host` | string? | |

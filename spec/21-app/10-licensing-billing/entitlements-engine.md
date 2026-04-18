@@ -93,7 +93,7 @@ Per request context `(account_id, org_id)`:
 
 ## 8. Entitlement keys (canonical list)
 
-Defined in `pricing-and-plans.md` § 8. Adding a new key requires:
+Defined in `plans-matrix.md` § 8. Adding a new key requires:
 1. Add to `plans.yaml` for every plan (default value).
 2. Add server-side enforcement.
 3. Add client UX gate.

@@ -96,6 +96,7 @@ When a parent is shared, the share recursively exposes all descendants (read-onl
 - Delete on any entity is soft (sets `deleted_at`). Hard delete happens after **30 days** in trash, or immediately on user-initiated "Empty Trash".
 - Soft-deleted entities are restorable via Undo or via the Trash UI (see `12-history-undo/` and `12-history-undo/undo-redo.md`).
 - Soft-deleting a parent soft-deletes all descendants atomically. Restoring a parent restores all descendants that were soft-deleted in the same operation.
+- **GDPR / DSR override:** a verified Data Subject Request (right-to-erasure) bypasses the 30-day grace and triggers immediate hard-delete of the requesting Account's PII and any Org where they are sole Owner. See `19-security-privacy/gdpr-ccpa.md` and `17-admin-org/data-export-delete.md` for the precedence chain.
 
 ### 3.6 Counting toward plan limits
 

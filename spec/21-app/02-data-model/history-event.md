@@ -17,7 +17,7 @@ The append-only log of every mutation across the system. Powers Undo/Redo, audit
 | `event_type` | string(80) | no | — | dotted enum, e.g. `item.created` | The action. Full enum lives in each entity's "Events emitted" section. |
 | `target_type` | enum(`organization`\|`space`\|`collection`\|`group`\|`item`\|`tag`\|`share`\|`member`\|`license`) | no | — | — | — |
 | `target_id` | uuid | no | — | — | The affected entity. |
-| `actor_role` | enum(`owner`\|`admin`\|`editor`\|`viewer`\|`system`) | no | — | — | Role at time of action. |
+| `actor_role` | enum(`owner`\|`admin`\|`editor`\|`viewer`\|`billing`\|`guest`\|`system`) | no | — | — | Role at time of action. `system` = synthetic actor (cron, webhook, API token). `billing` = billing-only seat. `guest` = Share-link viewer. |
 | `before` | json | yes | null | per-event schema | State snapshot of changed fields BEFORE. |
 | `after` | json | yes | null | per-event schema | State snapshot of changed fields AFTER. |
 | `metadata` | json | no | `{}` | — | Free-form (e.g. Save-Session window id, drag source, import filename). |

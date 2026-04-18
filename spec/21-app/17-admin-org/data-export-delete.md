@@ -2,6 +2,8 @@
 
 Self-service Org-wide data export (GDPR/portability) and Org deletion (with grace period).
 
+> ⚠️ **GDPR / DSR override.** Standard Org deletion has a 30-day reversible grace period. A verified Data Subject Request under GDPR Art. 17 (right to erasure) **bypasses** the grace period and triggers immediate hard-delete of the requesting Account's PII and any Org where they are sole Owner. See `19-security-privacy/gdpr-ccpa.md` for the verification flow and precedence chain. The 30-day grace applies only to user-initiated voluntary deletions, not to DSR-initiated deletions.
+
 ---
 
 ## 1. Export

@@ -1,4 +1,6 @@
-# Share Model
+# Share Model (v2 design note — NOT shipped in v1)
+
+> ⚠️ **STATUS: v2 future design.** The shipping v1 contract is the **single-table** model in `02-data-model/share.md`. This file documents a richer multi-table design (`Share` + `ShareLink` + `ShareInvite` + `ShareView`) intended for a later release when multiple links per share, embed URLs, and custom domains land. **Do not implement against this file for v1.**
 
 The data model and lifecycle for every shareable surface.
 

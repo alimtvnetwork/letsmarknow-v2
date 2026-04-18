@@ -5,6 +5,7 @@ Updated: just now
 
 ## Core
 Spec lives in `spec/21-app/` — "By domain/feature" structure (00-overview/ … 20-roadmap/). Do not flatten or re-shape folders.
+**No-implementation mode is active.** Do NOT write code under `src/`, do NOT enable Cloud, do NOT create migrations or install packages. Spec files + memory only. See `mem://constraints/no-implementation-mode`.
 Conversation logging: append every user instruction verbatim to `spec/21-app/00-conversation-log.md` AND refactor the relevant structured spec file(s).
 Instruction handling: write immediately. Only stop to ask when genuinely ambiguous (conflicting locked rules, missing data, multiple valid interpretations).
 Identifiers: UUIDv7 everywhere. Never ULID.
@@ -18,4 +19,5 @@ Always list remaining tasks at end of each work session; if all done, suggest ne
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
 
 ## Memories
+- [No Implementation Mode](mem://constraints/no-implementation-mode) — Spec-only phase. No src/ edits, no Cloud, no migrations. Audits stay as docs.
 - [Gap Analysis State](mem://features/gap-analysis-state) — **CLOSED:** B1-B3, B5-B6, M11, M13. **DEFERRED:** B4, B7. **OPEN:** M1-M10, M12, M14. Lovable: 78%, Cursor: 86%

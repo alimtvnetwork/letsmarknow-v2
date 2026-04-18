@@ -51,7 +51,7 @@ Ranked by **severity × frequency**.
 | ~~B3~~ | ~~No copy strings catalog.~~ **CLOSED** — see `06-ui-ux/17-copy-strings.md` (full key→EN map across 17 sections) | — | — | Done |
 | B4 | **No test plan / acceptance criteria.** Zero files matching `test|qa|acceptance`. | Every feature | AI ships untested code → you find bugs in week 2 | High — `21-testing/` folder with Gherkin-style scenarios per feature |
 | B5 | **Chrome extension MV3 manifest not finalized.** `04-extension/01-manifest.md` exists but permissions, host patterns, OAuth client IDs are TBD. | Extension build + Chrome Web Store submission | AI invents permissions → store rejection | Medium — fill manifest.json template literally |
-| B6 | **No infrastructure / deployment spec.** No file describes: hosting, CI/CD, env var inventory, secrets vault, domains, SSL, CDN, queues, cron. | Day 1 of deploy | AI defaults to Vercel + Supabase free tier → won't scale, no Redis for share-revocation 5s SLA | Medium — `22-infrastructure/` folder |
+| ~~B6~~ | ~~No infrastructure / deployment spec.~~ **CLOSED** — see `22-infrastructure/` (10 files: hosting, environments, env-vars, secrets, domains-ssl, cdn-storage, queues, cron, ci-cd, observability) | — | — | Done |
 | B7 | **No real seed/sample data.** No `seeds.json` or fixture file. | Every dev environment, every test | AI generates fake data inline, inconsistent across runs | Low — one seed file per major entity |
 
 ### 3.2 MAJOR — AI will fill with wrong defaults

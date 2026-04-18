@@ -1,0 +1,65 @@
+# Entity: Space
+
+## Purpose
+
+A logical grouping inside an Organization — e.g. "My Collections", "Evatix", "Personal", "Gaming PC". Contains Collections. Sharable as a unit.
+
+## Fields
+
+| Name | Type | Null | Default | Validation | Description |
+|---|---|---|---|---|---|
+| Audit Block | — | — | — | — | see `README.md` |
+| `organization_id` | uuid (Organization.id) | no | — | must exist | Parent organization. |
+| `name` | string(120) | no | "New Space" | trim, non-empty | Display name. |
+| `description` | text | yes | null | ≤ 4000 chars | Free-text description. |
+| `notes` | text | yes | null | ≤ 8000 chars | Markdown-lite notes shown in space sidebar. |
+| `icon` | string(40) | yes | null | from icon set | Optional icon name (e.g. `users`, `lock`, `gamepad`). |
+| `color` | color | yes | null | — | Optional accent color override. |
+| `position` | bigint | no | max(siblings)+1024 | — | Order within sidebar. |
+| `is_starred` | bool | no | false | — | Pinned to top of sidebar for current Account (per-Account flag — see § Per-Account state). |
+| `visibility` | enum(`private`\|`org`\|`shared`) | no | `org` | — | `private` = only members with explicit access; `org` = all Org members; `shared` = at least one active Share exists. |
+| `default_view_mode` | enum(`list`\|`grid`\|`compact`\|`mindmap`\|`column`) | yes | inherits from Org | — | Per-space view preference. |
+| `settings` | json | no | `{}` | — | Per-space prefs (e.g. `show_collection_count`, `collapsed_collections: [uuid,...]`). |
+
+### Per-Account state
+
+The `is_starred` flag and `collapsed_collections` are per-Account, not per-Space. The DB team should implement them via a side table `account_space_state(account_id, space_id, is_starred, collapsed_collections, last_viewed_at)`.
+
+## Relationships
+
+- **Parent:** Organization.
+- **Children:** Collections (0..N), Shares (0..N).
+
+## Invariants
+
+1. `organization_id` immutable.
+2. Cannot move a Space across Organizations (use export/import).
+3. `position` unique-ish per `(organization_id)` — re-balanced periodically.
+4. Soft-deleting a Space cascades to all Collections, Groups, Items.
+
+## Indexes (recommended)
+
+- `(organization_id, position)` for sidebar render
+- `(organization_id, deleted_at)`
+- `(organization_id, name)` for search
+
+## Lifecycle
+
+- **Create:** by Editor+ in Org. New Spaces appear at the bottom of the sidebar.
+- **Update:** any field except `id`, `organization_id`, `created_at`, `created_by`.
+- **Move (reorder):** updates `position`. Emits `space.reordered`.
+- **Soft-delete:** cascades. Recoverable for 30 days.
+- **Hard-delete:** cascades.
+
+## Events emitted
+
+- `space.created`
+- `space.updated`
+- `space.reordered`
+- `space.starred` / `space.unstarred`
+- `space.collapsed` / `space.expanded`
+- `space.soft_deleted`
+- `space.restored`
+- `space.hard_deleted`
+- `space.shared` (when first Share created)
+- `space.unshared` (when last Share revoked)

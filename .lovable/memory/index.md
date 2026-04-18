@@ -18,4 +18,4 @@ Always list remaining tasks at end of each work session; if all done, suggest ne
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
 
 ## Memories
-(none yet — add as project-specific design/feature/constraint rules emerge)
+- [Gap Analysis State](mem://features/gap-analysis-state) — **CLOSED:** B1-B3, B5-B6, M11, M13. **DEFERRED:** B4, B7. **OPEN:** M1-M10, M12, M14. Lovable: 78%, Cursor: 86%

@@ -6,6 +6,7 @@ How we learn what's working without violating user trust.
 
 1. `01-opt-in-analytics.md` — product analytics events, opt-in model.
 2. `02-error-reporting.md` — crash + exception capture.
+3. `03-events.md` — **canonical event taxonomy** (single source of truth for every event name, props schema, owner).
 
 ## Files
 
@@ -13,6 +14,7 @@ How we learn what's working without violating user trust.
 |---|---|
 | `01-opt-in-analytics.md` | Product event telemetry |
 | `02-error-reporting.md` | Crash + exception capture |
+| `03-events.md` | Master event catalog — every event name, props, owner, sampling |
 
 ## Locked rules
 

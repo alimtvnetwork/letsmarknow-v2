@@ -4,6 +4,8 @@ Single source of truth for what every role can do across every entity.
 
 Server enforces; client mirrors for UX. Drift = bug.
 
+> 🤖 **Machine-readable mirror:** [`permissions-matrix.json`](./permissions-matrix.json) ships the same matrix as a typed JSON document. RLS policies, server middleware checks, and client guards SHOULD be code-generated from the JSON, not transcribed from this prose. If the two ever disagree, the JSON wins and this file is the bug.
+
 ---
 
 ## 1. Roles

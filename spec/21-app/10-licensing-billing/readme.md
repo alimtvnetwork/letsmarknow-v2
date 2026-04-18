@@ -21,7 +21,7 @@ Both ultimately produce **entitlements** consumed by the rest of the app.
 9. `09-dunning-and-recovery.md` — failed payments, grace periods, win-backs.
 10. `10-coupons-and-promotions.md` — promo codes, referral credits, partner deals.
 11. `11-revenue-reporting.md` — internal MRR/ARR, churn dashboards.
-12. `billing-webhooks.md` — webhook handlers, idempotency, signature verification.
+12. `12-billing-webhooks.md` — webhook handlers, idempotency, signature verification.
 13. `13-cancellations-and-refunds.md` — cancellation flow, refund policy, retention.
 
 ## Files
@@ -39,7 +39,7 @@ Both ultimately produce **entitlements** consumed by the rest of the app.
 | `09-dunning-and-recovery.md` | Failed payments |
 | `10-coupons-and-promotions.md` | Discounts |
 | `11-revenue-reporting.md` | Internal metrics |
-| `billing-webhooks.md` | Inbound events |
+| `12-billing-webhooks.md` | Inbound events |
 | `13-cancellations-and-refunds.md` | End-of-life |
 
 ## Locked rules

@@ -16,7 +16,7 @@ Two distinct collaboration models live here:
 6. `06-realtime-presence.md` — WebSocket presence, cursors, "editing" badges.
 7. `07-comments-and-reactions.md` — Pro+ comments on Items + emoji reactions.
 8. `08-notifications.md` — inbox + email + push for collab events.
-9. `audit-log.md` — Team-tier history of who did what.
+9. `09-audit-log.md` — Team-tier history of who did what.
 10. `10-embed-widget.md` — `<iframe>` embed of a shared Collection.
 11. `11-share-analytics.md` — view counts, referrers, top items (Pro+).
 12. `12-revocation-and-expiry.md` — link rotation, TTL, kill switch.
@@ -33,7 +33,7 @@ Two distinct collaboration models live here:
 | `06-realtime-presence.md` | Live presence |
 | `07-comments-and-reactions.md` | Discussion |
 | `08-notifications.md` | Inbox / email / push |
-| `audit-log.md` | Compliance log |
+| `09-audit-log.md` | Compliance log |
 | `10-embed-widget.md` | Iframe embed |
 | `11-share-analytics.md` | Share metrics |
 | `12-revocation-and-expiry.md` | Lifecycle |

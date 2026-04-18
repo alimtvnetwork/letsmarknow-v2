@@ -97,7 +97,7 @@ offline ──► queued ──► (synced when online) ──► saved
   - Show preview from `POST /v1/sessions/save/preview`
   - Toggles: Close tabs after, Exclude pinned, Exclude internal URLs, Dedupe.
   - Big "Save" button.
-- Spec: `save-session.md`.
+- Spec: `09-save-session.md`.
 
 ## 9. Quick-find (in-popup)
 

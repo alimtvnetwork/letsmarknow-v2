@@ -157,5 +157,5 @@ For unknown errors, include `error_id`:
 ## 17. Editorial review
 
 - All new strings reviewed by content owner before merge.
-- `i18n/glossary.md` lists locked terms + translations.
+- `00-overview/02-glossary.md` lists locked terms + translations.
 - Lint rule flags forbidden phrases in source strings.

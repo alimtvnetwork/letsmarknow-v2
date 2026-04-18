@@ -7,11 +7,11 @@ Files in this folder describe **what** a feature does end-to-end. Implementation
 ## Reading order
 
 1. `01-save-tab.md` — single-tab save (the primary action).
-2. `save-session.md` — multi-tab "save this window".
+2. `02-save-session.md` — multi-tab "save this window".
 3. `03-quick-find.md` — Cmd+K / omnibox / popup search.
-4. `collections.md` — create, rename, move, duplicate, archive.
-5. `groups.md` — clusters of items inside a Collection.
-6. `tags.md` — flat, org-scoped tags + filtering.
+4. `04-collections.md` — create, rename, move, duplicate, archive.
+5. `05-groups.md` — clusters of items inside a Collection.
+6. `06-tags.md` — flat, org-scoped tags + filtering.
 7. `07-notes-and-descriptions.md` — Markdown-lite content fields.
 8. `08-view-modes.md` — grid / list / compact / column behavior.
 9. `09-hover-to-jump.md` — switch to existing tab on hover.
@@ -27,11 +27,11 @@ Files in this folder describe **what** a feature does end-to-end. Implementation
 | File | Purpose |
 |---|---|
 | `01-save-tab.md` | Save 1 tab |
-| `save-session.md` | Save N tabs |
+| `02-save-session.md` | Save N tabs |
 | `03-quick-find.md` | Search across saves |
-| `collections.md` | Collection lifecycle |
-| `groups.md` | Group lifecycle |
-| `tags.md` | Tag lifecycle |
+| `04-collections.md` | Collection lifecycle |
+| `05-groups.md` | Group lifecycle |
+| `06-tags.md` | Tag lifecycle |
 | `07-notes-and-descriptions.md` | Content fields |
 | `08-view-modes.md` | Display modes |
 | `09-hover-to-jump.md` | Open-tab detection |

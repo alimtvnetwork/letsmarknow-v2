@@ -116,10 +116,10 @@ spec/21-app/
 │   ├── 03-auth.md
 │   ├── 04-organizations.md
 │   ├── 05-spaces.md
-│   ├── collections.md
-│   ├── groups.md
+│   ├── 06-collections.md
+│   ├── 07-groups.md
 │   ├── 08-items.md
-│   ├── tags.md
+│   ├── 09-tags.md
 │   ├── 10-shares.md
 │   ├── 11-members-invites.md
 │   ├── 12-sessions-save.md                   (Save Session to Collection)
@@ -127,7 +127,7 @@ spec/21-app/
 │   ├── 14-history.md                         (undo/redo backend support)
 │   ├── 15-import-export.md
 │   ├── 16-licenses.md
-│   ├── billing-webhooks.md
+│   ├── 17-billing-webhooks.md
 │   └── 02-public-share-viewer.md             (unauthenticated /t/{slug} endpoints)
 ├── 04-extension/
 │   ├── README.md
@@ -139,7 +139,7 @@ spec/21-app/
 │   ├── tab-tracking.md                    (open tabs sidebar data source)
 │   ├── window-management.md               (Window 1/2/3 grouping)
 │   ├── drag-drop-from-tabs.md
-│   ├── save-session.md
+│   ├── 09-save-session.md
 │   ├── jump-to-tab.md
 │   ├── offline-cache.md                   (IndexedDB local mirror)
 │   ├── sync-engine.md                     (push/pull, conflict resolution)
@@ -264,7 +264,7 @@ spec/21-app/
 │   ├── 01-organization-settings.md
 │   ├── 02-members-management.md
 │   ├── 03-roles.md
-│   ├── audit-log.md
+│   ├── 04-audit-log.md
 │   └── 05-data-export-delete.md
 ├── 18-analytics-telemetry/
 │   ├── README.md

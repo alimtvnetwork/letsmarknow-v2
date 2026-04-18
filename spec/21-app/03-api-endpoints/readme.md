@@ -7,12 +7,12 @@
 1. `01-conventions.md` — read **first**. Defines base URL, versioning, auth headers, error envelope, pagination, idempotency, rate limits, ETag/concurrency, common types. Every other file in this folder assumes these.
 2. `02-public-share-viewer.md` — unauthenticated `/t/{slug}` endpoints. Read second because they have the loosest auth model.
 3. `03-auth.md` — sign-up, sign-in, OAuth, magic links, sessions, password reset.
-4. `04-organizations.md` → `05-spaces.md` → `collections.md` → `groups.md` → `08-items.md` — the core CRUD ladder.
-5. `tags.md`, `10-shares.md`, `11-members-invites.md` — cross-cutting collaboration.
+4. `04-organizations.md` → `05-spaces.md` → `06-collections.md` → `07-groups.md` → `08-items.md` — the core CRUD ladder.
+5. `09-tags.md`, `10-shares.md`, `11-members-invites.md` — cross-cutting collaboration.
 6. `12-sessions-save.md` — Save Session to Collection (extension-driven).
 7. `13-search.md`, `14-history.md` — power features.
 8. `15-import-export.md` — bulk operations.
-9. `16-licenses.md`, `billing-webhooks.md` — entitlements.
+9. `16-licenses.md`, `17-billing-webhooks.md` — entitlements.
 
 ## Files
 
@@ -23,10 +23,10 @@
 | `03-auth.md` | 14 | mixed |
 | `04-organizations.md` | 9 | bearer |
 | `05-spaces.md` | 9 | bearer |
-| `collections.md` | 11 | bearer |
-| `groups.md` | 9 | bearer |
+| `06-collections.md` | 11 | bearer |
+| `07-groups.md` | 9 | bearer |
 | `08-items.md` | 13 | bearer |
-| `tags.md` | 7 | bearer |
+| `09-tags.md` | 7 | bearer |
 | `10-shares.md` | 9 | bearer (mgmt) / public (viewer) |
 | `11-members-invites.md` | 11 | bearer |
 | `12-sessions-save.md` | 4 | bearer |
@@ -34,7 +34,7 @@
 | `14-history.md` | 6 | bearer |
 | `15-import-export.md` | 8 | bearer |
 | `16-licenses.md` | 7 | bearer |
-| `billing-webhooks.md` | 4 | webhook signature |
+| `17-billing-webhooks.md` | 4 | webhook signature |
 
 Total: ~130 endpoints.
 

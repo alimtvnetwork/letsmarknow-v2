@@ -78,7 +78,7 @@ Confirmation requires typing the Org name + Owner password re-entry.
 
 - Each tab saves independently with optimistic UI.
 - Server validates; reverts UI + shows error toast on rejection.
-- All changes emit audit log entries (per `audit-log.md`).
+- All changes emit audit log entries (per `04-audit-log.md`).
 - Slug rename triggers 301 redirects for old slug; cached 30 days.
 
 ## 10. Telemetry

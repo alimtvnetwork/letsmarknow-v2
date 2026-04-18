@@ -1,7 +1,7 @@
 # Wireframe — Extension Popup
 
 > **Surface:** Browser extension popup (Chrome MV3, 360×500 default)
-> **Spec ref:** `04-extension/04-popup.md`, `04-extension/save-tab.md`
+> **Spec ref:** `04-extension/04-popup.md`, `07-features/01-save-tab.md`
 
 ---
 

@@ -6,17 +6,17 @@ This folder defines the event log, undo/redo semantics, and conflict resolution.
 
 ## Reading order
 
-1. `event-log.md` — the append-only history of mutations.
-2. `undo-redo.md` — local + server-aware undo/redo semantics.
-3. `conflict-resolution.md` — what happens when two people edit at once.
+1. `01-event-log.md` — the append-only history of mutations.
+2. `02-undo-redo.md` — local + server-aware undo/redo semantics.
+3. `03-conflict-resolution.md` — what happens when two people edit at once.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `event-log.md` | Append-only mutation history |
-| `undo-redo.md` | Ctrl+Z / Ctrl+Y semantics |
-| `conflict-resolution.md` | Multi-user merge rules |
+| `01-event-log.md` | Append-only mutation history |
+| `02-undo-redo.md` | Ctrl+Z / Ctrl+Y semantics |
+| `03-conflict-resolution.md` | Multi-user merge rules |
 
 ## Locked rules
 

@@ -26,15 +26,15 @@
 
 | Strength | Evidence | Why it lands |
 |---|---|---|
-| **Locked vocabulary** | `00-overview/glossary.md` with forbidden synonyms | AI uses correct entity names everywhere |
+| **Locked vocabulary** | `00-overview/02-glossary.md` with forbidden synonyms | AI uses correct entity names everywhere |
 | **Full data-model contracts** | 11 entities × ~70 lines each, every field typed | AI generates DB schema + TypeScript types directly |
 | **REST contracts with bodies** | `03-api-endpoints/` — 17 files, ~3,200 lines, real JSON examples | AI generates routes + Zod schemas |
-| **Design tokens fully resolved** | `06-ui-ux/design-tokens.md` — 270 lines of HSL triplets | AI wires Tailwind config without guessing |
+| **Design tokens fully resolved** | `06-ui-ux/01-design-tokens.md` — 270 lines of HSL triplets | AI wires Tailwind config without guessing |
 | **Locked rules per section** | Each `README.md` ends with `## Locked rules` | AI has hard constraints to refuse bad changes |
-| **Phased roadmap** | `20-roadmap/phase-0-mvp.md` → `phase-4` | AI can scope a single phase instead of biting all |
+| **Phased roadmap** | `20-roadmap/01-phase-0-mvp.md` → `phase-4` | AI can scope a single phase instead of biting all |
 | **Audit + reconciliation done** | `audit.md` + 10-step fix | No more ULID/UUIDv7 drift, role enum locked, share v1 vs v2 separated |
 
-→ **An AI given just `00-overview/` + `02-data-model/` + `03-api-endpoints/` + `phase-0-mvp.md` will produce a working backend skeleton in one shot.** That's the 38–74% baseline.
+→ **An AI given just `00-overview/` + `02-data-model/` + `03-api-endpoints/` + `01-phase-0-mvp.md` will produce a working backend skeleton in one shot.** That's the 38–74% baseline.
 
 ---
 
@@ -47,10 +47,10 @@ Ranked by **severity × frequency**.
 | # | Gap | Where it hurts | What AI will do instead | Fix effort |
 |---|---|---|---|---|
 | ~~B1~~ | ~~No wireframes / Figma / pixel mockups.~~ **CLOSED** — see `06-ui-ux/wireframes/` (dashboard, popup, share-viewer, onboarding, billing) | — | — | Done |
-| ~~B2~~ | ~~No enumerated error code catalog.~~ **CLOSED** — see `03-api-endpoints/error-codes.md` (60+ codes across 10 domains) | — | — | Done |
-| ~~B3~~ | ~~No copy strings catalog.~~ **CLOSED** — see `06-ui-ux/copy-strings.md` (full key→EN map across 17 sections) | — | — | Done |
+| ~~B2~~ | ~~No enumerated error code catalog.~~ **CLOSED** — see `03-api-endpoints/18-error-codes.md` (60+ codes across 10 domains) | — | — | Done |
+| ~~B3~~ | ~~No copy strings catalog.~~ **CLOSED** — see `06-ui-ux/17-copy-strings.md` (full key→EN map across 17 sections) | — | — | Done |
 | B4 | **No test plan / acceptance criteria.** Zero files matching `test|qa|acceptance`. | Every feature | AI ships untested code → you find bugs in week 2 | High — `21-testing/` folder with Gherkin-style scenarios per feature |
-| B5 | **Chrome extension MV3 manifest not finalized.** `04-extension/manifest.md` exists but permissions, host patterns, OAuth client IDs are TBD. | Extension build + Chrome Web Store submission | AI invents permissions → store rejection | Medium — fill manifest.json template literally |
+| B5 | **Chrome extension MV3 manifest not finalized.** `04-extension/01-manifest.md` exists but permissions, host patterns, OAuth client IDs are TBD. | Extension build + Chrome Web Store submission | AI invents permissions → store rejection | Medium — fill manifest.json template literally |
 | B6 | **No infrastructure / deployment spec.** No file describes: hosting, CI/CD, env var inventory, secrets vault, domains, SSL, CDN, queues, cron. | Day 1 of deploy | AI defaults to Vercel + Supabase free tier → won't scale, no Redis for share-revocation 5s SLA | Medium — `22-infrastructure/` folder |
 | B7 | **No real seed/sample data.** No `seeds.json` or fixture file. | Every dev environment, every test | AI generates fake data inline, inconsistent across runs | Low — one seed file per major entity |
 
@@ -58,19 +58,19 @@ Ranked by **severity × frequency**.
 
 | # | Gap | Risk |
 |---|---|---|
-| M1 | **Pricing numbers exist but Paddle/Stripe product IDs don't.** `plans-matrix.md` has tiers but no `price_xxx` SKU mapping. | AI hardcodes placeholder IDs; live billing fails on first transaction. |
+| M1 | **Pricing numbers exist but Paddle/Stripe product IDs don't.** `01-plans-matrix.md` has tiers but no `price_xxx` SKU mapping. | AI hardcodes placeholder IDs; live billing fails on first transaction. |
 | M2 | **OAuth provider client IDs / redirect URIs not listed.** | AI hardcodes `localhost`; OAuth fails in prod. |
-| M3 | **Realtime presence transport unspecified.** `08-sharing-collab/realtime-presence.md` says "WebSocket" but no protocol (Phoenix? Supabase Realtime? Y.js? raw WS?). | AI picks Socket.io → conflicts with Supabase Realtime billing. |
+| M3 | **Realtime presence transport unspecified.** `08-sharing-collab/06-realtime-presence.md` says "WebSocket" but no protocol (Phoenix? Supabase Realtime? Y.js? raw WS?). | AI picks Socket.io → conflicts with Supabase Realtime billing. |
 | M4 | **Rate limits stated as policy, not as values.** "Throttle abusive auth attempts" with no `5/min/IP` numbers. | AI either over-throttles real users or leaves wide open. |
 | M5 | **Search engine choice undefined.** `14-search/` describes UX but not Postgres FTS vs Meilisearch vs Typesense vs Algolia. | AI picks the easiest (Postgres `ILIKE`); fails the "<150ms p95" non-goal. |
 | M6 | **Favicon pipeline only described.** No service chosen (Google s2 vs self-hosted vs duckduckgo proxy). | Privacy violation if AI picks Google. |
 | M7 | **Email provider not specified.** Verification, invites, share notifications all need email. No Resend/Postmark/SES choice. | AI picks Nodemailer + Gmail → spam folder + no DKIM. |
 | M8 | **Storage bucket layout undefined.** No path convention for favicons, exports, attachments. | AI invents naming; cleanup jobs break. |
-| M9 | **Mobile breakpoints implied, not enumerated.** `layout-grid.md` mentions responsive but no `sm/md/lg` token mapping with intended layouts. | AI ships desktop-first; mobile broken. |
+| M9 | **Mobile breakpoints implied, not enumerated.** `04-layout-grid.md` mentions responsive but no `sm/md/lg` token mapping with intended layouts. | AI ships desktop-first; mobile broken. |
 | M10 | **Accessibility (a11y) not gated.** No WCAG 2.1 AA target stated, no per-component a11y checklist. | AI skips ARIA; legal risk in EU. |
 | M11 | **Analytics events listed per feature but no taxonomy file.** Each `07-features/*.md` mentions events; no master `events.md`. | AI emits inconsistent event names; dashboards broken. |
-| M12 | **Migration / import dedup algorithm hand-waved.** `mapping-and-dedup.md` says "fuzzy match" without algorithm or threshold. | AI picks Levenshtein > 0.8 arbitrarily; users complain. |
-| M13 | **Permissions matrix references roles but no machine-readable matrix.** `permissions-matrix.md` is prose, not a table the AI can codegen RLS from. | AI writes wrong RLS policies; security incident. |
+| M12 | **Migration / import dedup algorithm hand-waved.** `05-mapping-and-dedup.md` says "fuzzy match" without algorithm or threshold. | AI picks Levenshtein > 0.8 arbitrarily; users complain. |
+| M13 | **Permissions matrix references roles but no machine-readable matrix.** `05-permissions-matrix.md` is prose, not a table the AI can codegen RLS from. | AI writes wrong RLS policies; security incident. |
 | M14 | **No definition of "Done."** No checklist per feature: "ship when X, Y, Z true." | AI declares features complete that aren't. |
 
 ### 3.3 MINOR — AI handles with reasonable defaults
@@ -135,15 +135,15 @@ Lovable's scoring is **lower than Cursor not because the spec is worse, but beca
 
 Ordered by ROI:
 
-1. **`06-ui-ux/copy-strings.md`** — full key→EN string map. *Closes B3, m1, m9 partially.*
-2. **`03-api-endpoints/error-codes.md`** — enumerated `error_code` table with HTTP status, retryable flag, suggested toast. *Closes B2.*
+1. **`06-ui-ux/17-copy-strings.md`** — full key→EN string map. *Closes B3, m1, m9 partially.*
+2. **`03-api-endpoints/18-error-codes.md`** — enumerated `error_code` table with HTTP status, retryable flag, suggested toast. *Closes B2.*
 3. **`21-testing/`** folder — Gherkin scenarios per feature + per API. *Closes B4 and M14.*
 4. **Annotated wireframes** — even hand-drawn screenshots in `06-ui-ux/wireframes/` named per route. *Closes B1.*
 5. **`22-infrastructure/`** — hosting, env vars, secrets, queues, cron, CDN, domains. *Closes B6.*
 6. **Machine-readable permissions matrix** (CSV/JSON) under `08-sharing-collab/permissions-matrix.json`. *Closes M13 → enables RLS codegen.*
 7. **`10-licensing-billing/sku-map.md`** — Paddle/Stripe product+price IDs per tier per currency. *Closes M1.*
 8. **`18-analytics-telemetry/events.md`** — single event taxonomy with name, props schema. *Closes M11.*
-9. **`04-extension/manifest.md` finalized** — actual `manifest.json` literal. *Closes B5.*
+9. **`04-extension/01-manifest.md` finalized** — actual `manifest.json` literal. *Closes B5.*
 10. **Seed data** under `99-fixtures/` (one JSON per entity). *Closes B7.*
 
 **Estimated effort to write all 10:** ~1 day of focused work. **Expected score lift:** Lovable 62 → 88, Cursor 74 → 92, Raw chat 38 → 65.
@@ -154,11 +154,11 @@ Ordered by ROI:
 
 > You are implementing the product specified in `spec/21-app/`. Read in this order:
 >
-> 1. `00-overview/glossary.md` — vocabulary is **locked**; never use synonyms.
-> 2. `01-information-architecture/hierarchy.md` — Org → Space → Collection → Group? → Item, max 1 level of Group.
+> 1. `00-overview/02-glossary.md` — vocabulary is **locked**; never use synonyms.
+> 2. `01-information-architecture/01-hierarchy.md` — Org → Space → Collection → Group? → Item, max 1 level of Group.
 > 3. `02-data-model/*.md` — every entity has full field tables. Generate DB schema + TS types from these literally.
-> 4. `03-api-endpoints/conventions.md` then specific endpoint files — generate route handlers + Zod schemas literally.
-> 5. `20-roadmap/phase-0-mvp.md` — **only build what's in this phase.** Ignore later phases.
+> 4. `03-api-endpoints/01-conventions.md` then specific endpoint files — generate route handlers + Zod schemas literally.
+> 5. `20-roadmap/01-phase-0-mvp.md` — **only build what's in this phase.** Ignore later phases.
 > 6. Each folder's `README.md` ends with `## Locked rules` — these are non-negotiable; refuse changes that violate them.
 >
 > **Hard rules:**
@@ -166,7 +166,7 @@ Ordered by ROI:
 > - Roles are `owner|admin|editor|viewer|billing|guest|system` only.
 > - Roles live in a separate `user_roles` table; check via `has_role()` security-definer function.
 > - Soft-delete = 30 days; verified GDPR DSR bypasses grace period.
-> - Share model v1 = single table (`02-data-model/share.md`); ignore `08-sharing-collab/share-model.md` (v2 design note).
+> - Share model v1 = single table (`02-data-model/07-share.md`); ignore `08-sharing-collab/01-share-model.md` (v2 design note).
 > - Currency, prices, timezone: USD on invoices, UTC on storage, Asia/Kuala_Lumpur (UTC+8) for owner-facing dates.
 >
 > **When the spec is ambiguous:** STOP and ask. Do not invent enums, error codes, copy strings, layouts, or pricing IDs. Reference `gap-analysis.md` for the known gap list.

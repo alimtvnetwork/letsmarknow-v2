@@ -4,21 +4,21 @@ Fast, fuzzy, multi-scope search. The fastest path from "I remember saving this" 
 
 ## Reading order
 
-1. `global-search.md` — Cmd+K everywhere; cross-Org if user has many.
-2. `item-search.md` — within an Org / Space / Collection.
-3. `workspace-search.md` — across all Orgs the Account belongs to.
-4. `filters.md` — chip-based refinement (tags, dates, type, share state).
-5. `jump-to-result.md` — what happens when you Enter on a result.
+1. `01-global-search.md` — Cmd+K everywhere; cross-Org if user has many.
+2. `02-item-search.md` — within an Org / Space / Collection.
+3. `03-workspace-search.md` — across all Orgs the Account belongs to.
+4. `04-filters.md` — chip-based refinement (tags, dates, type, share state).
+5. `05-jump-to-result.md` — what happens when you Enter on a result.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `global-search.md` | Cmd+K experience |
-| `item-search.md` | Scoped item search |
-| `workspace-search.md` | Cross-Org search |
-| `filters.md` | Refinement chips |
-| `jump-to-result.md` | Result actions |
+| `01-global-search.md` | Cmd+K experience |
+| `02-item-search.md` | Scoped item search |
+| `03-workspace-search.md` | Cross-Org search |
+| `04-filters.md` | Refinement chips |
+| `05-jump-to-result.md` | Result actions |
 
 ## Locked rules
 

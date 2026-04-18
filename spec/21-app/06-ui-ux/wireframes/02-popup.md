@@ -1,7 +1,7 @@
 # Wireframe — Extension Popup
 
 > **Surface:** Browser extension popup (Chrome MV3, 360×500 default)
-> **Spec ref:** `04-extension/popup.md`, `04-extension/save-tab.md`
+> **Spec ref:** `04-extension/04-popup.md`, `04-extension/save-tab.md`
 
 ---
 
@@ -123,7 +123,7 @@
 
 - `Cmd/Ctrl + S` — save (form submit)
 - `Esc` — close popup
-- `Tab` — cycle focus per `keyboard-input.md`
+- `Tab` — cycle focus per `08-keyboard-input.md`
 - `Cmd/Ctrl + Shift + S` — toggle session-save mode
 
 ---

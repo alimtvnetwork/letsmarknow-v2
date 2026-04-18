@@ -8,35 +8,35 @@ Two distinct collaboration models live here:
 
 ## Reading order
 
-1. `share-model.md` — the Share entity, scopes, link types.
-2. `public-shares.md` — `/t/{slug}` viewer, SEO controls, indexability.
-3. `password-shares.md` — gated viewers, brute-force defense.
-4. `invite-only-shares.md` — per-email allowlist, magic-link auth.
-5. `permissions-matrix.md` — what each role can do, everywhere.
-6. `realtime-presence.md` — WebSocket presence, cursors, "editing" badges.
-7. `comments-and-reactions.md` — Pro+ comments on Items + emoji reactions.
-8. `notifications.md` — inbox + email + push for collab events.
+1. `01-share-model.md` — the Share entity, scopes, link types.
+2. `02-public-shares.md` — `/t/{slug}` viewer, SEO controls, indexability.
+3. `03-password-shares.md` — gated viewers, brute-force defense.
+4. `04-invite-only-shares.md` — per-email allowlist, magic-link auth.
+5. `05-permissions-matrix.md` — what each role can do, everywhere.
+6. `06-realtime-presence.md` — WebSocket presence, cursors, "editing" badges.
+7. `07-comments-and-reactions.md` — Pro+ comments on Items + emoji reactions.
+8. `08-notifications.md` — inbox + email + push for collab events.
 9. `audit-log.md` — Team-tier history of who did what.
-10. `embed-widget.md` — `<iframe>` embed of a shared Collection.
-11. `share-analytics.md` — view counts, referrers, top items (Pro+).
-12. `revocation-and-expiry.md` — link rotation, TTL, kill switch.
+10. `10-embed-widget.md` — `<iframe>` embed of a shared Collection.
+11. `11-share-analytics.md` — view counts, referrers, top items (Pro+).
+12. `12-revocation-and-expiry.md` — link rotation, TTL, kill switch.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `share-model.md` | Share data model |
-| `public-shares.md` | Public link viewer |
-| `password-shares.md` | Gated viewer |
-| `invite-only-shares.md` | Per-email viewer |
-| `permissions-matrix.md` | Role capabilities |
-| `realtime-presence.md` | Live presence |
-| `comments-and-reactions.md` | Discussion |
-| `notifications.md` | Inbox / email / push |
+| `01-share-model.md` | Share data model |
+| `02-public-shares.md` | Public link viewer |
+| `03-password-shares.md` | Gated viewer |
+| `04-invite-only-shares.md` | Per-email viewer |
+| `05-permissions-matrix.md` | Role capabilities |
+| `06-realtime-presence.md` | Live presence |
+| `07-comments-and-reactions.md` | Discussion |
+| `08-notifications.md` | Inbox / email / push |
 | `audit-log.md` | Compliance log |
-| `embed-widget.md` | Iframe embed |
-| `share-analytics.md` | Share metrics |
-| `revocation-and-expiry.md` | Lifecycle |
+| `10-embed-widget.md` | Iframe embed |
+| `11-share-analytics.md` | Share metrics |
+| `12-revocation-and-expiry.md` | Lifecycle |
 
 ## Locked rules
 

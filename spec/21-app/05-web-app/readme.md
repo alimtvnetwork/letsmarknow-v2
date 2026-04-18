@@ -6,43 +6,43 @@ The web app mirrors the extension's dashboard but adds Account, Billing, Org adm
 
 ## Reading order
 
-1. `routes.md` — every route, auth requirement, and redirect rule.
-2. `shell.md` — top-level app shell (left rail, sidebar, header, footer, command palette).
-3. `dashboard.md` — Space/Collection/Group/Item rendering (shares 80% with new-tab in extension).
-4. `onboarding.md` — first-run experience.
-5. `account-settings.md` — profile, security, sessions, MFA, danger zone.
-6. `org-settings.md` — Org profile, theme, default Space, danger zone, ownership transfer.
-7. `member-management.md` — invite/remove/role-change UI.
-8. `billing-page.md` — plans, seats, invoices, lifetime redemption, portal entry.
-9. `trash.md` — soft-deleted entities review/restore/purge.
-10. `activity-feed.md` — History Events stream + filters.
-11. `import-export-ui.md` — file pickers, progress UI, error review.
-12. `share-management.md` — list/edit/revoke shares per entity.
-13. `marketing-site.md` — `letsmarknow.com` (home, pricing, docs, blog, changelog).
-14. `share-viewer.md` — `letsmarknow.com/t/{slug}` reader experience.
-15. `pwa.md` — installable web-app manifest, offline shell, push.
-16. `seo.md` — meta, sitemap, OG, schema.org, robots.
+1. `01-routes.md` — every route, auth requirement, and redirect rule.
+2. `02-shell.md` — top-level app shell (left rail, sidebar, header, footer, command palette).
+3. `03-dashboard.md` — Space/Collection/Group/Item rendering (shares 80% with new-tab in extension).
+4. `04-onboarding.md` — first-run experience.
+5. `05-account-settings.md` — profile, security, sessions, MFA, danger zone.
+6. `06-org-settings.md` — Org profile, theme, default Space, danger zone, ownership transfer.
+7. `07-member-management.md` — invite/remove/role-change UI.
+8. `08-billing-page.md` — plans, seats, invoices, lifetime redemption, portal entry.
+9. `09-trash.md` — soft-deleted entities review/restore/purge.
+10. `10-activity-feed.md` — History Events stream + filters.
+11. `11-import-export-ui.md` — file pickers, progress UI, error review.
+12. `12-share-management.md` — list/edit/revoke shares per entity.
+13. `13-marketing-site.md` — `letsmarknow.com` (home, pricing, docs, blog, changelog).
+14. `14-share-viewer.md` — `letsmarknow.com/t/{slug}` reader experience.
+15. `15-pwa.md` — installable web-app manifest, offline shell, push.
+16. `16-seo.md` — meta, sitemap, OG, schema.org, robots.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `routes.md` | URL map |
-| `shell.md` | App chrome |
-| `dashboard.md` | Core browsing UI |
-| `onboarding.md` | First-run flow |
-| `account-settings.md` | /me/* pages |
-| `org-settings.md` | /org/:id/settings |
-| `member-management.md` | /org/:id/members |
-| `billing-page.md` | /org/:id/billing |
-| `trash.md` | /org/:id/trash |
-| `activity-feed.md` | /org/:id/activity |
-| `import-export-ui.md` | /org/:id/import + /export |
-| `share-management.md` | /shares dashboards |
-| `marketing-site.md` | letsmarknow.com |
-| `share-viewer.md` | /t/{slug} |
-| `pwa.md` | PWA shell |
-| `seo.md` | SEO conventions |
+| `01-routes.md` | URL map |
+| `02-shell.md` | App chrome |
+| `03-dashboard.md` | Core browsing UI |
+| `04-onboarding.md` | First-run flow |
+| `05-account-settings.md` | /me/* pages |
+| `06-org-settings.md` | /org/:id/settings |
+| `07-member-management.md` | /org/:id/members |
+| `08-billing-page.md` | /org/:id/billing |
+| `09-trash.md` | /org/:id/trash |
+| `10-activity-feed.md` | /org/:id/activity |
+| `11-import-export-ui.md` | /org/:id/import + /export |
+| `12-share-management.md` | /shares dashboards |
+| `13-marketing-site.md` | letsmarknow.com |
+| `14-share-viewer.md` | /t/{slug} |
+| `15-pwa.md` | PWA shell |
+| `16-seo.md` | SEO conventions |
 
 ## Locked rules
 

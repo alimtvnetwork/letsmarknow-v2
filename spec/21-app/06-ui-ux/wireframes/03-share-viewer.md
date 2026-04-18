@@ -1,7 +1,7 @@
 # Wireframe — Public Share Viewer
 
 > **Route:** `/s/:token`
-> **Spec ref:** `05-web-app/share-viewer.md`, `08-sharing-collab/public-shares.md`
+> **Spec ref:** `05-web-app/14-share-viewer.md`, `08-sharing-collab/02-public-shares.md`
 
 ---
 
@@ -84,7 +84,7 @@
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-After 5 failed attempts within 10 min → `SHARE_PASSWORD_LOCKED` (see `error-codes.md`).
+After 5 failed attempts within 10 min → `SHARE_PASSWORD_LOCKED` (see `18-error-codes.md`).
 
 ---
 

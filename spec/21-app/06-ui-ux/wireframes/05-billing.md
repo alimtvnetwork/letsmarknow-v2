@@ -1,7 +1,7 @@
 # Wireframe — Billing
 
 > **Route:** `/settings/billing`
-> **Spec ref:** `05-web-app/billing-page.md`, `10-licensing-billing/plans-matrix.md`
+> **Spec ref:** `05-web-app/08-billing-page.md`, `10-licensing-billing/01-plans-matrix.md`
 
 ---
 
@@ -147,7 +147,7 @@ Sticky at top of every page (not just billing) until resolved. Background `--des
 
 - Visible to roles: `owner`, `billing`
 - All others see "Contact your owner to manage billing" placeholder
-- Source of truth: `08-sharing-collab/permissions-matrix.md`
+- Source of truth: `08-sharing-collab/05-permissions-matrix.md`
 
 ---
 

@@ -54,22 +54,22 @@ Which History Events this entity produces.
 | `url` | RFC 3986 absolute URL, max 2048 chars |
 | `email` | RFC 5322 email, lowercased on write |
 | `slug` | `[a-z0-9-]{3,64}`, unique per scope |
-| `color` | hex `#RRGGBB` or named token (see `06-ui-ux/design-tokens.md`) |
+| `color` | hex `#RRGGBB` or named token (see `06-ui-ux/01-design-tokens.md`) |
 
 ## Files
 
 | File | Entity |
 |---|---|
-| `organization.md` | Organization (the workspace bubble) |
-| `space.md` | Space |
-| `collection.md` | Collection |
-| `group.md` | Group (sub-container inside Collection) |
-| `item.md` | Item (the saved tab) |
-| `tag.md` | Tag |
-| `share.md` | Share (public/password/expiry/invite link) |
-| `member.md` | Membership of an Account in an Organization |
-| `history-event.md` | History Event (powers Undo/Redo and audit) |
-| `license.md` | License / Entitlement |
+| `01-organization.md` | Organization (the workspace bubble) |
+| `02-space.md` | Space |
+| `03-collection.md` | Collection |
+| `04-group.md` | Group (sub-container inside Collection) |
+| `05-item.md` | Item (the saved tab) |
+| `06-tag.md` | Tag |
+| `07-share.md` | Share (public/password/expiry/invite link) |
+| `08-member.md` | Membership of an Account in an Organization |
+| `09-history-event.md` | History Event (powers Undo/Redo and audit) |
+| `10-license.md` | License / Entitlement |
 
 ## Common fields on all top-level entities
 

@@ -4,17 +4,17 @@ How the app tells users about changes — both product news (release notes, what
 
 ## Reading order
 
-1. `in-app-updates-feed.md` — the "What's new" panel inside the app.
-2. `app-updater.md` — extension auto-update + manual check.
-3. `release-channels.md` — stable vs beta opt-in.
+1. `01-in-app-updates-feed.md` — the "What's new" panel inside the app.
+2. `02-app-updater.md` — extension auto-update + manual check.
+3. `03-release-channels.md` — stable vs beta opt-in.
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `in-app-updates-feed.md` | News feed UX |
-| `app-updater.md` | Extension + web update mechanics |
-| `release-channels.md` | Channel definitions + opt-in |
+| `01-in-app-updates-feed.md` | News feed UX |
+| `02-app-updater.md` | Extension + web update mechanics |
+| `03-release-channels.md` | Channel definitions + opt-in |
 
 ## Locked rules
 

@@ -33,6 +33,7 @@
 | Sub: 15-visualization P0/P2 split | 15-visualization | ✅ CLOSED | 2026-04-19 | `15-visualization/readme.md` §C5 (canonical split locked; per-view files reference by name) |
 | F-M09 Rate-limit envelope drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/13-rate-limit-values.md` §0 (reconciliation map) + §7 (canonical envelope); `11-rate-limits-and-abuse.md` §10 (envelope reference) |
 | F-M10 Rate-limit error code drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `13-rate-limit-values.md` §0 + §6 (only catalog codes; `BILLING_QUOTA_EXCEEDED` for org-wide quotas) |
+| Paddle webhook parity | 10-licensing-billing, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `03-api-endpoints/17-billing-webhooks.md` §Paddle (5 events, canonical payload schemas, idempotency by `event_id`) |
 
 **Deferred items rule:** ⚪ DEFERRED issues are excluded from the readiness denominator until the constraint is lifted. They remain visible for Phase-1 planning but do not depress current scores.
 
@@ -50,7 +51,8 @@
 | After W-11/W-12 | 2026-04-19 | 95 | 97 | 90 |
 | After B4/B7 deferred (excluded from denominator) | 2026-04-19 | 97 | 98 | 92 |
 | After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | 98 | 99 | 94 |
-| After F-M09 + F-M10 | 2026-04-19 | **99** | **99** | **96** |
+| After F-M09 + F-M10 | 2026-04-19 | 99 | 99 | 96 |
+| After Paddle webhook parity | 2026-04-19 | **99** | **99** | **97** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.
@@ -90,9 +92,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **10-licensing-billing**
 
-- **Score: 40/100 → 70/100 → 82/100 → 91/100 (A)** _updated 2026-04-19 (F-M11 closure)_
+- **Score: 40/100 → 70/100 → 82/100 → 91/100 → 95/100 (A)** _updated 2026-04-19 (Paddle webhook parity)_
 - **Original Grade: F**
-- **Closed since initial audit:** ✅ W-3 (pricing), ✅ W-6 (`_yearly` locked), ✅ W-10 (`amount_cents` swept), ✅ F-M11 (canonical webhook payload schemas + idempotency contract). Domain is now fully reconciled at the contract layer.
+- **Closed since initial audit:** ✅ W-3 (pricing), ✅ W-6 (`_yearly` locked), ✅ W-10 (`amount_cents` swept), ✅ F-M11 (canonical Stripe webhook payload schemas + idempotency contract), ✅ Paddle webhook parity (5 events: `subscription.created/updated/canceled`, `transaction.completed/payment_failed` — all with canonical payload schemas, required fields, dedup contract per `event_id`). Domain is now fully reconciled at the contract layer for both providers.
 - **Top failing issues (historical, retained until 100%):**
     - **`W-3` Hard Contradiction:** At least three different pricing schemes for Pro/Team plans exist across `01-plans-matrix.md`, `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. This is a fatal flaw for any billing-related codegen.
     - **`W-6` & `W-10` Semantic Drift:** Naming conventions for SKUs (`_yearly` vs `_annual`) and currency amounts (`amount_minor` vs `amount_cents`) are inconsistent. This will create fragmented data and broken analytics.
@@ -339,7 +341,7 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
-> **Current (2026-04-19, after F-M09 + F-M10 closures):** Lovable **99** · Cursor/Claude-Code **99** · Raw-LLM **96**
+> **Current (2026-04-19, after Paddle webhook parity):** Lovable **99** · Cursor/Claude-Code **99** · Raw-LLM **97**
 > **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
 > **Target:** 100 across all three. Issues remain documented above until target is reached.
 

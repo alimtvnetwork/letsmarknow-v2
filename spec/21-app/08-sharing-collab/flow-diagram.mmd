@@ -4,7 +4,7 @@ flowchart TD
     MODE -->|Public link| PUB[/t/:slug public/]
     MODE -->|Password| PWD[/t/:slug + password gate/]
     MODE -->|Invite only| INV[Invite email -> Guest role]
-    MODE -->|Embed| EMB[<iframe> widget on external site]
+    MODE -->|Embed| EMB["iframe widget on external site"]
 
     PUB --> VIEWER[Viewer opens link]
     PWD --> VIEWER

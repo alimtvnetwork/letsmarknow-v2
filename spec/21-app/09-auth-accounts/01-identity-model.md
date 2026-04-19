@@ -46,7 +46,7 @@ The role binding of one Account to one Org.
 | `id` | UUIDv7 | |
 | `org_id` | UUIDv7 | |
 | `account_id` | UUIDv7 | |
-| `role` | `owner \| admin \| editor \| viewer \| billing` | |
+| `role` | `owner \| admin \| editor \| viewer \| billing \| guest \| system` (canonical 7-value `org_role` enum per `17-admin-org/03-roles.md` §1) | |
 | `invited_by` | account_id? | |
 | `joined_at` | timestamptz | |
 | `last_active_at` | timestamptz | per Org |
@@ -55,7 +55,7 @@ The role binding of one Account to one Org.
 Unique `(org_id, account_id)` where `removed_at IS NULL`.
 
 ### `Role` enum
-`owner`, `admin`, `editor`, `viewer`, `billing`. See `08-sharing-collab/05-permissions-matrix.md`.
+Canonical 7-value `org_role`: `owner`, `admin`, `editor`, `viewer`, `billing`, `guest`, `system`. Single source of truth: `17-admin-org/03-roles.md` §1 + SQL DDL §2. Permissions matrix: `08-sharing-collab/05-permissions-matrix.md`. `system` is server-issued only (never user-assignable, enforced by SQL CHECK). `guest` is rare on Members (typically tracked via Share access).
 
 ### `user_roles` (security-definer table)
 Mirrors the `Member.role` for fast RLS via `has_role(account_id, org_id, role)`. Updated by trigger on Member changes; never written directly by API.

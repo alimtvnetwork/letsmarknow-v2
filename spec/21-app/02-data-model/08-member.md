@@ -12,7 +12,7 @@ The membership record linking an Account to an Organization with a Role. One Acc
 | `organization_id` | uuid (Organization.id) | no | — | — | — |
 | `account_id` | uuid (Account.id) | yes | null until accepted | — | Null until invitee signs up / accepts. |
 | `invited_email` | email | no | — | lowercased | Email used for invite. Stays even after accept. |
-| `role` | enum(`owner`\|`admin`\|`editor`\|`viewer`\|`billing`) | no | `viewer` | — | `billing` = access to billing/invoices only, no content access. `guest` is NOT a Member role — guests are tracked via Share access, not Membership. |
+| `role` | enum(`owner`\|`admin`\|`editor`\|`viewer`\|`billing`\|`guest`\|`system`) | no | `viewer` | — | Canonical 7-value `org_role` enum locked in `17-admin-org/03-roles.md` §1. `billing` = access to billing/invoices only, no content access. `guest` is rare on Members (typically tracked via Share access); when present, it represents an explicit guest-seat invite. `system` is server-issued only — never user-assigned (enforced by SQL CHECK in `17-admin-org/03-roles.md` §2). |
 | `status` | enum(`pending`\|`active`\|`suspended`\|`removed`) | no | `pending` | — | `pending` until accept; `active` after; `suspended` by Admin; `removed` is hard tombstone. |
 | `invited_by` | uuid (Account.id) | no | — | — | Who sent the invite. |
 | `invited_at` | timestamp | no | — | — | — |

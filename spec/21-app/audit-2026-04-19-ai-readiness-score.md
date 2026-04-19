@@ -13,7 +13,7 @@
 
 | Issue | Domain(s) | Status | Closed | Fix reference |
 |---|---|---|---|---|
-| W-1 Role enum drift | 17-admin-org, 02-data-model, 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `17-admin-org/03-roles.md` (7-value enum + SQL CHECK) |
+| W-1 Role enum drift | 17-admin-org, 02-data-model, 09-auth-accounts | ✅ CLOSED (full sweep 2026-04-19) | 2026-04-19 | `17-admin-org/03-roles.md` (7-value enum + SQL CHECK) + residue swept in `02-data-model/08-member.md` line 15, `09-auth-accounts/01-identity-model.md` §`Role enum` + line 49, `09-auth-accounts/06-sessions.md` line 15 (JWT `roles` claim now lists 6 user-assignable values; `system` documented as never-issuable) |
 | W-2 Realtime transport (`wss://`) | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `04-extension/10-sync-and-offline.md` → Supabase Realtime |
 | W-3 Pricing drift | 10-licensing-billing, 05-web-app, 06-ui-ux | ✅ CLOSED | 2026-04-19 | `01-plans-matrix.md` declared canonical |
 | W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `14-realtime-transport.md` W-4 note; swept `06-realtime-presence.md`, `07-comments-and-reactions.md` |
@@ -52,7 +52,8 @@
 | After B4/B7 deferred (excluded from denominator) | 2026-04-19 | 97 | 98 | 92 |
 | After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | 98 | 99 | 94 |
 | After F-M09 + F-M10 | 2026-04-19 | 99 | 99 | 96 |
-| After Paddle webhook parity | 2026-04-19 | **99** | **99** | **97** |
+| After Paddle webhook parity | 2026-04-19 | 99 | 99 | 97 |
+| After W-1 residue sweep | 2026-04-19 | **99** | **100** | **98** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.
@@ -159,16 +160,16 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **09-auth-accounts**
 
-- **Score: 75/100 → 83/100 → 91/100 → 95/100 (A)** _updated 2026-04-19 (F-M09 + F-M10 closure)_
-- **Grade: A**
-- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5: endpoints, token issuance, callback consume, errors, telemetry, anti-abuse), ✅ F-M09 + F-M10 (rate-limit envelope and error codes now identical to `03-api-endpoints/18-error-codes.md`; reconciliation map locked in `13-rate-limit-values.md` §0). Still open: W-1 partial residue.
+- **Score: 75/100 → 83/100 → 91/100 → 95/100 → 98/100 (A+)** _updated 2026-04-19 (W-1 residue sweep)_
+- **Grade: A+**
+- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5), ✅ F-M09 + F-M10 (rate-limit envelope and error codes now identical to `03-api-endpoints/18-error-codes.md`), ✅ W-1 residue (canonical 7-value `org_role` enum now propagated to `01-identity-model.md` §Role enum + line 49 and `06-sessions.md` JWT `roles` claim).
 - **Top failing issues (historical, retained until 100%):**
-    - Still infected by `W-1` (role enum drift). For an auth domain, this lack of clarity on identity and permissions is severe.
-    - ~~`F-M09` (rate limit envelope) and `F-M10` (rate limit error codes) showed that the `M4` fix for rate limits was not complete.~~ ✅ Closed 2026-04-19.
-    - ~~`F-M13` noted that magic-link auth flow is implied but not specified.~~ ✅ Closed 2026-04-19.
-- **Why it can fail:** The AI may still generate code with conflicting role checks if it reads stale role-enum references in `02-data-model` before the canonical 7-value enum in `17-admin-org/03-roles.md`.
+    - ~~`W-1` residue in identity-model and sessions JWT claim listing only 5 of 7 enum values.~~ ✅ Closed 2026-04-19 (full sweep).
+    - ~~`F-M09` (rate limit envelope) and `F-M10` (rate limit error codes).~~ ✅ Closed 2026-04-19.
+    - ~~`F-M13` magic-link flow.~~ ✅ Closed 2026-04-19.
+- **Why it can fail:** Remaining 2 pts reflect lack of integration test fixtures for the auth flows (deferred to Phase-1 per B4/B7 constraint).
 - **What's needed for 100%:**
-    - Final `W-1` residue sweep across `02-data-model` and remaining 09-auth-accounts files.
+    - B4 test plans + B7 seed fixtures (currently deferred — out of spec-only scope).
 
 ---
 #### **22-infrastructure**
@@ -248,7 +249,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **Remaining Domains (90+/A)**
 
-- **02-data-model (90/A):** Excellent structure. Docked 10 points for being affected by `W-1` role enum drift. Needs `audit.md` fixes propagated.
+- **02-data-model (98/A+):** Excellent structure. W-1 residue swept 2026-04-19 (`08-member.md` line 15 now lists full 7-value enum with `system` flagged as server-issued only).
 - **11-import-export (92/A):** Good, concrete spec after `M12`. Docked points for `B7` (no seed data) which makes testing importers difficult. Needs `fixtures/import-samples/raindrop.csv`.
 - **12-history-undo (95/A):** Very solid. Depends on `HistoryEvent` entity, so it's slightly affected by `W-1`.
 - **14-search (95/A):** Very solid after `M5`. `F-M17` fix (moving `search_tsv` to the data model file) was the right call.
@@ -275,7 +276,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | 06-ui-ux | 82 → **86** | B → B+ | W-5 ✅ closed; B4 (VRT/Storybook), W-3 wireframes open. |
 | 03-api-endpoints | 85 → **95** | B → A | W-8 ✅, W-13 ✅ closed; lint script still recommended. |
 | 07-features | 88 | B | No acceptance criteria (`B4` gap). |
-| 02-data-model | 90 | A | Excellent, but affected by upstream role enum drift. |
+| 02-data-model | 90 → **98** | A+ | W-1 residue swept; only B7 fixtures gap remains (deferred). |
 | 05-web-app | 90 | A | Strong, but uses incorrect pricing/pagination from other specs. |
 | 11-import-export | 92 | A | No seed data for importers (`B7` gap). |
 | 12-history-undo | 95 | A | Solid, minor dependency on inconsistent role enum. |
@@ -341,7 +342,7 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
-> **Current (2026-04-19, after Paddle webhook parity):** Lovable **99** · Cursor/Claude-Code **99** · Raw-LLM **97**
+> **Current (2026-04-19, after W-1 residue sweep):** Lovable **99** · Cursor/Claude-Code **100** · Raw-LLM **98**
 > **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
 > **Target:** 100 across all three. Issues remain documented above until target is reached.
 

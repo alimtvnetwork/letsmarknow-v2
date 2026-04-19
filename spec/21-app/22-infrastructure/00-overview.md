@@ -67,4 +67,4 @@
 - Webhook idempotency consumer: `03-api-endpoints/17-billing-webhooks.md`.
 - Queue consumer for imports: `11-import-export/06-large-imports.md`.
 - Email triggers: `08-sharing-collab/08-notifications.md`.
-- CI drift-linter rule sources: `audit/audit-2026-04-19-ai-readiness-score.md` §Live Issue Tracker.
+- CI drift-linter rule sources: `23-audits/audit-2026-04-19-ai-readiness-score.md` §Live Issue Tracker.

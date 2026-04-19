@@ -34,7 +34,7 @@ Full Org snapshot:
   - `members.json` — membership rows.
   - `spaces/`, `collections/`, `groups/`, `items/` — each entity in NDJSON files (1 row per line, sharded by 10k).
   - `assets/` — uploaded images (covers, logos), original filenames preserved.
-  - `audit/` — NDJSON, monthly files.
+  - `23-audits/` — NDJSON, monthly files.
   - `README.md` — human-readable schema description + version + restore instructions.
 
 Schema versioned (`schema_version: 1`). Future versions add fields backward-compatibly.

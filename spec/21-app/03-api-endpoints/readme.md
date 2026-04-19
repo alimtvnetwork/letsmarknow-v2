@@ -19,6 +19,7 @@
 
 | File | Endpoints (count) | Auth |
 |---|---|---|
+| `00-overview.md` | 136 (index, all methods) | — |
 | `01-conventions.md` | — | — |
 | `02-public-share-viewer.md` | 5 | none / share-cookie / OAuth |
 | `03-auth.md` | 14 | mixed |

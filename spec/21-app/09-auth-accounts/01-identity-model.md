@@ -46,7 +46,7 @@ The role binding of one Account to one Org.
 | `id` | UUIDv7 | |
 | `org_id` | UUIDv7 | |
 | `account_id` | UUIDv7 | |
-| `role` | `owner \| admin \| editor \| viewer \| billing` | |
+| `role` | `owner \| admin \| editor \| viewer \| billing \| guest \| system` (canonical 7-value `org_role` enum per `17-admin-org/03-roles.md` §1) | |
 | `invited_by` | account_id? | |
 | `joined_at` | timestamptz | |
 | `last_active_at` | timestamptz | per Org |

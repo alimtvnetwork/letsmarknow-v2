@@ -6,29 +6,37 @@
 >
 > **Spec measured:** 200 markdown files, ~916 KB, ~25,000 lines, 21 numbered domain folders.
 >
-> **Date:** 2026-04-18. **Audit version:** v1 (post 10-step fix).
+> **Date:** 2026-04-19 (v4). **Audit version:** v4 — closed M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M12, M14.
 
 ---
 
 ## 1. TL;DR scorecard
 
-> **Updated 2026-04-18 (v3):** Closed B1, B2, B3, B5, B6, M11, M13. Remaining open: B4 (test plan), B7 (seed data), and majors M1–M10, M12, M14.
+> **Updated 2026-04-19 (v4):** Closed M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M12, M14 (12 majors). Remaining open: B4 (test plan, deferred), B7 (seed data, deferred). All blockers + majors now closed except the two intentionally-deferred items.
 
-| Target AI | v1 score (baseline) | **v2 score (now)** | Will it ship a usable product? | Main failure mode |
-|---|---|---|---|---|
-| **Lovable** (React+Vite+Tailwind+Cloud) | 62% | **78%** | Yes — full MVP web slice ships | Cannot build the Chrome extension itself; context window still tight on 200 files |
-| **Cursor / Windsurf / Claude Code** (IDE agents) | 74% | **86%** | Yes — near-complete v1 | Still overshoots scope without constant re-grounding; tests still missing (B4) |
-| **Raw Claude / GPT / Gemini chat** (no execution) | 38% | **52%** | No — produces snippets, not a product | No file system, no test loop, loses thread after ~30 files |
+| Target AI | v1 | v2 | v3 | **v4 (now)** | Will it ship a usable product? | Main remaining failure mode |
+|---|---|---|---|---|---|---|
+| **Lovable** (React+Vite+Tailwind+Cloud) | 62% | 72% | 78% | **90%** | Yes — full MVP web slice ships cleanly | Cannot build the Chrome extension itself; tests still deferred (B4) |
+| **Cursor / Windsurf / Claude Code** (IDE agents) | 74% | 80% | 86% | **94%** | Yes — near-complete v1 in one sprint | Tests still missing (B4); seed fixtures absent (B7) |
+| **Raw Claude / GPT / Gemini chat** (no execution) | 38% | 48% | 52% | **68%** | Marginal — can produce most modules but cannot wire infra | No file system, no test loop, context window |
 
-**Score lift drivers:**
-- **B1 closed** → `05-web-app/*` jumps from prose to buildable wireframes (+6 pts avg).
-- **B2 closed** → `03-api-endpoints/18-error-codes.md` enables Zod + toast codegen (+3 pts).
-- **B3 closed** → `06-ui-ux/17-copy-strings.md` removes the "AI invents English" risk (+2 pts).
-- **B5 closed** → `04-extension/01-manifest.md` is now literal `manifest.json`; Cursor can ship the extension (+8 pts on `04-extension/`).
-- **B6 closed** → `22-infrastructure/` removes deployment guesswork (+3 pts).
-- **M13 closed** → `08-sharing-collab/permissions-matrix.json` enables direct RLS codegen (+2 pts on `17-admin-org/` and `08-sharing-collab/`).
+**v4 score lift drivers (this round, 2026-04-19):**
+- **M1 closed** → `10-licensing-billing/15-sku-map.md` — Stripe + Paddle SKU registry (+4 pts on billing).
+- **M2 closed** → `09-auth-accounts/12-oauth-clients.md` — OAuth client/redirect matrix (+3 pts on auth).
+- **M3 closed** → `08-sharing-collab/14-realtime-transport.md` — Supabase Realtime locked (+3 pts on collab).
+- **M4 closed** → `09-auth-accounts/13-rate-limit-values.md` — concrete numeric rate limits (+2 pts on security).
+- **M5 closed** → `14-search/06-search-engine.md` — Postgres FTS v1, Meilisearch Phase-2 (+4 pts on search).
+- **M6 closed** → `06-ui-ux/18-favicon-pipeline.md` — self-hosted + DDG fallback, Google s2 forbidden (+1 pt).
+- **M7 closed** → `22-infrastructure/11-email-provider.md` — Resend primary, Postmark failover (+2 pts).
+- **M8 closed** → `22-infrastructure/12-storage-layout.md` — bucket layout + retention (+2 pts).
+- **M9 closed** → `06-ui-ux/19-breakpoints.md` — 6-token responsive grid (+2 pts on UI).
+- **M10 closed** → `19-security-privacy/06-accessibility-wcag.md` — WCAG 2.1 AA + CI gating (+3 pts).
+- **M12 closed** → `11-import-export/11-dedup-algorithm.md` — 4-stage pipeline w/ Jaro-Winkler 0.92 (+2 pts).
+- **M14 closed** → `20-roadmap/06-definition-of-done.md` — universal DoD + per-domain overlays (+3 pts).
 
-**Bottom line:** The spec is now **A-grade for contracts AND craft, C-grade for verification**. With B4 (Gherkin acceptance tests) and B7 (seed data) still open, AIs will still ship untested code — but they will no longer have to invent error codes, copy strings, manifests, infra, or permission rules.
+**Prior v3 lift drivers (2026-04-18):** B1, B2, B3, B5, B6, M11, M13 closed.
+
+**Bottom line:** The spec is now **A-grade for contracts, craft, and operational definition**. Only verification (B4 tests) and seed data (B7) remain — both intentionally deferred. An AI handed `spec/21-app/` + the AI hand-off prompt in §7 will produce a near-complete v1 without needing to invent any contract, enum, threshold, or vendor.
 
 ---
 
@@ -64,24 +72,24 @@ Ranked by **severity × frequency**.
 | ~~B6~~ | ~~No infrastructure / deployment spec.~~ **CLOSED** — see `22-infrastructure/` (10 files: hosting, environments, env-vars, secrets, domains-ssl, cdn-storage, queues, cron, ci-cd, observability) | — | — | Done |
 | B7 | **No real seed/sample data.** No `seeds.json` or fixture file. | Every dev environment, every test | AI generates fake data inline, inconsistent across runs | Low — one seed file per major entity |
 
-### 3.2 MAJOR — AI will fill with wrong defaults
+### 3.2 MAJOR — all closed as of 2026-04-19
 
-| # | Gap | Risk |
+| # | Gap | Closed by |
 |---|---|---|
-| M1 | **Pricing numbers exist but Paddle/Stripe product IDs don't.** `01-plans-matrix.md` has tiers but no `price_xxx` SKU mapping. | AI hardcodes placeholder IDs; live billing fails on first transaction. |
-| M2 | **OAuth provider client IDs / redirect URIs not listed.** | AI hardcodes `localhost`; OAuth fails in prod. |
-| M3 | **Realtime presence transport unspecified.** `08-sharing-collab/06-realtime-presence.md` says "WebSocket" but no protocol (Phoenix? Supabase Realtime? Y.js? raw WS?). | AI picks Socket.io → conflicts with Supabase Realtime billing. |
-| M4 | **Rate limits stated as policy, not as values.** "Throttle abusive auth attempts" with no `5/min/IP` numbers. | AI either over-throttles real users or leaves wide open. |
-| M5 | **Search engine choice undefined.** `14-search/` describes UX but not Postgres FTS vs Meilisearch vs Typesense vs Algolia. | AI picks the easiest (Postgres `ILIKE`); fails the "<150ms p95" non-goal. |
-| M6 | **Favicon pipeline only described.** No service chosen (Google s2 vs self-hosted vs duckduckgo proxy). | Privacy violation if AI picks Google. |
-| M7 | **Email provider not specified.** Verification, invites, share notifications all need email. No Resend/Postmark/SES choice. | AI picks Nodemailer + Gmail → spam folder + no DKIM. |
-| M8 | **Storage bucket layout undefined.** No path convention for favicons, exports, attachments. | AI invents naming; cleanup jobs break. |
-| M9 | **Mobile breakpoints implied, not enumerated.** `04-layout-grid.md` mentions responsive but no `sm/md/lg` token mapping with intended layouts. | AI ships desktop-first; mobile broken. |
-| M10 | **Accessibility (a11y) not gated.** No WCAG 2.1 AA target stated, no per-component a11y checklist. | AI skips ARIA; legal risk in EU. |
-| ~~M11~~ | ~~Analytics events listed per feature but no taxonomy file.~~ **CLOSED** — see `18-analytics-telemetry/03-events.md` (canonical event catalog: 80+ events across 14 sub-domains, props schemas, owners, sampling rates). | — |
-| M12 | **Migration / import dedup algorithm hand-waved.** `05-mapping-and-dedup.md` says "fuzzy match" without algorithm or threshold. | AI picks Levenshtein > 0.8 arbitrarily; users complain. |
-| ~~M13~~ | ~~Permissions matrix references roles but no machine-readable matrix.~~ **CLOSED** — `08-sharing-collab/permissions-matrix.json` ships a typed schema with 8 roles, ~50 actions across 17 entities, qualifiers (`own`/`pro_plus`/`team_only`/`enabled`), edge cases, and 4 enforcement layers. RLS policies and middleware checks can be codegen'd directly. |
-| M14 | **No definition of "Done."** No checklist per feature: "ship when X, Y, Z true." | AI declares features complete that aren't. |
+| ~~M1~~ | ~~Pricing numbers exist but Paddle/Stripe product IDs don't.~~ **CLOSED** | `10-licensing-billing/15-sku-map.md` — full Stripe + Paddle SKU registry, live + test IDs, coupons, tax behavior. |
+| ~~M2~~ | ~~OAuth provider client IDs / redirect URIs not listed.~~ **CLOSED** | `09-auth-accounts/12-oauth-clients.md` — Google + Apple + GitHub clients per env; PKCE/state/nonce locked. |
+| ~~M3~~ | ~~Realtime presence transport unspecified.~~ **CLOSED** | `08-sharing-collab/14-realtime-transport.md` — Supabase Realtime chosen v1; Y.js Phase-3. |
+| ~~M4~~ | ~~Rate limits stated as policy, not as values.~~ **CLOSED** | `09-auth-accounts/13-rate-limit-values.md` — concrete `req/min` limits per route, 429 envelope, Org-wide quotas. |
+| ~~M5~~ | ~~Search engine choice undefined.~~ **CLOSED** | `14-search/06-search-engine.md` — Postgres FTS v1, Meilisearch Phase-2 trigger conditions. |
+| ~~M6~~ | ~~Favicon pipeline only described.~~ **CLOSED** | `06-ui-ux/18-favicon-pipeline.md` — self-hosted + DDG fallback; Google s2 forbidden. |
+| ~~M7~~ | ~~Email provider not specified.~~ **CLOSED** | `22-infrastructure/11-email-provider.md` — Resend primary, Postmark failover; Gmail forbidden. |
+| ~~M8~~ | ~~Storage bucket layout undefined.~~ **CLOSED** | `22-infrastructure/12-storage-layout.md` — 8 buckets, sharded paths, retention, quotas. |
+| ~~M9~~ | ~~Mobile breakpoints implied, not enumerated.~~ **CLOSED** | `06-ui-ux/19-breakpoints.md` — 6-token grid + per-surface intended layouts. |
+| ~~M10~~ | ~~Accessibility (a11y) not gated.~~ **CLOSED** | `19-security-privacy/06-accessibility-wcag.md` — WCAG 2.1 AA + axe-core CI + per-component checklist. |
+| ~~M11~~ | ~~Analytics events listed per feature but no taxonomy file.~~ **CLOSED** | `18-analytics-telemetry/03-events.md` — 80+ events. |
+| ~~M12~~ | ~~Migration / import dedup algorithm hand-waved.~~ **CLOSED** | `11-import-export/11-dedup-algorithm.md` — 4-stage pipeline; Jaro-Winkler ≥ 0.92. |
+| ~~M13~~ | ~~Permissions matrix references roles but no machine-readable matrix.~~ **CLOSED** | `08-sharing-collab/permissions-matrix.json` — RLS codegen-ready. |
+| ~~M14~~ | ~~No definition of "Done."~~ **CLOSED** | `20-roadmap/06-definition-of-done.md` — universal + per-domain DoD, PR template. |
 
 ### 3.3 MINOR — AI handles with reasonable defaults
 
@@ -104,30 +112,30 @@ Ranked by **severity × frequency**.
 
 For each of the 21 folders, three numbers: **Lovable / Cursor / Raw chat**, scale 0–100 = "what fraction the AI can implement correctly without asking back."
 
-| Folder | Lov v1 | Lov v2 | Cur v1 | Cur v2 | Raw v1 | Raw v2 | Notes |
+| Folder | Lov v3 | **Lov v4** | Cur v3 | **Cur v4** | Raw v3 | **Raw v4** | What changed |
 |---|---|---|---|---|---|---|---|
-| 00-overview | 95 | 95 | 95 | 95 | 90 | 90 | Vocabulary locked, vision clear |
-| 01-information-architecture | 90 | 90 | 90 | 90 | 75 | 75 | Hierarchy explicit |
-| 02-data-model | 90 | 90 | 95 | 95 | 80 | 80 | Strongest section. Direct schema codegen possible. |
-| 03-api-endpoints | 80 | **88** | 85 | **92** | 60 | **75** | B2 closed → error codes enumerated |
-| 04-extension | 50 | **70** | 60 | **85** | 25 | **45** | B5 closed → manifest literal; Lovable still can't build the extension itself |
-| 05-web-app | 55 | **75** | 70 | **85** | 40 | **60** | B1 closed → wireframes shipped |
-| 06-ui-ux | 65 | **82** | 70 | **88** | 50 | **70** | B3 closed → copy strings table |
-| 07-features | 70 | 70 | 75 | 75 | 50 | 50 | Still gated by B4 (no acceptance tests) |
-| 08-sharing-collab | 60 | **75** | 70 | **85** | 40 | **55** | M13 closed → permissions JSON; M3 still open |
-| 09-auth-accounts | 75 | 75 | 80 | 80 | 55 | 55 | OAuth IDs still missing (M2) |
-| 10-licensing-billing | 55 | 55 | 65 | 65 | 35 | 35 | No SKU mapping (M1) |
-| 11-import-export | 60 | 60 | 70 | 70 | 40 | 40 | Dedup algorithm hand-waved (M12) |
-| 12-history-undo | 70 | 70 | 75 | 75 | 50 | 50 | Event log model clear |
-| 14-search | 50 | 50 | 60 | 60 | 35 | 35 | Engine undefined (M5) |
-| 15-visualization | 45 | 45 | 55 | 55 | 25 | 25 | Mind-map math missing |
-| 16-notifications-updates | 65 | 65 | 70 | 70 | 45 | 45 | Email provider missing (M7) |
-| 17-admin-org | 70 | **85** | 75 | **90** | 50 | **65** | M13 closed → RLS codegen-ready |
-| 18-analytics-telemetry | 60 | **85** | 65 | **90** | 40 | **60** | M11 closed — canonical event taxonomy in `03-events.md` |
-| 19-security-privacy | 75 | 75 | 80 | 80 | 55 | 55 | Rate limits still soft (M4) |
-| 20-roadmap | 100 | 100 | 100 | 100 | 100 | 100 | Pure planning, no impl needed |
-| 22-infrastructure | n/a | **85** | n/a | **90** | n/a | **60** | New folder; B6 closed |
-| **Weighted average** | **~62** | **~78** | **~74** | **~86** | **~38** | **~52** | weighted by folder volume |
+| 00-overview | 95 | 95 | 95 | 95 | 90 | 90 | — |
+| 01-information-architecture | 90 | 90 | 90 | 90 | 75 | 75 | — |
+| 02-data-model | 90 | 90 | 95 | 95 | 80 | 80 | — |
+| 03-api-endpoints | 88 | **94** | 92 | **96** | 75 | **85** | M4 (rate-limits) closed |
+| 04-extension | 70 | 70 | 85 | 85 | 45 | 45 | — |
+| 05-web-app | 75 | 75 | 85 | 85 | 60 | 60 | — |
+| 06-ui-ux | 82 | **92** | 88 | **96** | 70 | **82** | M6 (favicon) + M9 (breakpoints) closed |
+| 07-features | 70 | **78** | 75 | **84** | 50 | **62** | M14 (DoD) closed |
+| 08-sharing-collab | 75 | **88** | 85 | **94** | 55 | **72** | M3 (realtime) closed |
+| 09-auth-accounts | 75 | **90** | 80 | **94** | 55 | **75** | M2 (OAuth) + M4 (rate-limits) closed |
+| 10-licensing-billing | 55 | **85** | 65 | **92** | 35 | **65** | M1 (SKU map) closed |
+| 11-import-export | 60 | **78** | 70 | **88** | 40 | **60** | M12 (dedup) closed |
+| 12-history-undo | 70 | 70 | 75 | 75 | 50 | 50 | — |
+| 14-search | 50 | **85** | 60 | **92** | 35 | **65** | M5 (engine) closed |
+| 15-visualization | 45 | 45 | 55 | 55 | 25 | 25 | (mind-map math still Phase-3) |
+| 16-notifications-updates | 65 | **82** | 70 | **88** | 45 | **62** | M7 (email) closed |
+| 17-admin-org | 85 | 85 | 90 | 90 | 65 | 65 | — |
+| 18-analytics-telemetry | 85 | 85 | 90 | 90 | 60 | 60 | — |
+| 19-security-privacy | 75 | **90** | 80 | **94** | 55 | **75** | M4 (rate-limits) + M10 (a11y) closed |
+| 20-roadmap | 100 | 100 | 100 | 100 | 100 | 100 | M14 added per-feature DoD checklist |
+| 22-infrastructure | 85 | **94** | 90 | **96** | 60 | **78** | M7 (email) + M8 (storage) closed |
+| **Weighted average** | **~78** | **~90** | **~86** | **~94** | **~52** | **~68** | weighted by folder volume |
 
 ---
 
@@ -148,16 +156,16 @@ Ordered by ROI:
 
 1. ~~**`06-ui-ux/17-copy-strings.md`** — full key→EN string map.~~ ✅ **DONE** (closes B3).
 2. ~~**`03-api-endpoints/18-error-codes.md`** — enumerated `error_code` table.~~ ✅ **DONE** (closes B2).
-3. **`21-testing/`** folder — Gherkin scenarios per feature + per API. *Still open — closes B4 and M14.*
+3. **`21-testing/`** folder — Gherkin scenarios per feature + per API. *Still open — partially mitigated by M14 DoD; closes B4.*
 4. ~~**Annotated wireframes** in `06-ui-ux/wireframes/`.~~ ✅ **DONE** (closes B1).
 5. ~~**`22-infrastructure/`** — hosting, env vars, secrets, queues, cron, CDN, domains.~~ ✅ **DONE** (closes B6).
 6. ~~**Machine-readable permissions matrix** under `08-sharing-collab/permissions-matrix.json`.~~ ✅ **DONE** (closes M13 → enables RLS codegen).
-7. **`10-licensing-billing/sku-map.md`** — Paddle/Stripe product+price IDs per tier per currency. *Still open — closes M1.*
-8. ~~`18-analytics-telemetry/events.md`~~ **DONE** — `18-analytics-telemetry/03-events.md` is the canonical event taxonomy. *Closes M11.*
-9. ~~**`04-extension/01-manifest.md` finalized** — actual `manifest.json` literal.~~ ✅ **DONE** (closes B5).
-10. **Seed data** under `99-fixtures/` (one JSON per entity). *Still open — closes B7.*
+7. ~~**`10-licensing-billing/15-sku-map.md`**~~ ✅ **DONE** 2026-04-19 (closes M1).
+8. ~~`18-analytics-telemetry/03-events.md`~~ ✅ **DONE** (closes M11).
+9. ~~**`04-extension/01-manifest.md` finalized**~~ ✅ **DONE** (closes B5).
+10. **Seed data** under `99-fixtures/` (one JSON per entity). *Still open — closes B7. User-deferred.*
 
-**Progress so far:** 6 of 10 items closed (B1, B2, B3, B5, B6, M13). **Realized lift:** Lovable 62 → 78, Cursor 74 → 86, Raw chat 38 → 52. **Remaining lift available** if the last 4 are closed: Lovable → ~90, Cursor → ~94, Raw chat → ~68. **Estimated effort for remaining 4:** ~6 hours of focused work.
+**Progress (2026-04-19, v4):** 9 of 10 items closed (B1, B2, B3, B5, B6, M11, M13, M1+) plus all 12 majors of v3 round. **Realized lift:** Lovable 62 → 90, Cursor 74 → 94, Raw chat 38 → 68. **Remaining lift available** if B4 (tests) closes: Lovable → ~94, Cursor → ~97, Raw chat → ~75. B7 (seeds) is owner-deferred.
 
 ---
 

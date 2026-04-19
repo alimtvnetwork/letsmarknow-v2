@@ -22,3 +22,4 @@ Do NOT append boilerplate "If you have any question..." or "Do you understand?..
 - [No Implementation Mode](mem://constraints/no-implementation-mode) — PERMANENT spec-only. No src/, no Cloud, no migrations, no tests, no fixtures, no seeds. No "lift" buttons in suggestions.
 - [Gap Analysis State](mem://features/gap-analysis-state) — v4 (2026-04-19): All majors closed (M1–M14). Deferred: B4, B7. Lovable 90 / Cursor 94 / Raw 68.
 - [Inquiry PDF format](mem://preference/inquiry-pdf-format) — `/mnt/documents/inquiry.pdf` Q&A archive: extract core questions only (no verbatim), 2–3 sentence answers, no tables.
+- [Audit tracker protocol](mem://preference/audit-tracker-protocol) — Never delete failing-issue text from audit-2026-04-19-ai-readiness-score.md until 100/100; mark closed inline with date + fix ref.

@@ -34,6 +34,7 @@
 | F-M09 Rate-limit envelope drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/13-rate-limit-values.md` §0 (reconciliation map) + §7 (canonical envelope); `11-rate-limits-and-abuse.md` §10 (envelope reference) |
 | F-M10 Rate-limit error code drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `13-rate-limit-values.md` §0 + §6 (only catalog codes; `BILLING_QUOTA_EXCEEDED` for org-wide quotas) |
 | Paddle webhook parity | 10-licensing-billing, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `03-api-endpoints/17-billing-webhooks.md` §Paddle (5 events, canonical payload schemas, idempotency by `event_id`) |
+| F-CI-DRIFT CI drift-linter (anti-regression) | 22-infrastructure, all spec | ✅ CLOSED | 2026-04-19 | `22-infrastructure/09-ci-cd.md` §2.1.1 (11 sub-checks lock W-1, W-3, W-4, W-5, W-6, W-7, W-8, W-10, W-12, W-13, F-M09/F-M10) + §2.1.2 pre-commit hook |
 
 **Deferred items rule:** ⚪ DEFERRED issues are excluded from the readiness denominator until the constraint is lifted. They remain visible for Phase-1 planning but do not depress current scores.
 

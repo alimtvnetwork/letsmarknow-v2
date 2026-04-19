@@ -106,7 +106,7 @@ Namespace `view.compact.*`. Catalog in `18-analytics-telemetry/03-events.md`.
 | Same-second timestamps | Stable sort by `id` descending (UUIDv7 lexicographic) | `mem://index.md` Core (UUIDv7) |
 | User pastes filter with operators | Parsed as global search query (auto-promote) | `14-search/02-item-search.md` |
 | `gg` typed but second `g` arrives after 500 ms | Treated as single `g` (currently no-op); optional dev warning | §5 |
-| Realtime delete arrives mid-edit | Edit cancelled; toast `view.compact.item_removed_remotely`; focus moves to next row | `08-sharing-collab/14-realtime-transport.md` |
+| Remote delete arrives mid-edit (P0: cross-tab `BroadcastChannel`; P2: cross-device realtime) | Edit cancelled; toast `view.compact.item_removed_remotely`; focus moves to next row | `readme.md` §C5 |
 
 ## 12. A11y
 

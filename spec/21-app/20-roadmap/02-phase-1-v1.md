@@ -153,6 +153,7 @@
 - [ ] In-app updates feed
 - [ ] GDPR/CCPA flows
 - [ ] Importers (7 sources)
+- [ ] **Cron pipeline operational** per `22-infrastructure/08-cron.md` — added 2026-04-19 per sequencing audit S-3. Unblocks: column-view auto-archive (`15-visualization/05-tabextend-column-view.md` §5), dunning retries (`10-licensing-billing/09-dunning-and-recovery.md`), large-import retry sweeps (`11-import-export/06-large-imports.md`).
 - [ ] Marketing site complete
 - [ ] External pen test passed
 - [ ] Public launch

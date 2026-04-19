@@ -144,7 +144,7 @@ Namespace: `view.list.*` per `18-analytics-telemetry/03-events.md`.
 | 10k+ items | Virtualization mandatory; "showing N of M" footer | `readme.md` §C7 |
 | All items in one tag group | Group header still rendered | — |
 | Sort + manual order conflict | Manual order disabled chip; click to re-enable | §4 |
-| Realtime delete arrives while row focused | Move focus to next sibling; toast copy-key `view.list.item_removed_remotely` | `08-sharing-collab/14-realtime-transport.md` |
+| Remote delete arrives while row focused (P0: cross-tab via `BroadcastChannel`; P2: cross-device via realtime) | Move focus to next sibling; toast copy-key `view.list.item_removed_remotely` | `readme.md` §C5 |
 | Concurrent `view_settings` PATCH | Server returns `409 CONFLICT`; client refetches; LWW per `12-history-undo/03-conflict-resolution.md` §3 | — |
 
 ## 14. A11y
@@ -175,5 +175,6 @@ All keys live in `06-ui-ux/17-copy-strings.md`. Add new strings there first, the
 - Virtualization scroll integrity (scrollTop math after viewport resize).
 - Density switch preserves focus.
 - Inline preview keyboard close.
-- Realtime invalidation: simulate `collection:{id}` event → row removed within 500 ms.
+- Cache invalidation P0: simulate `BroadcastChannel('lmn.invalidate')` postMessage → row removed within 500 ms.
+- Cache invalidation P2 (deferred until realtime ships): simulate `collection:{id}` Supabase Realtime event → row removed within 500 ms.
 - Entitlement gate: as Free user, click "Add column" → upsell modal opens; no PATCH fired.

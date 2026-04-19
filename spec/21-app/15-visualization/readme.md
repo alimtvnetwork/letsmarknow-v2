@@ -68,15 +68,22 @@ The active view per Collection is stored on the **Collection** row, not on the A
 - Pagination: cursor-based per `03-api-endpoints/01-conventions.md` §5. **Default `page_size=50`, max `200`.**
 - Errors: `403 FORBIDDEN`, `404 NOT_FOUND`, `429 RATE_LIMITED`, `400 VALIDATION_FAILED` per `03-api-endpoints/18-error-codes.md`.
 
-### C5 — Realtime invalidation
+### C5 — Cache invalidation (P0) and realtime invalidation (P2)
 
-Item / Collection mutations broadcast on the realtime channels per `08-sharing-collab/14-realtime-transport.md` §2:
+**Phasing (per sequencing audit S-2, 2026-04-19):** Realtime infra is **P2 per `20-roadmap/03-phase-2-collab.md` §4**. Do **not** pull the Supabase Realtime client SDK into P0 to satisfy this canon — single-user single-device P0 has no other client to receive a broadcast.
+
+**P0 — local invalidation (no realtime infra required):**
+- TanStack Query refetch on window focus (`refetchOnWindowFocus: true`) for the active Collection.
+- Optimistic mutations reconcile against the `PATCH` / `POST` response. No channel subscription.
+- Multi-tab in the same browser: cross-tab `BroadcastChannel('lmn.invalidate')` postMessage carrying `{ collection_id, item_id?, kind }` — pure browser API, zero infra.
+
+**P2 — cross-device realtime invalidation:** Item / Collection mutations broadcast on the channels per `08-sharing-collab/14-realtime-transport.md` §2:
 
 - `collection:{collection_id}` — item add / remove / move / rename within the open collection.
 - `item:{item_id}` — field-level updates (note, tag, star).
 - `org:{org_id}` — bulk events (`bulk.tagged`, `bulk.deleted`), entitlement changes that gate views.
 
-Transport: **Supabase Realtime** (locked per `14-realtime-transport.md`). No custom `wss://` endpoints — that path was withdrawn per F-M06.
+Transport: **Supabase Realtime** (locked per `14-realtime-transport.md`). No custom `wss://` endpoints — that path was withdrawn per F-M06. Subscription code is feature-flagged behind `realtime.enabled` per `07-features/15-feature-flags-and-rollouts.md`; flag flips on at P2 cutover.
 
 ### C6 — Selection state
 
@@ -156,7 +163,7 @@ All view telemetry events use the `view.*` namespace per `18-analytics-telemetry
 - **60 fps scroll target** on a mid-range laptop (M1 Air baseline) with 5,000 items.
 - **Image lazy-loading** with blurhash placeholders per `02-data-model/05-item.md` `metadata.blurhash` field + `06-ui-ux/18-favicon-pipeline.md` for favicon fallback chain.
 - **Reduced motion** respected throughout per C8.
-- **Realtime invalidation** via Supabase Realtime channels per C5.
+- **Cache invalidation**: P0 = TanStack Query refetch + `BroadcastChannel`; P2 = Supabase Realtime channels per C5.
 - **Entitlement gates** per C10 — server-enforced; client-hidden.
 - **All visible text uses copy-string keys** per C11.
 

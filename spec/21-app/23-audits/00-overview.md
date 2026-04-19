@@ -46,7 +46,7 @@
 ## Cross-references
 
 - Linter that locks audit closures: `22-infrastructure/09-ci-cd.md` §2.1.1 (`spec-drift-linter`).
-- Folder-overview rule (sub-check 12) sourced from: `audit/audit-2026-04-19-100-retrospective.md`.
-- Issue families originate from: `audit/audit.md` and `audit/gap-analysis.md`.
+- Folder-overview rule (sub-check 12) sourced from: `23-audits/audit-2026-04-19-100-retrospective.md`.
+- Issue families originate from: `23-audits/audit.md` and `23-audits/gap-analysis.md`.
 - Memory pointer: `mem://features/gap-analysis-state` tracks open vs. closed gap items.
 - Tracker-update protocol: `mem://preference/audit-tracker-protocol`.

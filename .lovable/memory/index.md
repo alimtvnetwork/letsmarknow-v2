@@ -13,7 +13,7 @@ Role enum is locked: owner, admin, editor, viewer, billing, guest, system. Do no
 Share model v1 = single-table (`02-data-model/share.md`). `08-sharing-collab/share-model.md` is a v2 design note only.
 **Browser scope v1 = Chrome only.** Edge / Brave / Arc / Opera / Firefox / Safari all postponed to Phase 4. Authoritative file: `spec/21-app/00-overview/browser-scope.md`. Never propose multi-browser work for v1.
 File naming: `NN-name.md` numbered prefix, lowercase + hyphens. Every spec/21-app/<folder>/ file is sequenced 01.. NN by folder reading-order; folder index stays as `readme.md` (no number).
-**Audit files location (moved 2026-04-19):** All `audit*.md` and `gap-analysis.md` live in `spec/21-app/audit/`. Folder overview at `spec/21-app/audit/00-overview.md`. Never reference them at `spec/21-app/` root — that path is stale.
+**Audit files location (moved 2026-04-19):** All `audit*.md` and `gap-analysis.md` live in `spec/21-app/23-audits/`. Folder overview at `spec/21-app/23-audits/00-overview.md`. Never reference them at `spec/21-app/` root — that path is stale.
 Never touch `.release/` folder. Code changes must bump at least minor version.
 User timezone: Malaysia (UTC+8). Milestone markers in readme.txt use format: `let's start now {date} {time}`.
 Always list remaining tasks at end of each work session; if all done, suggest next actions from memory **within spec-only scope** (audit, gap-close in spec form, rewrite weak spec). Never suggest tests/fixtures/seeds/implementation.
@@ -23,4 +23,4 @@ Do NOT append boilerplate "If you have any question..." or "Do you understand?..
 - [No Implementation Mode](mem://constraints/no-implementation-mode) — PERMANENT spec-only. No src/, no Cloud, no migrations, no tests, no fixtures, no seeds. No "lift" buttons in suggestions.
 - [Gap Analysis State](mem://features/gap-analysis-state) — v4 (2026-04-19): All majors closed (M1–M14). Deferred: B4, B7. Lovable 90 / Cursor 94 / Raw 68.
 - [Inquiry PDF format](mem://preference/inquiry-pdf-format) — `/mnt/documents/inquiry.pdf` Q&A archive: extract core questions only (no verbatim), 2–3 sentence answers, no tables.
-- [Audit tracker protocol](mem://preference/audit-tracker-protocol) — Never delete failing-issue text from `audit/audit-2026-04-19-ai-readiness-score.md` until 100/100; mark closed inline with date + fix ref.
+- [Audit tracker protocol](mem://preference/audit-tracker-protocol) — Never delete failing-issue text from `23-audits/audit-2026-04-19-ai-readiness-score.md` until 100/100; mark closed inline with date + fix ref.

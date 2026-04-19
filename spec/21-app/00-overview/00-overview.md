@@ -44,7 +44,7 @@ This folder owns five things and nothing else:
 - **Not implementation.** No code, no SQL, no API contracts, no env vars.
 - **Not a roadmap.** Roadmap lives in `20-roadmap/`. This folder describes *what* and *why*; the roadmap describes *when*.
 - **Not UI.** No wireframes, no design tokens, no copy strings beyond product taglines.
-- **Not a changelog.** Vision evolution is captured by versioned audit notes (`audit/audit-2026-04-19-*`), not by editing vision.md without trace.
+- **Not a changelog.** Vision evolution is captured by versioned audit notes (`23-audits/audit-2026-04-19-*`), not by editing vision.md without trace.
 
 ---
 

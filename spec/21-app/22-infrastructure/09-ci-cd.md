@@ -31,7 +31,7 @@ Gate: **all green** required to merge to `main`.
 
 ### 2.1.1 `spec-drift-linter` — anti-regression guard for the spec corpus
 
-Purpose: lock in every W-class fix from `audit/audit-2026-04-19-ai-readiness-score.md` AND the F-FOLDER-OVERVIEW closure from `audit/audit-2026-04-19-100-retrospective.md` so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` on every PR. Composite of twelve sub-checks, each of which fails the job independently with a precise error.
+Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness-score.md` AND the F-FOLDER-OVERVIEW closure from `23-audits/audit-2026-04-19-100-retrospective.md` so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` on every PR. Composite of twelve sub-checks, each of which fails the job independently with a precise error.
 
 | Sub-check | Tool | What it asserts | Fix-source it locks |
 |---|---|---|---|

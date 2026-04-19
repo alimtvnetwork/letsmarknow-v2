@@ -2,7 +2,7 @@
 
 > **Purpose:** Single source of truth for every `error_code` string returned by the API. Frontend switches on `error_code`, never on HTTP status alone, never on `message` text.
 >
-> **Closes:** Blocker B2 from `audit/gap-analysis.md`.
+> **Closes:** Blocker B2 from `23-audits/gap-analysis.md`.
 
 ---
 

@@ -3,7 +3,7 @@
 > **Generated:** 2026-04-19 07:49 (UTC+8) by AI auditor (Gemini 2.5 Pro).
 > **Scope:** All 21 numbered domain folders + existing audit/gap-analysis notes.
 > **Method:** Each domain scored /100 on AI-implementability. Failing issues, failure modes, and fix list per domain. Aggregated into critical-path remediation.
-> **Companion files:** `gap-analysis.md` (closure tracker), `audit-2026-04-19-spec-wide.md` (W-issues catalogue), `audit-2026-04-19-m-gaps.md` (M-issue closures), `audit-2026-04-19-rescore-delta.md` (v1, lowest-4 domains post W-1/W-2/W-3), `audit-2026-04-19-rescore-delta-v2.md` (v2, cumulative all-21-domains baseline → 100/100/100).
+> **Companion files:** `gap-analysis.md` (closure tracker), `audit-2026-04-19-spec-wide.md` (W-issues catalogue), `audit-2026-04-19-m-gaps.md` (M-issue closures), `audit-2026-04-19-rescore-delta.md` (v1, lowest-4 domains post W-1/W-2/W-3), `audit-2026-04-19-rescore-delta-v2.md` (v2, cumulative all-21-domains baseline → 100/100/100), `audit-2026-04-19-100-retrospective.md` (closing narrative + maintenance contract).
 
 ---
 

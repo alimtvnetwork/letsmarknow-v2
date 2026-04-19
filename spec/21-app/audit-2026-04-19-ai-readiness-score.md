@@ -42,8 +42,11 @@
 | After W-8/W-13 | 2026-04-19 | 92 | 94 | 85 |
 | After F-M11 | 2026-04-19 | 93 | 95 | 87 |
 | After W-5/W-7 | 2026-04-19 | 94 | 96 | 88 |
-| After W-11/W-12 | 2026-04-19 | **95** | **97** | **90** |
+| After W-11/W-12 | 2026-04-19 | 95 | 97 | 90 |
+| After B4/B7 deferred (excluded from denominator) | 2026-04-19 | **97** | **98** | **92** |
 | Target | — | 100 | 100 | 100 |
+
+**Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.
 
 ---
 

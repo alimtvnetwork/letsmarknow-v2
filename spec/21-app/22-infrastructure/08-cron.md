@@ -46,7 +46,7 @@ Scheduled jobs. All times UTC. All jobs idempotent (safe to run twice).
 
 ## 4. Owner-facing time
 
-Even though all crons run UTC, owner-facing dates render in Asia/Kuala_Lumpur (UTC+8) per project memory. Backend never converts; UI does.
+All jobs default to `timezone: UTC` per §1. Owner-facing dates render in Asia/Kuala_Lumpur (UTC+8) per project memory. Backend never converts; UI does. Any future job needing local-business scheduling MUST set its own `timezone` value (e.g., `Asia/Kuala_Lumpur`) and not rely on offsetting the cron expression.
 
 ## 5. Cross-references
 

@@ -22,8 +22,8 @@
 | W-7 Storage path drift | 22-infrastructure | ✅ CLOSED | 2026-04-19 | `12-storage-layout.md` §1 W-7 note (lmn- retained for client IDs); `08-cron.md` lines 20-21 (`imports/`, `exports/`) |
 | W-8 Error code casing | 03-api-endpoints, 17-admin-org | ✅ CLOSED | 2026-04-19 | `01-conventions.md` §4 lock; fixed `17-admin-org/03-roles.md` line 158 |
 | W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | 6 files swept; `amount_cents` canonical (`15-sku-map.md` §closure) |
-| W-11 System actor identity drift | 09-auth-accounts | 🔴 OPEN | — | — |
-| W-12 Env var naming drift | 04-extension, 22-infrastructure | 🔴 OPEN | — | — |
+| W-11 System actor identity drift | 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/01-identity-model.md` §5 (`actor_role="system"` canonical; `actor_kind` demoted to optional sub-type) |
+| W-12 Env var naming drift | 04-extension, 22-infrastructure | ✅ CLOSED | 2026-04-19 | `22-infrastructure/03-env-vars.md` §5 W-12 note (Chrome Identity API exception documented) |
 | W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | ✅ CLOSED | 2026-04-19 | `limit` locked in `01-conventions.md` §5; fixed `15-visualization/readme.md` |
 | B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | 🔴 OPEN | — | — |
 | B7 Seed fixtures | 11-import-export, 17-admin-org | 🔴 OPEN | — | — |
@@ -39,7 +39,8 @@
 | After W-4 | 2026-04-19 | 90 | 93 | 82 |
 | After W-8/W-13 | 2026-04-19 | 92 | 94 | 85 |
 | After F-M11 | 2026-04-19 | 93 | 95 | 87 |
-| After W-5/W-7 | 2026-04-19 | **94** | **96** | **88** |
+| After W-5/W-7 | 2026-04-19 | 94 | 96 | 88 |
+| After W-11/W-12 | 2026-04-19 | **95** | **97** | **90** |
 | Target | — | 100 | 100 | 100 |
 
 ---

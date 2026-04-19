@@ -8,7 +8,7 @@
 
 1. **Pin zone composition** for the screens listed below.
 2. **Define the primary action** at every screen (the one button a new user must find within 5 seconds).
-3. **Enumerate the responsive breakpoints** each wireframe supports (referencing `19-breakpoints.md`).
+3. **Enumerate the responsive breakpoints** each wireframe supports (referencing `06-ui-ux/19-breakpoints.md`).
 4. **Show the empty state, the populated state, and the dense state** for each screen.
 
 ---
@@ -36,8 +36,8 @@
 
 ## 4. What this folder is NOT
 
-- **Not pixel mocks.** No specific colours, typography, or shadows; those live in `01-design-tokens.md`.
-- **Not interaction specs.** Click behaviour, focus order, and motion live in `07-motion.md`, `08-keyboard-input.md`.
+- **Not pixel mocks.** No specific colours, typography, or shadows; those live in `06-ui-ux/01-design-tokens.md`.
+- **Not interaction specs.** Click behaviour, focus order, and motion live in `06-ui-ux/07-motion.md`, `06-ui-ux/08-keyboard-input.md`.
 - **Not exhaustive.** Only the highest-traffic screens are wireframed; secondary screens are spec'd in plain markdown under `05-web-app/`.
 
 ---
@@ -46,4 +46,4 @@
 
 - Tokens applied to these layouts: `06-ui-ux/01-design-tokens.md`.
 - Breakpoints: `06-ui-ux/19-breakpoints.md`.
-- Page specs that consume each wireframe: `05-web-app/03-dashboard.md`, `04-extension/04-popup.md`, `05-web-app/14-share-viewer.md`, `04-onboarding.md`, `08-billing-page.md`.
+- Page specs that consume each wireframe: `05-web-app/03-dashboard.md`, `04-extension/04-popup.md`, `05-web-app/14-share-viewer.md`, `04-onboarding.md`, `05-web-app/08-billing-page.md`.

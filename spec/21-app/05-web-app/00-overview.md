@@ -60,7 +60,7 @@
 ## 5. Cross-references
 
 - Component primitives: `06-ui-ux/03-component-library.md`.
-- Layout grid + breakpoints: `06-ui-ux/04-layout-grid.md`, `19-breakpoints.md`.
+- Layout grid + breakpoints: `06-ui-ux/04-layout-grid.md`, `06-ui-ux/19-breakpoints.md`.
 - Route auth derived from session model: `09-auth-accounts/06-sessions.md`.
 - Share viewer security model: `19-security-privacy/05-share-link-security.md`.
 - Marketing → pricing source of truth: `10-licensing-billing/01-plans-matrix.md` (W-3 lock).

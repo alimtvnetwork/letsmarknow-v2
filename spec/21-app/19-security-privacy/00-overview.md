@@ -31,7 +31,7 @@
 - **Define the security posture** that all other folders must respect.
 - **Lock encryption parameters** so they cannot be silently weakened.
 - **Define data subject rights flows** consumed by `11-import-export/09-gdpr-export.md` and `09-auth-accounts/08-account-deletion.md`.
-- **Define share-link entropy and rate-limit parameters** consumed by `08-sharing-collab/02-public-shares.md` … `04-invite-only-shares.md`.
+- **Define share-link entropy and rate-limit parameters** consumed by `08-sharing-collab/02-public-shares.md` … `08-sharing-collab/04-invite-only-shares.md`.
 
 ---
 

@@ -58,6 +58,6 @@
 
 - Hierarchy that constrains containment: `01-information-architecture/01-hierarchy.md`.
 - Permission policies that read these tables: `08-sharing-collab/05-permissions-matrix.md`.
-- API contracts on top of these tables: `03-api-endpoints/04-organizations.md` … `16-licenses.md`.
+- API contracts on top of these tables: `03-api-endpoints/04-organizations.md` … `03-api-endpoints/16-licenses.md`.
 - Webhook idempotency contract using `(provider, event_id)`: `03-api-endpoints/17-billing-webhooks.md`.
 - Audit/event log consumers: `12-history-undo/01-event-log.md`, `17-admin-org/04-audit-log.md`.

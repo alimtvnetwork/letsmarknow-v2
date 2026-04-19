@@ -43,8 +43,8 @@
 
 ## 5. Cross-references
 
-- Tables built from this tree: `02-data-model/01-organization.md` … `05-item.md`.
-- API paths derived from this tree: `03-api-endpoints/01-conventions.md` §URL shape; `05-spaces.md`, `06-collections.md`, `07-groups.md`, `08-items.md`.
+- Tables built from this tree: `02-data-model/01-organization.md` … `02-data-model/05-item.md`.
+- API paths derived from this tree: `03-api-endpoints/01-conventions.md` §URL shape; `03-api-endpoints/05-spaces.md`, `03-api-endpoints/06-collections.md`, `03-api-endpoints/07-groups.md`, `03-api-endpoints/08-items.md`.
 - UI breadcrumbs: `05-web-app/02-shell.md`, `06-ui-ux/13-navigation-patterns.md`.
 - Permission inheritance: `08-sharing-collab/05-permissions-matrix.md`.
-- Search scoping: `14-search/03-workspace-search.md`, `04-filters.md`.
+- Search scoping: `14-search/03-workspace-search.md`, `14-search/04-filters.md`.

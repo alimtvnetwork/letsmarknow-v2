@@ -160,16 +160,16 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **09-auth-accounts**
 
-- **Score: 75/100 → 83/100 → 91/100 → 95/100 (A)** _updated 2026-04-19 (F-M09 + F-M10 closure)_
-- **Grade: A**
-- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5: endpoints, token issuance, callback consume, errors, telemetry, anti-abuse), ✅ F-M09 + F-M10 (rate-limit envelope and error codes now identical to `03-api-endpoints/18-error-codes.md`; reconciliation map locked in `13-rate-limit-values.md` §0). Still open: W-1 partial residue.
+- **Score: 75/100 → 83/100 → 91/100 → 95/100 → 98/100 (A+)** _updated 2026-04-19 (W-1 residue sweep)_
+- **Grade: A+**
+- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5), ✅ F-M09 + F-M10 (rate-limit envelope and error codes now identical to `03-api-endpoints/18-error-codes.md`), ✅ W-1 residue (canonical 7-value `org_role` enum now propagated to `01-identity-model.md` §Role enum + line 49 and `06-sessions.md` JWT `roles` claim).
 - **Top failing issues (historical, retained until 100%):**
-    - Still infected by `W-1` (role enum drift). For an auth domain, this lack of clarity on identity and permissions is severe.
-    - ~~`F-M09` (rate limit envelope) and `F-M10` (rate limit error codes) showed that the `M4` fix for rate limits was not complete.~~ ✅ Closed 2026-04-19.
-    - ~~`F-M13` noted that magic-link auth flow is implied but not specified.~~ ✅ Closed 2026-04-19.
-- **Why it can fail:** The AI may still generate code with conflicting role checks if it reads stale role-enum references in `02-data-model` before the canonical 7-value enum in `17-admin-org/03-roles.md`.
+    - ~~`W-1` residue in identity-model and sessions JWT claim listing only 5 of 7 enum values.~~ ✅ Closed 2026-04-19 (full sweep).
+    - ~~`F-M09` (rate limit envelope) and `F-M10` (rate limit error codes).~~ ✅ Closed 2026-04-19.
+    - ~~`F-M13` magic-link flow.~~ ✅ Closed 2026-04-19.
+- **Why it can fail:** Remaining 2 pts reflect lack of integration test fixtures for the auth flows (deferred to Phase-1 per B4/B7 constraint).
 - **What's needed for 100%:**
-    - Final `W-1` residue sweep across `02-data-model` and remaining 09-auth-accounts files.
+    - B4 test plans + B7 seed fixtures (currently deferred — out of spec-only scope).
 
 ---
 #### **22-infrastructure**
@@ -249,7 +249,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **Remaining Domains (90+/A)**
 
-- **02-data-model (90/A):** Excellent structure. Docked 10 points for being affected by `W-1` role enum drift. Needs `audit.md` fixes propagated.
+- **02-data-model (98/A+):** Excellent structure. W-1 residue swept 2026-04-19 (`08-member.md` line 15 now lists full 7-value enum with `system` flagged as server-issued only).
 - **11-import-export (92/A):** Good, concrete spec after `M12`. Docked points for `B7` (no seed data) which makes testing importers difficult. Needs `fixtures/import-samples/raindrop.csv`.
 - **12-history-undo (95/A):** Very solid. Depends on `HistoryEvent` entity, so it's slightly affected by `W-1`.
 - **14-search (95/A):** Very solid after `M5`. `F-M17` fix (moving `search_tsv` to the data model file) was the right call.
@@ -276,7 +276,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | 06-ui-ux | 82 → **86** | B → B+ | W-5 ✅ closed; B4 (VRT/Storybook), W-3 wireframes open. |
 | 03-api-endpoints | 85 → **95** | B → A | W-8 ✅, W-13 ✅ closed; lint script still recommended. |
 | 07-features | 88 | B | No acceptance criteria (`B4` gap). |
-| 02-data-model | 90 | A | Excellent, but affected by upstream role enum drift. |
+| 02-data-model | 90 → **98** | A+ | W-1 residue swept; only B7 fixtures gap remains (deferred). |
 | 05-web-app | 90 | A | Strong, but uses incorrect pricing/pagination from other specs. |
 | 11-import-export | 92 | A | No seed data for importers (`B7` gap). |
 | 12-history-undo | 95 | A | Solid, minor dependency on inconsistent role enum. |

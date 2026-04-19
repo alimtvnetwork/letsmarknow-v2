@@ -12,7 +12,7 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 - Claims:
   - `sub` — `account_id` (UUIDv7)
   - `org` — active `org_id` (UUIDv7)
-  - `roles` — `{ "<org_id>": "owner" | "admin" | ... }` cached for active Org only
+  - `roles` — `{ "<org_id>": "owner" \| "admin" \| "editor" \| "viewer" \| "billing" \| "guest" }` cached for active Org only (canonical `org_role` enum minus `system`, which is never JWT-issuable; per `17-admin-org/03-roles.md` §1)
   - `tv` — token_version (incremented on global revoke)
   - `ent_h` — entitlements hash (for change detection)
   - `mfa` — bool (MFA satisfied this session)

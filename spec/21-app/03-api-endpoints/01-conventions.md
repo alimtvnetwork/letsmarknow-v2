@@ -80,7 +80,7 @@ Every non-2xx response:
 }
 ```
 
-- `code` is SCREAMING_SNAKE, stable across versions.
+- `code` is `UPPER_SNAKE_CASE` (a.k.a. SCREAMING_SNAKE), stable across versions. **Locked (W-8 closure 2026-04-19):** every reference to an error `code` in any spec file must use `UPPER_SNAKE_CASE`. Lowercase forms (e.g. `insufficient_role`) are **withdrawn**.
 - `field` is set when the error pertains to a single input field.
 - Never leak stack traces, SQL, or internal IDs.
 

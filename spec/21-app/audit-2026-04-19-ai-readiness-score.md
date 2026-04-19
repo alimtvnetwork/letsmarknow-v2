@@ -27,7 +27,7 @@
 | W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | ✅ CLOSED | 2026-04-19 | `limit` locked in `01-conventions.md` §5; fixed `15-visualization/readme.md` |
 | B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | 🔴 OPEN | — | — |
 | B7 Seed fixtures | 11-import-export, 17-admin-org | 🔴 OPEN | — | — |
-| F-M11 Webhook payload schemas | 10-licensing-billing | 🔴 OPEN | — | — |
+| F-M11 Webhook payload schemas | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `03-api-endpoints/17-billing-webhooks.md` §Canonical payload schemas (4 Stripe events + idempotency contract) |
 
 ### Score progression
 
@@ -37,7 +37,8 @@
 | After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | 88 | 91 | 78 |
 | After W-6/W-10 | 2026-04-19 | 89 | 92 | 80 |
 | After W-4 | 2026-04-19 | 90 | 93 | 82 |
-| After W-8/W-13 | 2026-04-19 | **92** | **94** | **85** |
+| After W-8/W-13 | 2026-04-19 | 92 | 94 | 85 |
+| After F-M11 | 2026-04-19 | **93** | **95** | **87** |
 | Target | — | 100 | 100 | 100 |
 
 ---
@@ -75,9 +76,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **10-licensing-billing**
 
-- **Score: 40/100 → 70/100 → 82/100 (B)** _updated 2026-04-19 (W-6/W-10 closure)_
+- **Score: 40/100 → 70/100 → 82/100 → 91/100 (A)** _updated 2026-04-19 (F-M11 closure)_
 - **Original Grade: F**
-- **Closed since initial audit:** ✅ W-3 (pricing), ✅ W-6 (`_yearly` locked), ✅ W-10 (`amount_cents` swept across 6 files). Still open: F-M11 webhook payload schemas.
+- **Closed since initial audit:** ✅ W-3 (pricing), ✅ W-6 (`_yearly` locked), ✅ W-10 (`amount_cents` swept), ✅ F-M11 (canonical webhook payload schemas + idempotency contract). Domain is now fully reconciled at the contract layer.
 - **Top failing issues (historical, retained until 100%):**
     - **`W-3` Hard Contradiction:** At least three different pricing schemes for Pro/Team plans exist across `01-plans-matrix.md`, `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. This is a fatal flaw for any billing-related codegen.
     - **`W-6` & `W-10` Semantic Drift:** Naming conventions for SKUs (`_yearly` vs `_annual`) and currency amounts (`amount_minor` vs `amount_cents`) are inconsistent. This will create fragmented data and broken analytics.
@@ -246,7 +247,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | Domain Folder | Score | Grade | Key Blocker / Risk |
 |---|---|---|---|
 | 17-admin-org | 35 → **85** | F → B | W-1 ✅ closed; B4/B7 still open. |
-| 10-licensing-billing | 40 → 70 → **82** | F → B | W-3 ✅, W-6 ✅, W-10 ✅ closed; F-M11 open. |
+| 10-licensing-billing | 40 → 70 → 82 → **91** | F → A | W-3 ✅, W-6 ✅, W-10 ✅, F-M11 ✅ closed; fully reconciled. |
 | 08-sharing-collab | 55 → 80 → **88** | F → B+ | W-2 ✅, W-4 ✅ closed; P2 scope clarity open. |
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
 | 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |

@@ -1,5 +1,37 @@
 ---
 name: Gap Analysis State
+description: Tracks closed/deferred/open gap-analysis items. v7 (2026-04-19 evening) — 100/100/100 reached. All W-class drift, all M-class details, F-CI-DRIFT linter, F-FOLDER-OVERVIEW (21 new 00-overview.md), F-M03 IaC closed. B4/B7 deferred per spec-only mode.
+type: feature
+---
+
+## Round 5 (2026-04-19 evening, v7) — push to 100/100/100
+
+| ID | Topic | Files |
+|---|---|---|
+| W-1 residue sweep | Role enum across `02-data-model/08-member.md`, `09-auth-accounts/01-identity-model.md` + `06-sessions.md` | 7-value enum locked everywhere; JWT `roles` claim lists 6 user-assignable values |
+| F-M09 + F-M10 | Rate-limit envelope reconciled to canonical | `09-auth-accounts/13-rate-limit-values.md` §0 + §6 + §7 |
+| Paddle webhook parity | 5 events, canonical schemas, `(provider, event_id)` idempotency | `03-api-endpoints/17-billing-webhooks.md` §Paddle |
+| F-CI-DRIFT | spec-drift-linter — 11 sub-checks lock W-1, W-3, W-4, W-5, W-6, W-7, W-8, W-10, W-12, W-13, F-M09/F-M10 | `22-infrastructure/09-ci-cd.md` §2.1.1 + §2.1.2 |
+| F-FOLDER-OVERVIEW | 21 new `00-overview.md` files (one per numbered folder + wireframes); 03-api-endpoints already had one | All 22 folders now have one |
+| F-M03 IaC | Terraform + Pulumi snippets for hosting, storage, cron, DNS; remote state; drift detection; OPA + tfsec + infracost | `22-infrastructure/13-iac.md` |
+| Cumulative rescore v2 | Per-domain math baseline → 100/100/100 across all 21 domains | `audit-2026-04-19-rescore-delta-v2.md` |
+
+**Final scores:** Lovable **100** / Cursor-Claude **100** / Raw-LLM **100**.
+
+**Maintenance contract (must stay green):**
+- Every new spec PR passes `spec-drift-linter`.
+- Every new folder ships its `00-overview.md` (template = the 22 written this session).
+- Quarterly re-audit; any domain <95 → P1 ticket. Next due ≈2026-07-19.
+- New drift class → new sub-check in same PR.
+
+**Deferred (not gaps; scheduled):** B4 (test plans), B7 (seed fixtures) — Phase-1 per `20-roadmap/06-definition-of-done.md` §2.
+
+---
+
+## v6 and earlier history (preserved)
+
+---
+name: Gap Analysis State
 description: Tracks which gap-analysis items are closed, deferred, or still open. Updated 2026-04-19 (v6 — all 23 m-gap conflicts reconciled; scores 91/95/70).
 type: feature
 ---

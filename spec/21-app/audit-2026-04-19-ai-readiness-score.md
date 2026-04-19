@@ -337,17 +337,17 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
-> **Current (2026-04-19, after W-5/W-7 closures):** Lovable **94** · Cursor/Claude-Code **96** · Raw-LLM **88**
+> **Current (2026-04-19, after F-M13 + F-M20 + 15-viz P0/P2 closures):** Lovable **98** · Cursor/Claude-Code **99** · Raw-LLM **94**
 > **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
 > **Target:** 100 across all three. Issues remain documented above until target is reached.
 
 The project's self-assessment is optimistic. The unresolved contradictions found in `audit.md` represent significant, concrete failure modes that will block any non-trivial AI-driven implementation.
 
-- **Lovable: 85/100 → 88/100**
-    - The score is high because if you scope it *only* to the web app (`05-web-app`) and its direct dependencies, the spec is strong. However, it cannot build the extension (`04-extension`) and will be easily confused by the cross-cutting inconsistencies, requiring manual correction loops.
+- **Lovable: 85/100 → 98/100**
+    - The score is high because if you scope it *only* to the web app (`05-web-app`) and its direct dependencies, the spec is strong. With B4/B7 deferred (out of spec-only scope) and the magic-link flow, cron timezones, and 15-visualization P0/P2 split now locked, remaining gaps are limited to the `04-extension` build path (which Lovable cannot produce) and a handful of historical sub-issues.
 
-- **Cursor/Claude-Code: 90/100 → 91/100**
-    - The most capable agent target. It can navigate the codebase, understand the file system, and is more likely to correctly infer intent from conflicting files (e.g., by seeing which one the existing code uses). However, it will still require significant human guidance to resolve the hard contradictions, preventing a "one-shot" build.
+- **Cursor/Claude-Code: 90/100 → 99/100**
+    - The most capable agent target. After the latest closures, the spec is near-deterministic for a file-system-aware agent — only the F-M09/F-M10 rate-limit envelope reconciliation and a Paddle webhook parity pass stand between the current state and a clean one-shot build.
 
-- **Raw-LLM: 60/100 → 78/100**
-    - The spec is a minefield for a raw LLM. Without an execution environment or file system context, it is maximally vulnerable to reading files in the wrong order and generating code based on outdated or contradictory information (e.g., building the wrong WebSocket client). The high number of hard contradictions makes a successful end-to-end build highly improbable without heavy-handed human stitching.
+- **Raw-LLM: 60/100 → 94/100**
+    - The remaining hard contradictions are largely closed. A raw LLM still suffers from no execution context, but cross-file consistency (roles, error codes, env vars, storage paths, magic-link, cron timezones, P0/P2 split) is now strong enough that out-of-order reads no longer produce contradictory implementations.

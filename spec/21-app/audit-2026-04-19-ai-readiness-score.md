@@ -3,7 +3,39 @@
 > **Generated:** 2026-04-19 07:49 (UTC+8) by AI auditor (Gemini 2.5 Pro).
 > **Scope:** All 21 numbered domain folders + existing audit/gap-analysis notes.
 > **Method:** Each domain scored /100 on AI-implementability. Failing issues, failure modes, and fix list per domain. Aggregated into critical-path remediation.
-> **Companion files:** `gap-analysis.md` (closure tracker), `audit-2026-04-19-spec-wide.md` (W-issues catalogue), `audit-2026-04-19-m-gaps.md` (M-issue closures).
+> **Companion files:** `gap-analysis.md` (closure tracker), `audit-2026-04-19-spec-wide.md` (W-issues catalogue), `audit-2026-04-19-m-gaps.md` (M-issue closures), `audit-2026-04-19-rescore-delta.md` (latest re-score math).
+
+---
+
+## 🟢 Live Issue Tracker (updated 2026-04-19, UTC+8)
+
+**Rule:** Issues are NEVER removed from this file until overall AI-readiness reaches **100/100**. They are only marked `✅ CLOSED` with a date + link to the fix. Scores in the per-domain sections below are updated in place.
+
+| Issue | Domain(s) | Status | Closed | Fix reference |
+|---|---|---|---|---|
+| W-1 Role enum drift | 17-admin-org, 02-data-model, 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `17-admin-org/03-roles.md` (7-value enum + SQL CHECK) |
+| W-2 Realtime transport (`wss://`) | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `04-extension/10-sync-and-offline.md` → Supabase Realtime |
+| W-3 Pricing drift | 10-licensing-billing, 05-web-app, 06-ui-ux | ✅ CLOSED | 2026-04-19 | `01-plans-matrix.md` declared canonical |
+| W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | 🔴 OPEN | — | — |
+| W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | 🔴 OPEN | — | — |
+| W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | 🔴 OPEN | — | — |
+| W-7 Storage path drift | 22-infrastructure | 🔴 OPEN | — | — |
+| W-8 Error code casing | 03-api-endpoints, 17-admin-org | 🔴 OPEN | — | — |
+| W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | 🔴 OPEN | — | — |
+| W-11 System actor identity drift | 09-auth-accounts | 🔴 OPEN | — | — |
+| W-12 Env var naming drift | 04-extension, 22-infrastructure | 🔴 OPEN | — | — |
+| W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | 🔴 OPEN | — | — |
+| B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | 🔴 OPEN | — | — |
+| B7 Seed fixtures | 11-import-export, 17-admin-org | 🔴 OPEN | — | — |
+| F-M11 Webhook payload schemas | 10-licensing-billing | 🔴 OPEN | — | — |
+
+### Score progression
+
+| Pass | Date | Lovable | Cursor/Claude-Code | Raw-LLM |
+|---|---|---:|---:|---:|
+| Initial | 2026-04-19 07:49 | 85 | 90 | 60 |
+| After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | **88** | **91** | **78** |
+| Target | — | 100 | 100 | 100 |
 
 ---
 
@@ -24,9 +56,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 
 #### **17-admin-org**
 
-- **Score: 35/100**
-- **Grade: F**
-- **Top failing issues:**
+- **Score: 35/100 → 85/100 (B)** _updated 2026-04-19 — see `audit-2026-04-19-rescore-delta.md`_
+- **Original Grade: F**
+- **Closed since initial audit:** ✅ W-1 (role enum) — fix in `17-admin-org/03-roles.md`.
+- **Top failing issues (historical, retained until 100%):**
     - `17-admin-org/03-roles.md` is the source of the `W-1` hard contradiction. It defines the canonical SQL `org_role` enum *incorrectly*, omitting `billing` and `system`. This is a spec file actively poisoning the well.
     - An AI generating the database migration from this file will create a schema that rejects valid data inserts for `billing` members.
     - Locked rules require `has_role()` for enforcement, but the core type definition for that function's input is wrong.
@@ -39,9 +72,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **10-licensing-billing**
 
-- **Score: 40/100**
-- **Grade: F**
-- **Top failing issues:**
+- **Score: 40/100 → 70/100 (C)** _updated 2026-04-19_
+- **Original Grade: F**
+- **Closed since initial audit:** ✅ W-3 (pricing drift). Still open: W-6, W-10, F-M11.
+- **Top failing issues (historical, retained until 100%):**
     - **`W-3` Hard Contradiction:** At least three different pricing schemes for Pro/Team plans exist across `01-plans-matrix.md`, `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. This is a fatal flaw for any billing-related codegen.
     - **`W-6` & `W-10` Semantic Drift:** Naming conventions for SKUs (`_yearly` vs `_annual`) and currency amounts (`amount_minor` vs `amount_cents`) are inconsistent. This will create fragmented data and broken analytics.
     - `F-M11` was a massive conflict that was supposedly fixed, but `audit.md` proves the fix did not propagate. The reconciliation work was incomplete.
@@ -56,9 +90,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **08-sharing-collab**
 
-- **Score: 55/100**
-- **Grade: F**
-- **Top failing issues:**
+- **Score: 55/100 → 80/100 (B)** _updated 2026-04-19_
+- **Original Grade: F**
+- **Closed since initial audit:** ✅ W-2 (transport authority reinforced). Still open: W-4 channel naming.
+- **Top failing issues (historical, retained until 100%):**
     - **`W-2` Hard Contradiction:** Eight feature files and the extension spec still reference a custom `wss://` endpoint, while `14-realtime-transport.md` locks Supabase Realtime as the v1 transport. This is a direct, fatal contradiction.
     - **`W-4` Channel Naming Drift:** Channel names use inconsistent formatting (`collection:<id>` vs. `collection:{collection_id}`), which will break any regex-based routing on the client.
     - **P2 Dependency Ambiguity:** The `README.md` correctly phases most of this folder to P2 (Collab), but key files like `14-realtime-transport.md` are dependencies for P0/P1 features in other folders (like `15-visualization`), creating a sequencing paradox.
@@ -87,9 +122,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **04-extension**
 
-- **Score: 70/100**
-- **Grade: C**
-- **Top failing issues:**
+- **Score: 70/100 → 85/100 (B)** _updated 2026-04-19_
+- **Original Grade: C**
+- **Closed since initial audit:** ✅ W-2 (purged `wss://`, references `14-realtime-transport.md`). Still open: W-12, B4 test plan.
+- **Top failing issues (historical, retained until 100%):**
     - The spec doesn't account for agent limitations. `Lovable` cannot build Chrome extensions, making this entire domain a 0/100 for that agent. The score is averaged up by Cursor's capability.
     - **`W-2` WebSocket Drift:** The extension's offline sync spec (`10-sync-and-offline.md`) is one of the files that references the old, incorrect `wss://` endpoint.
     - **`W-12` Env Var Drift:** The OAuth client ID env var for the extension (`EXT_OAUTH_CLIENT_ID`) doesn't follow the project's convention. The fix note in `audit.md` is good, but the inconsistency itself is a risk.
@@ -205,11 +241,11 @@ As requested, here is your brutally honest AI-development-readiness audit.
 
 | Domain Folder | Score | Grade | Key Blocker / Risk |
 |---|---|---|---|
-| 17-admin-org | 35 | F | Incorrect SQL enum definition for roles (`W-1`). |
-| 10-licensing-billing | 40 | F | Contradictory pricing across 3+ files (`W-3`). |
-| 08-sharing-collab | 55 | F | Contradictory WebSocket transport spec (`W-2`). |
+| 17-admin-org | 35 → **85** | F → B | W-1 ✅ closed; B4/B7 still open. |
+| 10-licensing-billing | 40 → **70** | F → C | W-3 ✅ closed; W-6, W-10, F-M11 open. |
+| 08-sharing-collab | 55 → **80** | F → B | W-2 ✅ closed; W-4 channel naming open. |
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
-| 04-extension | 70 | C | `Lovable` un-implementable; sync code points to dead endpoint. |
+| 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |
 | 22-infrastructure | 80 | B | Incomplete reconciliation of storage/env-var specs. |
 | 06-ui-ux | 82 | B | No VRT spec; outdated data in wireframes. |
@@ -281,13 +317,17 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
+> **Current (2026-04-19, after W-1/W-2/W-3 closures):** Lovable **88** · Cursor/Claude-Code **91** · Raw-LLM **78**
+> **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
+> **Target:** 100 across all three. Issues remain documented above until target is reached.
+
 The project's self-assessment is optimistic. The unresolved contradictions found in `audit.md` represent significant, concrete failure modes that will block any non-trivial AI-driven implementation.
 
-- **Lovable: 85/100**
+- **Lovable: 85/100 → 88/100**
     - The score is high because if you scope it *only* to the web app (`05-web-app`) and its direct dependencies, the spec is strong. However, it cannot build the extension (`04-extension`) and will be easily confused by the cross-cutting inconsistencies, requiring manual correction loops.
 
-- **Cursor/Claude-Code: 90/100**
+- **Cursor/Claude-Code: 90/100 → 91/100**
     - The most capable agent target. It can navigate the codebase, understand the file system, and is more likely to correctly infer intent from conflicting files (e.g., by seeing which one the existing code uses). However, it will still require significant human guidance to resolve the hard contradictions, preventing a "one-shot" build.
 
-- **Raw-LLM: 60/100**
+- **Raw-LLM: 60/100 → 78/100**
     - The spec is a minefield for a raw LLM. Without an execution environment or file system context, it is maximally vulnerable to reading files in the wrong order and generating code based on outdated or contradictory information (e.g., building the wrong WebSocket client). The high number of hard contradictions makes a successful end-to-end build highly improbable without heavy-handed human stitching.

@@ -24,3 +24,4 @@ Do NOT append boilerplate "If you have any question..." or "Do you understand?..
 - [Gap Analysis State](mem://features/gap-analysis-state) — v4 (2026-04-19): All majors closed (M1–M14). Deferred: B4, B7. Lovable 90 / Cursor 94 / Raw 68.
 - [Inquiry PDF format](mem://preference/inquiry-pdf-format) — `/mnt/documents/inquiry.pdf` Q&A archive: extract core questions only (no verbatim), 2–3 sentence answers, no tables.
 - [Audit tracker protocol](mem://preference/audit-tracker-protocol) — Never delete failing-issue text from `23-audits/audit-2026-04-19-ai-readiness-score.md` until 100/100; mark closed inline with date + fix ref.
+- [Impl-vs-spec baseline 2026-04-19](spec/21-app/23-audits/audit-2026-04-19-impl-vs-spec.md) — Spec 2/100, impl 1/100, prod-ready 1/100. 11 failing findings (F-01,02,03,04,05,06,07,08,14,19,22). Re-score after any future "lift no-impl" turn.

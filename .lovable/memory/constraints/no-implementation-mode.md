@@ -1,26 +1,25 @@
 ---
 name: No Implementation Mode
-description: User is in spec-only mode. Never write/modify code under src/, never enable Cloud, never create migrations or edge functions. Spec files (spec/21-app/**) and memory files only.
+description: LIFTED 2026-04-19. Implementation work in src/, supabase/, migrations, and Cloud is now allowed. Kept here as a historical record.
 type: constraint
 ---
 
-# No Implementation Mode (locked 2026-04-18)
+# No Implementation Mode — LIFTED 2026-04-19
 
-## Rule
-Do NOT write or modify any code under `src/`, `supabase/`, `extension/`, `public/`, or root config files (`vite.config.ts`, `tailwind.config.ts`, `index.html`, etc.).
-Do NOT enable Lovable Cloud, do NOT create migrations, do NOT install npm packages, do NOT scaffold routes/components.
+## Status: INACTIVE
 
-## Allowed
-- Read/write files under `spec/21-app/**`
-- Read/write memory files under `mem://`
-- Read/write artifacts under `/mnt/documents/`
-- Run read-only shell commands (sweeps, greps, audits)
+User explicitly lifted this constraint on 2026-04-19 to begin executing the audit fix plan (F1 → F3 → F2 → F10) from `spec/21-app/audit-2026-04-18.md`.
 
-## Why
-User is currently in spec-design phase only. Implementation will happen later, possibly handed off to another AI. All audits, gap analyses, and recommendations must stay as documentation, not code.
+## Current rules
+- Implementation in `src/`, `supabase/`, migrations, edge functions: **ALLOWED**
+- Lovable Cloud enablement: **ALLOWED**
+- npm dependency installs: **ALLOWED**
+- Spec files in `spec/21-app/**` remain the source of truth — code must conform to spec, not the other way around.
 
-## How to apply
-- When user asks for an audit → write findings to `spec/21-app/audit-{date}.md`, never propose code changes inline.
-- When user asks "close blocker X" → only edit spec files, never src/.
-- When user implies implementation ("build", "implement", "wire") → STOP and ask: "Spec-only update or do you want to lift the no-implementation rule?"
-- Suggestion buttons must NOT propose enabling Cloud, generating migrations, or any src/ edits unless the user explicitly lifts this rule.
+## Historical rule (locked 2026-04-18, lifted 2026-04-19)
+Originally forbade all code changes; only spec + memory files could be edited. Lifted because user reached the build phase.
+
+## How to apply now
+- Code changes must reference the spec section they implement (e.g. "implements `02-data-model/05-item.md`").
+- When spec and code disagree, surface the conflict and ask the user — do not silently diverge.
+- Each meaningful code change should bump at least minor version (per user-preferences).

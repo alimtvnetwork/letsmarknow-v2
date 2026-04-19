@@ -5,7 +5,7 @@ Updated: just now
 
 ## Core
 Spec lives in `spec/21-app/` — "By domain/feature" structure (00-overview/ … 20-roadmap/). Do not flatten or re-shape folders.
-**No-implementation mode is active.** Do NOT write code under `src/`, do NOT enable Cloud, do NOT create migrations or install packages. Spec files + memory only. See `mem://constraints/no-implementation-mode`.
+**PERMANENT spec-only mode (re-confirmed 2026-04-19).** Default-deny on ALL implementation: no `src/` edits, no Cloud/Supabase, no migrations, no npm installs, no edge functions. Suggestion buttons must NEVER offer "lift no-impl" or "switch to build phase." Implementation only when user explicitly types "lift no-impl for this turn." See `mem://constraints/no-implementation-mode`.
 Conversation logging: append every user instruction verbatim to `spec/21-app/00-conversation-log.md` AND refactor the relevant structured spec file(s).
 Instruction handling: write immediately. Only stop to ask when genuinely ambiguous (conflicting locked rules, missing data, multiple valid interpretations).
 Identifiers: UUIDv7 everywhere. Never ULID.

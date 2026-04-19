@@ -325,7 +325,7 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
-> **Current (2026-04-19, after W-1/W-2/W-3 closures):** Lovable **88** · Cursor/Claude-Code **91** · Raw-LLM **78**
+> **Current (2026-04-19, after W-5/W-7 closures):** Lovable **94** · Cursor/Claude-Code **96** · Raw-LLM **88**
 > **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
 > **Target:** 100 across all three. Issues remain documented above until target is reached.
 

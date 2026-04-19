@@ -1,11 +1,20 @@
 # Rate Limit Values
 
 > **Closes gap M4.** Concrete numeric rate limits for every public API route and authentication action.
-> **Reconciliation (2026-04-19, F-M04 / F-M05 / F-M09 / F-M10):**
-> - All paths use the locked `/v1/` prefix from `03-api-endpoints/01-conventions.md`.
-> - Auth limits aligned with `09-auth-accounts/11-rate-limits-and-abuse.md` §2 (which remains the narrative source-of-truth; this file is the numeric companion).
-> - 429 envelope uses the canonical `{ error: { code, ... } }` shape from `03-api-endpoints/01-conventions.md` §4 and `18-error-codes.md` §1.
-> - Org-wide quota errors use `BILLING_QUOTA_EXCEEDED` (already in error catalog), not invented `QUOTA_EXCEEDED`.
+>
+> **F-M09 / F-M10 closure (2026-04-19):** This file is the canonical numeric companion to `11-rate-limits-and-abuse.md`. The 429 / 402 response envelope below is **identical** to the canonical envelope in `03-api-endpoints/18-error-codes.md` §1 — nested `{ error: { code, ... } }`, `retry_after_ms` (milliseconds, never `_seconds` at top level), `request_id`, and `details.{...}`. Error codes are drawn **only** from the master catalog in `18-error-codes.md` §3.8 (rate) / §3.6 (billing); no codes are invented here.
+>
+> **Reconciliation map:**
+>
+> | This file | Canonical source | Status |
+> |---|---|---|
+> | All paths use `/v1/` prefix | `03-api-endpoints/01-conventions.md` §3 | ✅ aligned |
+> | Auth limit numbers | `09-auth-accounts/11-rate-limits-and-abuse.md` §2 (narrative) | ✅ aligned |
+> | 429 / 402 envelope shape | `03-api-endpoints/01-conventions.md` §4 + `18-error-codes.md` §1 | ✅ aligned |
+> | Rate-limit error codes | `18-error-codes.md` §3.8 (`RATE_LIMITED`, `RATE_LIMITED_AUTH`, `RATE_LIMITED_SHARE_PASSWORD`) | ✅ aligned |
+> | Org-quota error code | `18-error-codes.md` §3.6 (`BILLING_QUOTA_EXCEEDED`) | ✅ aligned (no invented `QUOTA_EXCEEDED`) |
+> | `Retry-After` HTTP header | mirrors `retry_after_ms` (seconds, rounded up) | ✅ aligned |
+>
 > **Locked rule:** Rate limits enforced at the edge function gateway via Upstash Redis token-bucket. Numbers below are MINIMUMS for production. Lower in test environments allowed; never higher in prod without owner approval.
 
 ---

@@ -87,10 +87,10 @@ When scheduled downgrade would shrink caps:
 ## 11. Telemetry
 
 - `proration.preview_requested` `{ from, to }`
-- `proration.upgrade_completed` `{ from, to, prorated_amount_minor, currency }`
+- `proration.upgrade_completed` `{ from, to, prorated_amount_cents, currency }`
 - `proration.downgrade_scheduled` `{ from, to, effective_at }`
 - `proration.downgrade_canceled`
-- `seat.added` `{ count, prorated_amount_minor }`
+- `seat.added` `{ count, prorated_amount_cents }`
 - `seat.removed_scheduled` `{ count, effective_at }`
 
 ## 12. Audit

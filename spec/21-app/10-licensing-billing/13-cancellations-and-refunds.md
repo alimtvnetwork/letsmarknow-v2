@@ -99,8 +99,8 @@ User can skip all and proceed to cancel.
 - `cancel.scheduled_canceled` (user reverted scheduled cancel)
 - `pause.started` `{ months }`
 - `pause.resumed` `{ via: "auto" | "manual" }`
-- `refund.requested` `{ scope, amount_minor }`
-- `refund.completed` `{ amount_minor, currency }`
+- `refund.requested` `{ scope, amount_cents }`
+- `refund.completed` `{ amount_cents, currency }`
 - `refund.denied` `{ reason }`
 - `resubscribe.completed` `{ days_since_cancel }`
 

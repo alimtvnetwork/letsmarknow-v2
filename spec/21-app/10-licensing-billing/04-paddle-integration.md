@@ -92,7 +92,7 @@ Signature verified with `PADDLE_WEBHOOK_SECRET` (HMAC-SHA256).
 ## 14. Telemetry
 
 - `paddle.checkout_started`
-- `paddle.checkout_completed` `{ amount_minor, currency }`
+- `paddle.checkout_completed` `{ amount_cents, currency }`
 - `paddle.subscription_created` / `_updated` / `_canceled`
 - `paddle.transaction_completed` / `_failed`
 - `paddle.webhook_received` `{ type, latency_ms }`

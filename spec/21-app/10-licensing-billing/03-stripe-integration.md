@@ -113,11 +113,11 @@ Signature verified with `STRIPE_WEBHOOK_SECRET`.
 ## 13. Telemetry
 
 - `stripe.checkout_started` `{ plan_code }`
-- `stripe.checkout_completed` `{ plan_code, amount_minor, currency }`
+- `stripe.checkout_completed` `{ plan_code, amount_cents, currency }`
 - `stripe.subscription_created`
 - `stripe.subscription_updated` `{ from, to }`
 - `stripe.subscription_canceled` `{ at_period_end }`
-- `stripe.invoice_paid` `{ amount_minor, currency }`
+- `stripe.invoice_paid` `{ amount_cents, currency }`
 - `stripe.invoice_failed` `{ attempt }`
 - `stripe.webhook_received` `{ type, latency_ms }`
 - `stripe.webhook_failed` `{ type, reason }`

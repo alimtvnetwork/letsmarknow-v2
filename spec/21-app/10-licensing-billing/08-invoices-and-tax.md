@@ -90,8 +90,8 @@ Invoice generation, tax handling, and receipt delivery.
 
 ## 10. Telemetry
 
-- `invoice.created` `{ amount_minor, currency, has_tax_id }`
-- `invoice.paid` `{ amount_minor, currency }`
+- `invoice.created` `{ amount_cents, currency, has_tax_id }`
+- `invoice.paid` `{ amount_cents, currency }`
 - `invoice.downloaded` `{ format }`
 - `invoice.tax_calculated` `{ rate, country }`
 

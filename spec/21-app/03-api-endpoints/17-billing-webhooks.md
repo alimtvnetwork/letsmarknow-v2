@@ -161,16 +161,194 @@ These are the **exact** subset of fields the handler reads. All money values use
 ### Paddle webhook
 `POST /v1/webhooks/paddle`
 
-**Auth:** Paddle Signature header (`Paddle-Signature`) HMAC-SHA256.
+**Auth:** Paddle Signature header (`Paddle-Signature`) HMAC-SHA256 validated against env `PADDLE_WEBHOOK_SECRET`.
+**Request body:** raw Paddle event JSON (do NOT parse before sig check).
 
 **Handled event types** (Paddle Billing v2):
-- `subscription.created` → activate
-- `subscription.updated` → recompute entitlements
-- `subscription.canceled` → downgrade at period end
-- `transaction.completed` → record invoice
-- `transaction.payment_failed` → dunning
+
+| Event | Action |
+|---|---|
+| `subscription.created` | Activate License; set `plan`, `seats`, `current_billing_period_*`. Emit `organization.subscription_activated`. |
+| `subscription.updated` | Update `plan`, `seats`, `interval`, `scheduled_change`. Recompute entitlements; bump `entitlements_hash`. |
+| `subscription.canceled` | Downgrade to `free` at period end. Mark `status="canceled"`. |
+| `transaction.completed` | Record invoice; reset dunning state. |
+| `transaction.payment_failed` | Set `status="past_due"`; trigger dunning email; entitlements DOWNGRADED to free after 7 days unless resolved. |
 
 Same Org binding model as Stripe (via `customer_id`).
+
+**Response 200** `{}`
+
+**Errors**
+- `400` — bad signature (no body parse)
+- `409` — Org not found for `customer_id` (Paddle customer never bound; alert ops)
+
+Webhook handler emits internal History Events (`actor_account_id=null`, `actor_role="system"`) and pushes WebSocket invalidation messages so connected clients refresh entitlements within 5s.
+
+#### Canonical payload schemas (Paddle — F-M11 parity 2026-04-19)
+
+These are the **exact** subset of fields the handler reads. All money values are converted to `amount_cents` on ingest (W-10) — Paddle sends them as **stringified integers in the smallest currency unit** under `details.totals.*` and `items[].price.unit_price.amount`. Provider may send additional fields — ignore unknown keys. Every payload is wrapped in the standard Paddle envelope:
+
+```json
+{
+  "event_id": "evt_01j...",
+  "event_type": "<event.type>",
+  "occurred_at": "2026-04-19T07:49:00.000Z",
+  "notification_id": "ntf_01j...",
+  "data": { /* see per-event below */ }
+}
+```
+
+> **Idempotency key:** `event_id` (NOT `notification_id` — Paddle replays the same event with new notification IDs).
+
+**`subscription.created`** — `data`:
+```json
+{
+  "id": "sub_01j...",
+  "status": "active",
+  "customer_id": "ctm_01j...",
+  "address_id": "add_01j...",
+  "currency_code": "USD",
+  "started_at": "2026-04-19T07:49:00.000Z",
+  "first_billed_at": "2026-04-19T07:49:00.000Z",
+  "current_billing_period": {
+    "starts_at": "2026-04-19T07:49:00.000Z",
+    "ends_at": "2026-05-19T07:49:00.000Z"
+  },
+  "billing_cycle": { "interval": "month", "frequency": 1 },
+  "items": [
+    {
+      "price": {
+        "id": "pri_pro_monthly_usd_LIVE",
+        "product_id": "pro_pro",
+        "unit_price": { "amount": "500", "currency_code": "USD" },
+        "billing_cycle": { "interval": "month", "frequency": 1 }
+      },
+      "quantity": 1,
+      "status": "active"
+    }
+  ],
+  "custom_data": {
+    "organization_id": "01J...",
+    "plan_code": "pro_monthly"
+  }
+}
+```
+- **Required:** `customer_id`, `id`, `custom_data.organization_id`, `custom_data.plan_code`, `items[0].price.id`, `items[0].quantity`.
+- **Action:** bind `customer_id → organization_id`; activate License with `plan = custom_data.plan_code`, `seats = items[0].quantity`, `provider_subscription_id = id`, `current_period_start = current_billing_period.starts_at`, `current_period_end = current_billing_period.ends_at`. Emit `organization.subscription_activated`.
+
+**`subscription.updated`** — `data`:
+```json
+{
+  "id": "sub_01j...",
+  "status": "active",
+  "customer_id": "ctm_01j...",
+  "currency_code": "USD",
+  "current_billing_period": {
+    "starts_at": "2026-05-19T07:49:00.000Z",
+    "ends_at": "2026-06-19T07:49:00.000Z"
+  },
+  "billing_cycle": { "interval": "month", "frequency": 1 },
+  "scheduled_change": null,
+  "items": [
+    {
+      "price": {
+        "id": "pri_team_monthly_usd_LIVE",
+        "unit_price": { "amount": "900", "currency_code": "USD" },
+        "billing_cycle": { "interval": "month", "frequency": 1 }
+      },
+      "quantity": 3,
+      "status": "active"
+    }
+  ],
+  "custom_data": { "organization_id": "01J...", "plan_code": "team_monthly" }
+}
+```
+- **Required:** `customer_id`, `status`, `items[0].price.id`, `items[0].quantity`, `current_billing_period.*`, `scheduled_change`.
+- **Action:** resolve `price.id` → `plan_code` via `licensing.skuMap` (never trust `custom_data.plan_code` alone — it can be stale on plan changes). Update License: `plan`, `seats = items[0].quantity`, `interval = billing_cycle.interval`, `current_period_*`, `cancel_at_period_end = (scheduled_change?.action === "cancel")`, `status`. Recompute entitlements; bump `entitlements_hash`.
+
+**`subscription.canceled`** — `data`:
+```json
+{
+  "id": "sub_01j...",
+  "status": "canceled",
+  "customer_id": "ctm_01j...",
+  "canceled_at": "2026-04-19T07:49:00.000Z",
+  "current_billing_period": {
+    "starts_at": "2026-04-19T07:49:00.000Z",
+    "ends_at": "2026-05-19T07:49:00.000Z"
+  },
+  "scheduled_change": {
+    "action": "cancel",
+    "effective_at": "2026-05-19T07:49:00.000Z",
+    "resume_at": null
+  }
+}
+```
+- **Required:** `customer_id`, `status="canceled"`, `scheduled_change.effective_at` (or `current_billing_period.ends_at` as fallback).
+- **Action:** mark License `status="canceled"`; schedule downgrade to `free` entitlements at `scheduled_change.effective_at` (period end). Do NOT delete the License row — preserve for audit. Emit `organization.subscription_canceled` with `cancellation_details = { reason: "user_requested", effective_at }`. (Paddle does not send a structured cancel reason; default to `"user_requested"`.)
+
+**`transaction.completed`** — `data`:
+```json
+{
+  "id": "txn_01j...",
+  "status": "completed",
+  "customer_id": "ctm_01j...",
+  "subscription_id": "sub_01j...",
+  "invoice_id": "inv_01j...",
+  "invoice_number": "12345-10001",
+  "currency_code": "USD",
+  "billed_at": "2026-04-19T07:49:00.000Z",
+  "billing_period": {
+    "starts_at": "2026-04-19T07:49:00.000Z",
+    "ends_at": "2026-05-19T07:49:00.000Z"
+  },
+  "details": {
+    "totals": {
+      "subtotal": "500",
+      "tax": "0",
+      "total": "500",
+      "grand_total": "500",
+      "currency_code": "USD"
+    }
+  },
+  "origin": "subscription_recurring"
+}
+```
+- **Required:** `customer_id`, `subscription_id`, `details.totals.grand_total`, `billing_period.*`, `invoice_id`.
+- **Action:** insert into `invoices` (key: `(provider, id)` where `id = transaction.id`); reset dunning state on the License; advance `current_period_start/end`. Emit `invoice.paid` History Event with `{ amount_cents: parseInt(details.totals.grand_total), currency: currency_code }`. PDF URL fetched lazily via Paddle API `GET /transactions/{id}/invoice` (not in webhook).
+
+**`transaction.payment_failed`** — `data`:
+```json
+{
+  "id": "txn_01j...",
+  "status": "past_due",
+  "customer_id": "ctm_01j...",
+  "subscription_id": "sub_01j...",
+  "currency_code": "USD",
+  "details": {
+    "totals": {
+      "grand_total": "500",
+      "currency_code": "USD"
+    }
+  },
+  "payments": [
+    {
+      "payment_attempt_id": "pay_01j...",
+      "status": "error",
+      "error_code": "card_declined",
+      "captured_at": null
+    }
+  ]
+}
+```
+- **Required:** `customer_id`, `subscription_id`, `payments[0].error_code`.
+- **Action:** Set License `status="past_due"`; trigger dunning email (`07-billing-emails.md`); schedule entitlements downgrade to `free` after 7 days unless resolved. Emit `invoice.payment_failed` History Event with `{ amount_cents, currency, decline_code: payments[0].error_code }`. Map `error_code` to canonical `BILLING_PAYMENT_FAILED` envelope per `18-error-codes.md` §3.6 when surfacing to admin UI.
+
+**Idempotency contract (all Paddle events):**
+- Dedup key is `(provider, event_id)` — the `event_id` field, NOT `notification_id`. Store in `webhook_events` with PK `(provider, event_id)`. Second arrival → 200 OK with no side effects.
+- All five handlers above are **safe to replay** end-to-end.
+- Order is NOT guaranteed by Paddle; if `subscription.updated` arrives before `subscription.created`, buffer for ≤30s waiting for the bind, then alert ops.
+- Paddle replays a failed delivery up to 60 times over 3 days with exponential backoff; the handler MUST return 2xx within 5s or Paddle will retry.
 
 ---
 

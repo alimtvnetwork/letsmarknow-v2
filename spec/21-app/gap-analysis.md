@@ -124,7 +124,7 @@ Ranked by **severity × frequency**.
 | W-8 | API error-code casing: `UPPER_SNAKE_CASE` (canonical) vs `lower_snake_case` (drift). | ✅ CLOSED 2026-04-19 | Lock added to `03-api-endpoints/01-conventions.md` §4; fixed sole drift at `17-admin-org/03-roles.md:158`. |
 | W-10 | Money fields: `amount_minor` vs `amount_cents` drift in `10-licensing-billing/`. | ✅ CLOSED 2026-04-19 | Swept 6 files; `amount_cents` canonical. See `15-sku-map.md` W-10 note. |
 | W-13 | Pagination param: `limit` (canonical, see `01-conventions.md` §5) vs `page_size` in some examples. | ✅ CLOSED 2026-04-19 | Fixed `15-visualization/readme.md` (2 lines); `page_size` alias withdrawn. |
-| F-M11 | Webhook-driven UI consistency: payload schemas not exhaustively listed. | OPEN | Add canonical payload list to `03-api-endpoints/17-billing-webhooks.md`. |
+| F-M11 | Webhook-driven UI consistency: payload schemas not exhaustively listed. | ✅ CLOSED 2026-04-19 | Canonical schemas for `checkout.session.completed`, `invoice.paid`, `customer.subscription.updated`, `customer.subscription.deleted` + idempotency contract added to `03-api-endpoints/17-billing-webhooks.md`. |
 
 ### 3.3 MINOR — AI handles with reasonable defaults
 

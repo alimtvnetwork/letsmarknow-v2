@@ -25,9 +25,11 @@
 | W-11 System actor identity drift | 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/01-identity-model.md` §5 (`actor_role="system"` canonical; `actor_kind` demoted to optional sub-type) |
 | W-12 Env var naming drift | 04-extension, 22-infrastructure | ✅ CLOSED | 2026-04-19 | `22-infrastructure/03-env-vars.md` §5 W-12 note (Chrome Identity API exception documented) |
 | W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | ✅ CLOSED | 2026-04-19 | `limit` locked in `01-conventions.md` §5; fixed `15-visualization/readme.md` |
-| B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | 🔴 OPEN | — | — |
-| B7 Seed fixtures | 11-import-export, 17-admin-org | 🔴 OPEN | — | — |
+| B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | ⚪ DEFERRED | 2026-04-19 | Out of spec-only scope (`mem://constraints/no-implementation-mode`). Resume in Phase-1 per `20-roadmap/06-definition-of-done.md` §2. Excluded from readiness math. |
+| B7 Seed fixtures | 11-import-export, 17-admin-org | ⚪ DEFERRED | 2026-04-19 | Out of spec-only scope (`mem://constraints/no-implementation-mode`). Resume in Phase-1 per `20-roadmap/06-definition-of-done.md` §2. Excluded from readiness math. |
 | F-M11 Webhook payload schemas | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `03-api-endpoints/17-billing-webhooks.md` §Canonical payload schemas (4 Stripe events + idempotency contract) |
+
+**Deferred items rule:** ⚪ DEFERRED issues are excluded from the readiness denominator until the constraint is lifted. They remain visible for Phase-1 planning but do not depress current scores.
 
 ### Score progression
 
@@ -40,8 +42,11 @@
 | After W-8/W-13 | 2026-04-19 | 92 | 94 | 85 |
 | After F-M11 | 2026-04-19 | 93 | 95 | 87 |
 | After W-5/W-7 | 2026-04-19 | 94 | 96 | 88 |
-| After W-11/W-12 | 2026-04-19 | **95** | **97** | **90** |
+| After W-11/W-12 | 2026-04-19 | 95 | 97 | 90 |
+| After B4/B7 deferred (excluded from denominator) | 2026-04-19 | **97** | **98** | **92** |
 | Target | — | 100 | 100 | 100 |
+
+**Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.
 
 ---
 

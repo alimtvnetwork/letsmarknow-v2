@@ -241,11 +241,11 @@ As requested, here is your brutally honest AI-development-readiness audit.
 
 | Domain Folder | Score | Grade | Key Blocker / Risk |
 |---|---|---|---|
-| 17-admin-org | 35 | F | Incorrect SQL enum definition for roles (`W-1`). |
-| 10-licensing-billing | 40 | F | Contradictory pricing across 3+ files (`W-3`). |
-| 08-sharing-collab | 55 | F | Contradictory WebSocket transport spec (`W-2`). |
+| 17-admin-org | 35 → **85** | F → B | W-1 ✅ closed; B4/B7 still open. |
+| 10-licensing-billing | 40 → **70** | F → C | W-3 ✅ closed; W-6, W-10, F-M11 open. |
+| 08-sharing-collab | 55 → **80** | F → B | W-2 ✅ closed; W-4 channel naming open. |
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
-| 04-extension | 70 | C | `Lovable` un-implementable; sync code points to dead endpoint. |
+| 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |
 | 22-infrastructure | 80 | B | Incomplete reconciliation of storage/env-var specs. |
 | 06-ui-ux | 82 | B | No VRT spec; outdated data in wireframes. |

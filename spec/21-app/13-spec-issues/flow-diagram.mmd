@@ -1,0 +1,14 @@
+flowchart TD
+    AUDIT[Auditor finds defect] --> APPEND[Append SI-NNN row to 02-current-issues.md]
+    APPEND --> SEV{Severity?}
+    SEV -->|S0 / S1| HOT[Goes into next phase in 03-phase-plan.md]
+    SEV -->|S2 / S3| BACKLOG[Stays in 02-current-issues.md backlog]
+
+    HOT --> WAIT[Wait for user to type 'next']
+    WAIT --> FIX[Fix lands in OWNING folder, not here]
+    FIX --> MOVE[Move row from 02 to 04-closed-issues.md]
+    MOVE --> MEM[Update mem://features/spec-issue-tracker.md counts]
+    MEM --> SCORE[Add invalidation note to 23-audits readiness score]
+
+    BACKLOG --> REPLAN[Re-grouped in next phase]
+    REPLAN --> WAIT

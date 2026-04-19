@@ -24,10 +24,39 @@ Jobs (parallel):
 9. **a11y** — `@axe-core/cli` against built routes; fail on serious/critical.
 10. **lighthouse** — perf budget on key routes (LCP < 2.5s, CLS < 0.1, TBT < 200ms).
 11. **size-limit** — fail if any route's JS > 250 KB gzipped.
-12. **spec-link-check** — fail if any `spec/21-app/**/*.md` link points to a non-existent file.
+12. **spec-drift-linter** — see §2.1.1 below. Single composite job, fails the PR on any drift class.
 13. **env-check** — `scripts/check-env.ts` validates required env vars present per environment matrix.
 
 Gate: **all green** required to merge to `main`.
+
+### 2.1.1 `spec-drift-linter` — anti-regression guard for the spec corpus
+
+Purpose: lock in every W-class fix from `audit-2026-04-19-ai-readiness-score.md` so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` on every PR. Composite of seven sub-checks, each of which fails the job independently with a precise error.
+
+| Sub-check | Tool | What it asserts | Fix-source it locks |
+|---|---|---|---|
+| `link-check` | `lychee --offline spec/21-app/**/*.md` | Every relative markdown link resolves to an existing file. | W-5 (broken a11y link). |
+| `naming-convention` | `scripts/lint/spec-filenames.ts` | Every file under a numbered domain folder matches `^(\d{2})-[a-z0-9-]+\.md$`; folder index is exactly `readme.md`; sequence numbers are contiguous (no gaps, no duplicates). | Locked rule in `mem://index` ("File naming: `NN-name.md`"). |
+| `role-enum` | `scripts/lint/role-enum.ts` | Greps `org_role`, `app_role`, `roles[]`, JWT `roles` claim, and any enum-looking SQL `CHECK` against the canonical 7-value list (`owner, admin, editor, viewer, billing, guest, system`). Any extra value or missing value fails. Allowlist file: `scripts/lint/role-enum.allowlist.txt` (must reference glossary + member.md). | W-1 + W-1 residue sweep. |
+| `error-code-casing` | `scripts/lint/error-codes.ts` | Every error code emitted in spec matches `^[A-Z][A-Z0-9_]+$` AND is listed in `03-api-endpoints/18-error-codes.md`. Unknown codes fail. | W-8, F-M09, F-M10. |
+| `money-units` | `scripts/lint/money-units.ts` | Disallows `amount_minor`, `amount_in_cents`, `priceInCents` anywhere in `spec/21-app/`. Only `amount_cents` permitted. | W-10. |
+| `sku-naming` | `scripts/lint/sku-naming.ts` | Disallows `_annual` suffix in plan SKUs; only `_yearly` permitted. Source of truth: `10-licensing-billing/15-sku-map.md`. | W-6. |
+| `pagination-param` | `scripts/lint/pagination.ts` | Disallows `page_size` and `pageSize` in any `03-api-endpoints/**` or `05-web-app/**` file. Only `limit` permitted. | W-13. |
+| `realtime-channel-syntax` | `scripts/lint/channel-syntax.ts` | Channel and route templates use `{id}` placeholders, never `<id>` or `:id`. | W-4. |
+| `storage-path` | `scripts/lint/storage-path.ts` | Storage paths in `22-infrastructure/**` and `11-import-export/**` match the layout declared in `12-storage-layout.md`. Bucket names allowlisted there. | W-7. |
+| `env-var-naming` | `scripts/lint/env-vars.ts` | Every `process.env.*` / `import.meta.env.*` reference in spec exists in `22-infrastructure/03-env-vars.md`. Chrome Identity API exception list is allowlisted in §5 of that file. | W-12. |
+| `pricing-source` | `scripts/lint/pricing.ts` | Any price string (e.g. `$5`, `$10`, `€7`) outside `10-licensing-billing/01-plans-matrix.md` must be a markdown link back to that file. | W-3. |
+
+Implementation contract:
+- Each linter is a standalone `ts-node` script under `scripts/lint/`.
+- All scripts share a common output format: `{file}:{line}:{col} [{rule}] {message}` so editor jump-to-error works.
+- Composite job runs every linter even if one fails (collect-then-report), so PR authors see all violations in one CI run.
+- Allowlists live next to each linter as `*.allowlist.txt`. Adding a value requires a PR comment justifying the exception.
+- All scripts are pure read-only on `spec/21-app/**`; never modify files.
+
+### 2.1.2 Pre-commit hook (developer-side)
+
+A `.husky/pre-commit` (or equivalent) runs the same `spec-drift-linter` on staged `.md` files only (fast subset). This is advisory — CI is authoritative.
 
 ### 2.2 `deploy-dev.yml` — runs on merge to `main`
 

@@ -34,6 +34,7 @@
 | F-M09 Rate-limit envelope drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/13-rate-limit-values.md` §0 (reconciliation map) + §7 (canonical envelope); `11-rate-limits-and-abuse.md` §10 (envelope reference) |
 | F-M10 Rate-limit error code drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `13-rate-limit-values.md` §0 + §6 (only catalog codes; `BILLING_QUOTA_EXCEEDED` for org-wide quotas) |
 | Paddle webhook parity | 10-licensing-billing, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `03-api-endpoints/17-billing-webhooks.md` §Paddle (5 events, canonical payload schemas, idempotency by `event_id`) |
+| F-CI-DRIFT CI drift-linter (anti-regression) | 22-infrastructure, all spec | ✅ CLOSED | 2026-04-19 | `22-infrastructure/09-ci-cd.md` §2.1.1 (11 sub-checks lock W-1, W-3, W-4, W-5, W-6, W-7, W-8, W-10, W-12, W-13, F-M09/F-M10) + §2.1.2 pre-commit hook |
 
 **Deferred items rule:** ⚪ DEFERRED issues are excluded from the readiness denominator until the constraint is lifted. They remain visible for Phase-1 planning but do not depress current scores.
 
@@ -53,7 +54,8 @@
 | After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | 98 | 99 | 94 |
 | After F-M09 + F-M10 | 2026-04-19 | 99 | 99 | 96 |
 | After Paddle webhook parity | 2026-04-19 | 99 | 99 | 97 |
-| After W-1 residue sweep | 2026-04-19 | **99** | **100** | **98** |
+| After W-1 residue sweep | 2026-04-19 | 99 | 100 | 98 |
+| After CI drift-linter spec | 2026-04-19 | **100** | **100** | **99** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.

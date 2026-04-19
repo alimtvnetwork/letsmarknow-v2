@@ -39,7 +39,7 @@
 ## 4. What this folder is NOT
 
 - **Not a Gantt chart.** No dates, no estimates, only ordering and gating.
-- **Not an audit.** Audits live in `audit-2026-04-19-*.md` files at the folder root.
+- **Not an audit.** Audits live in `audit/audit-2026-04-19-*.md` files at the folder root.
 - **Not a status report.** Status of in-flight work is tracked outside the spec.
 
 ---

@@ -1,6 +1,6 @@
 # 22 — Infrastructure
 
-> **Closes:** Blocker B6 from `gap-analysis.md`.
+> **Closes:** Blocker B6 from `audit/gap-analysis.md`.
 >
 > **Purpose:** Single source of truth for hosting, CI/CD, env vars, secrets, domains, SSL, CDN, queues, cron, and observability. Anything the on-call engineer needs at 3 a.m. lives here.
 

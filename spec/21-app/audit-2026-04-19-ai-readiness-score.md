@@ -31,6 +31,8 @@
 | F-M13 Magic-link flow spec | 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/02-signup-and-signin.md` §5 (endpoints, token issuance, callback, errors, telemetry) |
 | F-M20 Cron timezone fields | 22-infrastructure | ✅ CLOSED | 2026-04-19 | `22-infrastructure/08-cron.md` §1 (per-job `timezone` column, default `UTC`) |
 | Sub: 15-visualization P0/P2 split | 15-visualization | ✅ CLOSED | 2026-04-19 | `15-visualization/readme.md` §C5 (canonical split locked; per-view files reference by name) |
+| F-M09 Rate-limit envelope drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/13-rate-limit-values.md` §0 (reconciliation map) + §7 (canonical envelope); `11-rate-limits-and-abuse.md` §10 (envelope reference) |
+| F-M10 Rate-limit error code drift | 09-auth-accounts, 03-api-endpoints | ✅ CLOSED | 2026-04-19 | `13-rate-limit-values.md` §0 + §6 (only catalog codes; `BILLING_QUOTA_EXCEEDED` for org-wide quotas) |
 
 **Deferred items rule:** ⚪ DEFERRED issues are excluded from the readiness denominator until the constraint is lifted. They remain visible for Phase-1 planning but do not depress current scores.
 
@@ -47,7 +49,8 @@
 | After W-5/W-7 | 2026-04-19 | 94 | 96 | 88 |
 | After W-11/W-12 | 2026-04-19 | 95 | 97 | 90 |
 | After B4/B7 deferred (excluded from denominator) | 2026-04-19 | 97 | 98 | 92 |
-| After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | **98** | **99** | **94** |
+| After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | 98 | 99 | 94 |
+| After F-M09 + F-M10 | 2026-04-19 | **99** | **99** | **96** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.

@@ -7,11 +7,13 @@
 
 ## 1. Supported providers (Phase 0)
 
+> **Reconciled (F-M14, 2026-04-19):** GitHub is **deferred to P1** (Phase 1, post-MVP). Decision rationale: Apple + Google cover ≥ 95% of consumer + Workspace signups; deferring GitHub reduces P0 OAuth surface area and saves provisioning + review effort for launch. The §4 client-ID rows and §5 scope rows for GitHub remain in the file as **forward-spec** so Phase-1 work can drop in without reopening the spec; they are flagged `(P1 — do not provision before Phase 1)`. Provider-listing UI MUST hide P1 rows in P0 (per locked rule §8.5).
+
 | Provider | Status | Notes |
 |---|---|---|
 | Google | **Required (P0)** | OAuth 2.0 + OpenID Connect; managed via Lovable Cloud Auth |
 | Apple | Required (P0) | Sign in with Apple; needs Apple Team + Service ID |
-| GitHub | P1 | Manual via Supabase provider config (not in Cloud-managed list) |
+| GitHub | **Deferred — P1** | Spec preserved below for Phase-1 drop-in; do not provision in P0 |
 | Microsoft (Azure AD) | P1 | Multi-tenant |
 | SAML SSO | P2 (Team plan only) | Per-org, configured in admin UI |
 

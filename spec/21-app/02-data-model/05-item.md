@@ -28,6 +28,7 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 | `source` | enum(`manual`\|`save_session`\|`drag_from_tabs`\|`import_toby`\|`import_tabextend`\|`import_chrome`\|`import_json`\|`api`) | no | `manual` | — | How this Item was created. Useful for analytics + import dedup. |
 | `import_origin_id` | string(120) | yes | null | — | Original ID from imported source (for re-import dedup). |
 | `metadata` | json | no | `{}` | — | Page metadata snapshot at save time (see § Metadata JSON). |
+| `search_tsv` | tsvector | no | generated | — | **Computed column.** See `14-search/06-search-engine.md` §2.2 for the generation expression and weight table (F-M17 reconciliation, 2026-04-19). Used by global, item, and workspace search. Indexed via GIN. Never written by application code. |
 
 ### Metadata JSON (snapshot at save time, never auto-refreshed)
 
@@ -63,8 +64,10 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - `(organization_id, url_normalized)` for dedupe / jump-to-tab
 - `(organization_id, deleted_at)`
 - GIN on `tag_ids`
-- Full-text on `(title, description, notes, url)` for global search
+- **GIN on `search_tsv`** for global / item / workspace search — definition lives in `14-search/06-search-engine.md` §2.2
 - `(organization_id, last_opened_at DESC)` for "Recently opened"
+
+> **Note on full-text search:** The legacy line "Full-text on `(title, description, notes, url)`" is superseded by the generated `search_tsv` column above. Analogous `search_tsv` columns also exist on `collections`, `spaces`, and `groups` per the same source spec.
 
 ## Lifecycle
 

@@ -63,19 +63,24 @@ Stored as `url_normalized` (indexed) + original `url`.
 
 ## 5. Dedup modes
 
+> **Algorithm reference (F-M18, 2026-04-19):** The high-level modes here select *behavior*. The concrete matching algorithm — exact match on `url_normalized` (Stage 1) plus optional fuzzy title fallback at Jaro-Winkler ≥ 0.92 (Stage 2) plus host-grouping (Stage 3) plus user-confirm prompt (Stage 4) — is specified in `11-import-export/11-dedup-algorithm.md`. Importer codegen MUST consult that file for matcher constants. This file owns the UX modes; that file owns the matcher math.
+
 User picks at import:
 
 ### `merge_by_url` (default)
-- For each incoming item, look up existing items in target Org by `url_normalized`.
-- If match: update existing item; merge tags (union); append note (separator: `\n\n---\n\n`); preserve original `created_at`.
+- For each incoming item, look up existing items in target Org by `url_normalized` (Stage 1 of the matcher).
+- If exact-URL match: update existing item; merge tags (union); append note (separator: `\n\n---\n\n`); preserve original `created_at`.
+- If no exact match AND fuzzy title score ≥ 0.92 within the same host group: surface to user as Stage 4 confirm prompt; on accept, treat as match.
 - If no match: insert new.
 
 ### `keep_both`
 - Always insert; results in possible duplicates with same URL but different tags/notes.
+- Stage 2 / Stage 4 fuzzy matching disabled in this mode.
 
 ### `skip_duplicates`
 - For each incoming item, look up by `url_normalized`.
-- If match: skip entirely.
+- If exact match: skip entirely.
+- If Stage 2 fuzzy match (≥ 0.92): also skip (more conservative than `merge_by_url`).
 - If no match: insert.
 
 ## 6. Collection-aware dedup (advanced)

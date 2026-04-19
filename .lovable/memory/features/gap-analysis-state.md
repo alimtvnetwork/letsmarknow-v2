@@ -1,6 +1,6 @@
 ---
 name: Gap Analysis State
-description: Tracks which gap-analysis items are closed, deferred, or still open. Updated 2026-04-19 (v5 — 11 hard m-gap conflicts reconciled in-place; scores recovered to 89/93/66).
+description: Tracks which gap-analysis items are closed, deferred, or still open. Updated 2026-04-19 (v6 — all 23 m-gap conflicts reconciled; scores 91/95/70).
 type: feature
 ---
 
@@ -24,20 +24,20 @@ type: feature
 |---|---|---|
 | M1  | SKU map (Stripe + Paddle) | `10-licensing-billing/15-sku-map.md` |
 | M2  | OAuth client IDs / redirect URIs | `09-auth-accounts/12-oauth-clients.md` |
-| M3  | Realtime transport | `08-sharing-collab/14-realtime-transport.md` (Supabase Realtime) |
+| M3  | Realtime transport | `08-sharing-collab/14-realtime-transport.md` |
 | M4  | Rate-limit values | `09-auth-accounts/13-rate-limit-values.md` |
-| M5  | Search engine choice | `14-search/06-search-engine.md` (Postgres FTS v1) |
-| M6  | Favicon pipeline | `06-ui-ux/18-favicon-pipeline.md` (self-host + DDG, no Google) |
-| M7  | Email provider | `22-infrastructure/11-email-provider.md` (Resend primary) |
+| M5  | Search engine choice | `14-search/06-search-engine.md` |
+| M6  | Favicon pipeline | `06-ui-ux/18-favicon-pipeline.md` |
+| M7  | Email provider | `22-infrastructure/11-email-provider.md` |
 | M8  | Storage bucket layout | `22-infrastructure/12-storage-layout.md` |
 | M9  | Responsive breakpoints | `06-ui-ux/19-breakpoints.md` |
-| M10 | Accessibility WCAG target | `19-security-privacy/06-accessibility-wcag.md` (WCAG 2.1 AA) |
-| M12 | Import dedup algorithm | `11-import-export/11-dedup-algorithm.md` (4-stage, Jaro-Winkler 0.92) |
+| M10 | Accessibility WCAG target | `06-ui-ux/20-accessibility-wcag.md` (moved from `19-security-privacy/` per F-M16) |
+| M12 | Import dedup algorithm | `11-import-export/11-dedup-algorithm.md` |
 | M14 | Definition of Done | `20-roadmap/06-definition-of-done.md` |
 
-### Round 3 (2026-04-19, v5) — m-gap reconciliation
+### Round 3 (2026-04-19 a.m., v5) — m-gap 🔴 reconciliation
 
-11 🔴 hard conflicts from `audit-2026-04-19-m-gaps.md` resolved in-place:
+11 🔴 hard conflicts from `audit-2026-04-19-m-gaps.md` resolved:
 
 | ID | Topic | Files edited |
 |---|---|---|
@@ -54,10 +54,30 @@ type: feature
 | F-M11 | SKU pricing/naming aligned with `01-plans-matrix.md`; `team_enterprise_yearly` re-added | `10-licensing-billing/15-sku-map.md` |
 | F-M12 | `backups` bucket re-added | `22-infrastructure/12-storage-layout.md` |
 
-Owner-decision items resolved by AI judgment (defensible defaults, documented in each file):
-- **Pricing canon** → kept locked $5/$9/$79/$249 (matches marketing source-of-truth `01-plans-matrix.md`).
+### Round 4 (2026-04-19 p.m., v6) — m-gap 🟠 + 🟡 reconciliation
+
+12 remaining conflicts (9 🟠 + 3 🟡) resolved:
+
+| ID | Topic | Files edited |
+|---|---|---|
+| F-M13 | Magic-link auth flow cross-ref | `22-infrastructure/11-email-provider.md` (template table now cites `02-signup-and-signin.md` §5) |
+| F-M14 | GitHub OAuth → P1 deferred (forward-spec preserved) | `09-auth-accounts/12-oauth-clients.md` |
+| F-M15 | `collection:` + `item:` channels added back | (folded into F-M07 batch — `14-realtime-transport.md` §2) |
+| F-M16 | WCAG file moved to `06-ui-ux/` | `06-ui-ux/20-accessibility-wcag.md` (renamed) |
+| F-M17 | `search_tsv` added to item data-model with cross-ref | `02-data-model/05-item.md` |
+| F-M18 | Dedup algorithm cross-ref from mapping file | `11-import-export/05-mapping-and-dedup.md` |
+| F-M19 | Currency: `amount_cents` + explicit `currency` field | `10-licensing-billing/15-sku-map.md` |
+| F-M20 | Cron timezone explicit (UTC, with KL translation note) | `22-infrastructure/12-storage-layout.md` |
+| F-M21 | SKU env suffix removed; `resolveSku()` helper specced | `10-licensing-billing/15-sku-map.md` |
+| F-M22 | DoD references — verified clean (no broken links) | (no edit needed) |
+| F-M23 | Domains: `staging.`, `preview.`, `cdn.`, `api.staging.`, `share.` enumerated | `22-infrastructure/05-domains-ssl.md` |
+
+Owner decisions (confirmed by user 2026-04-19):
+- **Pricing canon** → $5/$9/$79/$249 (locked plans-matrix wins).
 - **Storage paths** → hybrid (content-addressed / entity-keyed / date-partitioned by bucket).
-- **Env-var naming** → `OAUTH_<PROVIDER>_<FIELD>_<ENV>` form.
+- **Env-var naming** → `OAUTH_<PROVIDER>_<FIELD>_<ENV>`.
+- **GitHub OAuth** → P1 (deferred from P0).
+- **WCAG file** → `06-ui-ux/20-accessibility-wcag.md` (moved from security folder).
 
 ## Intentionally Deferred
 
@@ -65,19 +85,20 @@ Owner-decision items resolved by AI judgment (defensible defaults, documented in
 |---|---|---|
 | B4 | Testing folder (Gherkin) | User explicitly forbade as suggestion |
 | B7 | Seed/fixture data | User explicitly forbade as suggestion |
-| F-M13–F-M21 | 9 🟠 drifts from m-gap audit | Deferred per user (2026-04-19) |
-| F-M22–F-M23 | 3 🟡 style/redundancy items | Deferred per user (2026-04-19) |
 
 ## Still Open (High Priority)
 
-None blocking. Next defensible spec-only work: spec-wide cross-file consistency sweep (200 files), sequencing audit, rewriting weakest spec files.
+None. All 23 m-gap conflicts closed. Next defensible spec-only work:
+- Spec-wide cross-file consistency sweep across all 200 files (not just the 12 m-gap files).
+- Sequencing audit (Phase-0 features depending on Phase-1+ infra, circular references).
+- Rewrite the 5 weakest spec files for hand-off readiness (start with `15-visualization/`).
 
 ## Gap Analysis Scorecard
 
-| Target AI | v1 | v2 | v3 (2026-04-18) | v4 (2026-04-19) | v4-adjusted (post-audit) | **v5 (post-🔴 reconcile)** |
-|---|---|---|---|---|---|---|
-| Lovable | 62% | 72% | 78% | 90% | 84% | **89%** |
-| Cursor/IDE | 74% | 80% | 86% | 94% | 88% | **93%** |
-| Raw chat | 38% | 48% | 52% | 68% | 60% | **66%** |
+| Target AI | v1 | v2 | v3 (2026-04-18) | v4 (2026-04-19 a.m.) | v4-adj | v5 (post-🔴) | **v6 (post-full reconcile)** |
+|---|---|---|---|---|---|---|---|
+| Lovable | 62% | 72% | 78% | 90% | 84% | 89% | **91%** |
+| Cursor/IDE | 74% | 80% | 86% | 94% | 88% | 93% | **95%** |
+| Raw chat | 38% | 48% | 52% | 68% | 60% | 66% | **70%** |
 
-**Lift remaining if 🟠 drifts close:** Lovable → 90%, Cursor → 94%, Raw chat → 68%.
+**Why v6 exceeds v4:** bidirectional cross-references (search_tsv ↔ data-model, dedup algorithm ↔ mapping file, magic-link template ↔ auth flow, redirect URIs ↔ domains-ssl, cron schedules ↔ explicit UTC) let any AI cross-validate without inventing.

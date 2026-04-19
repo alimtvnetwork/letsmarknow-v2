@@ -29,15 +29,17 @@ All four MUST share the same `letsmarknow.com` SPF / DKIM / DMARC.
 
 ## 3. Required emails (Phase 0)
 
-| Template ID | Trigger | From | Subject | Plain-text fallback |
-|---|---|---|---|---|
-| `auth.verify` | Sign-up | noreply | "Verify your Lets Marknow email" | required |
-| `auth.reset` | Password reset request | noreply | "Reset your password" | required |
-| `auth.magic_link` | Magic link sign-in | noreply | "Your sign-in link" | required |
-| `org.invite` | Member invited | noreply | "{Inviter} invited you to {Org}" | required |
-| `share.commented` | Comment on share | notifications | "{Commenter} commented on your share" | required |
-| `billing.invoice` | New invoice | billing | "Invoice #{n} from Lets Marknow" | required |
-| `billing.payment_failed` | Stripe failure | billing | "Payment failed — action required" | required |
+> **F-M13 reconciliation (2026-04-19):** the `auth.magic_link` template ships P0 because the magic-link sign-in flow is fully specified in `09-auth-accounts/02-signup-and-signin.md` §5 (token format, 15-min TTL, single-use, denylist replay window). This file owns only the email render contract (subject, sender, text fallback). Token issuance, route handler, and consumption rules belong to that auth file — do not duplicate them here.
+
+| Template ID | Trigger | From | Subject | Plain-text fallback | Auth flow ref |
+|---|---|---|---|---|---|
+| `auth.verify` | Sign-up | noreply | "Verify your Lets Marknow email" | required | `09-auth-accounts/02-signup-and-signin.md` §3 |
+| `auth.reset` | Password reset request | noreply | "Reset your password" | required | `09-auth-accounts/02-signup-and-signin.md` §8 |
+| `auth.magic_link` | Magic link sign-in | noreply | "Your sign-in link" | required | `09-auth-accounts/02-signup-and-signin.md` §5 |
+| `org.invite` | Member invited | noreply | "{Inviter} invited you to {Org}" | required | `09-auth-accounts/02-signup-and-signin.md` §6 |
+| `share.commented` | Comment on share | notifications | "{Commenter} commented on your share" | required | — |
+| `billing.invoice` | New invoice | billing | "Invoice #{n} from Lets Marknow" | required | — |
+| `billing.payment_failed` | Stripe failure | billing | "Payment failed — action required" | required | — |
 
 Templates live in `src/emails/*.tsx` (React Email). PR adds template → adds row here.
 

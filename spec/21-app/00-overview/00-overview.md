@@ -50,7 +50,7 @@ This folder owns five things and nothing else:
 
 ## 5. Cross-references
 
-- Roadmap consuming this scope: `20-roadmap/01-phase-0-mvp.md` → `05-phase-4-cross-browser.md`
+- Roadmap consuming this scope: `20-roadmap/01-phase-0-mvp.md` → `20-roadmap/05-phase-4-cross-browser.md`
 - Pricing derived from competitive analysis: `10-licensing-billing/01-plans-matrix.md`
 - Persona-driven copy: `06-ui-ux/14-copy-voice.md`, `06-ui-ux/17-copy-strings.md`
 - Browser-scope enforcement in extension spec: `04-extension/01-manifest.md`

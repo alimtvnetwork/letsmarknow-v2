@@ -64,7 +64,7 @@
 
 ## 5. Cross-references
 
-- Identity tables: `02-data-model/11-account.md`, `08-member.md`.
+- Identity tables: `02-data-model/11-account.md`, `02-data-model/08-member.md`.
 - Session header contract: `03-api-endpoints/01-conventions.md` §Auth headers.
 - Error envelope: `03-api-endpoints/18-error-codes.md`.
 - Email delivery: `22-infrastructure/11-email-provider.md`.

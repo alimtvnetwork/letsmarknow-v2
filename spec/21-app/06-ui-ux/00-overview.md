@@ -72,6 +72,6 @@
 ## 5. Cross-references
 
 - Pages composing these primitives: `05-web-app/**`.
-- Extension surfaces composing these primitives: `04-extension/04-popup.md`, `05-new-tab.md`.
+- Extension surfaces composing these primitives: `04-extension/04-popup.md`, `04-extension/05-new-tab.md`.
 - Pricing surface using copy + tokens: `10-licensing-billing/01-plans-matrix.md` rendered in `05-web-app/13-marketing-site.md`.
 - Accessibility acceptance criteria: `20-roadmap/06-definition-of-done.md` §a11y.

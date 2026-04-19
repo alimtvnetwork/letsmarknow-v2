@@ -64,5 +64,5 @@
 - Browser scope lock: `00-overview/05-browser-scope.md`.
 - Session/refresh contract used by the auth bridge: `09-auth-accounts/06-sessions.md`.
 - Realtime transport for sync: `08-sharing-collab/14-realtime-transport.md`.
-- API surfaces used by the extension: `03-api-endpoints/12-sessions-save.md`, `08-items.md`, `13-search.md`.
+- API surfaces used by the extension: `03-api-endpoints/12-sessions-save.md`, `03-api-endpoints/08-items.md`, `03-api-endpoints/13-search.md`.
 - Phase-4 cross-browser plan: `20-roadmap/05-phase-4-cross-browser.md`.

@@ -9,18 +9,21 @@
 
 ## 0. Executive verdict
 
-| Category | Count | Severity |
-|---|---|---|
-| 🔴 Hard sequencing breaks (P0 spec demands P1+ infra to function) | **3** |
-| 🟠 Soft sequencing leaks (P1 spec assumes P2 realtime; degrades cleanly) | **4** |
-| 🟡 Missing phase markers on shipped features | **2** |
-| 🟢 Forward-spec done correctly (data-model > feature, OAuth deferred) | **3** |
-| ⚪ Circular references | **0** |
+| Category | Count | Severity | Status |
+|---|---|---|---|
+| 🔴 Hard sequencing breaks (P0 spec demands P1+ infra to function) | **3** | | ✅ **All resolved 2026-04-19** |
+| 🟠 Soft sequencing leaks (P1 spec assumes P2 realtime; degrades cleanly) | **4** | | open |
+| 🟡 Missing phase markers on shipped features | **2** | | open |
+| 🟢 Forward-spec done correctly (data-model > feature, OAuth deferred) | **3** | | n/a |
+| ⚪ Circular references | **0** | | n/a |
 
-**Total findings: 9** (3 hard, 4 soft, 2 missing markers).
+**Total findings: 9** (3 hard ✅ closed, 4 soft, 2 missing markers).
 **Cycles:** none detected (clean DAG of cross-refs).
 
-The biggest risk is that **15-visualization P0 view files (just rewritten this session) cross-reference Supabase Realtime channels and the conflict-resolution doc** — both of which are P2 infrastructure. The realtime references make sense as **future-proofing**, but they need explicit "P2 enhancement, not required for P0" tags so a P0 implementer doesn't pull realtime forward unnecessarily.
+**Resolution log (2026-04-19, hard breaks):**
+- **S-1** closed by `15-visualization/06-resizable-sections.md` §3, §10 — split into P0 (local + `BroadcastChannel`) vs P2 (cross-device realtime, flag-gated).
+- **S-2** closed by `15-visualization/readme.md` §C5 (rewritten to "Cache invalidation P0 vs realtime P2") + propagated to `01-list-view.md` §13 + `03-compact-view.md` §11 + test rows.
+- **S-3** closed by `20-roadmap/02-phase-1-v1.md` §9 (cron pipeline added as explicit P1 deliverable) + `15-visualization/05-tabextend-column-view.md` §5 (now references `22-infrastructure/08-cron.md` and the new P1 deliverable).
 
 ---
 

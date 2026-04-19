@@ -128,9 +128,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **04-extension**
 
-- **Score: 70/100 → 85/100 (B)** _updated 2026-04-19_
+- **Score: 70/100 → 85/100 → 88/100 (B+)** _updated 2026-04-19 (W-12 closure)_
 - **Original Grade: C**
-- **Closed since initial audit:** ✅ W-2 (purged `wss://`, references `14-realtime-transport.md`). Still open: W-12, B4 test plan.
+- **Closed since initial audit:** ✅ W-2 (purged `wss://`, references `14-realtime-transport.md`), ✅ W-12 (env-var Chrome Identity API exception documented in `22-infrastructure/03-env-vars.md` §5). Still open: B4 test plan.
 - **Top failing issues (historical, retained until 100%):**
     - The spec doesn't account for agent limitations. `Lovable` cannot build Chrome extensions, making this entire domain a 0/100 for that agent. The score is averaged up by Cursor's capability.
     - **`W-2` WebSocket Drift:** The extension's offline sync spec (`10-sync-and-offline.md`) is one of the files that references the old, incorrect `wss://` endpoint.
@@ -144,9 +144,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **09-auth-accounts**
 
-- **Score: 75/100**
-- **Grade: C**
-- **Top failing issues:**
+- **Score: 75/100 → 83/100 (B)** _updated 2026-04-19 (W-11 closure)_
+- **Grade: B**
+- **Closed since initial audit:** ✅ W-11 (system-actor field unified — `actor_role="system"` canonical in `09-auth-accounts/01-identity-model.md` §5; `actor_kind` demoted to optional sub-type). Still open: W-1 partial residue, F-M09/F-M10 rate-limit envelope, F-M13 magic-link flow.
+- **Top failing issues (historical, retained until 100%):**
     - Still infected by `W-1` (role enum drift) and `W-11` (system actor identity drift). For an auth domain, this lack of clarity on identity and permissions is severe.
     - `F-M09` (rate limit envelope) and `F-M10` (rate limit error codes) showed that the `M4` fix for rate limits was not complete. The `values` file contradicted the `conventions` and `error-codes` files. The reconciliation was insufficient.
     - `F-M13` noted that magic-link auth flow is implied but not specified, creating a gap. The `README.md` confirms magic-link is P1.
@@ -158,9 +159,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **22-infrastructure**
 
-- **Score: 80/100 → 86/100 (B+)** _updated 2026-04-19 (W-7 closure)_
+- **Score: 80/100 → 86/100 → 90/100 (A-)** _updated 2026-04-19 (W-12 closure)_
 - **Original Grade: B**
-- **Closed since initial audit:** ✅ W-7 (storage path drift — `12-storage-layout.md` §1 W-7 note clarifies `lmn-` retained for client IDs; `08-cron.md` bucket paths corrected to `imports/`/`exports/`). Still open: W-12 (env var naming), no IaC examples.
+- **Closed since initial audit:** ✅ W-7 (storage path drift — `12-storage-layout.md` §1 W-7 note clarifies `lmn-` retained for client IDs; `08-cron.md` bucket paths corrected to `imports/`/`exports/`), ✅ W-12 (env-var naming exception documented for `EXT_OAUTH_CLIENT_ID`). Still open: no IaC examples, cron timezone fields.
 - **Top failing issues (historical, retained until 100%):**
     - `F-M01` was a "hard conflict" on storage layout and `F-M02` on env vars. The `m-gaps.md` report *claims* these are resolved, but the persistence of `W-7` and `W-12` in the later `audit.md` suggests the reconciliation was superficial.
     - Cron schedules (`08-cron.md`) were noted in `F-M20` as lacking a timezone specification, an ambiguity that will lead to jobs running at the wrong time.

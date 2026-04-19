@@ -15,13 +15,15 @@ Order of evaluation: edge → gateway → app → anti-bot challenge if score hi
 
 ## 2. Auth route limits
 
+> **Numeric source-of-truth:** `13-rate-limit-values.md` §2. Numbers below MUST match. Route names use the locked `sign_up` / `sign_in` form (snake_case verb pair) per `03-api-endpoints/01-conventions.md` §3.
+
 | Route | Per-IP | Per-Email/Account | Notes |
 |---|---|---|---|
-| `POST /v1/auth/signup` | 10 / hour | 3 / 24h per email | Re-CAPTCHA on suspicion |
-| `POST /v1/auth/signin` | 30 / 5 min | 5 / 15 min per email | Backoff on consecutive fails |
+| `POST /v1/auth/sign_up` | 10 / hour | 3 / 24h per email | Re-CAPTCHA on suspicion |
+| `POST /v1/auth/sign_in` | 30 / 5 min | 5 / 15 min per email | Backoff on consecutive fails |
 | `POST /v1/auth/magic_link` | 10 / hour | 5 / 24h per email | Generic success response |
 | `POST /v1/auth/forgot` | 5 / hour | 3 / 24h per email | Generic success |
-| `GET /auth/verify` | 30 / hour | n/a | Token bound |
+| `GET /v1/auth/verify` | 30 / hour | n/a | Token bound |
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | Refresh hot path |
 | `POST /v1/auth/sign_out` | 30 / min | n/a | |
 | `POST /v1/shares/access` (password) | 10 / 15 min | 5 / 15 min per slug | Lockout at 100 fails / 24h on slug |
@@ -72,8 +74,9 @@ Order of evaluation: edge → gateway → app → anti-bot challenge if score hi
 
 ## 10. UX during throttle
 
-- 429 responses include `Retry-After` header.
-- UI shows friendly "Too many attempts. Try again in X minutes." with countdown.
+- 429 responses include `Retry-After` HTTP header (seconds, rounded up).
+- 429 response body uses the canonical envelope from `03-api-endpoints/18-error-codes.md` §1 — frontend matches on `error.code` (e.g. `RATE_LIMITED`, `RATE_LIMITED_AUTH`, `RATE_LIMITED_SHARE_PASSWORD`), never on `message` or status alone. Full envelope examples in `13-rate-limit-values.md` §7.
+- UI shows friendly "Too many attempts. Try again in X minutes." with countdown driven by `retry_after_ms`.
 - Magic-link / forgot flows: never reveal whether limit was hit due to email-specific or IP-specific rule.
 
 ## 11. Telemetry

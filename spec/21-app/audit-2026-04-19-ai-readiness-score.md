@@ -3,7 +3,39 @@
 > **Generated:** 2026-04-19 07:49 (UTC+8) by AI auditor (Gemini 2.5 Pro).
 > **Scope:** All 21 numbered domain folders + existing audit/gap-analysis notes.
 > **Method:** Each domain scored /100 on AI-implementability. Failing issues, failure modes, and fix list per domain. Aggregated into critical-path remediation.
-> **Companion files:** `gap-analysis.md` (closure tracker), `audit-2026-04-19-spec-wide.md` (W-issues catalogue), `audit-2026-04-19-m-gaps.md` (M-issue closures).
+> **Companion files:** `gap-analysis.md` (closure tracker), `audit-2026-04-19-spec-wide.md` (W-issues catalogue), `audit-2026-04-19-m-gaps.md` (M-issue closures), `audit-2026-04-19-rescore-delta.md` (latest re-score math).
+
+---
+
+## 🟢 Live Issue Tracker (updated 2026-04-19, UTC+8)
+
+**Rule:** Issues are NEVER removed from this file until overall AI-readiness reaches **100/100**. They are only marked `✅ CLOSED` with a date + link to the fix. Scores in the per-domain sections below are updated in place.
+
+| Issue | Domain(s) | Status | Closed | Fix reference |
+|---|---|---|---|---|
+| W-1 Role enum drift | 17-admin-org, 02-data-model, 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `17-admin-org/03-roles.md` (7-value enum + SQL CHECK) |
+| W-2 Realtime transport (`wss://`) | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `04-extension/10-sync-and-offline.md` → Supabase Realtime |
+| W-3 Pricing drift | 10-licensing-billing, 05-web-app, 06-ui-ux | ✅ CLOSED | 2026-04-19 | `01-plans-matrix.md` declared canonical |
+| W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | 🔴 OPEN | — | — |
+| W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | 🔴 OPEN | — | — |
+| W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | 🔴 OPEN | — | — |
+| W-7 Storage path drift | 22-infrastructure | 🔴 OPEN | — | — |
+| W-8 Error code casing | 03-api-endpoints, 17-admin-org | 🔴 OPEN | — | — |
+| W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | 🔴 OPEN | — | — |
+| W-11 System actor identity drift | 09-auth-accounts | 🔴 OPEN | — | — |
+| W-12 Env var naming drift | 04-extension, 22-infrastructure | 🔴 OPEN | — | — |
+| W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | 🔴 OPEN | — | — |
+| B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | 🔴 OPEN | — | — |
+| B7 Seed fixtures | 11-import-export, 17-admin-org | 🔴 OPEN | — | — |
+| F-M11 Webhook payload schemas | 10-licensing-billing | 🔴 OPEN | — | — |
+
+### Score progression
+
+| Pass | Date | Lovable | Cursor/Claude-Code | Raw-LLM |
+|---|---|---:|---:|---:|
+| Initial | 2026-04-19 07:49 | 85 | 90 | 60 |
+| After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | **88** | **91** | **78** |
+| Target | — | 100 | 100 | 100 |
 
 ---
 

@@ -1,30 +1,41 @@
 ---
 name: No Implementation Mode
-description: User is in spec-only mode. Never write/modify code under src/, never enable Cloud, never create migrations or edge functions. Spec files (spec/21-app/**) and memory files only.
+description: PERMANENT spec-only mode. Never write code, never enable Cloud/Supabase, never run migrations. Only spec files (spec/21-app/**) and memory. User triggers any implementation work explicitly per request — default is always NO.
 type: constraint
 ---
 
-# No Implementation Mode (locked 2026-04-18, re-confirmed 2026-04-19)
+# No Implementation Mode — PERMANENT (re-confirmed 2026-04-19)
 
-## Rule
-Do NOT write or modify any code under `src/`, `supabase/`, `extension/`, `public/`, or root config files (`vite.config.ts`, `tailwind.config.ts`, `index.html`, etc.).
-Do NOT enable Lovable Cloud, do NOT create migrations, do NOT install npm packages, do NOT scaffold routes/components.
+## Rule (hard, default-deny)
+- **NEVER** write or modify code under `src/`, `supabase/`, `extension/`, `public/`, or any root config (`vite.config.ts`, `tailwind.config.ts`, `index.html`, `package.json`, etc.).
+- **NEVER** enable Lovable Cloud or Supabase.
+- **NEVER** create migrations, edge functions, or RLS policies as code.
+- **NEVER** install/remove npm packages.
+- **NEVER** suggest "lift no-impl mode" as a default option in suggestion buttons.
+- Implementation happens ONLY when the user explicitly types something like "implement X" or "write the code for Y" in that exact turn — and even then, ask once to confirm scope before touching `src/`.
 
 ## Allowed
-- Read/write files under `spec/21-app/**`
-- Read/write memory files under `mem://`
-- Read/write artifacts under `/mnt/documents/`
-- Run read-only shell commands (sweeps, greps, audits)
+- Read/write `spec/21-app/**` (the source of truth).
+- Read/write `mem://` memory files.
+- Read/write `/mnt/documents/` artifacts.
+- Read-only shell (greps, sweeps, audits).
+- Cross-reference checks, gap-analysis updates, audit refreshes.
 
-## Why
-User is currently in spec-design phase only. Implementation will happen later, possibly handed off to another AI. All audits, gap analyses, and recommendations must stay as documentation, not code.
+## My job (per user, 2026-04-19)
+1. Find gaps in the spec.
+2. Fine-tune existing spec files for clarity.
+3. Write spec in detail so any AI (Lovable, Cursor, raw Claude, etc.) can pick it up and build without inventing.
+4. Make sure things are in **right order** — sequence, dependencies, prerequisites.
+5. Surface inconsistencies, never silently paper over them.
+
+## How to apply (every turn)
+- User says "audit" → write findings to `spec/21-app/audit-{date}-{topic}.md`. Never propose code.
+- User says "close gap X" → only spec files. Never src/.
+- User says "fix" → ask: which spec file or which gap? Never assume "fix" means code.
+- User says "build / implement / wire / scaffold" → STOP. Reply: "Spec-only mode is locked. Type explicitly 'lift no-impl for this turn' if you want code." Do NOT pre-emptively offer to lift.
+- Suggestion buttons MUST stay inside spec-only scope. No "Retry F1 — enable Cloud" buttons. No "switch to build phase" buttons.
 
 ## History
 - 2026-04-18: Locked.
-- 2026-04-19: User asked to lift, then rejected Cloud enablement → re-locked. Cloud cannot be enabled without explicit confirmation in the popup.
-
-## How to apply
-- When user asks for an audit → write findings to `spec/21-app/audit-{date}.md`, never propose code changes inline.
-- When user asks "close blocker X" → only edit spec files, never src/.
-- When user implies implementation ("build", "implement", "wire") → STOP and ask: "Spec-only update or do you want to lift the no-implementation rule?"
-- Suggestion buttons must NOT propose enabling Cloud, generating migrations, or any src/ edits unless the user explicitly lifts this rule.
+- 2026-04-19 (a.m.): User asked to lift for F1 chain → rejected Cloud popup → re-locked.
+- 2026-04-19 (p.m.): User confirmed PERMANENT spec-only. Implementation suggestions are forbidden as defaults.

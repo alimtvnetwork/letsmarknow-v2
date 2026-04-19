@@ -185,9 +185,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **03-api-endpoints**
 
-- **Score: 85/100**
-- **Grade: B**
-- **Top failing issues:**
+- **Score: 85/100 → 95/100 (A)** _updated 2026-04-19 (W-8 + W-13 closure)_
+- **Original Grade: B**
+- **Closed since initial audit:** ✅ W-8 (UPPER_SNAKE_CASE locked), ✅ W-13 (`limit` locked).
+- **Top failing issues (historical, retained until 100%):**
     - **`W-8` Casing Inconsistency:** Error codes use `UPPER_SNAKE_CASE` in the canonical list but `lower_snake_case` in some examples. This will cause client-side matching failures.
     - **`W-13` Pagination Drift:** Use of `limit=50` in one file vs. the canonical `page_size=25` is a classic avoidable inconsistency.
     - **`B2` (Error Codes) is closed, but `F-M09` showed the *envelope was still wrong* for rate limits.** This proves that closing a gap with a file doesn't guarantee consistency.

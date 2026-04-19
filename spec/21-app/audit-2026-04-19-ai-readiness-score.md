@@ -122,8 +122,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **15-visualization**
 
-- **Score: 65/100**
-- **Grade: D**
+- **Score: 65/100 → 88/100 (B+)** _updated 2026-04-19 (P0/P2 split closure)_
+- **Grade: B+**
+- **Closed since initial audit:** ✅ 15-viz P0/P2 split — `readme.md` §C5 now declares itself canonical with an explicit closure note; per-view files (e.g. `01-list-view.md` §147, §178-179) reference the section by name rather than re-stating transport. AI no longer branches on phasing decisions in per-view files.
 - **Top failing issues:**
     - **P0 vs. P2 Dependency:** Section `C5` of the `README.md` creates a complex instruction: it defines a P2 realtime invalidation mechanism (Supabase) but tells the AI *not* to implement it for P0, instead using a different `BroadcastChannel` mechanism. This branching logic is a classic failure point for one-shot codegen.
     - The `mindmap` feature is P3, meaning a large part of this folder is not implementable for MVP/v1, lowering the effective readiness score.

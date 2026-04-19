@@ -70,6 +70,8 @@ The active view per Collection is stored on the **Collection** row, not on the A
 
 ### C5 — Cache invalidation (P0) and realtime invalidation (P2)
 
+> **Sub-issue closure (2026-04-19):** The P0/P2 split below is the canonical specification. Per-view files reference this section by name; no view file may re-define invalidation transport. Audit notes referencing "15-visualization P0/P2 split" are now closed.
+
 **Phasing (per sequencing audit S-2, 2026-04-19):** Realtime infra is **P2 per `20-roadmap/03-phase-2-collab.md` §4**. Do **not** pull the Supabase Realtime client SDK into P0 to satisfy this canon — single-user single-device P0 has no other client to receive a broadcast.
 
 **P0 — local invalidation (no realtime infra required):**

@@ -28,6 +28,9 @@
 | B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | ⚪ DEFERRED | 2026-04-19 | Out of spec-only scope (`mem://constraints/no-implementation-mode`). Resume in Phase-1 per `20-roadmap/06-definition-of-done.md` §2. Excluded from readiness math. |
 | B7 Seed fixtures | 11-import-export, 17-admin-org | ⚪ DEFERRED | 2026-04-19 | Out of spec-only scope (`mem://constraints/no-implementation-mode`). Resume in Phase-1 per `20-roadmap/06-definition-of-done.md` §2. Excluded from readiness math. |
 | F-M11 Webhook payload schemas | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `03-api-endpoints/17-billing-webhooks.md` §Canonical payload schemas (4 Stripe events + idempotency contract) |
+| F-M13 Magic-link flow spec | 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `09-auth-accounts/02-signup-and-signin.md` §5 (endpoints, token issuance, callback, errors, telemetry) |
+| F-M20 Cron timezone fields | 22-infrastructure | ✅ CLOSED | 2026-04-19 | `22-infrastructure/08-cron.md` §1 (per-job `timezone` column, default `UTC`) |
+| Sub: 15-visualization P0/P2 split | 15-visualization | ✅ CLOSED | 2026-04-19 | `15-visualization/readme.md` §C5 (canonical split locked; per-view files reference by name) |
 
 **Deferred items rule:** ⚪ DEFERRED issues are excluded from the readiness denominator until the constraint is lifted. They remain visible for Phase-1 planning but do not depress current scores.
 
@@ -43,7 +46,8 @@
 | After F-M11 | 2026-04-19 | 93 | 95 | 87 |
 | After W-5/W-7 | 2026-04-19 | 94 | 96 | 88 |
 | After W-11/W-12 | 2026-04-19 | 95 | 97 | 90 |
-| After B4/B7 deferred (excluded from denominator) | 2026-04-19 | **97** | **98** | **92** |
+| After B4/B7 deferred (excluded from denominator) | 2026-04-19 | 97 | 98 | 92 |
+| After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | **98** | **99** | **94** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.
@@ -118,8 +122,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **15-visualization**
 
-- **Score: 65/100**
-- **Grade: D**
+- **Score: 65/100 → 88/100 (B+)** _updated 2026-04-19 (P0/P2 split closure)_
+- **Grade: B+**
+- **Closed since initial audit:** ✅ 15-viz P0/P2 split — `readme.md` §C5 now declares itself canonical with an explicit closure note; per-view files (e.g. `01-list-view.md` §147, §178-179) reference the section by name rather than re-stating transport. AI no longer branches on phasing decisions in per-view files.
 - **Top failing issues:**
     - **P0 vs. P2 Dependency:** Section `C5` of the `README.md` creates a complex instruction: it defines a P2 realtime invalidation mechanism (Supabase) but tells the AI *not* to implement it for P0, instead using a different `BroadcastChannel` mechanism. This branching logic is a classic failure point for one-shot codegen.
     - The `mindmap` feature is P3, meaning a large part of this folder is not implementable for MVP/v1, lowering the effective readiness score.
@@ -149,9 +154,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **09-auth-accounts**
 
-- **Score: 75/100 → 83/100 (B)** _updated 2026-04-19 (W-11 closure)_
-- **Grade: B**
-- **Closed since initial audit:** ✅ W-11 (system-actor field unified — `actor_role="system"` canonical in `09-auth-accounts/01-identity-model.md` §5; `actor_kind` demoted to optional sub-type). Still open: W-1 partial residue, F-M09/F-M10 rate-limit envelope, F-M13 magic-link flow.
+- **Score: 75/100 → 83/100 → 91/100 (A-)** _updated 2026-04-19 (F-M13 closure)_
+- **Grade: A-**
+- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5: endpoints, token issuance, callback consume, errors, telemetry, anti-abuse). Still open: W-1 partial residue, F-M09/F-M10 rate-limit envelope.
 - **Top failing issues (historical, retained until 100%):**
     - Still infected by `W-1` (role enum drift) and `W-11` (system actor identity drift). For an auth domain, this lack of clarity on identity and permissions is severe.
     - `F-M09` (rate limit envelope) and `F-M10` (rate limit error codes) showed that the `M4` fix for rate limits was not complete. The `values` file contradicted the `conventions` and `error-codes` files. The reconciliation was insufficient.
@@ -164,9 +169,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **22-infrastructure**
 
-- **Score: 80/100 → 86/100 → 90/100 (A-)** _updated 2026-04-19 (W-12 closure)_
+- **Score: 80/100 → 86/100 → 90/100 → 94/100 (A)** _updated 2026-04-19 (F-M20 closure)_
 - **Original Grade: B**
-- **Closed since initial audit:** ✅ W-7 (storage path drift — `12-storage-layout.md` §1 W-7 note clarifies `lmn-` retained for client IDs; `08-cron.md` bucket paths corrected to `imports/`/`exports/`), ✅ W-12 (env-var naming exception documented for `EXT_OAUTH_CLIENT_ID`). Still open: no IaC examples, cron timezone fields.
+- **Closed since initial audit:** ✅ W-7 (storage path drift), ✅ W-12 (env-var naming exception), ✅ F-M20 (cron timezone — every job in `08-cron.md` §1 now carries an explicit `timezone` column; default `UTC` documented; §4 updated). Still open: no IaC examples.
 - **Top failing issues (historical, retained until 100%):**
     - `F-M01` was a "hard conflict" on storage layout and `F-M02` on env vars. The `m-gaps.md` report *claims* these are resolved, but the persistence of `W-7` and `W-12` in the later `audit.md` suggests the reconciliation was superficial.
     - Cron schedules (`08-cron.md`) were noted in `F-M20` as lacking a timezone specification, an ambiguity that will lead to jobs running at the wrong time.

@@ -20,20 +20,20 @@ These match the existing `tailwind.config.ts` defaults — no overrides — so `
 
 ## 2. Intended layout per surface
 
-| Surface | xs / sm | md | lg / xl / 2xl |
-|---|---|---|---|
-| Marketing landing | Single column, sticky CTA bottom | Two-column hero | Three-section with screenshot grid |
-| Sign-in / Sign-up | Single column form, full-bleed | Centered card 480 px | Centered card 480 px + side illustration |
-| Dashboard shell | Bottom tab bar (5 items) + drawer | Collapsed sidebar (icons) + content | Expanded sidebar (240 px) + content + right panel |
-| Item list view | One card per row | Two cards per row | Three to four cards per row (grid) |
-| Item grid view | Disabled (use list) | 3 columns | 4–6 columns |
-| Item compact view | Available | 2 columns | 3 columns |
-| Mind-map view | Disabled (notice + link to list) | Available, pinch to zoom | Full canvas |
-| Share viewer | Single column | Two column | Three column with TOC |
-| Onboarding | Full-screen sheet | Centered card | Centered card 720 px max |
-| Billing | Stacked plans | Two-column comparison | Four-column comparison |
-| Settings | Stacked sections | Stacked sections | Sidebar nav + content |
-| Command palette | Full-screen modal | Centered modal 640 px | Centered modal 720 px |
+| Surface | xs / sm | md | lg / xl / 2xl | 3xl |
+|---|---|---|---|---|
+| Marketing landing | Single column, sticky CTA bottom | Two-column hero | Three-section with screenshot grid | Same as 2xl, capped at container `3xl` (1600 px) |
+| Sign-in / Sign-up | Single column form, full-bleed | Centered card 480 px | Centered card 480 px + side illustration | Same as 2xl |
+| Dashboard shell | Bottom tab bar (5 items) + drawer | Collapsed sidebar (icons) + content | Expanded sidebar (240 px) + content + right panel | Same as 2xl, content area expands |
+| Item list view | One card per row | Two cards per row | Three to four cards per row (grid) | Up to six cards per row |
+| Item grid view | Disabled (use list) | 3 columns | 4–6 columns | 6–8 columns |
+| Item compact view | Available | 2 columns | 3 columns | 4 columns |
+| Mind-map view | Disabled (notice + link to list) | Available, pinch to zoom | Full canvas | Full canvas |
+| Share viewer | Single column | Two column | Three column with TOC | Same as 2xl |
+| Onboarding | Full-screen sheet | Centered card | Centered card 720 px max | Same as 2xl |
+| Billing | Stacked plans | Two-column comparison | Four-column comparison | Same as 2xl |
+| Settings | Stacked sections | Stacked sections | Sidebar nav + content | Same as 2xl |
+| Command palette | Full-screen modal | Centered modal 640 px | Centered modal 720 px | Centered modal 720 px |
 
 ## 3. Touch vs. pointer
 
@@ -60,8 +60,9 @@ Print stylesheet (`16-print-stylesheet.md`) ignores breakpoints; uses A4-portrai
 
 ## 6. Locked rules
 
-1. Only the 6 named breakpoints. No `min-width: 900px` etc.
+1. Only the 7 named breakpoints (`xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`). No `min-width: 900px` etc.
 2. Mobile-first CSS. Default styles target `xs`; larger breakpoints layer on.
-3. Every new view MUST specify behavior at xs, md, lg in this file's table before ship.
+3. Every new view MUST specify behavior at xs, md, lg, and (where it differs) 3xl in this file's table before ship.
 4. Bottom tab bar exists ONLY on `< md`. Above `md`, sidebar replaces it.
 5. Mind-map view is hidden on `< md` (UX bypass: link "Open on desktop").
+6. `3xl` MUST be defined as `1920px` (this file) and the marketing container caps at `1600px` per `04-layout-grid.md` §2 — do not conflate the two values.

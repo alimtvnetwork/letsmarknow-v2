@@ -10,6 +10,7 @@
 | SI-005 | 2026-04-19 | S2 | `23-audits/` missing `00-overview.md` | **False positive** — file already exists at `spec/21-app/23-audits/00-overview.md` (3939 bytes). Detection error in initial Phase-0 sweep. (Phase 1.1) |
 | SI-006 | 2026-04-19 | S2 | `23-audits/` missing `flow-diagram.mmd` | **False positive** — file already exists at `spec/21-app/23-audits/flow-diagram.mmd` (15 lines, `flowchart TD`). Detection error in initial Phase-0 sweep. (Phase 1.1) |
 | SI-007 | 2026-04-19 | S2 | `templates/` folder missing required `readme.md`/`overview`/`diagram` | Closed by exemption — `13-spec-issues/01-naming-conventions.md §3` Exempt-folders table now lists `templates/` (process-meta, not a domain). No files added. (Phase 1.4) |
+| SI-009 | 2026-04-19 | S3 | Audit chain claims 100/100 but post-100 backlog exists | Added "Post-100 backlog" row to Live Issue Tracker + score-invalidation note in Score-progression table. `audit-2026-04-19-ai-readiness-score.md` lines 40, 62. (Phase 3) |
 
 ---
 

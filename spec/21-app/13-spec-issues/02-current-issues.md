@@ -5,6 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
+**Last updated:** 2026-04-19 (after Phase 1).
 
 ---
 
@@ -12,8 +13,9 @@
 
 | ID | Sev | Title | Evidence | Owning file(s) for fix | Rule violated (`01-naming-conventions.md` §) |
 |---|---|---|---|---|---|
-| SI-001 | S1 | Folder sequence has gap `21` | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. | `13-spec-issues/01-naming-conventions.md §2` (slot `21` documented as Reserved/empty) | §2 |
+| SI-001 | S1 | Folder slot `21` is empty (gap in numeric sequence) | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. Slot `21` now documented as Reserved in `01-naming-conventions.md §2`. | Either fill slot `21` with a future cross-cutting domain OR keep the Reserved note. Re-evaluate at next major spec revision. | §2 |
 | SI-008 | S2 | "TBD" markers remain in 2 locked spec files | `00-overview/04-competitive-analysis.md` line 13, `readme.md` line 327. (`22-infrastructure/03-env-vars.md` line 93 allowed — describes a linter pattern. `23-audits/*` allowed — historical audit prose.) | `00-overview/04-competitive-analysis.md`, `readme.md` | §7 |
+| SI-009 | S3 | Audit chain claims 100/100 but post-100 backlog now exists | `23-audits/audit-2026-04-19-ai-readiness-score.md` lines 60-62 declare `100/100/100` while `13-spec-issues/02-current-issues.md` has open rows | Add a "Post-100 backlog" row + score-invalidation note to the Live Issue Tracker in that file. (Scheduled for Phase 3.) | n/a (process) |
 | SI-010 | S2 | `15-feature-flags-and-rollouts.md` placement contradicts no-impl mode | Spec-only mode bans feature-flag implementation work, but `07-features/15-feature-flags-and-rollouts.md` is marked P0 in `07-features/readme.md` | `07-features/readme.md` (clarify: spec lives at P0, implementation deferred) | §7 |
 
 ---

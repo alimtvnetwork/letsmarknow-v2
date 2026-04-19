@@ -24,7 +24,7 @@ A feature is **Done** when:
 - [ ] Uses design tokens only (no hex literals, no ad-hoc colors).
 - [ ] Uses copy strings from `06-ui-ux/17-copy-strings.md` (no inline English).
 - [ ] Responsive at xs / md / lg per `06-ui-ux/19-breakpoints.md`.
-- [ ] Accessibility checklist (`19-security-privacy/06-accessibility-wcag.md` §2) passes.
+- [ ] Accessibility checklist (`06-ui-ux/20-accessibility-wcag.md` §2) passes.
 
 ### Behavior
 - [ ] Soft-delete + Undo path verified (if entity is soft-deletable).

@@ -48,7 +48,7 @@
 - **M7 closed** → `22-infrastructure/11-email-provider.md` — Resend primary, Postmark failover (+2 pts).
 - **M8 closed** → `22-infrastructure/12-storage-layout.md` — bucket layout + retention (+2 pts).
 - **M9 closed** → `06-ui-ux/19-breakpoints.md` — 6-token responsive grid (+2 pts on UI).
-- **M10 closed** → `19-security-privacy/06-accessibility-wcag.md` — WCAG 2.1 AA + CI gating (+3 pts).
+- **M10 closed** → `06-ui-ux/20-accessibility-wcag.md` — WCAG 2.1 AA + CI gating (+3 pts). _Path corrected 2026-04-19 (W-5 closure)._
 - **M12 closed** → `11-import-export/11-dedup-algorithm.md` — 4-stage pipeline w/ Jaro-Winkler 0.92 (+2 pts).
 - **M14 closed** → `20-roadmap/06-definition-of-done.md` — universal DoD + per-domain overlays (+3 pts).
 
@@ -103,7 +103,7 @@ Ranked by **severity × frequency**.
 | ~~M7~~ | ~~Email provider not specified.~~ **CLOSED** | `22-infrastructure/11-email-provider.md` — Resend primary, Postmark failover; Gmail forbidden. |
 | ~~M8~~ | ~~Storage bucket layout undefined.~~ **CLOSED** | `22-infrastructure/12-storage-layout.md` — 8 buckets, sharded paths, retention, quotas. |
 | ~~M9~~ | ~~Mobile breakpoints implied, not enumerated.~~ **CLOSED** | `06-ui-ux/19-breakpoints.md` — 6-token grid + per-surface intended layouts. |
-| ~~M10~~ | ~~Accessibility (a11y) not gated.~~ **CLOSED** | `19-security-privacy/06-accessibility-wcag.md` — WCAG 2.1 AA + axe-core CI + per-component checklist. |
+| ~~M10~~ | ~~Accessibility (a11y) not gated.~~ **CLOSED** | `06-ui-ux/20-accessibility-wcag.md` — WCAG 2.1 AA + axe-core CI + per-component checklist. _Path corrected 2026-04-19 (W-5 closure)._ |
 | ~~M11~~ | ~~Analytics events listed per feature but no taxonomy file.~~ **CLOSED** | `18-analytics-telemetry/03-events.md` — 80+ events. |
 | ~~M12~~ | ~~Migration / import dedup algorithm hand-waved.~~ **CLOSED** | `11-import-export/11-dedup-algorithm.md` — 4-stage pipeline; Jaro-Winkler ≥ 0.92. |
 | ~~M13~~ | ~~Permissions matrix references roles but no machine-readable matrix.~~ **CLOSED** | `08-sharing-collab/permissions-matrix.json` — RLS codegen-ready. |

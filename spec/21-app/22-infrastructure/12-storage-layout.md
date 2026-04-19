@@ -21,6 +21,8 @@
 | `backups` | Private (system only, restricted IAM) | date-partitioned | DB + storage backups | Per `02-environments.md` retention |
 
 > **Bucket count:** 10. Names are lowercase + hyphen, no prefix. PRs that introduce other buckets are rejected.
+>
+> **W-7 closure note (2026-04-19):** The `lmn-` prefix was dropped **from storage bucket names only** (per F-M01). It is **retained** for client-side identifiers — IndexedDB stores (`lmn-cache`), built-zip names (`lmn-<version>.zip`), ESLint plugins (`eslint-plugin-lmn-design`), and brand asset filenames (`lmn-mark.svg`). Do not rename those. Stale bucket-path references (e.g. `lmn-imports/`, `lmn-exports/`) in cron specs were corrected on 2026-04-19; canonical bucket names are in §1 above.
 
 ## 2. Path conventions
 

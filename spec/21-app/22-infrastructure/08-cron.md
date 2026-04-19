@@ -17,8 +17,8 @@ Scheduled jobs. All times UTC. All jobs idempotent (safe to run twice).
 | `analytics-rollup-daily` | daily 01:00 UTC | `0 1 * * *` | Roll hourly → daily |
 | `analytics-purge-raw` | daily 02:00 UTC | `0 2 * * *` | Drop raw events older than 90d |
 | `audit-log-archive` | daily 03:00 UTC | `0 3 * * *` | Move >90d audit entries to cold storage |
-| `import-cleanup` | daily 04:00 UTC | `0 4 * * *` | Delete `lmn-imports/` files older than 24h |
-| `export-cleanup` | daily 04:30 UTC | `30 4 * * *` | Delete `lmn-exports/` files older than 7d |
+| `import-cleanup` | daily 04:00 UTC | `0 4 * * *` | Delete `imports/` bucket files older than 24h (per `12-storage-layout.md` §5) |
+| `export-cleanup` | daily 04:30 UTC | `30 4 * * *` | Delete `exports/` bucket files older than 7d (per `12-storage-layout.md` §5) |
 | `favicon-refresh` | weekly Sun 05:00 UTC | `0 5 * * 0` | Refresh stale favicons (90d TTL) |
 | `seat-quota-recompute` | daily 06:00 UTC | `0 6 * * *` | Recompute Org seat counts; mark over-quota |
 | `notifications-digest-email` | daily 16:00 UTC | `0 16 * * *` | Daily digest email per user prefs |

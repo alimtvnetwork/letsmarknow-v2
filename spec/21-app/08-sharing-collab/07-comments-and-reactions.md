@@ -52,7 +52,7 @@ Unique `(target_type, target_id, account_id|invite_email, emoji)`.
 
 ## 5. Realtime
 
-- New comment broadcasts on `item:<id>` channel.
+- New comment broadcasts on `item:{item_id}` channel.
 - Optimistic UI: comment appears immediately with pending state.
 - Reactions optimistic + debounced server sync.
 

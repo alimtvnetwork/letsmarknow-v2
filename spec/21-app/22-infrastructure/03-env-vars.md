@@ -36,16 +36,29 @@ Complete inventory. Anything not listed here MUST NOT be read from `process.env`
 | `STRIPE_WEBHOOK_SECRET` | yes (prod) | `whsec_…` |
 | `PADDLE_API_KEY` | optional | EU VAT path |
 | `PADDLE_WEBHOOK_PUBLIC_KEY` | optional | For signature verification |
-| `RESEND_API_KEY` | yes | Outbound transactional email |
-| `EMAIL_FROM` | yes | `noreply@letsmarknow.com` |
-| `OAUTH_GOOGLE_CLIENT_ID` | yes | |
-| `OAUTH_GOOGLE_CLIENT_SECRET` | yes | |
-| `OAUTH_APPLE_CLIENT_ID` | optional | |
-| `OAUTH_APPLE_TEAM_ID` | optional | |
-| `OAUTH_APPLE_KEY_ID` | optional | |
-| `OAUTH_APPLE_PRIVATE_KEY` | optional | PEM, base64-encoded in vault |
-| `OAUTH_GITHUB_CLIENT_ID` | optional | |
-| `OAUTH_GITHUB_CLIENT_SECRET` | optional | |
+| `RESEND_API_KEY` | yes | Outbound transactional email (primary provider) |
+| `POSTMARK_API_KEY` | optional | Required if `EMAIL_PROVIDER=postmark` (failover) |
+| `EMAIL_PROVIDER` | optional | `resend` (default) or `postmark` |
+| `EMAIL_FROM` | yes | `noreply@letsmarknow.com` (transactional) |
+| `EMAIL_FROM_NOTIFICATIONS` | yes | `notifications@letsmarknow.com` |
+| `EMAIL_FROM_BILLING` | yes | `billing@letsmarknow.com` |
+| `EMAIL_FROM_SUPPORT` | yes | `support@letsmarknow.com` |
+| `OAUTH_GOOGLE_CLIENT_ID_STAGING` | optional | Required in staging |
+| `OAUTH_GOOGLE_CLIENT_SECRET_STAGING` | optional | Required in staging |
+| `OAUTH_GOOGLE_CLIENT_ID_PROD` | yes (prod) | |
+| `OAUTH_GOOGLE_CLIENT_SECRET_PROD` | yes (prod) | |
+| `OAUTH_APPLE_CLIENT_ID_STAGING` | optional | Service ID, e.g. `com.letsmarknow.app.staging` |
+| `OAUTH_APPLE_CLIENT_ID_PROD` | optional | Service ID, e.g. `com.letsmarknow.app` |
+| `OAUTH_APPLE_TEAM_ID` | optional | Single value, both envs |
+| `OAUTH_APPLE_KEY_ID_STAGING` | optional | |
+| `OAUTH_APPLE_KEY_ID_PROD` | optional | |
+| `OAUTH_APPLE_PRIVATE_KEY_STAGING` | optional | PEM, base64-encoded in vault |
+| `OAUTH_APPLE_PRIVATE_KEY_PROD` | optional | PEM, base64-encoded in vault |
+| `OAUTH_GITHUB_CLIENT_ID_STAGING` | optional | |
+| `OAUTH_GITHUB_CLIENT_SECRET_STAGING` | optional | |
+| `OAUTH_GITHUB_CLIENT_ID_PROD` | optional | |
+| `OAUTH_GITHUB_CLIENT_SECRET_PROD` | optional | |
+| `OAUTH_STATE_SECRET` | yes | HMAC key for OAuth `state` param (rotated quarterly) |
 | `SHARE_LINK_HMAC_KEY` | yes | For signed share tokens |
 | `RATE_LIMIT_REDIS_URL` | yes | Upstash or Cloud Redis |
 | `QUEUE_URL` | yes | See `07-queues.md` |

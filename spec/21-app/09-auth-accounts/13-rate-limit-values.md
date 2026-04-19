@@ -1,7 +1,12 @@
 # Rate Limit Values
 
 > **Closes gap M4.** Concrete numeric rate limits for every public API route and authentication action.
-> **Locked rule:** Rate limits are enforced at the edge function gateway via Upstash Redis token-bucket. Limits below are MINIMUMS for production. Lower in test environments allowed; never higher in prod without owner approval.
+> **Reconciliation (2026-04-19, F-M04 / F-M05 / F-M09 / F-M10):**
+> - All paths use the locked `/v1/` prefix from `03-api-endpoints/01-conventions.md`.
+> - Auth limits aligned with `09-auth-accounts/11-rate-limits-and-abuse.md` §2 (which remains the narrative source-of-truth; this file is the numeric companion).
+> - 429 envelope uses the canonical `{ error: { code, ... } }` shape from `03-api-endpoints/01-conventions.md` §4 and `18-error-codes.md` §1.
+> - Org-wide quota errors use `BILLING_QUOTA_EXCEEDED` (already in error catalog), not invented `QUOTA_EXCEEDED`.
+> **Locked rule:** Rate limits enforced at the edge function gateway via Upstash Redis token-bucket. Numbers below are MINIMUMS for production. Lower in test environments allowed; never higher in prod without owner approval.
 
 ---
 
@@ -19,44 +24,51 @@ When both IP and account exist, the **stricter** of the two applies.
 
 ## 2. Authentication endpoints
 
-| Action | Identifier | Limit | Burst | Window | Lockout |
-|---|---|---|---|---|---|
-| `POST /auth/signin` (password) | ip + email | **5/min** | 10 | 60 s | 15-min lockout after 10 failures in 1 h |
-| `POST /auth/signup` | ip | **3/min** | 5 | 60 s | 24-h email block after 5 signups same email |
-| `POST /auth/reset-password` | ip + email | **3/h** | 5 | 1 h | — |
-| `POST /auth/verify-email` (resend) | account | **5/h** | — | 1 h | — |
-| `POST /auth/oauth/callback` | ip | **20/min** | 30 | 60 s | — |
-| `POST /auth/mfa/verify` | account | **5/min** | 10 | 60 s | 15-min lockout after 10 failures |
+> Numbers reconciled with `11-rate-limits-and-abuse.md` §2. That file is the narrative source; the table below is the canonical numeric table for codegen.
 
-## 3. Content endpoints (per authenticated user)
+| Route | Per-IP | Per-Email/Account | Lockout |
+|---|---|---|---|
+| `POST /v1/auth/sign_up` | 10 / hour | 3 / 24 h per email | 24-h email block after 5 signups same email |
+| `POST /v1/auth/sign_in` | 30 / 5 min | 5 / 15 min per email | 15-min lockout on `(email, IP)` after 5 consecutive failures; account lock after 100 fails / 24 h |
+| `POST /v1/auth/magic_link` | 10 / hour | 5 / 24 h per email | — |
+| `POST /v1/auth/forgot` | 5 / hour | 3 / 24 h per email | — |
+| `GET /v1/auth/verify` | 30 / hour | n/a | — |
+| `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | — |
+| `POST /v1/auth/sign_out` | 30 / min | n/a | — |
+| `POST /v1/auth/mfa/verify` | n/a | 5/min per account | 15-min lockout after 10 failures |
+| `POST /v1/auth/oauth/callback` | 30 / hour | n/a | — |
+
+## 3. Content endpoints (per authenticated account)
 
 | Endpoint group | Limit | Window | Notes |
 |---|---|---|---|
-| `GET /items`, `/collections`, `/spaces` (reads) | **300/min** | 60 s | Cached; ETag-aware |
-| `POST /items` (save tab) | **120/min** | 60 s | Bulk save uses `/items/batch` instead |
-| `POST /items/batch` | **10/min** | 60 s | Max 500 items per call |
-| `PATCH /items/:id` | **180/min** | 60 s | |
-| `DELETE /items/:id` | **120/min** | 60 s | |
-| `POST /sessions/save` | **30/min** | 60 s | Each session = up to 200 items |
-| `POST /shares` | **30/min** | 60 s | |
-| `GET /search` | **120/min** | 60 s | Per-query cached 60 s server-side |
+| `GET /v1/items`, `/v1/collections`, `/v1/spaces` (reads) | 1000 | 1 min | Class `read` per `01-conventions.md` §8 |
+| `POST /v1/items` (save tab) | 200 | 1 min | Class `write` |
+| `POST /v1/items/bulk` | 20 | 1 min | Class `bulk`; max 500 items per call |
+| `PATCH /v1/items/:id` | 200 | 1 min | Class `write` |
+| `DELETE /v1/items/:id` | 200 | 1 min | Class `write` |
+| `POST /v1/sessions/save` | 30 | 1 min | Each session = up to 200 items |
+| `POST /v1/shares` | 30 | 1 min | |
+| `GET /v1/search` | 120 | 1 min | Class `search`; per-query cached 60 s server-side |
+
+Per-Org caps mirror per-Account at 5× (per `01-conventions.md` §8).
 
 ## 4. Public share viewer (anonymous)
 
 | Endpoint | Identifier | Limit |
 |---|---|---|
-| `GET /s/:token` (HTML) | ip | **60/min** per token |
-| `GET /api/share/:token/items` | ip | **120/min** per token |
-| `POST /api/share/:token/comment` (if enabled) | ip | **10/min** per token |
-| `POST /api/share/:token/password` (verify) | ip | **5/min** per token; 15-min lockout after 10 failures |
+| `GET /t/:slug` (HTML) | ip | 60 / min per slug |
+| `GET /v1/share-public/:slug/items` | ip | 120 / min per slug |
+| `POST /v1/share-public/:slug/comment` (if enabled) | ip | 10 / min per slug |
+| `POST /v1/shares/access` (password verify) | ip + slug | 10 / 15 min per slug; 5 / 15 min per IP; lockout at 100 fails / 24 h on slug |
 
 ## 5. Webhook endpoints (inbound)
 
 | Endpoint | Limit | Verification |
 |---|---|---|
-| `POST /webhooks/stripe` | **300/min** | HMAC-SHA256 (Stripe-Signature header) |
-| `POST /webhooks/paddle` | **300/min** | HMAC-SHA256 |
-| `POST /webhooks/email-in` (per-org address) | **60/min** | Postmark/SES signature |
+| `POST /v1/webhooks/stripe` | 300 / min | HMAC-SHA256 (Stripe-Signature header) |
+| `POST /v1/webhooks/paddle` | 300 / min | HMAC-SHA256 |
+| `POST /v1/webhooks/email-in` (per-org address) | 60 / min | Postmark/SES signature |
 
 ## 6. Org-wide quotas (Free / Pro / Team / Lifetime)
 
@@ -65,24 +77,58 @@ When both IP and account exist, the **stricter** of the two applies.
 | Saves per day | 500 | 5,000 | 20,000 | 5,000 |
 | Exports per day | 1 | 10 | 50 | 10 |
 | Active shares | 5 | 100 | unlimited | 100 |
-| API tokens | 0 | 3 | 10 | 3 |
+| API tokens | 0 | 0 | 10 | 0 |
 
-When quota exhausted → HTTP 429 with `error_code = QUOTA_EXCEEDED` and `Retry-After` header set to seconds until next UTC midnight reset.
+> **API token row** aligned with `10-licensing-billing/01-plans-matrix.md` capability matrix (API tokens are Team-only).
 
-## 7. Response shape (all 429 responses)
+When quota exhausted → HTTP 402 with `error.code = BILLING_QUOTA_EXCEEDED` (per `03-api-endpoints/18-error-codes.md` §3.6). `Retry-After` header set to seconds until next UTC midnight reset.
+
+## 7. Response shape (all 429 / 402 quota responses)
+
+> Uses canonical envelope from `03-api-endpoints/01-conventions.md` §4 + `18-error-codes.md` §1. **Do not invent flat `error_code` fields.**
+
+429 rate-limit example:
 
 ```json
 {
-  "error_code": "RATE_LIMITED",
-  "message": "Too many requests. Try again in 23 s.",
-  "retry_after_seconds": 23,
-  "limit": 120,
-  "window_seconds": 60,
-  "scope": "account:route"
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Too many requests. Try again in 23 s.",
+    "http_status": 429,
+    "retryable": true,
+    "retry_after_ms": 23000,
+    "request_id": "req_01HZ...",
+    "details": {
+      "limit": 120,
+      "window_seconds": 60,
+      "scope": "account:route"
+    }
+  }
 }
 ```
 
-`Retry-After` HTTP header MUST mirror `retry_after_seconds`.
+402 org-quota example:
+
+```json
+{
+  "error": {
+    "code": "BILLING_QUOTA_EXCEEDED",
+    "message": "Daily save quota reached. Upgrade or wait until reset.",
+    "http_status": 402,
+    "retryable": false,
+    "retry_after_ms": null,
+    "request_id": "req_01HZ...",
+    "details": {
+      "quota": "saves_per_day",
+      "limit": 500,
+      "current": 500,
+      "reset_at": "2026-04-20T00:00:00Z"
+    }
+  }
+}
+```
+
+`Retry-After` HTTP header MUST mirror `retry_after_ms` (in seconds, rounded up).
 
 ## 8. Bypass rules
 
@@ -102,5 +148,7 @@ When quota exhausted → HTTP 429 with `error_code = QUOTA_EXCEEDED` and `Retry-
 
 1. All limits enforced server-side at gateway. Client retry helpers MUST honour `Retry-After`.
 2. No endpoint runs without a rate limit. Default-deny: missing limit = configuration error, not "unlimited".
-3. Lockouts are stored in Redis with TTL = lockout window; never persisted in Postgres (avoids replication lag bypass).
+3. Lockouts stored in Redis with TTL = lockout window; never persisted in Postgres (avoids replication lag bypass).
 4. Limits live in `src/lib/rate-limits.ts` (codegen from this file). PRs that add a route must add a row to this table.
+5. All paths in this file MUST include the `/v1/` prefix from `03-api-endpoints/01-conventions.md`. Bare `/auth/...` paths are a spec bug.
+6. 429 / 402 envelopes MUST use the canonical nested `{ error: { code, ... } }` shape. Flat `error_code` is forbidden.

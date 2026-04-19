@@ -1,44 +1,49 @@
 # SKU Map (Stripe + Paddle product / price IDs)
 
 > **Closes gap M1.** Source of truth for every billable SKU.
+> **Reconciliation (2026-04-19, F-M11):** Pricing, naming, and tier inventory aligned with the locked `10-licensing-billing/01-plans-matrix.md`. Old prices ($5 / $9 / $79 / $249) and old naming (`_yearly`, `lifetime_pro`, `lifetime_team`) are canonical. Inflated draft numbers ($8 / $12 / $199 / $599) and renamed keys (`_annual`, `lifetime_personal`, `lifetime_team5`) are **withdrawn**. `team_enterprise_yearly` re-added.
 > **Locked rule:** No code may hardcode a `price_xxx` or Paddle `pri_xxx` value. All references resolve through `licensing.skuMap` exported from `src/lib/billing/sku-map.ts` (codegenned from this file).
 
 ---
 
 ## 1. Conventions
 
-- **Currency:** USD is canonical. Local currencies are *display-only* via Stripe automatic tax + currency conversion; invoices are issued in USD unless EU VAT MOSS forces local.
-- **Billing periods:** `monthly` and `annual` only. Annual = 10× monthly (2 months free).
+- **Currency:** USD is canonical. Local currencies are *display-only* via Stripe automatic tax + currency conversion; invoices issued in USD unless EU VAT MOSS forces local.
+- **Billing periods:** `monthly` and `yearly` only.
+- **Annual discount:** ~20% off monthly equivalent (e.g. Pro `12 × $5 = $60` → `$48` annual; Team `12 × $9 = $108` → `$84` annual). The "10× monthly" rule is **withdrawn** — per `01-plans-matrix.md` §4.
 - **Trial:** 14 days, no card, applied via Stripe coupon `TRIAL14` / Paddle discount `dsc_trial14`.
 - **Proration:** Stripe default (immediate, prorated). Paddle uses `prorate_billing` flag.
 - **Lifetime SKUs:** one-time purchase; never expire; exempt from dunning.
-- **Naming:** Stripe IDs are `price_{tier}_{period}_{currency}`; Paddle uses opaque `pri_xxx` issued by dashboard.
+- **Naming:** Stripe IDs are `price_{tier}_{period}_{currency}`; Paddle uses opaque `pri_xxx` issued by dashboard. SKU keys use `_yearly` (matches plan codes in `01-plans-matrix.md` §6).
 - **Environments:** Each SKU has `live` and `test` IDs. Test IDs are placeholder strings until the dashboards are provisioned — the file structure is locked, the literal IDs are owner-fillable.
+- **Team Enterprise:** custom-priced; no fixed `price_xxx` in either provider. Quoted per-deal; tracked in CRM, materialised as a Stripe invoice item at signing.
 
 ---
 
 ## 2. Stripe SKU table
 
-| Tier | Period | Stripe Product ID | Stripe Price ID (live) | Stripe Price ID (test) | Amount (USD) |
-|---|---|---|---|---|---|
-| Free | — | `prod_free` | — (no charge) | — | 0.00 |
-| Pro | monthly | `prod_pro` | `price_pro_monthly_usd_LIVE` | `price_pro_monthly_usd_TEST` | 8.00 |
-| Pro | annual | `prod_pro` | `price_pro_annual_usd_LIVE` | `price_pro_annual_usd_TEST` | 80.00 |
-| Team | monthly (per seat) | `prod_team` | `price_team_monthly_usd_LIVE` | `price_team_monthly_usd_TEST` | 12.00 |
-| Team | annual (per seat) | `prod_team` | `price_team_annual_usd_LIVE` | `price_team_annual_usd_TEST` | 120.00 |
-| Lifetime Personal | one-time | `prod_lifetime_personal` | `price_lifetime_personal_usd_LIVE` | `price_lifetime_personal_usd_TEST` | 199.00 |
-| Lifetime Team (5 seats) | one-time | `prod_lifetime_team5` | `price_lifetime_team5_usd_LIVE` | `price_lifetime_team5_usd_TEST` | 599.00 |
+| SKU key | Tier | Period | Stripe Product ID | Stripe Price ID (live) | Stripe Price ID (test) | Amount (USD) |
+|---|---|---|---|---|---|---|
+| `free` | Free | — | `prod_free` | — (no charge) | — | 0.00 |
+| `pro_monthly` | Pro | monthly | `prod_pro` | `price_pro_monthly_usd_LIVE` | `price_pro_monthly_usd_TEST` | 5.00 |
+| `pro_yearly` | Pro | yearly | `prod_pro` | `price_pro_yearly_usd_LIVE` | `price_pro_yearly_usd_TEST` | 48.00 |
+| `team_monthly` | Team | monthly (per seat) | `prod_team` | `price_team_monthly_usd_LIVE` | `price_team_monthly_usd_TEST` | 9.00 |
+| `team_yearly` | Team | yearly (per seat) | `prod_team` | `price_team_yearly_usd_LIVE` | `price_team_yearly_usd_TEST` | 84.00 |
+| `team_enterprise_yearly` | Team Enterprise | yearly (per seat) | `prod_team_enterprise` | _custom-quoted; created per-deal_ | _custom-quoted; created per-deal_ | custom |
+| `lifetime_pro` | Lifetime (Pro) | one-time | `prod_lifetime_pro` | `price_lifetime_pro_usd_LIVE` | `price_lifetime_pro_usd_TEST` | 79.00 |
+| `lifetime_team` | Lifetime (Team, 5 seats) | one-time | `prod_lifetime_team` | `price_lifetime_team_usd_LIVE` | `price_lifetime_team_usd_TEST` | 249.00 |
 
 ## 3. Paddle SKU table (alternative billing region — EU/UK)
 
-| Tier | Period | Paddle Product ID | Paddle Price ID (live) | Paddle Price ID (sandbox) | Amount (USD) |
-|---|---|---|---|---|---|
-| Pro | monthly | `pro_paddle_TBD` | `pri_pro_monthly_LIVE` | `pri_pro_monthly_SBX` | 8.00 |
-| Pro | annual | `pro_paddle_TBD` | `pri_pro_annual_LIVE` | `pri_pro_annual_SBX` | 80.00 |
-| Team | monthly (per seat) | `team_paddle_TBD` | `pri_team_monthly_LIVE` | `pri_team_monthly_SBX` | 12.00 |
-| Team | annual (per seat) | `team_paddle_TBD` | `pri_team_annual_LIVE` | `pri_team_annual_SBX` | 120.00 |
-| Lifetime Personal | one-time | `lt_personal_paddle_TBD` | `pri_lt_personal_LIVE` | `pri_lt_personal_SBX` | 199.00 |
-| Lifetime Team5 | one-time | `lt_team5_paddle_TBD` | `pri_lt_team5_LIVE` | `pri_lt_team5_SBX` | 599.00 |
+| SKU key | Tier | Period | Paddle Product ID | Paddle Price ID (live) | Paddle Price ID (sandbox) | Amount (USD) |
+|---|---|---|---|---|---|---|
+| `pro_monthly` | Pro | monthly | `pro_paddle_TBD` | `pri_pro_monthly_LIVE` | `pri_pro_monthly_SBX` | 5.00 |
+| `pro_yearly` | Pro | yearly | `pro_paddle_TBD` | `pri_pro_yearly_LIVE` | `pri_pro_yearly_SBX` | 48.00 |
+| `team_monthly` | Team | monthly (per seat) | `team_paddle_TBD` | `pri_team_monthly_LIVE` | `pri_team_monthly_SBX` | 9.00 |
+| `team_yearly` | Team | yearly (per seat) | `team_paddle_TBD` | `pri_team_yearly_LIVE` | `pri_team_yearly_SBX` | 84.00 |
+| `team_enterprise_yearly` | Team Enterprise | yearly (per seat) | `team_ent_paddle_TBD` | _custom-quoted_ | _custom-quoted_ | custom |
+| `lifetime_pro` | Lifetime (Pro) | one-time | `lt_pro_paddle_TBD` | `pri_lt_pro_LIVE` | `pri_lt_pro_SBX` | 79.00 |
+| `lifetime_team` | Lifetime (Team, 5 seats) | one-time | `lt_team_paddle_TBD` | `pri_lt_team_LIVE` | `pri_lt_team_SBX` | 249.00 |
 
 ## 4. Coupons & promotions (canonical IDs)
 
@@ -60,12 +65,14 @@
 // src/lib/billing/sku-map.ts (generated; do not edit by hand)
 export const skuMap = {
   stripe: {
-    pro_monthly:  { live: "price_pro_monthly_usd_LIVE",  test: "price_pro_monthly_usd_TEST",  amountUsd: 800 },
-    pro_annual:   { live: "price_pro_annual_usd_LIVE",   test: "price_pro_annual_usd_TEST",   amountUsd: 8000 },
-    team_monthly: { live: "price_team_monthly_usd_LIVE", test: "price_team_monthly_usd_TEST", amountUsd: 1200 },
-    team_annual:  { live: "price_team_annual_usd_LIVE",  test: "price_team_annual_usd_TEST",  amountUsd: 12000 },
-    lifetime_personal: { live: "price_lifetime_personal_usd_LIVE", test: "price_lifetime_personal_usd_TEST", amountUsd: 19900 },
-    lifetime_team5:    { live: "price_lifetime_team5_usd_LIVE",    test: "price_lifetime_team5_usd_TEST",    amountUsd: 59900 },
+    free:                   { live: null, test: null, amountUsd: 0 },
+    pro_monthly:            { live: "price_pro_monthly_usd_LIVE",     test: "price_pro_monthly_usd_TEST",     amountUsd: 500 },
+    pro_yearly:             { live: "price_pro_yearly_usd_LIVE",      test: "price_pro_yearly_usd_TEST",      amountUsd: 4800 },
+    team_monthly:           { live: "price_team_monthly_usd_LIVE",    test: "price_team_monthly_usd_TEST",    amountUsd: 900 },
+    team_yearly:            { live: "price_team_yearly_usd_LIVE",     test: "price_team_yearly_usd_TEST",     amountUsd: 8400 },
+    team_enterprise_yearly: { live: null, test: null, amountUsd: null /* custom-quoted */ },
+    lifetime_pro:           { live: "price_lifetime_pro_usd_LIVE",    test: "price_lifetime_pro_usd_TEST",    amountUsd: 7900 },
+    lifetime_team:          { live: "price_lifetime_team_usd_LIVE",   test: "price_lifetime_team_usd_TEST",   amountUsd: 24900 },
   },
   paddle: { /* mirror */ },
 } as const;
@@ -78,10 +85,12 @@ export type SkuKey = keyof typeof skuMap.stripe;
 1. Adding a new SKU → update this file → regenerate `sku-map.ts` → add Stripe + Paddle IDs together (never one provider).
 2. Deprecating a SKU → mark `deprecated: true` in the table; keep the row for 24 months for invoice replay.
 3. Rotation: live IDs are immutable; never re-use a deleted price ID for a new product.
+4. SKU key MUST match a `plan_code` in `01-plans-matrix.md` §6. Drift is a spec bug.
 
 ## 8. Locked rules
 
 - All amounts in **integer cents** in code.
-- Annual = 10× monthly. Hard rule.
+- Annual ≈ 20% off monthly. The "10× monthly" rule is withdrawn (F-M11).
 - Lifetime SKUs never appear in `subscriptions`; they live in `licenses`.
 - Only `owner` and `billing` roles can see the live IDs in admin UI.
+- SKU naming uses `_yearly` (not `_annual`), `lifetime_pro` / `lifetime_team` (not `lifetime_personal` / `lifetime_team5`). This matches `01-plans-matrix.md` §6.

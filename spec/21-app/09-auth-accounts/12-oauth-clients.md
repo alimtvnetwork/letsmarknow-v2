@@ -39,14 +39,16 @@ For every provider, register **all four** environment redirect URIs:
 
 ## 4. Client ID registry (placeholders — owner fills before launch)
 
-| Provider | Env | Client ID | Client Secret name (in Lovable Cloud secrets) |
+> **Naming convention (locked, F-M02 reconciliation):** `OAUTH_<PROVIDER>_<FIELD>_<ENV>`. Matches `22-infrastructure/03-env-vars.md`. Old `OAUTH_GOOGLE_CLIENT_SECRET` (no env suffix) is removed.
+
+| Provider | Env | Client ID env var | Client Secret env var |
 |---|---|---|---|
-| Google | staging | `OWNER_FILL_GOOGLE_CLIENT_ID_STAGING.apps.googleusercontent.com` | `GOOGLE_OAUTH_CLIENT_SECRET_STAGING` |
-| Google | prod    | `OWNER_FILL_GOOGLE_CLIENT_ID_PROD.apps.googleusercontent.com`    | `GOOGLE_OAUTH_CLIENT_SECRET_PROD` |
-| Apple  | staging | `com.letsmarknow.app.staging` (Service ID) | `APPLE_OAUTH_KEY_STAGING` (.p8 contents) |
-| Apple  | prod    | `com.letsmarknow.app`         (Service ID) | `APPLE_OAUTH_KEY_PROD` |
-| GitHub | staging | `OWNER_FILL_GH_CLIENT_ID_STAGING` | `GITHUB_OAUTH_CLIENT_SECRET_STAGING` |
-| GitHub | prod    | `OWNER_FILL_GH_CLIENT_ID_PROD`    | `GITHUB_OAUTH_CLIENT_SECRET_PROD` |
+| Google | staging | `OAUTH_GOOGLE_CLIENT_ID_STAGING` | `OAUTH_GOOGLE_CLIENT_SECRET_STAGING` |
+| Google | prod    | `OAUTH_GOOGLE_CLIENT_ID_PROD`    | `OAUTH_GOOGLE_CLIENT_SECRET_PROD` |
+| Apple  | staging | `OAUTH_APPLE_CLIENT_ID_STAGING` (Service ID `com.letsmarknow.app.staging`) | `OAUTH_APPLE_PRIVATE_KEY_STAGING` (.p8) + `OAUTH_APPLE_KEY_ID_STAGING` + `OAUTH_APPLE_TEAM_ID` |
+| Apple  | prod    | `OAUTH_APPLE_CLIENT_ID_PROD` (Service ID `com.letsmarknow.app`) | `OAUTH_APPLE_PRIVATE_KEY_PROD` (.p8) + `OAUTH_APPLE_KEY_ID_PROD` + `OAUTH_APPLE_TEAM_ID` |
+| GitHub | staging | `OAUTH_GITHUB_CLIENT_ID_STAGING` | `OAUTH_GITHUB_CLIENT_SECRET_STAGING` |
+| GitHub | prod    | `OAUTH_GITHUB_CLIENT_ID_PROD`    | `OAUTH_GITHUB_CLIENT_SECRET_PROD` |
 
 ## 5. Required scopes
 

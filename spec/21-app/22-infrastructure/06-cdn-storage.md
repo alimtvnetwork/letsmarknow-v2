@@ -16,35 +16,43 @@ Static asset delivery + bucket layout for user uploads, favicons, exports.
 | OG images | edge cached from storage | `max-age=604800` | Purge on share metadata change |
 | Exports (signed URLs) | not cached | — | n/a |
 
-## 2. Storage buckets (Cloud Storage, S3-compatible)
+## 2. Storage buckets
 
-| Bucket | Visibility | Purpose | Lifecycle |
-|---|---|---|---|
-| `lmn-favicons` | public-read | Cached favicons resolved by our worker | TTL 90 d, refresh on miss |
-| `lmn-og-images` | public-read | Generated OG cards for shares | TTL 30 d after share revoked |
-| `lmn-exports` | private (signed URLs) | User-requested exports (zips, JSON) | Auto-delete after 7 d |
-| `lmn-imports` | private (signed URLs) | User-uploaded import files | Auto-delete after 24 h |
-| `lmn-attachments` | per-Org private | Future: Item attachments (Pro+) | Soft-delete with parent |
-| `lmn-avatars` | public-read | Org + user avatars | TTL 30 d after delete |
-| `lmn-backups` | private, restricted IAM | DB + storage backups | Per `02-environments.md` retention |
+> **Authoritative inventory:** `12-storage-layout.md` §1. The table here is a non-normative summary kept in sync. **Bucket names are unprefixed** (no `lmn-`). The reconciliation on 2026-04-19 (F-M01) dropped the prefix.
 
-## 3. Bucket path convention
+| Bucket | Visibility | Purpose |
+|---|---|---|
+| `favicons` | public-read | Cached favicons resolved by our worker |
+| `share-snapshots` | public-read | Generated OG cards for shares (was `lmn-og-images`) |
+| `exports` | private (signed URLs) | User-requested exports (zips, JSON) |
+| `imports` | private (signed URLs) | User-uploaded import files |
+| `attachments` | per-Org private | Item attachments (Pro+) |
+| `avatars` | public-read | Org + Account avatars |
+| `org-assets` | public-read | Org logos, share-page branding |
+| `email-attachments` | private (signed URLs, 24 h) | Email-in pipeline temp |
+| `audit-archive` | private (system only) | Compressed audit-log JSON |
+| `backups` | private, restricted IAM | DB + storage backups |
 
-```
-<bucket>/<org_id>/<entity_type>/<entity_id>/<filename>
-```
+## 3. Bucket path conventions
+
+Two schemes — see `12-storage-layout.md` §2 for full rules. Summary:
+
+- **Content-addressed** (`favicons`, `share-snapshots`, `email-attachments`): `{bucket}/{shard}/{logical_id}/{kind}.{ext}`
+- **Entity-keyed** (`attachments`, `exports`, `imports`, `org-assets`, `avatars`): `{bucket}/{org_id}/{entity_type}/{entity_id}/{filename}`
+- **Date-partitioned** (`audit-archive`, `backups`): `{bucket}/{YYYY}/{MM}/{DD}/{name}.{ext}`
 
 Examples:
 
 ```
-lmn-favicons/<org_id>/items/<item_id>/icon.png
-lmn-og-images/shares/<share_id>/card-1200x630.png
-lmn-exports/<org_id>/exports/<export_id>/full.zip
-lmn-avatars/orgs/<org_id>/avatar-256.webp
-lmn-avatars/users/<account_id>/avatar-256.webp
+favicons/ab/abcdef0123…/16.png
+share-snapshots/4d/4d8888…/og.png
+attachments/<org_id>/items/<item_id>/orig.pdf
+exports/<org_id>/exports/<export_id>/full.zip
+avatars/<org_id>/users/<account_id>/avatar-256.webp
+audit-archive/2026/04/19/audit-org-<org_id>.json.zst
 ```
 
-> Org ID always present (except `shares/` and `users/`) so bulk-delete on Org deletion is a single prefix scan.
+> Org ID always present in entity-keyed paths so bulk-delete on Org deletion is a single prefix scan.
 
 ## 4. Image pipeline
 

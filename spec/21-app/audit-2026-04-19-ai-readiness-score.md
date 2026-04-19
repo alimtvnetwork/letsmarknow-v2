@@ -54,7 +54,8 @@
 | After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | 98 | 99 | 94 |
 | After F-M09 + F-M10 | 2026-04-19 | 99 | 99 | 96 |
 | After Paddle webhook parity | 2026-04-19 | 99 | 99 | 97 |
-| After W-1 residue sweep | 2026-04-19 | **99** | **100** | **98** |
+| After W-1 residue sweep | 2026-04-19 | 99 | 100 | 98 |
+| After CI drift-linter spec | 2026-04-19 | **100** | **100** | **99** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.

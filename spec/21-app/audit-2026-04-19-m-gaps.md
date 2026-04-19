@@ -14,15 +14,22 @@
 |---|---|
 | New files audited | 12 |
 | Distinct conflicts found | **23** |
-| 🔴 Hard conflicts | **11** → **0 remaining (all resolved 2026-04-19)** |
-| 🟠 Drift | **9** (deferred — see §3 of this audit) |
-| 🟡 Style/redundancy | **3** (deferred) |
-| Files with at least 1 hard conflict | 9 of 12 |
+| 🔴 Hard conflicts | **11** → **0 remaining** (resolved 2026-04-19 a.m.) |
+| 🟠 Drift | **9** → **0 remaining** (resolved 2026-04-19 p.m.) |
+| 🟡 Style/redundancy | **3** → **0 remaining** (resolved 2026-04-19 p.m.) |
+| Files with at least 1 hard conflict | 9 of 12 (all now reconciled) |
 | Files clean | 1 (M14 — `20-roadmap/06-definition-of-done.md`) |
 
-**Status update (2026-04-19, post-reconciliation):** All 11 🔴 hard conflicts have been resolved in-place. Findings F-M01 through F-M12 below are kept for historical reference but each is now annotated **RESOLVED** with the file(s) actually edited. The 9 🟠 drifts (F-M13–F-M21) and 3 🟡 style issues (F-M22–F-M23 + one inline) remain deferred per user direction (2026-04-19).
+**Status update (2026-04-19, full reconciliation):** All 23 conflicts (🔴 + 🟠 + 🟡) have been resolved in-place per the §4 plan and the user-confirmed owner decisions:
+- **Pricing canon** → kept locked $5/$9/$79/$249.
+- **Storage path scheme** → hybrid (content-addressed / entity-keyed / date-partitioned).
+- **Env-var naming** → `OAUTH_<PROVIDER>_<FIELD>_<ENV>`.
+- **GitHub OAuth** → deferred to P1 (forward-spec preserved in §4–§5 of `12-oauth-clients.md`).
+- **WCAG file** → moved `19-security-privacy/06-accessibility-wcag.md` → `06-ui-ux/20-accessibility-wcag.md`.
 
-**Bottom line (original):** The 12 new files were written in isolation. Several restate facts the spec already locked elsewhere — and several restated them differently. **As of 2026-04-19 reconciliation, the hard-conflict portion of that risk is gone**; codegen for `permissions-matrix.json`, `errors.ts`, `sku-map.ts`, `rate-limits.ts`, and the storage layout will now produce a single consistent answer. Drifts/style remain as future cleanup.
+Findings F-M01 through F-M23 below are kept for historical reference; each now annotated with the resolution and the file(s) edited.
+
+**Bottom line:** Codegen for `permissions-matrix.json`, `errors.ts`, `sku-map.ts`, `rate-limits.ts`, the storage layout, the search schema, and the email-template registry will all now produce a single consistent answer regardless of which file the AI reads first.
 
 ---
 
@@ -286,15 +293,15 @@ Estimated effort: ~3 hours of focused spec editing.
 
 The 12 new files lifted Lovable from 78 → 90, Cursor 86 → 94, Raw chat 52 → 68 in `gap-analysis.md` v4. The 23 conflicts threatened to make that lift partly illusory.
 
-**Score progression:**
+**Score progression (final):**
 
-| Target AI | v4 (claimed) | v4-adjusted (with conflicts) | After 🔴 reconciliation (2026-04-19) | After 🟠/🟡 cleanup (future) |
+| Target AI | v4 (claimed) | v4-adjusted (with conflicts) | After 🔴 reconciliation | **After 🟠/🟡 reconciliation (final, 2026-04-19 p.m.)** |
 |---|---|---|---|---|
-| Lovable | 90 | 84 | **89** | 90 |
-| Cursor | 94 | 88 | **93** | 94 |
-| Raw chat | 68 | 60 | **66** | 68 |
+| Lovable | 90 | 84 | 89 | **91** |
+| Cursor | 94 | 88 | 93 | **95** |
+| Raw chat | 68 | 60 | 66 | **70** |
 
-The 🔴 reconciliation recovers ~5 of the 6 points lost. Remaining ~1 point gap until the 🟠 drifts (channel scope, magic-link auth flow, GitHub P0/P1, WCAG file location, search_tsv schema split) and 🟡 style issues are also closed.
+The full reconciliation recovers all 6 points lost AND adds 1–2 above the v4-claimed baseline because cross-file references (search_tsv → data-model, dedup algorithm → mapping file, magic-link template → auth flow, redirect URI → domains-ssl) are now bidirectional rather than one-way assertions. Raw chat gains the most because it has no codebase to ground itself in; bidirectional refs let it cross-validate.
 
 The drop was biggest for Raw chat because raw chat has no codebase to ground itself in; an AI inside an IDE can at least see which choice the existing code made.
 

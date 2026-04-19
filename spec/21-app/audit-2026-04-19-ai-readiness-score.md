@@ -51,7 +51,8 @@
 | After W-11/W-12 | 2026-04-19 | 95 | 97 | 90 |
 | After B4/B7 deferred (excluded from denominator) | 2026-04-19 | 97 | 98 | 92 |
 | After F-M13 + F-M20 + 15-viz P0/P2 | 2026-04-19 | 98 | 99 | 94 |
-| After F-M09 + F-M10 | 2026-04-19 | **99** | **99** | **96** |
+| After F-M09 + F-M10 | 2026-04-19 | 99 | 99 | 96 |
+| After Paddle webhook parity | 2026-04-19 | **99** | **99** | **97** |
 | Target | — | 100 | 100 | 100 |
 
 **Math note (B4/B7 deferral):** Both items were docked ~2–3 pts each across `06-ui-ux`, `07-features`, `04-extension`, `11-import-export`, `17-admin-org`. With the constraint formally documented and Phase-1 resumption pinned in `20-roadmap/06-definition-of-done.md` §2, they are removed from the active denominator. This recovers ≈2 pts on Lovable, ≈1 pt on Cursor/Claude, ≈2 pts on Raw-LLM. No spec content was added or removed.
@@ -340,7 +341,7 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
-> **Current (2026-04-19, after F-M09 + F-M10 closures):** Lovable **99** · Cursor/Claude-Code **99** · Raw-LLM **96**
+> **Current (2026-04-19, after Paddle webhook parity):** Lovable **99** · Cursor/Claude-Code **99** · Raw-LLM **97**
 > **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
 > **Target:** 100 across all three. Issues remain documented above until target is reached.
 

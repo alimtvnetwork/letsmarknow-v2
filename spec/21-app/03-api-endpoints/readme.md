@@ -4,7 +4,8 @@
 
 ## Reading order
 
-1. `01-conventions.md` — read **first**. Defines base URL, versioning, auth headers, error envelope, pagination, idempotency, rate limits, ETag/concurrency, common types. Every other file in this folder assumes these.
+0. **`00-overview.md` — start here if you just want to see every endpoint.** Single index of all ~140 endpoints grouped by HTTP method (GET / POST / PATCH / PUT / DELETE), each with one-line purpose and a pointer to its detailed contract file.
+1. `01-conventions.md` — read **first** before implementing. Defines base URL, versioning, auth headers, error envelope, pagination, idempotency, rate limits, ETag/concurrency, common types. Every other file in this folder assumes these.
 2. `02-public-share-viewer.md` — unauthenticated `/t/{slug}` endpoints. Read second because they have the loosest auth model.
 3. `03-auth.md` — sign-up, sign-in, OAuth, magic links, sessions, password reset.
 4. `04-organizations.md` → `05-spaces.md` → `06-collections.md` → `07-groups.md` → `08-items.md` — the core CRUD ladder.

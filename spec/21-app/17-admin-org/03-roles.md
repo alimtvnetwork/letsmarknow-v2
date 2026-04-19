@@ -6,20 +6,33 @@ Role definitions, the permission matrix, and the rules for combining them.
 
 ## 1. Role definitions
 
-| Role | Purpose |
-|---|---|
-| **Owner** | Sole legal/billing owner. Exactly 1 per Org (transferable). Full access. |
-| **Admin** | Org-wide management except billing + ownership transfer. |
-| **Editor** | Create / edit / delete content. No member or settings access. |
-| **Viewer** | Read-only access to all content the Org exposes to them. |
-| **Guest** | Per-resource access only (via share). Not a full Org member. |
+> **Canonical enum (locked):** `owner, admin, editor, viewer, billing, guest, system`. This list MUST match `00-overview/02-glossary.md` and `02-data-model/08-member.md`. Do not add, rename, or remove a role without updating all three files in the same change.
+
+| Role | Invitable? | Purpose |
+|---|---|---|
+| **Owner** | transfer-only | Sole legal/billing owner. Exactly 1 per Org (transferable). Full access. |
+| **Admin** | yes | Org-wide management except billing + ownership transfer. |
+| **Editor** | yes | Create / edit / delete content. No member or settings access. |
+| **Viewer** | yes | Read-only access to all content the Org exposes to them. |
+| **Billing** | yes | Billing-only: invoices, payment method, plan changes. No content access. |
+| **Guest** | per-share only | Per-resource access only (via share). Not a full Org member. |
+| **System** | NEVER (server-issued) | Internal service principal for background jobs, webhooks, migrations. Never assignable through invite UI or API; only created by server-side workflows. |
 
 ## 2. Storage
 
 Per `<user-roles>` policy:
 
 ```sql
-create type public.org_role as enum ('owner','admin','editor','viewer','guest');
+-- Canonical 7-value enum. Matches glossary + member.md. Do not edit in isolation.
+create type public.org_role as enum (
+  'owner',
+  'admin',
+  'editor',
+  'viewer',
+  'billing',
+  'guest',
+  'system'
+);
 
 create table public.member_roles (
   id uuid primary key default gen_random_uuid(),
@@ -31,9 +44,16 @@ create table public.member_roles (
   unique (org_id, user_id, role)
 );
 alter table public.member_roles enable row level security;
+
+-- 'system' role is server-issued only. Block any path that attempts to grant it
+-- through normal mutation (invite accept, role-change endpoint, bulk import).
+-- Enforced via a CHECK + a security-definer guard on the invite/role endpoints.
+alter table public.member_roles
+  add constraint member_roles_no_user_assigned_system
+  check (role <> 'system' OR granted_by IS NULL);
 ```
 
-A user CAN have multiple roles in different Orgs. Within one Org, a user has exactly one role (enforced at app layer; unique constraint on `(org_id, user_id)` via partial index excluding guests).
+A user CAN have multiple roles in different Orgs. Within one Org, a user has exactly one role (enforced at app layer; unique constraint on `(org_id, user_id)` via partial index excluding guests). The `system` role is reserved for the platform itself and is never returned by member-list endpoints.
 
 ## 3. `has_role` security definer function
 
@@ -56,53 +76,56 @@ Use this in every RLS policy. Never check role via subquery on `member_roles` fr
 
 Legend: ✅ allowed · ✏ allowed with constraints · — denied
 
+> **System role omitted** from all matrices below — it bypasses RLS as a security-definer principal and has implicit full access for background jobs only. It MUST never appear in user-facing UI.
+
 ### Content
 
-| Capability | Viewer | Editor | Admin | Owner | Guest |
-|---|---|---|---|---|---|
-| View Spaces / Collections (Org-visible) | ✅ | ✅ | ✅ | ✅ | per-share |
-| Create Collection | — | ✅ | ✅ | ✅ | — |
-| Edit Collection meta | — | ✏ own | ✅ | ✅ | — |
-| Delete Collection | — | ✏ own | ✅ | ✅ | — |
-| Create Item | — | ✅ | ✅ | ✅ | per-share |
-| Edit Item (any) | — | ✅ | ✅ | ✅ | per-share |
-| Delete Item | — | ✏ own | ✅ | ✅ | — |
-| Move to Trash | — | ✏ own | ✅ | ✅ | — |
-| Restore from Trash | — | ✏ own | ✅ | ✅ | — |
-| Empty Trash (Org-wide) | — | — | ✅ | ✅ | — |
+| Capability | Viewer | Editor | Admin | Owner | Billing | Guest |
+|---|---|---|---|---|---|---|
+| View Spaces / Collections (Org-visible) | ✅ | ✅ | ✅ | ✅ | — | per-share |
+| Create Collection | — | ✅ | ✅ | ✅ | — | — |
+| Edit Collection meta | — | ✏ own | ✅ | ✅ | — | — |
+| Delete Collection | — | ✏ own | ✅ | ✅ | — | — |
+| Create Item | — | ✅ | ✅ | ✅ | — | per-share |
+| Edit Item (any) | — | ✅ | ✅ | ✅ | — | per-share |
+| Delete Item | — | ✏ own | ✅ | ✅ | — | — |
+| Move to Trash | — | ✏ own | ✅ | ✅ | — | — |
+| Restore from Trash | — | ✏ own | ✅ | ✅ | — | — |
+| Empty Trash (Org-wide) | — | — | ✅ | ✅ | — | — |
 
 ### Sharing
 
-| Capability | Viewer | Editor | Admin | Owner | Guest |
-|---|---|---|---|---|---|
-| Share content read-only | — | ✅ | ✅ | ✅ | — |
-| Share content with edit | — | ✏ if Org allows | ✅ | ✅ | — |
-| Make content public | — | ✏ if Org allows | ✅ | ✅ | — |
-| Revoke any share | — | own | ✅ | ✅ | — |
-| Set share password | — | ✅ | ✅ | ✅ | — |
-| Create embed widget | — | ✅ | ✅ | ✅ | — |
+| Capability | Viewer | Editor | Admin | Owner | Billing | Guest |
+|---|---|---|---|---|---|---|
+| Share content read-only | — | ✅ | ✅ | ✅ | — | — |
+| Share content with edit | — | ✏ if Org allows | ✅ | ✅ | — | — |
+| Make content public | — | ✏ if Org allows | ✅ | ✅ | — | — |
+| Revoke any share | — | own | ✅ | ✅ | — | — |
+| Set share password | — | ✅ | ✅ | ✅ | — | — |
+| Create embed widget | — | ✅ | ✅ | ✅ | — | — |
 
 ### Members & Org
 
-| Capability | Viewer | Editor | Admin | Owner | Guest |
-|---|---|---|---|---|---|
-| View member list | ✅ | ✅ | ✅ | ✅ | — |
-| Invite members | — | — | ✅ | ✅ | — |
-| Change member roles | — | — | ✅ | ✅ | — |
-| Remove members | — | — | ✅ | ✅ | — |
-| Transfer ownership | — | — | — | ✅ | — |
-| Edit Org settings | — | — | ✅ | ✅ | — |
-| Manage billing | — | — | — | ✅ | — |
-| Delete Org | — | — | — | ✅ | — |
+| Capability | Viewer | Editor | Admin | Owner | Billing | Guest |
+|---|---|---|---|---|---|---|
+| View member list | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| Invite members | — | — | ✅ | ✅ | — | — |
+| Change member roles | — | — | ✅ | ✅ | — | — |
+| Remove members | — | — | ✅ | ✅ | — | — |
+| Transfer ownership | — | — | — | ✅ | — | — |
+| Edit Org settings | — | — | ✅ | ✅ | — | — |
+| Manage billing (plans, payment, invoices) | — | — | — | ✅ | ✅ | — |
+| Delete Org | — | — | — | ✅ | — | — |
 
 ### Audit & data
 
-| Capability | Viewer | Editor | Admin | Owner | Guest |
-|---|---|---|---|---|---|
-| View own activity | ✅ | ✅ | ✅ | ✅ | — |
-| View Org audit log | — | — | ✅ | ✅ | — |
-| Export Org data | — | — | ✅ | ✅ | — |
-| Restore from snapshot | — | — | ✅ | ✅ | — |
+| Capability | Viewer | Editor | Admin | Owner | Billing | Guest |
+|---|---|---|---|---|---|---|
+| View own activity | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| View Org audit log | — | — | ✅ | ✅ | — | — |
+| View billing events in audit log | — | — | ✅ | ✅ | ✅ | — |
+| Export Org data | — | — | ✅ | ✅ | — | — |
+| Restore from snapshot | — | — | ✅ | ✅ | — | — |
 
 ## 5. Constraint rules
 

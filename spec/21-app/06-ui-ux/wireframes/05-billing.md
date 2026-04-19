@@ -2,6 +2,7 @@
 
 > **Route:** `/settings/billing`
 > **Spec ref:** `05-web-app/08-billing-page.md`, `10-licensing-billing/01-plans-matrix.md`
+> **⚠ Pricing in this wireframe is illustrative only.** Wireframes specify *layout*, not pricing. The single source of truth for prices, seat counts, and plan IDs is `10-licensing-billing/01-plans-matrix.md` §1. If a number here disagrees with the matrix, **the matrix wins** and this file is wrong.
 
 ---
 
@@ -17,10 +18,10 @@
 │                                                                              │
 │  ┌─ Current plan ──────────────────────────────────────────────────────┐    │
 │  │                                                                     │    │
-│  │   Pro   $12 / user / month        ┌──────────────────┐              │    │
-│  │   Annual billing                  │ [Change plan]    │              │    │
+│  │   Team   $9 / seat / month        ┌──────────────────┐              │    │
+│  │   Annual billing ($84/seat/yr)    │ [Change plan]    │              │    │
 │  │                                   └──────────────────┘              │    │
-│  │   Renews on Jan 15, 2027 ($432.00 USD)                              │    │
+│  │   Renews on Jan 15, 2027 ($672.00 USD · 8 seats × $84)              │    │
 │  │                                                                     │    │
 │  │   Features:                                                         │    │
 │  │   ✓ Unlimited collections    ✓ Public + private shares              │    │
@@ -88,20 +89,22 @@ Sticky at top of every page (not just billing) until resolved. Background `--des
               │                                              │
               │  ┌─────────┐  ┌─────────┐  ┌─────────┐       │
               │  │  Free   │  │   Pro   │  │  Team   │       │
-              │  │   $0    │  │  $12/mo │  │  $24/mo │       │
-              │  │         │  │ ✓ Curr. │  │         │       │
+              │  │   $0    │  │  $5/mo  │  │ $9/seat │       │
+              │  │         │  │ ✓ Curr. │  │  /mo    │       │
               │  │ [Select]│  │ [×]     │  │ [Select]│       │
               │  └─────────┘  └─────────┘  └─────────┘       │
               │                                              │
               │  Billing cycle:  ( ) Monthly  (●) Annual -20%│
               │                                              │
               │  ─────────────────────────────────────       │
-              │  New total: $24 × 8 seats × 12 = $2,304/yr   │
-              │  Prorated charge today: $156.40              │
+              │  New total: $84/seat/yr × 8 = $672.00/yr     │
+              │  Prorated charge today: shown by API         │
               │                                              │
               │              [Cancel]  [Confirm change]      │
               └──────────────────────────────────────────────┘
 ```
+
+> Prices above mirror `10-licensing-billing/01-plans-matrix.md` §1 (Free $0, Pro $5/mo or $48/yr, Team $9/seat/mo or $84/seat/yr). The implementation MUST fetch live values; never hardcode.
 
 ---
 

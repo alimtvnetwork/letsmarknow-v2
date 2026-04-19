@@ -2,6 +2,8 @@
 
 Plans, seats, invoices, lifetime, portal. UI for `03-api-endpoints/16-licenses.md`.
 
+> **Pricing source of truth:** `10-licensing-billing/01-plans-matrix.md`. All numbers shown here are illustrative; the implementation MUST read live values from the entitlements/plans API. If this file disagrees with `01-plans-matrix.md`, **the matrix wins**.
+
 Owner and Billing role can access; others see "Billing is managed by your Owner" placeholder.
 
 ---
@@ -25,12 +27,14 @@ Sticky right column on wide screens shows "Plan comparison" mini-table (Free / P
 ┌──────────────────────────────────────────────┐
 │  Pro · Monthly                                │
 │  ─────────────────────────────────────────    │
-│  USD $9.00 / month · 1 seat                   │
+│  USD $5.00 / month · 1 seat                   │
 │  Renews on May 18, 2026                       │
 │  ─────────────────────────────────────────    │
 │  [ Change plan ]   [ Cancel ]                 │
 └──────────────────────────────────────────────┘
 ```
+
+> Numbers above are illustrative only — render live values from the `/v1/me/entitlements` + `/v1/organizations/:id/billing/subscription` payloads. Canonical prices: `10-licensing-billing/01-plans-matrix.md` §1.
 
 If `cancel_at_period_end=true`: amber banner "Pro ends on May 18, 2026 → [Resume]".
 
@@ -45,16 +49,16 @@ If `status="trialing"`: "Free trial ends in 4 days · [Add payment]".
 │  Seats:  3 used / 5 total                     │
 │  ─────────────────────────────────────────    │
 │  [ Add seats ]   [ Reduce seats ]             │
-│  Each seat is USD $5/mo (billed monthly).     │
+│  Each seat is USD $9/mo (billed monthly).     │
 └──────────────────────────────────────────────┘
 ```
 
-Adding seats: inline stepper + cost estimate ("Add 2 seats — $10/mo prorated $4.13 today"). Submits via `/billing/change`.
+Per-seat price comes from `01-plans-matrix.md` §1 — Team plan is **$9/seat/mo or $84/seat/yr**. Adding seats: inline stepper + cost estimate ("Add 2 seats — $18/mo prorated today"). Submits via `/billing/change`.
 
 ## 4. Plan picker (Change plan modal)
 
-- 3 cards side-by-side: Free, Pro ($9/mo or $84/yr), Team ($5/seat/mo or $50/seat/yr).
-- Toggle Monthly/Yearly.
+- 3 cards side-by-side: **Free** ($0), **Pro** ($5/mo or $48/yr), **Team** ($9/seat/mo or $84/seat/yr). Sourced from `01-plans-matrix.md` §1.
+- Toggle Monthly/Yearly (annual ≈ 20% discount per §4 of plans matrix).
 - "Current" badge on current plan.
 - Switch CTA → confirms → calls `/billing/change` → 200 means immediate effect with proration.
 - Downgrade: shows what features they'll lose; type-to-confirm.
@@ -102,7 +106,7 @@ Lifetime codes are provider-agnostic (issued by us). Redemption works regardless
 
 ## 11. Webhooks-driven UI
 
-When billing webhook fires (subscription updated, invoice paid, payment failed), WebSocket `entitlements_changed` triggers a refetch; UI updates without reload. A toast confirms each change ("Plan upgraded to Team", "Payment failed — please update card").
+When a billing webhook fires (subscription updated, invoice paid, payment failed), the realtime channel emits an `entitlements_changed` message which triggers a refetch; UI updates without reload. A toast confirms each change ("Plan upgraded to Team", "Payment failed — please update card"). Realtime transport is **Supabase Realtime** per `08-sharing-collab/14-realtime-transport.md` — do not implement a custom WebSocket client.
 
 ## 12. Telemetry
 

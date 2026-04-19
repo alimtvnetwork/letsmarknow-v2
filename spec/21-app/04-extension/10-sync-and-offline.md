@@ -73,18 +73,21 @@ Mutations are pushed eagerly; no batching delay.
 
 For `bulk` operations (e.g. multi-select tag), client uses `/v1/bulk/items` to keep the server-trip count low.
 
-## 7. Realtime invalidation (WebSocket)
+## 7. Realtime invalidation
 
-- Endpoint: `wss://api.letsmarknow.com/v1/realtime?org=<id>` (auth via short-lived ticket from `POST /v1/realtime/ticket`).
-- Connected when at least one surface is open AND user enabled "Real-time updates" (default ON for Pro+; Free uses 5-min poll).
-- Messages:
+> **Transport (locked, F-M06):** Supabase Realtime (Phoenix Channels over WebSocket). The previously-specced custom `wss://api.letsmarknow.com/v1/realtime` endpoint and the `POST /v1/realtime/ticket` ticket-exchange flow are **withdrawn**. There is no bespoke realtime endpoint to implement. See `08-sharing-collab/14-realtime-transport.md` for wire protocol, channel naming (`org:{org_id}`, `collection:{collection_id}`, `item:{item_id}`), JWT auth, reconnect policy, and heartbeat values.
+
+- Subscriber is connected when at least one surface is open AND the user enabled "Real-time updates" (default ON for Pro+; Free tier falls back to a 5-min poll via `lmn.sync-pull` alarm).
+- Channels the extension subscribes to per active Org:
+  - `org:{org_id}` — entitlement / membership changes
+  - `collection:{collection_id}` — for each Collection currently rendered in popup or new-tab
+- Application-level message shapes (delivered as Supabase Realtime `broadcast` payloads):
   ```json
   { "type": "invalidate", "entity_type": "item", "ids": ["01J..."] }
   { "type": "broadcast", "event_type": "item.created", "entity": { ... } }
   { "type": "entitlements_changed", "entitlements_hash": "..." }
   ```
-- On disconnect: exponential backoff reconnect (1s, 2s, 4s, max 30s).
-- Heartbeat ping every 25s; close on miss.
+- Reconnect policy, heartbeat interval, and backoff curve are defined in `08-sharing-collab/14-realtime-transport.md` — do not duplicate the values here.
 
 ## 8. Conflict resolution UI
 

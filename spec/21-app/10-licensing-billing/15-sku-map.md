@@ -61,23 +61,33 @@
 
 ## 6. Codegen target
 
+> **Reconciled (F-M19, 2026-04-19):** field name is `amount_cents` (snake_case to match the API money convention in `03-api-endpoints/01-conventions.md` §9) and an explicit `currency` field is added so non-USD prices are forward-compatible. Old `amountUsd` (camelCase, currency baked into key) is withdrawn.
+>
+> **Reconciled (F-M21, 2026-04-19):** the `_LIVE` / `_TEST` suffix on price IDs is illustrative *placeholder* only. Real values are resolved at runtime via the env-keyed lookup in `licensing.skuMap.resolve(skuKey, env)` where `env = VITE_PUBLIC_ENV`. SKU **keys** never contain environment markers; only the **lookup table** is partitioned by env. This matches the locked rule in `01-plans-matrix.md` §6 ("Stripe Price IDs are mapped per-environment in config; never hardcoded in app code").
+
 ```ts
 // src/lib/billing/sku-map.ts (generated; do not edit by hand)
 export const skuMap = {
   stripe: {
-    free:                   { live: null, test: null, amountUsd: 0 },
-    pro_monthly:            { live: "price_pro_monthly_usd_LIVE",     test: "price_pro_monthly_usd_TEST",     amountUsd: 500 },
-    pro_yearly:             { live: "price_pro_yearly_usd_LIVE",      test: "price_pro_yearly_usd_TEST",      amountUsd: 4800 },
-    team_monthly:           { live: "price_team_monthly_usd_LIVE",    test: "price_team_monthly_usd_TEST",    amountUsd: 900 },
-    team_yearly:            { live: "price_team_yearly_usd_LIVE",     test: "price_team_yearly_usd_TEST",     amountUsd: 8400 },
-    team_enterprise_yearly: { live: null, test: null, amountUsd: null /* custom-quoted */ },
-    lifetime_pro:           { live: "price_lifetime_pro_usd_LIVE",    test: "price_lifetime_pro_usd_TEST",    amountUsd: 7900 },
-    lifetime_team:          { live: "price_lifetime_team_usd_LIVE",   test: "price_lifetime_team_usd_TEST",   amountUsd: 24900 },
+    free:                   { live: null,                                test: null,                                amount_cents: 0,     currency: "USD" },
+    pro_monthly:            { live: "<price_pro_monthly_usd_live>",      test: "<price_pro_monthly_usd_test>",      amount_cents: 500,   currency: "USD" },
+    pro_yearly:             { live: "<price_pro_yearly_usd_live>",       test: "<price_pro_yearly_usd_test>",       amount_cents: 4800,  currency: "USD" },
+    team_monthly:           { live: "<price_team_monthly_usd_live>",     test: "<price_team_monthly_usd_test>",     amount_cents: 900,   currency: "USD" },
+    team_yearly:            { live: "<price_team_yearly_usd_live>",      test: "<price_team_yearly_usd_test>",      amount_cents: 8400,  currency: "USD" },
+    team_enterprise_yearly: { live: null,                                test: null,                                amount_cents: null,  currency: "USD" /* custom-quoted */ },
+    lifetime_pro:           { live: "<price_lifetime_pro_usd_live>",     test: "<price_lifetime_pro_usd_test>",     amount_cents: 7900,  currency: "USD" },
+    lifetime_team:          { live: "<price_lifetime_team_usd_live>",    test: "<price_lifetime_team_usd_test>",    amount_cents: 24900, currency: "USD" },
   },
-  paddle: { /* mirror */ },
+  paddle: { /* mirror, same shape */ },
 } as const;
 
 export type SkuKey = keyof typeof skuMap.stripe;
+
+// Lookup helper — single source of truth at call sites.
+// Resolution rule per F-M21: never inline live/test IDs; always go through resolve().
+export function resolveSku(provider: "stripe" | "paddle", key: SkuKey, env: "live" | "test") {
+  return skuMap[provider][key][env];
+}
 ```
 
 ## 7. Operational rules

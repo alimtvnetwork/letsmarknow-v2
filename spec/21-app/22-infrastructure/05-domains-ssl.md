@@ -6,17 +6,26 @@ Authoritative DNS layout. Any divergence is a bug.
 
 ## 1. Domain map
 
+> **Reconciled (F-M23, 2026-04-19):** added `staging.`, `preview.`, `cdn.`, `api.staging.`, `share.` so that every redirect URI registered in `09-auth-accounts/12-oauth-clients.md` §3 has a corresponding origin enumerated here.
+
 | Domain | Purpose | Provider |
 |---|---|---|
 | `letsmarknow.com` | Root (marketing + share viewer) | Registrar: Porkbun. DNS: Cloudflare. |
-| `app.letsmarknow.com` | Web app SPA | CNAME → Lovable hosting |
-| `api.letsmarknow.com` | REST API | CNAME → Cloud Edge Functions |
+| `app.letsmarknow.com` | Web app SPA (prod) | CNAME → Lovable hosting |
+| `staging.letsmarknow.com` | Web app SPA (staging) — also OAuth redirect host for staging | CNAME → Lovable hosting (staging env) |
+| `preview.letsmarknow.com` | Preview-branch reverse proxy → `*.lovable.app` | CNAME → preview proxy worker |
+| `api.letsmarknow.com` | REST API (prod) | CNAME → Cloud Edge Functions |
+| `api.staging.letsmarknow.com` | REST API (staging) | CNAME → Cloud Edge Functions (staging) |
+| `cdn.letsmarknow.com` | Public CDN for storage buckets per `06-cdn-storage.md` §4 | CNAME → CDN provider |
+| `share.letsmarknow.com` | Custom-domain CNAME target for Team plan share viewers (per §4 below) | CNAME → Lovable hosting |
 | `docs.letsmarknow.com` | User docs (static) | CNAME → Lovable hosting |
 | `status.letsmarknow.com` | Status page | CNAME → Instatus |
-| `letsmarknow.dev` | dev/staging environments | Same registrar; isolated zone |
+| `letsmarknow.dev` | dev/staging legacy zone (kept for tooling) | Same registrar; isolated zone |
 | `*.lmn.email` | `save@user.lmn.email` import addresses | MX → email-in vendor (per `11-import-export/08-email-in.md`) |
 | `letsmarknow.app` | Defensive registration (redirect to `.com`) | 301 |
 | `letsmark.com` / `lets-mark.com` | Defensive (typosquatting) | 301 |
+
+> Note: `rt.letsmarknow.com` is **not** registered. Realtime transport runs on Supabase Realtime per `08-sharing-collab/14-realtime-transport.md` (post F-M06 reconciliation).
 
 ## 2. DNS records (prod)
 

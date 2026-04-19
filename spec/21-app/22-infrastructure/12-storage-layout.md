@@ -91,16 +91,18 @@ Time-series, not entity-keyed; never enumerate via prefix scan from app code.
 
 ## 5. Cleanup jobs (cron)
 
-| Job | Schedule | Action |
+> **All cron schedules in this section are UTC** (F-M20 reconciliation, 2026-04-19). `nightly = 03:00 UTC`. `daily = 02:00 UTC`. `weekly = Sunday 04:00 UTC`. `hourly = top of every hour, UTC`. Owner-facing dashboards translate to Asia/Kuala_Lumpur (UTC+8) per locked timezone rule.
+
+| Job | Schedule (UTC) | Action |
 |---|---|---|
-| `purge_imports` | hourly | Delete `imports/*` older than 24 h |
-| `purge_exports` | hourly | Delete `exports/*` older than 7 d |
-| `purge_email_attachments` | hourly | Delete `email-attachments/*` older than 24 h |
-| `purge_share_snapshots` | daily | Delete `share-snapshots/*` for revoked shares > 90 d |
-| `purge_avatars` | daily | Delete `avatars/*` orphaned > 30 d |
-| `refresh_favicons` | weekly | Re-extract favicons not refreshed in 90 d |
-| `archive_audit` | nightly | Roll prior day's `audit_log` rows into `audit-archive` then delete from DB |
-| `backup_db` | nightly | Snapshot DB → `backups/` per `02-environments.md` |
+| `purge_imports` | hourly (`:00`) | Delete `imports/*` older than 24 h |
+| `purge_exports` | hourly (`:05`) | Delete `exports/*` older than 7 d |
+| `purge_email_attachments` | hourly (`:10`) | Delete `email-attachments/*` older than 24 h |
+| `purge_share_snapshots` | daily (`02:00 UTC`) | Delete `share-snapshots/*` for revoked shares > 90 d |
+| `purge_avatars` | daily (`02:15 UTC`) | Delete `avatars/*` orphaned > 30 d |
+| `refresh_favicons` | weekly (`Sun 04:00 UTC`) | Re-extract favicons not refreshed in 90 d |
+| `archive_audit` | nightly (`03:00 UTC`) | Roll prior day's `audit_log` rows into `audit-archive` then delete from DB |
+| `backup_db` | nightly (`03:30 UTC`) | Snapshot DB → `backups/` per `02-environments.md` |
 
 ## 6. Quotas (per Org)
 

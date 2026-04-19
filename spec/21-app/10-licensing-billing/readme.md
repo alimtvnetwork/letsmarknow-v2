@@ -26,21 +26,25 @@ Both ultimately produce **entitlements** consumed by the rest of the app.
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `01-plans-matrix.md` | Plan matrix |
-| `02-entitlements-engine.md` | Capability resolution |
-| `03-stripe-integration.md` | Stripe primary |
-| `04-paddle-integration.md` | Paddle alt |
-| `05-lifetime-licenses.md` | One-time deals |
-| `06-proration-and-upgrades.md` | Plan transitions |
-| `07-seats-and-quotas.md` | Team seats |
-| `08-invoices-and-tax.md` | Receipts & tax |
-| `09-dunning-and-recovery.md` | Failed payments |
-| `10-coupons-and-promotions.md` | Discounts |
-| `11-revenue-reporting.md` | Internal metrics |
-| `12-billing-webhooks.md` | Inbound events |
-| `13-cancellations-and-refunds.md` | End-of-life |
+| File | Purpose | Phase |
+|---|---|---|
+| `01-plans-matrix.md` | Plan matrix | P0 (Free locked) / P1 (Pro, Team, Lifetime live) |
+| `02-entitlements-engine.md` | Capability resolution | P0 (foundational) |
+| `03-stripe-integration.md` | Stripe primary | P1 |
+| `04-paddle-integration.md` | Paddle alt | P1 (config-gated) |
+| `05-lifetime-licenses.md` | One-time deals | P1 |
+| `06-proration-and-upgrades.md` | Plan transitions | P1 |
+| `07-seats-and-quotas.md` | Team seats | P2 |
+| `08-invoices-and-tax.md` | Receipts & tax | P1 |
+| `09-dunning-and-recovery.md` | Failed payments | P1 (cron-backed) |
+| `10-coupons-and-promotions.md` | Discounts | P1 |
+| `11-revenue-reporting.md` | Internal metrics | P2 |
+| `12-billing-webhooks.md` | Inbound events | P1 |
+| `13-cancellations-and-refunds.md` | End-of-life | P1 |
+| `14-support-system.md` | Support tooling | P2 |
+| `15-sku-map.md` | SKU canonical map | P1 |
+
+> **Phase legend:** P0 = MVP, P1 = v1, P2 = Collab, P3 = Mindmap/AI, P4 = Cross-browser. Source of truth: `20-roadmap/`.
 
 ## Locked rules
 

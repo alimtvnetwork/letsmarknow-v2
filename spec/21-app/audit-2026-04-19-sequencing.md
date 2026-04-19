@@ -13,12 +13,16 @@
 |---|---|---|---|
 | 🔴 Hard sequencing breaks (P0 spec demands P1+ infra to function) | **3** | | ✅ **All resolved 2026-04-19** |
 | 🟠 Soft sequencing leaks (P1 spec assumes P2 realtime; degrades cleanly) | **4** | | ✅ **All resolved 2026-04-19** |
-| 🟡 Missing phase markers on shipped features | **2** | | open |
+| 🟡 Missing phase markers on shipped features | **2** | | ✅ **All resolved 2026-04-19** |
 | 🟢 Forward-spec done correctly (data-model > feature, OAuth deferred) | **3** | | n/a |
 | ⚪ Circular references | **0** | | n/a |
 
-**Total findings: 9** (3 hard ✅ closed, 4 soft ✅ closed, 2 missing markers open).
+**Total findings: 9** (3 hard ✅ closed, 4 soft ✅ closed, 2 missing markers ✅ closed). **All findings resolved.**
 **Cycles:** none detected (clean DAG of cross-refs).
+
+**Resolution log (2026-04-19, missing markers):**
+- **S-8** closed by `07-features/readme.md` §Files — Phase column added to all 16 feature rows + legend footer.
+- **S-9** closed by Phase column added to readmes for `04-extension`, `08-sharing-collab`, `09-auth-accounts`, `10-licensing-billing`, `11-import-export`, `12-history-undo` (6 folders) + legend footer in each.
 
 **Resolution log (2026-04-19, soft leaks):**
 - **S-4** closed by `15-visualization/05-tabextend-column-view.md` §12 — tagged "P2 enhancement"; P1 ships optimistic local-only with `BroadcastChannel`.

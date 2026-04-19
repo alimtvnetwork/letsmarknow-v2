@@ -12,11 +12,13 @@ This folder defines the event log, undo/redo semantics, and conflict resolution.
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `01-event-log.md` | Append-only mutation history |
-| `02-undo-redo.md` | Ctrl+Z / Ctrl+Y semantics |
-| `03-conflict-resolution.md` | Multi-user merge rules |
+| File | Purpose | Phase |
+|---|---|---|
+| `01-event-log.md` | Append-only mutation history | P0 (table + read-only viewer; emitter catalog forward-spec per phase) |
+| `02-undo-redo.md` | Ctrl+Z / Ctrl+Y semantics | P1 (Undo toast UI) / P2 (server-aware redo across sessions) |
+| `03-conflict-resolution.md` | Multi-user merge rules | P2 (collab) |
+
+> **Phase legend:** P0 = MVP, P1 = v1, P2 = Collab, P3 = Mindmap/AI, P4 = Cross-browser. Source of truth: `20-roadmap/`.
 
 ## Locked rules
 

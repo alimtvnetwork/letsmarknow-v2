@@ -24,23 +24,25 @@ The Chrome extension is the primary surface for **Lets Mark Now**. **v1 ships fo
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `01-manifest.md` | manifest.json contract |
-| `02-surfaces.md` | Inventory of UI surfaces |
-| `03-service-worker.md` | Background runtime |
-| `04-popup.md` | Toolbar popup |
-| `05-new-tab.md` | New tab override |
-| `06-omnibox.md` | URL-bar keyword |
-| `07-context-menu.md` | Right-click integration |
-| `08-keyboard-shortcuts.md` | `commands` API |
-| `09-save-session.md` | Window → Collection flow |
-| `10-sync-and-offline.md` | Caching & offline queue |
-| `11-auth-bridge.md` | OAuth/PKCE for extension |
-| `12-messaging.md` | Internal message protocol |
-| `13-update-and-rollout.md` | Release management |
-| `14-analytics-telemetry.md` | Event reporting |
-| `15-dev-loop.md` | Developer experience |
+| File | Purpose | Phase |
+|---|---|---|
+| `01-manifest.md` | manifest.json contract | P0 |
+| `02-surfaces.md` | Inventory of UI surfaces | P0 (popup, new-tab, context-menu) / P1 (side panel, omnibox) |
+| `03-service-worker.md` | Background runtime | P0 |
+| `04-popup.md` | Toolbar popup | P0 |
+| `05-new-tab.md` | New tab override | P0 (basic) / P1 (full dashboard parity) |
+| `06-omnibox.md` | URL-bar keyword | P1 |
+| `07-context-menu.md` | Right-click integration | P0 |
+| `08-keyboard-shortcuts.md` | `commands` API | P0 (default save) / P1 (full set) |
+| `09-save-session.md` | Window → Collection flow | P1 |
+| `10-sync-and-offline.md` | Caching & offline queue | P0 (cache) / P1 (offline queue) |
+| `11-auth-bridge.md` | OAuth/PKCE for extension | P0 |
+| `12-messaging.md` | Internal message protocol | P0 |
+| `13-update-and-rollout.md` | Release management | P0 |
+| `14-analytics-telemetry.md` | Event reporting | P0 |
+| `15-dev-loop.md` | Developer experience | P0 (foundational) |
+
+> **Phase legend:** P0 = MVP, P1 = v1, P2 = Collab, P3 = Mindmap/AI, P4 = Cross-browser. Chrome MV3 only in v1; other browsers postponed to P4. Source of truth: `20-roadmap/`.
 
 ## Locked rules
 

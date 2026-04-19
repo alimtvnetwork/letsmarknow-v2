@@ -13,20 +13,45 @@
 | Folder index | `readme.md` (lowercase) | `readme.md` | `README.md`, `Readme.md` |
 | Folder summary | `00-overview.md` (lowercase, kebab) | `00-overview.md` | `overview.md`, `00_overview.md` |
 | Diagram | `flow-diagram.mmd` | `flow-diagram.mmd` | `flow_diagram.mmd`, `flowDiagram.mmd` |
-| Audit reports (in `23-audits/`) | `audit-YYYY-MM-DD-topic.md` | `audit-2026-04-19-spec-wide.md` | `audit_2026-04-19_spec_wide.md` |
+| Audit reports (in `23-audits/`) | `audit-YYYY-MM-DD-{topic}.md` — **EXEMPT from `NN-` numbered-prefix rule** because audits are append-only history, not a sequenced document set | `audit-2026-04-19-spec-wide.md` | `audit_2026-04-19_spec_wide.md` (underscores), `01-audit-spec-wide.md` (numbered) |
 | No underscores anywhere in **filenames or folder names**, ever. |
+
+### Exemptions to the `NN-` numbered prefix rule
+
+The following file classes are exempt — they appear in numbered folders but do not themselves carry an `NN-` prefix:
+
+| Pattern | Lives in | Why exempt |
+|---|---|---|
+| `audit-YYYY-MM-DD-{topic}.md` | `23-audits/` | Append-only dated history; chronological order is the date itself. |
+| `audit.md` | `23-audits/` | Original seed audit — historical baseline filename, predates the convention. |
+| `gap-analysis.md` | `23-audits/` | Living closure tracker — singular file, no sibling sequence. |
+| `permissions-matrix.json` | `08-sharing-collab/` | Machine-readable artefact, not prose. |
+| `flow-diagram.mmd` | every numbered folder | Singular per folder; named by role, not sequence. |
+| `readme.md`, `00-overview.md` | every numbered folder | Required-by-name; not part of the user sequence. |
 
 ## 2. Folder sequence integrity
 
 - Numbered folders MUST form a contiguous sequence: `00, 01, 02, …`
-- Gaps (e.g. missing `13`, `21`) are a defect — either fill the slot or document the reservation in this file.
-- Reserved slots (intentionally empty) MUST be listed below:
-  - *(none currently)*
+- Gaps are a defect — either fill the slot or document the reservation in the table below.
+
+### Reserved or intentionally-empty slots
+
+| Slot | Status | Owner / reason |
+|---|---|---|
+| `13-spec-issues/` | **In use** as of 2026-04-19 | Spec-issues catalogue + phase plan. |
+| `21-` | **Reserved (empty)** | Held for a future cross-cutting domain. The folder name `spec/21-app/` is unrelated and must not be confused with this slot. Re-evaluate at next major spec revision. Do NOT silently fill — open an issue first. |
 
 ## 3. Intra-folder file sequence
 
-- Files inside a numbered folder MUST also be a contiguous `NN-` sequence.
-- A folder MUST contain: `readme.md`, `00-overview.md`, and `flow-diagram.mmd`. Exceptions: `templates/`.
+- Files inside a numbered folder MUST also be a contiguous `NN-` sequence (excluding the exemptions in §1).
+- A folder MUST contain: `readme.md`, `00-overview.md`, and `flow-diagram.mmd`.
+
+### Exempt folders (do NOT need `readme.md` / `00-overview.md` / `flow-diagram.mmd`)
+
+| Folder | Why exempt |
+|---|---|
+| `templates/` | Holds reusable scaffold files for OTHER folders to copy. Has its own `readme.md` only; no overview or diagram needed because it is process-meta, not a domain. |
+| `06-ui-ux/wireframes/` | Sub-folder of `06-ui-ux/`. Inherits parent's overview/diagram. Has its own `readme.md` and `00-overview.md` for navigability but `flow-diagram.mmd` is optional. |
 
 ## 4. Identifier casing inside spec content
 

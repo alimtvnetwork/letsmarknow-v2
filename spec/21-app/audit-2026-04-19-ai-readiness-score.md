@@ -157,9 +157,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **22-infrastructure**
 
-- **Score: 80/100**
-- **Grade: B**
-- **Top failing issues:**
+- **Score: 80/100 → 86/100 (B+)** _updated 2026-04-19 (W-7 closure)_
+- **Original Grade: B**
+- **Closed since initial audit:** ✅ W-7 (storage path drift — `12-storage-layout.md` §1 W-7 note clarifies `lmn-` retained for client IDs; `08-cron.md` bucket paths corrected to `imports/`/`exports/`). Still open: W-12 (env var naming), no IaC examples.
+- **Top failing issues (historical, retained until 100%):**
     - `F-M01` was a "hard conflict" on storage layout and `F-M02` on env vars. The `m-gaps.md` report *claims* these are resolved, but the persistence of `W-7` and `W-12` in the later `audit.md` suggests the reconciliation was superficial.
     - Cron schedules (`08-cron.md`) were noted in `F-M20` as lacking a timezone specification, an ambiguity that will lead to jobs running at the wrong time.
     - The core principle "Infrastructure-as-spec" is good, but a spec is not infrastructure. There are no Terraform/Pulumi/IAC examples or modules.
@@ -171,9 +172,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **06-ui-ux**
 
-- **Score: 82/100**
-- **Grade: B**
-- **Top failing issues:**
+- **Score: 82/100 → 86/100 (B+)** _updated 2026-04-19 (W-5 closure)_
+- **Original Grade: B**
+- **Closed since initial audit:** ✅ W-5 (broken accessibility link — DoD checklist + gap-analysis now point to `06-ui-ux/20-accessibility-wcag.md`). Still open: B4 (VRT/Storybook), W-3 wireframe pricing.
+- **Top failing issues (historical, retained until 100%):**
     - **Gap B4 (Testing):** This folder defines visual and interaction rules, but contains no visual regression test plan, no VRT baseline images, and no Storybook stories defined.
     - **`W-3` Pricing Drift:** The wireframes in `06-ui-ux/wireframes/05-billing.md` contain outdated, incorrect pricing information. This violates the principle of a single source of truth.
     - **`W-5` Broken Link:** The key accessibility spec was moved, but other files still link to the old path. This indicates a lack of automated link checking.
@@ -253,8 +255,8 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
 | 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |
-| 22-infrastructure | 80 | B | Incomplete reconciliation of storage/env-var specs. |
-| 06-ui-ux | 82 | B | No VRT spec; outdated data in wireframes. |
+| 22-infrastructure | 80 → **86** | B → B+ | W-7 ✅ closed; W-12 + IaC examples open. |
+| 06-ui-ux | 82 → **86** | B → B+ | W-5 ✅ closed; B4 (VRT/Storybook), W-3 wireframes open. |
 | 03-api-endpoints | 85 → **95** | B → A | W-8 ✅, W-13 ✅ closed; lint script still recommended. |
 | 07-features | 88 | B | No acceptance criteria (`B4` gap). |
 | 02-data-model | 90 | A | Excellent, but affected by upstream role enum drift. |

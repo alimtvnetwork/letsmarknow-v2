@@ -56,9 +56,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 
 #### **17-admin-org**
 
-- **Score: 35/100**
-- **Grade: F**
-- **Top failing issues:**
+- **Score: 35/100 → 85/100 (B)** _updated 2026-04-19 — see `audit-2026-04-19-rescore-delta.md`_
+- **Original Grade: F**
+- **Closed since initial audit:** ✅ W-1 (role enum) — fix in `17-admin-org/03-roles.md`.
+- **Top failing issues (historical, retained until 100%):**
     - `17-admin-org/03-roles.md` is the source of the `W-1` hard contradiction. It defines the canonical SQL `org_role` enum *incorrectly*, omitting `billing` and `system`. This is a spec file actively poisoning the well.
     - An AI generating the database migration from this file will create a schema that rejects valid data inserts for `billing` members.
     - Locked rules require `has_role()` for enforcement, but the core type definition for that function's input is wrong.

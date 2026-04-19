@@ -83,7 +83,9 @@ Complete inventory. Anything not listed here MUST NOT be read from `process.env`
 | `EXT_API_URL` | yes | Baked into manifest |
 | `EXT_CHANNEL` | yes | `stable` / `beta` |
 | `EXT_VERSION` | yes | Semver written to `manifest.json` |
-| `EXT_OAUTH_CLIENT_ID` | yes | Per `04-extension/11-auth-bridge.md` |
+| `EXT_OAUTH_CLIENT_ID` | yes | Per `04-extension/11-auth-bridge.md`. See note below. |
+
+> **W-12 closure (2026-04-19):** `EXT_OAUTH_CLIENT_ID` does **NOT** follow the `OAUTH_<PROVIDER>_<FIELD>_<ENV>` pattern used in §3 because the Chrome Identity API requires a single client ID baked into `manifest.json` at build time (not selectable at runtime). Provider is fixed to **Google** (Chrome Web Store / Identity API only). Environment is determined by `EXT_CHANNEL` (`stable` ↔ prod client ID, `beta` ↔ staging client ID); the build script selects the correct value at compile time and emits a single `EXT_OAUTH_CLIENT_ID` per artifact. Do **not** rename to add an `_ENV` suffix. Do **not** rename the §3 server-side OAuth vars to drop the suffix — they remain `OAUTH_GOOGLE_CLIENT_ID_PROD` / `_STAGING`.
 
 ## 6. Validation
 

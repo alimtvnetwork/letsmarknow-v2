@@ -88,7 +88,10 @@ UI tracks `activeOrgId` in TanStack Query meta + `localStorage` for persistence;
 
 - Acts as a synthetic "Account" with limited scopes; tied to creating Account.
 - Cannot create new Accounts/Orgs/Members.
-- Audited under its own `actor_kind="api_token"`.
+- Audited under `actor_role="system"` (canonical — matches `02-data-model/09-history-event.md` and the locked role enum in `17-admin-org/03-roles.md`).
+- Optional sub-classification via `actor_kind` field: `system.api_token`, `system.cron`, `system.webhook`, `system.migration`. `actor_kind` is informational only — never use it for permission checks; gate on `actor_role="system"`.
+
+> **W-11 closure (2026-04-19):** Previously this section used `actor_kind="api_token"` as the discriminator, conflicting with `02-data-model/09-history-event.md` which used `actor_role=system`. Canonical field is now `actor_role` (enum, already exists). `actor_kind` is demoted to optional sub-type. Audit-log queries filtering "exclude system actions" MUST use `WHERE actor_role <> 'system'`.
 
 ## 6. Domain claim (Team)
 

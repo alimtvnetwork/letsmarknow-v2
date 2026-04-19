@@ -121,9 +121,9 @@ Ranked by **severity × frequency**.
 | W-4 | Channel naming format drift: `collection:<id>` vs `collection:{collection_id}` across realtime files. | ✅ CLOSED 2026-04-19 | `{placeholder}` syntax locked in `14-realtime-transport.md` W-4 note; swept `06-realtime-presence.md`, `07-comments-and-reactions.md`. |
 | W-5 | Broken accessibility spec link (file moved). | OPEN | Repair link in cross-references. |
 | W-6 | SKU naming inconsistency: `_yearly` vs `_annual` across `10-licensing-billing/`. | ✅ CLOSED 2026-04-19 | `_yearly` locked in `15-sku-map.md`; `_annual` withdrawn. |
-| W-8 | API error-code casing: `UPPER_SNAKE_CASE` (canonical) vs `lower_snake_case` (drift). | OPEN | Sweep `03-api-endpoints/`. |
+| W-8 | API error-code casing: `UPPER_SNAKE_CASE` (canonical) vs `lower_snake_case` (drift). | ✅ CLOSED 2026-04-19 | Lock added to `03-api-endpoints/01-conventions.md` §4; fixed sole drift at `17-admin-org/03-roles.md:158`. |
 | W-10 | Money fields: `amount_minor` vs `amount_cents` drift in `10-licensing-billing/`. | ✅ CLOSED 2026-04-19 | Swept 6 files; `amount_cents` canonical. See `15-sku-map.md` W-10 note. |
-| W-13 | Pagination param: `limit=50` (canonical, see `01-conventions.md`) vs `page_size=25` in some examples. | OPEN | Sweep examples to use `limit`. |
+| W-13 | Pagination param: `limit` (canonical, see `01-conventions.md` §5) vs `page_size` in some examples. | ✅ CLOSED 2026-04-19 | Fixed `15-visualization/readme.md` (2 lines); `page_size` alias withdrawn. |
 | F-M11 | Webhook-driven UI consistency: payload schemas not exhaustively listed. | OPEN | Add canonical payload list to `03-api-endpoints/17-billing-webhooks.md`. |
 
 ### 3.3 MINOR — AI handles with reasonable defaults

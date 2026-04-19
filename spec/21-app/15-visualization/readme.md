@@ -61,11 +61,11 @@ The active view per Collection is stored on the **Collection** row, not on the A
 
 ### C4 — Items payload for any view
 
-`GET /v1/collections/{collection_id}/items?view=<mode>&page_size=50&cursor=<...>`
+`GET /v1/collections/{collection_id}/items?view={mode}&limit=50&cursor={...}`
 
 - See `03-api-endpoints/08-items.md` for full schema.
 - The `view` query param is **advisory only**: it lets the server tune which fields to hydrate (e.g. `grid` triggers OG-image lookup; `compact` skips description). The shape returned is always a strict subset of `Item`.
-- Pagination: cursor-based per `03-api-endpoints/01-conventions.md` §5. **Default `page_size=50`, max `200`.**
+- Pagination: cursor-based per `03-api-endpoints/01-conventions.md` §5. **Default `limit=50`, max `200`** (W-13 closure 2026-04-19: `page_size` alias withdrawn).
 - Errors: `403 FORBIDDEN`, `404 NOT_FOUND`, `429 RATE_LIMITED`, `400 VALIDATION_FAILED` per `03-api-endpoints/18-error-codes.md`.
 
 ### C5 — Cache invalidation (P0) and realtime invalidation (P2)

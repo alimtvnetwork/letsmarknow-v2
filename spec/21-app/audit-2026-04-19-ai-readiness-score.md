@@ -20,11 +20,11 @@
 | W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | 🔴 OPEN | — | — |
 | W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `15-sku-map.md` (`_yearly` locked; `_annual` withdrawn) |
 | W-7 Storage path drift | 22-infrastructure | 🔴 OPEN | — | — |
-| W-8 Error code casing | 03-api-endpoints, 17-admin-org | 🔴 OPEN | — | — |
+| W-8 Error code casing | 03-api-endpoints, 17-admin-org | ✅ CLOSED | 2026-04-19 | `01-conventions.md` §4 lock; fixed `17-admin-org/03-roles.md` line 158 |
 | W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | 6 files swept; `amount_cents` canonical (`15-sku-map.md` §closure) |
 | W-11 System actor identity drift | 09-auth-accounts | 🔴 OPEN | — | — |
 | W-12 Env var naming drift | 04-extension, 22-infrastructure | 🔴 OPEN | — | — |
-| W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | 🔴 OPEN | — | — |
+| W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | ✅ CLOSED | 2026-04-19 | `limit` locked in `01-conventions.md` §5; fixed `15-visualization/readme.md` |
 | B4 Test plans / acceptance criteria | 06-ui-ux, 07-features, 04-extension | 🔴 OPEN | — | — |
 | B7 Seed fixtures | 11-import-export, 17-admin-org | 🔴 OPEN | — | — |
 | F-M11 Webhook payload schemas | 10-licensing-billing | 🔴 OPEN | — | — |
@@ -36,7 +36,8 @@
 | Initial | 2026-04-19 07:49 | 85 | 90 | 60 |
 | After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | 88 | 91 | 78 |
 | After W-6/W-10 | 2026-04-19 | 89 | 92 | 80 |
-| After W-4 | 2026-04-19 | **90** | **93** | **82** |
+| After W-4 | 2026-04-19 | 90 | 93 | 82 |
+| After W-8/W-13 | 2026-04-19 | **92** | **94** | **85** |
 | Target | — | 100 | 100 | 100 |
 
 ---
@@ -184,9 +185,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **03-api-endpoints**
 
-- **Score: 85/100**
-- **Grade: B**
-- **Top failing issues:**
+- **Score: 85/100 → 95/100 (A)** _updated 2026-04-19 (W-8 + W-13 closure)_
+- **Original Grade: B**
+- **Closed since initial audit:** ✅ W-8 (UPPER_SNAKE_CASE locked), ✅ W-13 (`limit` locked).
+- **Top failing issues (historical, retained until 100%):**
     - **`W-8` Casing Inconsistency:** Error codes use `UPPER_SNAKE_CASE` in the canonical list but `lower_snake_case` in some examples. This will cause client-side matching failures.
     - **`W-13` Pagination Drift:** Use of `limit=50` in one file vs. the canonical `page_size=25` is a classic avoidable inconsistency.
     - **`B2` (Error Codes) is closed, but `F-M09` showed the *envelope was still wrong* for rate limits.** This proves that closing a gap with a file doesn't guarantee consistency.
@@ -251,7 +253,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |
 | 22-infrastructure | 80 | B | Incomplete reconciliation of storage/env-var specs. |
 | 06-ui-ux | 82 | B | No VRT spec; outdated data in wireframes. |
-| 03-api-endpoints | 85 | B | Inconsistent error casing and pagination params. |
+| 03-api-endpoints | 85 → **95** | B → A | W-8 ✅, W-13 ✅ closed; lint script still recommended. |
 | 07-features | 88 | B | No acceptance criteria (`B4` gap). |
 | 02-data-model | 90 | A | Excellent, but affected by upstream role enum drift. |
 | 05-web-app | 90 | A | Strong, but uses incorrect pricing/pagination from other specs. |

@@ -65,7 +65,7 @@ Each coupon configured with:
 - `coupon.invalid` `{ coupon_id, reason }`
 - `referral.link_visited` `{ ref_code }`
 - `referral.signup_attributed` `{ ref_code }`
-- `referral.credit_issued` `{ amount_minor, currency }`
+- `referral.credit_issued` `{ amount_cents, currency }`
 - `winback.coupon_redeemed` `{ days_since_cancel }`
 
 ## 9. Audit

@@ -2,6 +2,8 @@
 
 > **Closes gap M1.** Source of truth for every billable SKU.
 > **Reconciliation (2026-04-19, F-M11):** Pricing, naming, and tier inventory aligned with the locked `10-licensing-billing/01-plans-matrix.md`. Old prices ($5 / $9 / $79 / $249) and old naming (`_yearly`, `lifetime_pro`, `lifetime_team`) are canonical. Inflated draft numbers ($8 / $12 / $199 / $599) and renamed keys (`_annual`, `lifetime_personal`, `lifetime_team5`) are **withdrawn**. `team_enterprise_yearly` re-added.
+> **W-6 closure (2026-04-19):** SKU period suffix is locked as `_yearly` (never `_annual`) across all 16 files in this folder. Verified by `grep -r "_annual" spec/21-app/10-licensing-billing/` returning only this withdrawal note.
+> **W-10 closure (2026-04-19):** All money fields use `amount_cents` (integer, minor units of `currency`). The `amount_minor` alias is **withdrawn** and was replaced in 6 files: `03-stripe-integration.md`, `04-paddle-integration.md`, `06-proration-and-upgrades.md`, `08-invoices-and-tax.md`, `10-coupons-and-promotions.md`, `13-cancellations-and-refunds.md`. Telemetry payloads, webhook payloads, and API responses must all use `amount_cents`.
 > **Locked rule:** No code may hardcode a `price_xxx` or Paddle `pri_xxx` value. All references resolve through `licensing.skuMap` exported from `src/lib/billing/sku-map.ts` (codegenned from this file).
 
 ---

@@ -120,9 +120,9 @@ Ranked by **severity × frequency**.
 | **W-3** | Three different price tables across `10-licensing-billing/01-plans-matrix.md` (canonical), `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. | ✅ **CLOSED 2026-04-19** | Both downstream files now show $5/$9 Pro/Team prices, declare `01-plans-matrix.md` as canonical, and instruct the implementation to fetch live values via API. |
 | W-4 | Channel naming format drift: `collection:<id>` vs `collection:{collection_id}` across realtime files. | OPEN | Globally normalize to `{placeholder}` syntax. |
 | W-5 | Broken accessibility spec link (file moved). | OPEN | Repair link in cross-references. |
-| W-6 | SKU naming inconsistency: `_yearly` vs `_annual` across `10-licensing-billing/`. | OPEN | Normalize in `15-sku-map.md`. |
+| W-6 | SKU naming inconsistency: `_yearly` vs `_annual` across `10-licensing-billing/`. | ✅ CLOSED 2026-04-19 | `_yearly` locked in `15-sku-map.md`; `_annual` withdrawn. |
 | W-8 | API error-code casing: `UPPER_SNAKE_CASE` (canonical) vs `lower_snake_case` (drift). | OPEN | Sweep `03-api-endpoints/`. |
-| W-10 | Money fields: `amount_minor` vs `amount_cents` drift in `10-licensing-billing/`. | OPEN | Standardize on `amount_cents`. |
+| W-10 | Money fields: `amount_minor` vs `amount_cents` drift in `10-licensing-billing/`. | ✅ CLOSED 2026-04-19 | Swept 6 files; `amount_cents` canonical. See `15-sku-map.md` W-10 note. |
 | W-13 | Pagination param: `limit=50` (canonical, see `01-conventions.md`) vs `page_size=25` in some examples. | OPEN | Sweep examples to use `limit`. |
 | F-M11 | Webhook-driven UI consistency: payload schemas not exhaustively listed. | OPEN | Add canonical payload list to `03-api-endpoints/17-billing-webhooks.md`. |
 

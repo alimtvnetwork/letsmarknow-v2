@@ -18,10 +18,10 @@
 | W-3 Pricing drift | 10-licensing-billing, 05-web-app, 06-ui-ux | ✅ CLOSED | 2026-04-19 | `01-plans-matrix.md` declared canonical |
 | W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | 🔴 OPEN | — | — |
 | W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | 🔴 OPEN | — | — |
-| W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | 🔴 OPEN | — | — |
+| W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `15-sku-map.md` (`_yearly` locked; `_annual` withdrawn) |
 | W-7 Storage path drift | 22-infrastructure | 🔴 OPEN | — | — |
 | W-8 Error code casing | 03-api-endpoints, 17-admin-org | 🔴 OPEN | — | — |
-| W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | 🔴 OPEN | — | — |
+| W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | 6 files swept; `amount_cents` canonical (`15-sku-map.md` §closure) |
 | W-11 System actor identity drift | 09-auth-accounts | 🔴 OPEN | — | — |
 | W-12 Env var naming drift | 04-extension, 22-infrastructure | 🔴 OPEN | — | — |
 | W-13 Pagination `limit` vs `page_size` | 03-api-endpoints, 05-web-app | 🔴 OPEN | — | — |
@@ -34,7 +34,8 @@
 | Pass | Date | Lovable | Cursor/Claude-Code | Raw-LLM |
 |---|---|---:|---:|---:|
 | Initial | 2026-04-19 07:49 | 85 | 90 | 60 |
-| After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | **88** | **91** | **78** |
+| After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | 88 | 91 | 78 |
+| After W-6/W-10 | 2026-04-19 | **89** | **92** | **80** |
 | Target | — | 100 | 100 | 100 |
 
 ---
@@ -72,9 +73,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **10-licensing-billing**
 
-- **Score: 40/100 → 70/100 (C)** _updated 2026-04-19_
+- **Score: 40/100 → 70/100 → 82/100 (B)** _updated 2026-04-19 (W-6/W-10 closure)_
 - **Original Grade: F**
-- **Closed since initial audit:** ✅ W-3 (pricing drift). Still open: W-6, W-10, F-M11.
+- **Closed since initial audit:** ✅ W-3 (pricing), ✅ W-6 (`_yearly` locked), ✅ W-10 (`amount_cents` swept across 6 files). Still open: F-M11 webhook payload schemas.
 - **Top failing issues (historical, retained until 100%):**
     - **`W-3` Hard Contradiction:** At least three different pricing schemes for Pro/Team plans exist across `01-plans-matrix.md`, `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. This is a fatal flaw for any billing-related codegen.
     - **`W-6` & `W-10` Semantic Drift:** Naming conventions for SKUs (`_yearly` vs `_annual`) and currency amounts (`amount_minor` vs `amount_cents`) are inconsistent. This will create fragmented data and broken analytics.
@@ -242,7 +243,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | Domain Folder | Score | Grade | Key Blocker / Risk |
 |---|---|---|---|
 | 17-admin-org | 35 → **85** | F → B | W-1 ✅ closed; B4/B7 still open. |
-| 10-licensing-billing | 40 → **70** | F → C | W-3 ✅ closed; W-6, W-10, F-M11 open. |
+| 10-licensing-billing | 40 → 70 → **82** | F → B | W-3 ✅, W-6 ✅, W-10 ✅ closed; F-M11 open. |
 | 08-sharing-collab | 55 → **80** | F → B | W-2 ✅ closed; W-4 channel naming open. |
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
 | 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |

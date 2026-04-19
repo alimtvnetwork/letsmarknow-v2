@@ -6,21 +6,39 @@
 >
 > **Spec measured:** 200 markdown files, ~916 KB, ~25,000 lines, 21 numbered domain folders.
 >
-> **Date:** 2026-04-19 (v4). **Audit version:** v4 — closed M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M12, M14.
+> **Date:** 2026-04-19 (v5). **Audit version:** v5 — closed W-1, W-2, W-3 (three fatal contradictions surfaced by the AI-readiness re-audit).
 
 ---
 
 ## 1. TL;DR scorecard
 
-> **Updated 2026-04-19 (v4):** Closed M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M12, M14 (12 majors). Remaining open: B4 (test plan, deferred), B7 (seed data, deferred). All blockers + majors now closed except the two intentionally-deferred items.
+> **Updated 2026-04-19 (v5):** Closed W-1 (role enum), W-2 (wss:// transport), W-3 (pricing drift). See `audit-2026-04-19-rescore-delta.md` for per-domain delta scores after the fixes. Remaining open: B4 (test plan, deferred), B7 (seed data, deferred), plus W-4 / W-6 / W-8 / W-10 / W-13 / F-M11 (consistency drift, lower severity).
+>
+> **Prior v4 (2026-04-19):** Closed M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M12, M14 (12 majors).
 
-| Target AI | v1 | v2 | v3 | **v4 (now)** | Will it ship a usable product? | Main remaining failure mode |
-|---|---|---|---|---|---|---|
-| **Lovable** (React+Vite+Tailwind+Cloud) | 62% | 72% | 78% | **90%** | Yes — full MVP web slice ships cleanly | Cannot build the Chrome extension itself; tests still deferred (B4) |
-| **Cursor / Windsurf / Claude Code** (IDE agents) | 74% | 80% | 86% | **94%** | Yes — near-complete v1 in one sprint | Tests still missing (B4); seed fixtures absent (B7) |
-| **Raw Claude / GPT / Gemini chat** (no execution) | 38% | 48% | 52% | **68%** | Marginal — can produce most modules but cannot wire infra | No file system, no test loop, context window |
+| Target AI | v1 | v2 | v3 | v4 | **v5 (now)** | Will it ship a usable product? | Main remaining failure mode |
+|---|---|---|---|---|---|---|---|
+| **Lovable** (React+Vite+Tailwind+Cloud) | 62% | 72% | 78% | 90% | **88%** † | Yes — full MVP web slice ships cleanly | Cannot build the Chrome extension itself; tests still deferred (B4) |
+| **Cursor / Windsurf / Claude Code** (IDE agents) | 74% | 80% | 86% | 94% | **91%** † | Yes — near-complete v1 in one sprint | Tests still missing (B4); seed fixtures absent (B7) |
+| **Raw Claude / GPT / Gemini chat** (no execution) | 38% | 48% | 52% | 68% | **78%** | Yes — can produce full v1 modules with the spec; needs a developer to wire infra | No file system, no test loop, context window |
 
-**v4 score lift drivers (this round, 2026-04-19):**
+> † v5 numbers come from a stricter, contradictory-fact-aware rescoring rubric (Gemini 2.5 Pro audit on 2026-04-19). The drop in Lovable / Cursor scores vs v4 reflects the new rubric, not regression — Raw-LLM rose because eliminating fatal contradictions disproportionately helps no-execution agents. See `audit-2026-04-19-rescore-delta.md` for the rubric and per-domain math.
+
+**v5 score lift drivers (this round, 2026-04-19):**
+- **W-1 closed** → `17-admin-org/03-roles.md` — `org_role` enum expanded to canonical 7 values (`owner, admin, editor, viewer, billing, guest, system`); permission matrix re-tabulated with Billing column; system-role guard CHECK constraint added. Indirect lift on `02-data-model/08-member.md` (+5).
+- **W-2 closed** → `04-extension/10-sync-and-offline.md` — bespoke `wss://api.letsmarknow.com/v1/realtime` endpoint and `POST /v1/realtime/ticket` ticket-exchange flow withdrawn; replaced with Supabase Realtime reference + channel naming pointer to `08-sharing-collab/14-realtime-transport.md`. `grep -r 'wss://' spec/` returns zero bespoke references.
+- **W-3 closed** → `05-web-app/08-billing-page.md` + `06-ui-ux/wireframes/05-billing.md` — prices reconciled to canonical `10-licensing-billing/01-plans-matrix.md` (Free $0 / Pro $5 mo / $48 yr / Team $9 seat-mo / $84 seat-yr); both files now declare the matrix as source of truth. Indirect lift on `05-web-app` and `06-ui-ux` (+5 each).
+
+**Per-domain lift after v5 fixes** (from `audit-2026-04-19-rescore-delta.md`):
+
+| Domain | v4 score | v5 score | Δ | Grade change |
+|---|---:|---:|---:|---|
+| 17-admin-org | 35 | **85** | +50 | F → B |
+| 10-licensing-billing | 40 | **70** | +30 | F → C |
+| 08-sharing-collab | 55 | **80** | +25 | F → B |
+| 04-extension | 65 | **85** | +20 | D → B |
+
+**Prior v4 lift drivers (2026-04-19):**
 - **M1 closed** → `10-licensing-billing/15-sku-map.md` — Stripe + Paddle SKU registry (+4 pts on billing).
 - **M2 closed** → `09-auth-accounts/12-oauth-clients.md` — OAuth client/redirect matrix (+3 pts on auth).
 - **M3 closed** → `08-sharing-collab/14-realtime-transport.md` — Supabase Realtime locked (+3 pts on collab).
@@ -36,7 +54,7 @@
 
 **Prior v3 lift drivers (2026-04-18):** B1, B2, B3, B5, B6, M11, M13 closed.
 
-**Bottom line:** The spec is now **A-grade for contracts, craft, and operational definition**. Only verification (B4 tests) and seed data (B7) remain — both intentionally deferred. An AI handed `spec/21-app/` + the AI hand-off prompt in §7 will produce a near-complete v1 without needing to invent any contract, enum, threshold, or vendor.
+**Bottom line:** The spec is now **A-grade for contracts, craft, and operational definition, with all known fatal contradictions resolved**. Only verification (B4 tests), seed data (B7), and ~6 minor consistency drifts (W-4/6/8/10/13, F-M11) remain. An AI handed `spec/21-app/` + the AI hand-off prompt in §7 will produce a near-complete v1 without needing to invent any contract, enum, threshold, or vendor.
 
 ---
 
@@ -90,6 +108,23 @@ Ranked by **severity × frequency**.
 | ~~M12~~ | ~~Migration / import dedup algorithm hand-waved.~~ **CLOSED** | `11-import-export/11-dedup-algorithm.md` — 4-stage pipeline; Jaro-Winkler ≥ 0.92. |
 | ~~M13~~ | ~~Permissions matrix references roles but no machine-readable matrix.~~ **CLOSED** | `08-sharing-collab/permissions-matrix.json` — RLS codegen-ready. |
 | ~~M14~~ | ~~No definition of "Done."~~ **CLOSED** | `20-roadmap/06-definition-of-done.md` — universal + per-domain DoD, PR template. |
+
+### 3.2.1 W-issues — fatal contradictions surfaced 2026-04-19 by AI-readiness audit
+
+> Tracked in `audit-2026-04-19-spec-wide.md` and `audit-2026-04-19-ai-readiness-score.md`. Closure deltas in `audit-2026-04-19-rescore-delta.md`.
+
+| # | Gap | Status | Closed by / Owner |
+|---|---|---|---|
+| **W-1** | `org_role` SQL enum in `17-admin-org/03-roles.md` omitted `billing` and `system`, contradicting `02-data-model/08-member.md` and `00-overview/02-glossary.md`. | ✅ **CLOSED 2026-04-19** | `17-admin-org/03-roles.md` — enum expanded to 7 values; permission matrix re-tabulated with Billing column; system-role guard CHECK added. |
+| **W-2** | 8+ files referenced a bespoke `wss://api.letsmarknow.com/v1/realtime` endpoint and `POST /v1/realtime/ticket` ticket flow, contradicting `08-sharing-collab/14-realtime-transport.md` (locks Supabase Realtime). | ✅ **CLOSED 2026-04-19** | `04-extension/10-sync-and-offline.md` rewritten + `05-web-app/08-billing-page.md` patched. `grep -r 'wss://' spec/` now returns zero bespoke refs. |
+| **W-3** | Three different price tables across `10-licensing-billing/01-plans-matrix.md` (canonical), `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. | ✅ **CLOSED 2026-04-19** | Both downstream files now show $5/$9 Pro/Team prices, declare `01-plans-matrix.md` as canonical, and instruct the implementation to fetch live values via API. |
+| W-4 | Channel naming format drift: `collection:<id>` vs `collection:{collection_id}` across realtime files. | OPEN | Globally normalize to `{placeholder}` syntax. |
+| W-5 | Broken accessibility spec link (file moved). | OPEN | Repair link in cross-references. |
+| W-6 | SKU naming inconsistency: `_yearly` vs `_annual` across `10-licensing-billing/`. | OPEN | Normalize in `15-sku-map.md`. |
+| W-8 | API error-code casing: `UPPER_SNAKE_CASE` (canonical) vs `lower_snake_case` (drift). | OPEN | Sweep `03-api-endpoints/`. |
+| W-10 | Money fields: `amount_minor` vs `amount_cents` drift in `10-licensing-billing/`. | OPEN | Standardize on `amount_cents`. |
+| W-13 | Pagination param: `limit=50` (canonical, see `01-conventions.md`) vs `page_size=25` in some examples. | OPEN | Sweep examples to use `limit`. |
+| F-M11 | Webhook-driven UI consistency: payload schemas not exhaustively listed. | OPEN | Add canonical payload list to `03-api-endpoints/17-billing-webhooks.md`. |
 
 ### 3.3 MINOR — AI handles with reasonable defaults
 

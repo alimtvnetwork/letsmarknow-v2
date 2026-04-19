@@ -2,7 +2,7 @@
 
 > **Purpose:** Every user-visible string in the product, keyed for i18n. Components reference keys, never hard-coded English.
 >
-> **Closes:** Blocker B3 from `gap-analysis.md`.
+> **Closes:** Blocker B3 from `audit/gap-analysis.md`.
 >
 > **Voice & tone:** see `14-copy-voice.md`. This file is the *content*; that file is the *style*.
 

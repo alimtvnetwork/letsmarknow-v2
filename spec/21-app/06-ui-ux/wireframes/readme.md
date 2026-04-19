@@ -2,7 +2,7 @@
 
 > **Purpose:** ASCII-annotated layout specs for every primary surface. AIs and humans use these as the "shape" reference; `01-design-tokens.md` provides the visual style; `17-copy-strings.md` provides the text.
 >
-> **Closes:** Blocker B1 from `gap-analysis.md`.
+> **Closes:** Blocker B1 from `audit/gap-analysis.md`.
 
 ## Files
 

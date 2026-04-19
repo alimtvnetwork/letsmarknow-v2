@@ -1,6 +1,6 @@
 # 13 — Infrastructure as Code (Terraform / Pulumi)
 
-> **Closes:** F-M03 (IaC examples gap from `audit-2026-04-19-m-gaps.md`).
+> **Closes:** F-M03 (IaC examples gap from `audit/audit-2026-04-19-m-gaps.md`).
 >
 > **Purpose.** Make every piece of production infrastructure declarable, diffable, and reviewable. This file gives **canonical IaC snippets** for hosting, storage, cron, secrets, DNS, and CDN, plus the rules for repository layout, state, and drift detection. Anything provisioned by hand is a bug; the fix is to import it into IaC the same week.
 >

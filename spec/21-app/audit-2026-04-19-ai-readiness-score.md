@@ -317,13 +317,17 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
+> **Current (2026-04-19, after W-1/W-2/W-3 closures):** Lovable **88** · Cursor/Claude-Code **91** · Raw-LLM **78**
+> **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
+> **Target:** 100 across all three. Issues remain documented above until target is reached.
+
 The project's self-assessment is optimistic. The unresolved contradictions found in `audit.md` represent significant, concrete failure modes that will block any non-trivial AI-driven implementation.
 
-- **Lovable: 85/100**
+- **Lovable: 85/100 → 88/100**
     - The score is high because if you scope it *only* to the web app (`05-web-app`) and its direct dependencies, the spec is strong. However, it cannot build the extension (`04-extension`) and will be easily confused by the cross-cutting inconsistencies, requiring manual correction loops.
 
-- **Cursor/Claude-Code: 90/100**
+- **Cursor/Claude-Code: 90/100 → 91/100**
     - The most capable agent target. It can navigate the codebase, understand the file system, and is more likely to correctly infer intent from conflicting files (e.g., by seeing which one the existing code uses). However, it will still require significant human guidance to resolve the hard contradictions, preventing a "one-shot" build.
 
-- **Raw-LLM: 60/100**
+- **Raw-LLM: 60/100 → 78/100**
     - The spec is a minefield for a raw LLM. Without an execution environment or file system context, it is maximally vulnerable to reading files in the wrong order and generating code based on outdated or contradictory information (e.g., building the wrong WebSocket client). The high number of hard contradictions makes a successful end-to-end build highly improbable without heavy-handed human stitching.

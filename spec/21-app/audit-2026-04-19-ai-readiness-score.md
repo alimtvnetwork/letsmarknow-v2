@@ -17,9 +17,9 @@
 | W-2 Realtime transport (`wss://`) | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `04-extension/10-sync-and-offline.md` → Supabase Realtime |
 | W-3 Pricing drift | 10-licensing-billing, 05-web-app, 06-ui-ux | ✅ CLOSED | 2026-04-19 | `01-plans-matrix.md` declared canonical |
 | W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `14-realtime-transport.md` W-4 note; swept `06-realtime-presence.md`, `07-comments-and-reactions.md` |
-| W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | 🔴 OPEN | — | — |
+| W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | ✅ CLOSED | 2026-04-19 | `20-roadmap/06-definition-of-done.md` line 27 + `gap-analysis.md` lines 51/106 → `06-ui-ux/20-accessibility-wcag.md` |
 | W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `15-sku-map.md` (`_yearly` locked; `_annual` withdrawn) |
-| W-7 Storage path drift | 22-infrastructure | 🔴 OPEN | — | — |
+| W-7 Storage path drift | 22-infrastructure | ✅ CLOSED | 2026-04-19 | `12-storage-layout.md` §1 W-7 note (lmn- retained for client IDs); `08-cron.md` lines 20-21 (`imports/`, `exports/`) |
 | W-8 Error code casing | 03-api-endpoints, 17-admin-org | ✅ CLOSED | 2026-04-19 | `01-conventions.md` §4 lock; fixed `17-admin-org/03-roles.md` line 158 |
 | W-10 `amount_minor` vs `amount_cents` | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | 6 files swept; `amount_cents` canonical (`15-sku-map.md` §closure) |
 | W-11 System actor identity drift | 09-auth-accounts | 🔴 OPEN | — | — |
@@ -38,7 +38,8 @@
 | After W-6/W-10 | 2026-04-19 | 89 | 92 | 80 |
 | After W-4 | 2026-04-19 | 90 | 93 | 82 |
 | After W-8/W-13 | 2026-04-19 | 92 | 94 | 85 |
-| After F-M11 | 2026-04-19 | **93** | **95** | **87** |
+| After F-M11 | 2026-04-19 | 93 | 95 | 87 |
+| After W-5/W-7 | 2026-04-19 | **94** | **96** | **88** |
 | Target | — | 100 | 100 | 100 |
 
 ---
@@ -156,9 +157,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **22-infrastructure**
 
-- **Score: 80/100**
-- **Grade: B**
-- **Top failing issues:**
+- **Score: 80/100 → 86/100 (B+)** _updated 2026-04-19 (W-7 closure)_
+- **Original Grade: B**
+- **Closed since initial audit:** ✅ W-7 (storage path drift — `12-storage-layout.md` §1 W-7 note clarifies `lmn-` retained for client IDs; `08-cron.md` bucket paths corrected to `imports/`/`exports/`). Still open: W-12 (env var naming), no IaC examples.
+- **Top failing issues (historical, retained until 100%):**
     - `F-M01` was a "hard conflict" on storage layout and `F-M02` on env vars. The `m-gaps.md` report *claims* these are resolved, but the persistence of `W-7` and `W-12` in the later `audit.md` suggests the reconciliation was superficial.
     - Cron schedules (`08-cron.md`) were noted in `F-M20` as lacking a timezone specification, an ambiguity that will lead to jobs running at the wrong time.
     - The core principle "Infrastructure-as-spec" is good, but a spec is not infrastructure. There are no Terraform/Pulumi/IAC examples or modules.
@@ -170,9 +172,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **06-ui-ux**
 
-- **Score: 82/100**
-- **Grade: B**
-- **Top failing issues:**
+- **Score: 82/100 → 86/100 (B+)** _updated 2026-04-19 (W-5 closure)_
+- **Original Grade: B**
+- **Closed since initial audit:** ✅ W-5 (broken accessibility link — DoD checklist + gap-analysis now point to `06-ui-ux/20-accessibility-wcag.md`). Still open: B4 (VRT/Storybook), W-3 wireframe pricing.
+- **Top failing issues (historical, retained until 100%):**
     - **Gap B4 (Testing):** This folder defines visual and interaction rules, but contains no visual regression test plan, no VRT baseline images, and no Storybook stories defined.
     - **`W-3` Pricing Drift:** The wireframes in `06-ui-ux/wireframes/05-billing.md` contain outdated, incorrect pricing information. This violates the principle of a single source of truth.
     - **`W-5` Broken Link:** The key accessibility spec was moved, but other files still link to the old path. This indicates a lack of automated link checking.
@@ -252,8 +255,8 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
 | 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |
-| 22-infrastructure | 80 | B | Incomplete reconciliation of storage/env-var specs. |
-| 06-ui-ux | 82 | B | No VRT spec; outdated data in wireframes. |
+| 22-infrastructure | 80 → **86** | B → B+ | W-7 ✅ closed; W-12 + IaC examples open. |
+| 06-ui-ux | 82 → **86** | B → B+ | W-5 ✅ closed; B4 (VRT/Storybook), W-3 wireframes open. |
 | 03-api-endpoints | 85 → **95** | B → A | W-8 ✅, W-13 ✅ closed; lint script still recommended. |
 | 07-features | 88 | B | No acceptance criteria (`B4` gap). |
 | 02-data-model | 90 | A | Excellent, but affected by upstream role enum drift. |
@@ -322,7 +325,7 @@ To push the overall AI-readiness score to 95+, execute these fixes in order:
 
 ### 5. Final Overall AI-Development-Readiness Score
 
-> **Current (2026-04-19, after W-1/W-2/W-3 closures):** Lovable **88** · Cursor/Claude-Code **91** · Raw-LLM **78**
+> **Current (2026-04-19, after W-5/W-7 closures):** Lovable **94** · Cursor/Claude-Code **96** · Raw-LLM **88**
 > **Initial baseline (2026-04-19 07:49):** Lovable 85 · Cursor/Claude-Code 90 · Raw-LLM 60
 > **Target:** 100 across all three. Issues remain documented above until target is reached.
 

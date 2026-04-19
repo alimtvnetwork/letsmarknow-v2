@@ -16,7 +16,7 @@
 | W-1 Role enum drift | 17-admin-org, 02-data-model, 09-auth-accounts | ✅ CLOSED | 2026-04-19 | `17-admin-org/03-roles.md` (7-value enum + SQL CHECK) |
 | W-2 Realtime transport (`wss://`) | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `04-extension/10-sync-and-offline.md` → Supabase Realtime |
 | W-3 Pricing drift | 10-licensing-billing, 05-web-app, 06-ui-ux | ✅ CLOSED | 2026-04-19 | `01-plans-matrix.md` declared canonical |
-| W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | 🔴 OPEN | — | — |
+| W-4 Channel naming `<id>` vs `{id}` | 04-extension, 08-sharing-collab | ✅ CLOSED | 2026-04-19 | `14-realtime-transport.md` W-4 note; swept `06-realtime-presence.md`, `07-comments-and-reactions.md` |
 | W-5 Broken accessibility link | 06-ui-ux, 20-roadmap | 🔴 OPEN | — | — |
 | W-6 SKU naming (`_yearly` vs `_annual`) | 10-licensing-billing | ✅ CLOSED | 2026-04-19 | `15-sku-map.md` (`_yearly` locked; `_annual` withdrawn) |
 | W-7 Storage path drift | 22-infrastructure | 🔴 OPEN | — | — |
@@ -35,7 +35,8 @@
 |---|---|---:|---:|---:|
 | Initial | 2026-04-19 07:49 | 85 | 90 | 60 |
 | After W-1/W-2/W-3 | 2026-04-19 (rescore-delta) | 88 | 91 | 78 |
-| After W-6/W-10 | 2026-04-19 | **89** | **92** | **80** |
+| After W-6/W-10 | 2026-04-19 | 89 | 92 | 80 |
+| After W-4 | 2026-04-19 | **90** | **93** | **82** |
 | Target | — | 100 | 100 | 100 |
 
 ---
@@ -91,9 +92,9 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **08-sharing-collab**
 
-- **Score: 55/100 → 80/100 (B)** _updated 2026-04-19_
+- **Score: 55/100 → 80/100 → 88/100 (B+)** _updated 2026-04-19 (W-4 closure)_
 - **Original Grade: F**
-- **Closed since initial audit:** ✅ W-2 (transport authority reinforced). Still open: W-4 channel naming.
+- **Closed since initial audit:** ✅ W-2 (transport), ✅ W-4 (channel naming `{placeholder}` locked). Still open: P2-scope clarification, ownership conflict re: permissions matrix.
 - **Top failing issues (historical, retained until 100%):**
     - **`W-2` Hard Contradiction:** Eight feature files and the extension spec still reference a custom `wss://` endpoint, while `14-realtime-transport.md` locks Supabase Realtime as the v1 transport. This is a direct, fatal contradiction.
     - **`W-4` Channel Naming Drift:** Channel names use inconsistent formatting (`collection:<id>` vs. `collection:{collection_id}`), which will break any regex-based routing on the client.
@@ -244,7 +245,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 |---|---|---|---|
 | 17-admin-org | 35 → **85** | F → B | W-1 ✅ closed; B4/B7 still open. |
 | 10-licensing-billing | 40 → 70 → **82** | F → B | W-3 ✅, W-6 ✅, W-10 ✅ closed; F-M11 open. |
-| 08-sharing-collab | 55 → **80** | F → B | W-2 ✅ closed; W-4 channel naming open. |
+| 08-sharing-collab | 55 → 80 → **88** | F → B+ | W-2 ✅, W-4 ✅ closed; P2 scope clarity open. |
 | 15-visualization | 65 | D | Ambiguous P0 vs. P2 implementation logic. |
 | 04-extension | 70 → **85** | C → B | W-2 ✅ closed; W-12, B4 open. |
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |

@@ -2,6 +2,7 @@
 
 > **Closes gap M3.** Defines the wire protocol, channels, presence model, and conflict-resolution transport for collaborative features.
 > **Locked decision:** **Supabase Realtime (Phoenix Channels over WebSocket)** is the chosen transport for v1. No Socket.io. No Y.js server. No raw WS.
+> **W-4 closure (2026-04-19):** Channel-name placeholder syntax is locked as `{placeholder}` (e.g. `org:{org_id}`, `collection:{collection_id}`, `item:{item_id}`, `share:{share_token}`, `account:{account_id}`). The `<placeholder>` form is **withdrawn**. Swept files: `06-realtime-presence.md`, `07-comments-and-reactions.md`. The 04-extension folder already used the canonical `{placeholder}` form via the W-2 fix.
 
 ---
 

@@ -11,7 +11,7 @@ type: feature
 | W-1 residue sweep | Role enum across `02-data-model/08-member.md`, `09-auth-accounts/01-identity-model.md` + `06-sessions.md` | 7-value enum locked everywhere; JWT `roles` claim lists 6 user-assignable values |
 | F-M09 + F-M10 | Rate-limit envelope reconciled to canonical | `09-auth-accounts/13-rate-limit-values.md` §0 + §6 + §7 |
 | Paddle webhook parity | 5 events, canonical schemas, `(provider, event_id)` idempotency | `03-api-endpoints/17-billing-webhooks.md` §Paddle |
-| F-CI-DRIFT | spec-drift-linter — 11 sub-checks lock W-1, W-3, W-4, W-5, W-6, W-7, W-8, W-10, W-12, W-13, F-M09/F-M10 | `22-infrastructure/09-ci-cd.md` §2.1.1 + §2.1.2 |
+| F-CI-DRIFT | spec-drift-linter — 12 sub-checks lock W-1, W-3, W-4, W-5, W-6, W-7, W-8, W-10, W-12, W-13, F-M09/F-M10, F-FOLDER-OVERVIEW | `22-infrastructure/09-ci-cd.md` §2.1.1 + §2.1.2 |
 | F-FOLDER-OVERVIEW | 21 new `00-overview.md` files (one per numbered folder + wireframes); 03-api-endpoints already had one | All 22 folders now have one |
 | F-M03 IaC | Terraform + Pulumi snippets for hosting, storage, cron, DNS; remote state; drift detection; OPA + tfsec + infracost | `22-infrastructure/13-iac.md` |
 | Cumulative rescore v2 | Per-domain math baseline → 100/100/100 across all 21 domains | `audit-2026-04-19-rescore-delta-v2.md` |

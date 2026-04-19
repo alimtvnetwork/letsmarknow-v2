@@ -31,7 +31,7 @@ Gate: **all green** required to merge to `main`.
 
 ### 2.1.1 `spec-drift-linter` — anti-regression guard for the spec corpus
 
-Purpose: lock in every W-class fix from `audit-2026-04-19-ai-readiness-score.md` so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` on every PR. Composite of seven sub-checks, each of which fails the job independently with a precise error.
+Purpose: lock in every W-class fix from `audit-2026-04-19-ai-readiness-score.md` AND the F-FOLDER-OVERVIEW closure from `audit-2026-04-19-100-retrospective.md` so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` on every PR. Composite of twelve sub-checks, each of which fails the job independently with a precise error.
 
 | Sub-check | Tool | What it asserts | Fix-source it locks |
 |---|---|---|---|
@@ -46,6 +46,7 @@ Purpose: lock in every W-class fix from `audit-2026-04-19-ai-readiness-score.md`
 | `storage-path` | `scripts/lint/storage-path.ts` | Storage paths in `22-infrastructure/**` and `11-import-export/**` match the layout declared in `12-storage-layout.md`. Bucket names allowlisted there. | W-7. |
 | `env-var-naming` | `scripts/lint/env-vars.ts` | Every `process.env.*` / `import.meta.env.*` reference in spec exists in `22-infrastructure/03-env-vars.md`. Chrome Identity API exception list is allowlisted in §5 of that file. | W-12. |
 | `pricing-source` | `scripts/lint/pricing.ts` | Any price string (e.g. `$5`, `$10`, `€7`) outside `10-licensing-billing/01-plans-matrix.md` must be a markdown link back to that file. | W-3. |
+| `folder-overview` | `scripts/lint/folder-overview.ts` | Every directory under `spec/21-app/` (recursively, excluding hidden dirs and the root itself) MUST contain a file named exactly `00-overview.md`. The file MUST be ≥ 40 lines (proxy for "not a stub") AND MUST contain the headings `## 1. Responsibilities`, `## 2. File-by-file behaviour` (or `behavior`), `## 3. Tasks performed by this folder`, `## 4. What this folder is NOT`, `## 5. Cross-references`. Allowlist: `scripts/lint/folder-overview.allowlist.txt` (folders explicitly exempt — currently empty). | F-FOLDER-OVERVIEW (retrospective §8.1). |
 
 Implementation contract:
 - Each linter is a standalone `ts-node` script under `scripts/lint/`.

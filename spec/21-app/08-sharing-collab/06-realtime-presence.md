@@ -12,11 +12,11 @@ Live indicators of who is viewing / editing what, in the same Org.
 
 | Channel | Scope |
 |---|---|
-| `org:<org_id>` | Org-wide events (member changes, broad notifications) |
-| `space:<space_id>` | Members viewing a Space |
-| `collection:<collection_id>` | Members on a Collection page |
-| `item:<item_id>` | Members editing an Item (notes/description) |
-| `account:<account_id>` | User-targeted (notifications, sign-out) |
+| `org:{org_id}` | Org-wide events (member changes, broad notifications) |
+| `space:{space_id}` | Members viewing a Space |
+| `collection:{collection_id}` | Members on a Collection page |
+| `item:{item_id}` | Members editing an Item (notes/description) |
+| `account:{account_id}` | User-targeted (notifications, sign-out) |
 
 Subscribe on view mount; unsubscribe on unmount.
 

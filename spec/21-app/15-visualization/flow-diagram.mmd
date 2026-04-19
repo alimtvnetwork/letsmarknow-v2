@@ -1,0 +1,10 @@
+flowchart TD
+    OPEN[User opens a Collection] --> PICK{View toggle in toolbar}
+    PICK --> LST[List view<br/>title + favicon + tags]
+    PICK --> GRD[Grid view<br/>card thumbnails]
+    PICK --> CMP[Compact view<br/>dense rows]
+    PICK --> MM[Mindmap view<br/>visual tree]
+    PICK --> COL[Column view<br/>Tab Extend style]
+
+    LST & GRD & CMP & MM & COL --> RESZ[User drags section dividers]
+    RESZ --> SAVED[Layout preference saved per Collection]

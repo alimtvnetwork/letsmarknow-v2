@@ -40,11 +40,73 @@ All entry flows for getting an Account authenticated.
 
 ## 5. Magic link
 
-1. Submit email at `/signin/magic`.
-2. Server generates one-time token (32-byte random; sha256 hashed at rest); 15-min TTL; email sent.
-3. Click link `/signin/magic/callback?t=...` → server consumes token; signs user in.
-4. If account doesn't exist, treats as signup (creates Account + Personal Org).
-5. Used token denylisted for replay window (24 h).
+> **F-M13 closure (2026-04-19):** This section is the canonical magic-link spec. P1 per `readme.md`. Replaces the prior "implied but not specified" gap.
+
+### 5.1 Endpoints
+
+| Verb | Path | Purpose | Auth |
+|---|---|---|---|
+| `POST` | `/v1/auth/magic/request` | Issue token, send email | none |
+| `GET`  | `/v1/auth/magic/callback?t={token}` | Consume token, sign in | none |
+
+Both routes obey the rate-limit envelope in `13-rate-limit-values.md` and return errors per `03-api-endpoints/18-error-codes.md` (UPPER_SNAKE_CASE per W-8 closure).
+
+### 5.2 Request payload
+
+`POST /v1/auth/magic/request`
+```json
+{ "email": "user@example.com", "next": "/dashboard" }
+```
+Response is **always** `202 ACCEPTED` with empty body — no enumeration of whether the address exists.
+
+### 5.3 Token issuance
+
+- 32-byte CSPRNG → URL-safe base64 → token shown to user (single-use).
+- Server stores **sha256(token)** in `auth_magic_links(account_id, token_hash, requested_ip, requested_ua, expires_at, consumed_at)`.
+- TTL: **15 min**. New request invalidates older unconsumed tokens for the same address.
+- One pending token per email at a time.
+
+### 5.4 Callback / consume
+
+`GET /v1/auth/magic/callback?t={token}` performs, in order:
+
+1. Hash incoming `t`, look up row.
+2. If missing / expired / already consumed → `410 GONE` with code `MAGIC_LINK_INVALID`; render `/auth/magic/expired` page with "Request a new link" CTA.
+3. If row exists and matches:
+   - Set `consumed_at = now()`.
+   - If account exists → mint access JWT (15 min) + refresh cookie (rolling 30 d) per §4 step 4; record `Session` row.
+   - If no account → create Account + Personal Org per `01-identity-model.md` §3 (treats as signup); same session issuance.
+4. Redirect `302` to `?next=` (validated against same-origin allow-list) or `/dashboard`.
+5. Token denylisted via `consumed_at` lookup for **24 h replay window** even after row TTL passes.
+
+### 5.5 Email content
+
+- Subject: copy-key `auth.magic.email.subject` ("Sign in to Lets Mark Now").
+- CTA button → callback URL.
+- Body includes: requesting IP (coarse), UA family, expiry stamp, "Didn't request? Ignore." footer.
+- Sender + provider per `22-infrastructure/11-email-provider.md`.
+
+### 5.6 Anti-abuse
+
+- Throttle: 1 request per 60 s per email; 5 per 24 h per email; 10 per hour per IP. See §13.
+- reCAPTCHA Enterprise gate when abuse score > 0.7.
+- Tokens never logged; never echoed in URLs other than the callback path itself; callback page sets `Cache-Control: no-store, no-referrer`.
+
+### 5.7 Telemetry
+
+- `auth.magic_link_requested` `{ new_account: bool }`
+- `auth.magic_link_sent`
+- `auth.magic_link_consumed` `{ time_to_consume_s, new_account: bool }`
+- `auth.magic_link_failed` `{ reason: "expired" | "consumed" | "not_found" | "rate_limited" }`
+
+### 5.8 Errors
+
+| Condition | HTTP | Code |
+|---|---|---|
+| Token missing / expired / consumed | 410 | `MAGIC_LINK_INVALID` |
+| Throttled | 429 | `RATE_LIMITED` |
+| Email malformed | 400 | `VALIDATION_FAILED` |
+| reCAPTCHA fail | 403 | `CAPTCHA_REQUIRED` |
 
 ## 6. Invite acceptance
 

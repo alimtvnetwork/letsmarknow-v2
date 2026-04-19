@@ -72,9 +72,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **10-licensing-billing**
 
-- **Score: 40/100**
-- **Grade: F**
-- **Top failing issues:**
+- **Score: 40/100 → 70/100 (C)** _updated 2026-04-19_
+- **Original Grade: F**
+- **Closed since initial audit:** ✅ W-3 (pricing drift). Still open: W-6, W-10, F-M11.
+- **Top failing issues (historical, retained until 100%):**
     - **`W-3` Hard Contradiction:** At least three different pricing schemes for Pro/Team plans exist across `01-plans-matrix.md`, `05-web-app/08-billing-page.md`, and `06-ui-ux/wireframes/05-billing.md`. This is a fatal flaw for any billing-related codegen.
     - **`W-6` & `W-10` Semantic Drift:** Naming conventions for SKUs (`_yearly` vs `_annual`) and currency amounts (`amount_minor` vs `amount_cents`) are inconsistent. This will create fragmented data and broken analytics.
     - `F-M11` was a massive conflict that was supposedly fixed, but `audit.md` proves the fix did not propagate. The reconciliation work was incomplete.
@@ -89,9 +90,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **08-sharing-collab**
 
-- **Score: 55/100**
-- **Grade: F**
-- **Top failing issues:**
+- **Score: 55/100 → 80/100 (B)** _updated 2026-04-19_
+- **Original Grade: F**
+- **Closed since initial audit:** ✅ W-2 (transport authority reinforced). Still open: W-4 channel naming.
+- **Top failing issues (historical, retained until 100%):**
     - **`W-2` Hard Contradiction:** Eight feature files and the extension spec still reference a custom `wss://` endpoint, while `14-realtime-transport.md` locks Supabase Realtime as the v1 transport. This is a direct, fatal contradiction.
     - **`W-4` Channel Naming Drift:** Channel names use inconsistent formatting (`collection:<id>` vs. `collection:{collection_id}`), which will break any regex-based routing on the client.
     - **P2 Dependency Ambiguity:** The `README.md` correctly phases most of this folder to P2 (Collab), but key files like `14-realtime-transport.md` are dependencies for P0/P1 features in other folders (like `15-visualization`), creating a sequencing paradox.
@@ -120,9 +122,10 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **04-extension**
 
-- **Score: 70/100**
-- **Grade: C**
-- **Top failing issues:**
+- **Score: 70/100 → 85/100 (B)** _updated 2026-04-19_
+- **Original Grade: C**
+- **Closed since initial audit:** ✅ W-2 (purged `wss://`, references `14-realtime-transport.md`). Still open: W-12, B4 test plan.
+- **Top failing issues (historical, retained until 100%):**
     - The spec doesn't account for agent limitations. `Lovable` cannot build Chrome extensions, making this entire domain a 0/100 for that agent. The score is averaged up by Cursor's capability.
     - **`W-2` WebSocket Drift:** The extension's offline sync spec (`10-sync-and-offline.md`) is one of the files that references the old, incorrect `wss://` endpoint.
     - **`W-12` Env Var Drift:** The OAuth client ID env var for the extension (`EXT_OAUTH_CLIENT_ID`) doesn't follow the project's convention. The fix note in `audit.md` is good, but the inconsistency itself is a risk.

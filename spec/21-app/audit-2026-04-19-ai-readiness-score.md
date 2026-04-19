@@ -253,7 +253,7 @@ As requested, here is your brutally honest AI-development-readiness audit.
 | 09-auth-accounts | 75 | C | Still suffers from role enum drift; incomplete gap closures. |
 | 22-infrastructure | 80 | B | Incomplete reconciliation of storage/env-var specs. |
 | 06-ui-ux | 82 | B | No VRT spec; outdated data in wireframes. |
-| 03-api-endpoints | 85 | B | Inconsistent error casing and pagination params. |
+| 03-api-endpoints | 85 → **95** | B → A | W-8 ✅, W-13 ✅ closed; lint script still recommended. |
 | 07-features | 88 | B | No acceptance criteria (`B4` gap). |
 | 02-data-model | 90 | A | Excellent, but affected by upstream role enum drift. |
 | 05-web-app | 90 | A | Strong, but uses incorrect pricing/pagination from other specs. |

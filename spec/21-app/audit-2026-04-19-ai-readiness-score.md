@@ -157,17 +157,16 @@ As requested, here is your brutally honest AI-development-readiness audit.
 ---
 #### **09-auth-accounts**
 
-- **Score: 75/100 → 83/100 → 91/100 (A-)** _updated 2026-04-19 (F-M13 closure)_
-- **Grade: A-**
-- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5: endpoints, token issuance, callback consume, errors, telemetry, anti-abuse). Still open: W-1 partial residue, F-M09/F-M10 rate-limit envelope.
+- **Score: 75/100 → 83/100 → 91/100 → 95/100 (A)** _updated 2026-04-19 (F-M09 + F-M10 closure)_
+- **Grade: A**
+- **Closed since initial audit:** ✅ W-11 (system-actor unified), ✅ F-M13 (magic-link flow fully specified in `02-signup-and-signin.md` §5: endpoints, token issuance, callback consume, errors, telemetry, anti-abuse), ✅ F-M09 + F-M10 (rate-limit envelope and error codes now identical to `03-api-endpoints/18-error-codes.md`; reconciliation map locked in `13-rate-limit-values.md` §0). Still open: W-1 partial residue.
 - **Top failing issues (historical, retained until 100%):**
-    - Still infected by `W-1` (role enum drift) and `W-11` (system actor identity drift). For an auth domain, this lack of clarity on identity and permissions is severe.
-    - `F-M09` (rate limit envelope) and `F-M10` (rate limit error codes) showed that the `M4` fix for rate limits was not complete. The `values` file contradicted the `conventions` and `error-codes` files. The reconciliation was insufficient.
-    - `F-M13` noted that magic-link auth flow is implied but not specified, creating a gap. The `README.md` confirms magic-link is P1.
-- **Why it can fail:** The AI will generate code with conflicting role checks. It will return non-standard 429 responses that the client can't parse. It will be unable to implement the magic-link feature without inventing the entire token exchange flow.
+    - Still infected by `W-1` (role enum drift). For an auth domain, this lack of clarity on identity and permissions is severe.
+    - ~~`F-M09` (rate limit envelope) and `F-M10` (rate limit error codes) showed that the `M4` fix for rate limits was not complete.~~ ✅ Closed 2026-04-19.
+    - ~~`F-M13` noted that magic-link auth flow is implied but not specified.~~ ✅ Closed 2026-04-19.
+- **Why it can fail:** The AI may still generate code with conflicting role checks if it reads stale role-enum references in `02-data-model` before the canonical 7-value enum in `17-admin-org/03-roles.md`.
 - **What's needed for 100%:**
-    - `09-auth-accounts/02-signup-and-signin.md`: Add a full specification for the magic-link token issuance and verification flow.
-    - `09-auth-accounts/13-rate-limit-values.md`: Rewrite the error envelope section to exactly match `03-api-endpoints/18-error-codes.md`.
+    - Final `W-1` residue sweep across `02-data-model` and remaining 09-auth-accounts files.
 
 ---
 #### **22-infrastructure**

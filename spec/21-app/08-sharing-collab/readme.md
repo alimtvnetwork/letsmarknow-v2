@@ -23,20 +23,24 @@ Two distinct collaboration models live here:
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `01-share-model.md` | Share data model |
-| `02-public-shares.md` | Public link viewer |
-| `03-password-shares.md` | Gated viewer |
-| `04-invite-only-shares.md` | Per-email viewer |
-| `05-permissions-matrix.md` | Role capabilities |
-| `06-realtime-presence.md` | Live presence |
-| `07-comments-and-reactions.md` | Discussion |
-| `08-notifications.md` | Inbox / email / push |
-| `09-audit-log.md` | Compliance log |
-| `10-embed-widget.md` | Iframe embed |
-| `11-share-analytics.md` | Share metrics |
-| `12-revocation-and-expiry.md` | Lifecycle |
+| File | Purpose | Phase |
+|---|---|---|
+| `01-share-model.md` | Share data model | P2 (v2 design note; v1 uses `02-data-model/07-share.md`) |
+| `02-public-shares.md` | Public link viewer | P2 |
+| `03-password-shares.md` | Gated viewer | P2 |
+| `04-invite-only-shares.md` | Per-email viewer | P2 |
+| `05-permissions-matrix.md` | Role capabilities | P0 (foundational) |
+| `06-realtime-presence.md` | Live presence | P2 |
+| `07-comments-and-reactions.md` | Discussion | P2 (Pro+) |
+| `08-notifications.md` | Inbox / email / push | P2 |
+| `09-audit-log.md` | Compliance log | P2 (Team tier) |
+| `10-embed-widget.md` | Iframe embed | P2 |
+| `11-share-analytics.md` | Share metrics | P2 (Pro+) |
+| `12-revocation-and-expiry.md` | Lifecycle | P2 |
+| `13-share-link.md` | ShareLink sub-model | P2 |
+| `14-realtime-transport.md` | WebSocket/Realtime canon | P2 (transport infra) |
+
+> **Phase legend:** P0 = MVP, P1 = v1, P2 = Collab, P3 = Mindmap/AI, P4 = Cross-browser. Source of truth: `20-roadmap/`.
 
 ## Locked rules
 

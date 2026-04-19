@@ -17,18 +17,21 @@ How users get data INTO Lets Mark Now and OUT of it. First-class concern: portab
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `01-formats.md` | File format specs |
-| `02-importers.md` | Source-specific adapters |
-| `03-import-pipeline.md` | Upload → commit |
-| `04-export-pipeline.md` | Request → deliver |
-| `05-mapping-and-dedup.md` | Model translation |
-| `06-large-imports.md` | Scale & resumability |
-| `07-webhooks-and-api-imports.md` | Programmatic |
-| `08-email-in.md` | Email capture |
-| `09-gdpr-export.md` | Full data export |
-| `10-migration-out.md` | Leaving Lets Mark Now |
+| File | Purpose | Phase |
+|---|---|---|
+| `01-formats.md` | File format specs | P0 (HTML, JSON) / P1 (CSV, OPML, Markdown) |
+| `02-importers.md` | Source-specific adapters | P0 (Chrome HTML) / P1 (Raindrop, Pocket, Toby, Tab Extend, Pinboard, Instapaper) |
+| `03-import-pipeline.md` | Upload → commit | P0 |
+| `04-export-pipeline.md` | Request → deliver | P1 |
+| `05-mapping-and-dedup.md` | Model translation | P0 |
+| `06-large-imports.md` | Scale & resumability | P1 (cron-backed retries) |
+| `07-webhooks-and-api-imports.md` | Programmatic | P2 |
+| `08-email-in.md` | Email capture | P2 (Pro+) |
+| `09-gdpr-export.md` | Full data export | P1 |
+| `10-migration-out.md` | Leaving Lets Mark Now | P1 |
+| `11-dedup-algorithm.md` | Dedup details | P0 |
+
+> **Phase legend:** P0 = MVP, P1 = v1, P2 = Collab, P3 = Mindmap/AI, P4 = Cross-browser. Source of truth: `20-roadmap/`.
 
 ## Locked rules
 

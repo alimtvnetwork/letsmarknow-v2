@@ -6,10 +6,7 @@ Live indicators of who is viewing / editing what, in the same Org.
 
 ## 1. Transport
 
-- **WebSocket** primary: `wss://rt.letsmarknow.com/v1/presence?org=<id>&token=<jwt>`.
-- **Server-Sent Events** fallback for restricted networks.
-- Reconnect with exponential backoff (250ms × 2^n, max 30 s, jitter).
-- Heartbeat every 25 s; missed 2 heartbeats = drop.
+> **Reconciled (2026-04-19, F-M06):** Transport is **Supabase Realtime (Phoenix Channels over WebSocket)**, per `08-sharing-collab/14-realtime-transport.md`. The previously-specced custom `wss://rt.letsmarknow.com/v1/presence` subdomain and SSE fallback are **withdrawn**. See `14-realtime-transport.md` for the wire protocol, auth, reconnect policy, and heartbeat values. This file covers presence UX and channel semantics only.
 
 ## 2. Channels
 

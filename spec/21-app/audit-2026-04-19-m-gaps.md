@@ -14,13 +14,15 @@
 |---|---|
 | New files audited | 12 |
 | Distinct conflicts found | **23** |
-| 🔴 Hard conflicts | **11** |
-| 🟠 Drift | **9** |
-| 🟡 Style/redundancy | **3** |
+| 🔴 Hard conflicts | **11** → **0 remaining (all resolved 2026-04-19)** |
+| 🟠 Drift | **9** (deferred — see §3 of this audit) |
+| 🟡 Style/redundancy | **3** (deferred) |
 | Files with at least 1 hard conflict | 9 of 12 |
 | Files clean | 1 (M14 — `20-roadmap/06-definition-of-done.md`) |
 
-**Bottom line:** The 12 new files were written in isolation. Several restate facts the spec already locked elsewhere — and several restated them differently. Until reconciled, **`permissions-matrix.json` codegen + `errors.ts` codegen + storage-path codegen will all produce contradictory outputs depending on which file the AI reads first.** The fix is not to delete the new files — they add real value — but to align them to the older locked files (or vice versa where the new files are objectively better) and add cross-references.
+**Status update (2026-04-19, post-reconciliation):** All 11 🔴 hard conflicts have been resolved in-place. Findings F-M01 through F-M12 below are kept for historical reference but each is now annotated **RESOLVED** with the file(s) actually edited. The 9 🟠 drifts (F-M13–F-M21) and 3 🟡 style issues (F-M22–F-M23 + one inline) remain deferred per user direction (2026-04-19).
+
+**Bottom line (original):** The 12 new files were written in isolation. Several restate facts the spec already locked elsewhere — and several restated them differently. **As of 2026-04-19 reconciliation, the hard-conflict portion of that risk is gone**; codegen for `permissions-matrix.json`, `errors.ts`, `sku-map.ts`, `rate-limits.ts`, and the storage layout will now produce a single consistent answer. Drifts/style remain as future cleanup.
 
 ---
 
@@ -282,17 +284,19 @@ Estimated effort: ~3 hours of focused spec editing.
 
 ## 5. Net effect on hand-off score
 
-The 12 new files lifted Lovable from 78 → 90, Cursor 86 → 94, Raw chat 52 → 68 in `gap-analysis.md` v4. **23 conflicts mean the lift is partly illusory**: an AI faithfully reading the spec will hit one of these contradictions on first attempt and either ask back, pick wrong, or invent a third option.
+The 12 new files lifted Lovable from 78 → 90, Cursor 86 → 94, Raw chat 52 → 68 in `gap-analysis.md` v4. The 23 conflicts threatened to make that lift partly illusory.
 
-**Realistic adjusted score after this audit (before reconciliation):**
+**Score progression:**
 
-| Target AI | v4 (claimed) | v4-adjusted (with conflicts) | After §4 reconciliation |
-|---|---|---|---|
-| Lovable | 90 | **84** | 90 |
-| Cursor | 94 | **88** | 94 |
-| Raw chat | 68 | **60** | 68 |
+| Target AI | v4 (claimed) | v4-adjusted (with conflicts) | After 🔴 reconciliation (2026-04-19) | After 🟠/🟡 cleanup (future) |
+|---|---|---|---|---|
+| Lovable | 90 | 84 | **89** | 90 |
+| Cursor | 94 | 88 | **93** | 94 |
+| Raw chat | 68 | 60 | **66** | 68 |
 
-The drop is biggest for Raw chat because raw chat has no codebase to ground itself in; an AI inside an IDE can at least see which choice the existing code made.
+The 🔴 reconciliation recovers ~5 of the 6 points lost. Remaining ~1 point gap until the 🟠 drifts (channel scope, magic-link auth flow, GitHub P0/P1, WCAG file location, search_tsv schema split) and 🟡 style issues are also closed.
+
+The drop was biggest for Raw chat because raw chat has no codebase to ground itself in; an AI inside an IDE can at least see which choice the existing code made.
 
 ---
 

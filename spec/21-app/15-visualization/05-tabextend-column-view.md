@@ -63,7 +63,8 @@ Per-column options (stored on Group row at `groups.view_settings: jsonb`):
 - **WIP limit** (Pro+, entitlement `view.column.wip_limit`) — cap at N items; warn when full. Stored at `groups.view_settings.wip_limit: number`.
 - **View mode within column** (Pro+, entitlement `view.column.per_column_mode`): cards / list / compact. Default cards.
 - **Auto-archive** (Pro+, entitlement `view.column.auto_archive`): items > N days old auto-move to "Archive" column. Stored at `groups.view_settings.auto_archive_days: number`.
-  - Implemented as a cron job per `22-infrastructure/12-storage-layout.md` §5: `auto_archive_columns` runs **daily at 02:30 UTC**. Translation to user TZ (Asia/KL = UTC+8) is presentation-layer only.
+  - Implemented as a cron job per `22-infrastructure/08-cron.md`: `auto_archive_columns` runs **daily at 02:30 UTC**. Translation to user TZ (Asia/KL = UTC+8) is presentation-layer only.
+  - **Phase dependency (per sequencing audit S-3, 2026-04-19):** the cron pipeline is now an explicit **P1 deliverable** per `20-roadmap/02-phase-1-v1.md` §9 (added 2026-04-19). Auto-archive lights up at P1 alongside the rest of column view.
 - **Show count**: on/off. Stored at `groups.view_settings.show_count: bool`. Default true.
 
 ## 6. Keyboard

@@ -29,7 +29,8 @@ Stored per Account, per surface (web vs extension new tab) — NOT per Collectio
 
 - Field: `account.preferences.layout: jsonb` shaped `{ web: { sidebar: 280, inspector: 360, ... }, extension: { ... } }`.
 - API: `PATCH /v1/account/preferences` per `03-api-endpoints/04-organizations.md` (account-scoped section).
-- Synced across devices via realtime channel `account:{account_id}` per `08-sharing-collab/14-realtime-transport.md` §2.
+- **P0 (no realtime infra required):** load on page load, PATCH on debounced change. Single-device only. Cross-tab in same browser uses `BroadcastChannel('lmn.layout')` per `15-visualization/readme.md` §C5 — pure browser API, zero infra.
+- **P2 enhancement (per sequencing audit S-1, 2026-04-19):** cross-device live sync via realtime channel `account:{account_id}` per `08-sharing-collab/14-realtime-transport.md` §2. Realtime infra ships P2 per `20-roadmap/03-phase-2-collab.md` §4 — do not pull the Supabase Realtime client SDK into P0 to satisfy this section.
 - Reset via Settings → Layout → "Restore default sizes" (PATCH with `null` → server applies defaults from §1).
 
 ## 4. Constraints
@@ -86,9 +87,13 @@ Stored per Account, per surface (web vs extension new tab) — NOT per Collectio
 
 ## 10. Persistence sync
 
+**P0:**
 - Local change: write `localStorage["lmn.layout"]` immediately (zero-latency local UI).
 - Debounced 2 s → sync to `account.preferences.layout` via `PATCH /v1/account/preferences`.
-- Cross-device: subscribed via realtime channel `account:{account_id}` per `08-sharing-collab/14-realtime-transport.md`; remote changes apply with subtle 200 ms tween (respects reduced-motion).
+- Cross-tab in same browser: `BroadcastChannel('lmn.layout')` postMessage carrying `{ surface, region, size_px }` — pure browser API.
+
+**P2 enhancement (gated behind feature flag `realtime.enabled` per `07-features/15-feature-flags-and-rollouts.md`):**
+- Cross-device live sync: subscribed via realtime channel `account:{account_id}` per `08-sharing-collab/14-realtime-transport.md`; remote changes apply with subtle 200 ms tween (respects reduced-motion).
 - Conflict (two devices write at once): per `12-history-undo/03-conflict-resolution.md` §3, LWW by server timestamp on the JSONB blob — no field-level merge (single value).
 
 ## 11. Telemetry

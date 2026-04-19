@@ -2,16 +2,22 @@
 
 How Members join, leave, change roles, and how Orgs are owned and transferred.
 
+> **Phase markers** (per sequencing audit S-7, 2026-04-19, reconciled against `20-roadmap/`):
+> - **P0:** none. P0 ships single personal Org per Account; no invites, no role changes, no transfer. Sections below are forward-spec for P0 implementers — table columns may exist (`member_invites`, `member.role`) but no UI/email path is wired.
+> - **P1:** §1 (path #1 Invite only — single email at a time, manual), §2 (Invite flow), §3 (Roles), §4 (Role changes), §5 (Removing Members), §6 (Last Owner protection), §9 (Visibility & directory — Members tab in `/settings/members`), §11 (Notifications — invite + role-change only).
+> - **P2:** §1 (paths #2 Domain claim, #3 SCIM), §7 (Ownership transfer — requires re-auth + email confirm infra), §8 (Domain claim + DNS verification), §10 (capacity rows for Team/Enterprise), §11 (full notification matrix), §12 (telemetry beyond `org.invite_*`), §13 edge cases involving SCIM and bulk invite (1000 emails).
+> - **P4 (cross-browser/Enterprise):** SAML JIT path referenced in §1.4 (cross-link to `05-sso-saml.md`).
+
 ---
 
 ## 1. Joining an Org
 
 Three paths:
-1. **Invite** — Owner/Admin sends to email; recipient accepts via magic link.
-2. **Domain claim** (Team) — verified domain; matching-email signups offered to join.
-3. **SCIM provisioning** (Team) — IdP creates Members.
+1. **Invite** — Owner/Admin sends to email; recipient accepts via magic link. **(P1)**
+2. **Domain claim** (Team) — verified domain; matching-email signups offered to join. **(P2)**
+3. **SCIM provisioning** (Team) — IdP creates Members. **(P2)**
 
-JIT via SAML covered in `05-sso-saml.md`.
+JIT via SAML covered in `05-sso-saml.md`. **(P4)**
 
 ## 2. Invite flow
 

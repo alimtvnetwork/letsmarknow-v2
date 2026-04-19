@@ -47,6 +47,8 @@ Indexed: `(org_id, created_at desc)`, `(target_type, target_id, created_at desc)
 
 Dot-namespaced. Stable strings (renames require migration).
 
+> **Event-kind catalog is forward-spec** (per sequencing audit S-6, 2026-04-19). The event-log table can hold every kind below from **P0 onward**, but emitters only ship in the phase that ships the underlying feature. P0 emitters: `item.*`, `collection.*`, `group.*`, `space.*`, `tag.*`, `org.created`, `system.*`, `import.committed`. P1 emitters: `item.starred/unstarred/pinned/unpinned/archived/unarchived`, `collection.starred/unstarred/archived/unarchived`, `member.invited/joined` (multi-Org switcher only), `system.plan_changed`, `bulk.*`. P2 emitters: full `share.*`, full `member.*` (Team), `comment.*` (when comments ship). P3+ emitters: AI/mindmap-related kinds. Reading clients MUST tolerate unknown kinds (forward-compat per `12-history-undo/03-conflict-resolution.md` §5).
+
 ### Item
 - `item.created`
 - `item.updated` (generic field change; payload says which)

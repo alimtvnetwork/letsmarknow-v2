@@ -124,7 +124,9 @@ Namespace `view.column.*`. Catalog in `18-analytics-telemetry/03-events.md`.
 
 ## 12. Realtime
 
-Per `08-sharing-collab/14-realtime-transport.md` §2 (Supabase Realtime — locked transport):
+> **Phase: P2 enhancement** (per sequencing audit S-4, 2026-04-19). Column view ships in **P1 with optimistic local-only mutations**; no realtime channel is required to function. Cross-tab invalidation in P1 uses `BroadcastChannel('lmn.collection.{collection_id}')` per `readme.md` §C5. The Supabase Realtime layer below lights up in **P2** alongside the rest of the realtime fleet (`20-roadmap/03-phase-2-collab.md` §4), gated behind feature flag `realtime.enabled` per `07-features/15-feature-flags-and-rollouts.md`.
+
+**P2 behavior** — per `08-sharing-collab/14-realtime-transport.md` §2 (Supabase Realtime — locked transport):
 
 - Subscribe to `collection:{collection_id}` channel.
 - Inbound `item.moved` / `item.created` / `item.trashed` events update the local cache and animate cards in/out (250 ms ease-out).

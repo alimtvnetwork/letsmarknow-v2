@@ -10,7 +10,7 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 |---|---|---|---|---|---|
 | Audit Block | — | — | — | — | — |
 | `organization_id` | uuid (Organization.id) | no | derived | — | For tenancy + counting. |
-| `target_type` | enum(`space`\|`collection`\|`group`\|`item`) | no | — | — | What is being shared. |
+| `target_type` | enum(`space`\|`collection`\|`group`\|`item`\|`mindmap_layout`) | no | — | `mindmap_layout` first emitted at P3 per sequencing audit S-5 (2026-04-19); column must be added by P2 so the share table is forward-compatible when mindmap ships in P3 (`15-visualization/04-mindmap-view.md` §7). | What is being shared. |
 | `target_id` | uuid | no | — | must exist & belong to same Org | The target entity id. |
 | `slug` | slug | no | random `[a-z0-9]{10}` | unique globally, `[a-z0-9-]{3,64}` | URL component → `letsmarknow.com/t/{slug}`. Custom slug only on Pro+. |
 | `is_custom_slug` | bool | no | false | — | True if user picked the slug. |

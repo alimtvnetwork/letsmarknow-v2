@@ -11,18 +11,17 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-19, UTC+8 — after Phase 1)
+## Counts (updated 2026-04-19, UTC+8 — after Phase 3)
 
 - Open: **3** (SI-001, SI-008, SI-010)
-- Closed: 6 (SI-002 fixed; SI-003/004/007 closed by exemption clause; SI-005/006 false positives)
-- SI-009 (process: invalidate stale 100/100 score) — moves to Phase 3.
+- Closed: 7 (SI-002 fixed; SI-003/004/007 closed by exemption clause; SI-005/006 false positives; SI-009 closed by process update)
 - By severity (open): S0 = 0 · S1 = 1 · S2 = 2 · S3 = 0
 
 ## Phase queue
 
 1. ✅ **Phase 1 — DONE 2026-04-19.** Locked rules in `01-naming-conventions.md` (Exemptions tables for audit files + templates folder + slot 21 reservation). Created `23-audits/readme.md`. Closed SI-002, 003, 004, 005, 006, 007.
-2. **Phase 2** — collapsed into Phase 1 (rules + audit-naming were edited together).
-3. **Phase 3** — Invalidate stale 100/100 score in `23-audits/audit-2026-04-19-ai-readiness-score.md`. Closes SI-009.
+2. ✅ **Phase 2 — collapsed into Phase 1** (rules + audit-naming were edited together).
+3. ✅ **Phase 3 — DONE 2026-04-19.** Added Post-100 backlog row + score-invalidation note to `audit-2026-04-19-ai-readiness-score.md`. Closed SI-009.
 4. **Phase 4** — TBD/TODO stub cleanup. Closes SI-008.
 5. **Phase 5** — Re-audit sweep (will OPEN more issues).
 6. **Phase 6** — Resolve SI-010 (P0 vs no-impl mode for feature flags).

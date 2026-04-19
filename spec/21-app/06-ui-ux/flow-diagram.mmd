@@ -1,0 +1,12 @@
+flowchart LR
+    DT[Design tokens<br/>colors · spacing · type] --> THM[Theming light/dark]
+    THM --> COMP[Component library<br/>buttons · inputs · cards]
+    COMP --> SCR[Every screen in 05-web-app]
+    SCR --> USR[User]
+
+    DT --> ICN[Iconography]
+    DT --> ILL[Illustration]
+    DT --> MOT[Motion presets]
+    COMP --> A11Y[Keyboard · ARIA · WCAG]
+    COMP --> COPY[Copy strings · voice]
+    USR -. feedback toast / empty / loading .-> SCR

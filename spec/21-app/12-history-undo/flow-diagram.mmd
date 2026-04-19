@@ -1,0 +1,12 @@
+flowchart TD
+    ACT[User action: edit · move · delete] --> LOG[Append to history_events]
+    LOG --> UI[Undo toast appears for ~10s]
+    UI -->|Click Undo| REV[Revert action]
+    UI -->|Ignore| KEEP[Action stands]
+
+    REV --> REDO[Redo available in command palette]
+    KEEP --> ACT
+
+    PAR[Two users edit same item] --> CONF{Conflict?}
+    CONF -->|same field| RESOLVE[Last-write-wins + diff toast]
+    CONF -->|different fields| MERGE[Auto-merge]

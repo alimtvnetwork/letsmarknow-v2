@@ -19,5 +19,5 @@ Always list remaining tasks at end of each work session; if all done, suggest ne
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
 
 ## Memories
-- [No Implementation Mode](mem://constraints/no-implementation-mode) — Spec-only phase. No src/ edits, no Cloud, no migrations. Audits stay as docs.
-- [Gap Analysis State](mem://features/gap-analysis-state) — **CLOSED:** B1-B3, B5-B6, M11, M13. **DEFERRED:** B4, B7. **OPEN:** M1-M10, M12, M14. Lovable: 78%, Cursor: 86%
+- [No Implementation Mode](mem://constraints/no-implementation-mode) — PERMANENT spec-only. No src/, no Cloud, no migrations. No "lift" buttons in suggestions.
+- [Gap Analysis State](mem://features/gap-analysis-state) — v4 (2026-04-19): All majors closed (M1–M14). Deferred: B4, B7. Lovable 90 / Cursor 94 / Raw 68.

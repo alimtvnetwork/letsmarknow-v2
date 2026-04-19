@@ -16,6 +16,7 @@
 8. `08-cron.md` — scheduled jobs (trash purge, dunning, share-expiry, analytics rollups).
 9. `09-ci-cd.md` — pipelines, build-time secrets, deployment gates, rollback.
 10. `10-observability.md` — logs, metrics, traces, alerts, on-call.
+11. `13-iac.md` — Terraform/Pulumi snippets for hosting, storage, cron, DNS; drift detection (F-M03 closure).
 
 ## Files
 
@@ -31,6 +32,7 @@
 | `08-cron.md` | Scheduled jobs |
 | `09-ci-cd.md` | CI/CD pipelines |
 | `10-observability.md` | Logs, metrics, alerts |
+| `13-iac.md` | Terraform/Pulumi modules + drift detection (F-M03) |
 
 ## Locked rules
 

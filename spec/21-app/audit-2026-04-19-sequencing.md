@@ -12,13 +12,19 @@
 | Category | Count | Severity | Status |
 |---|---|---|---|
 | 🔴 Hard sequencing breaks (P0 spec demands P1+ infra to function) | **3** | | ✅ **All resolved 2026-04-19** |
-| 🟠 Soft sequencing leaks (P1 spec assumes P2 realtime; degrades cleanly) | **4** | | open |
+| 🟠 Soft sequencing leaks (P1 spec assumes P2 realtime; degrades cleanly) | **4** | | ✅ **All resolved 2026-04-19** |
 | 🟡 Missing phase markers on shipped features | **2** | | open |
 | 🟢 Forward-spec done correctly (data-model > feature, OAuth deferred) | **3** | | n/a |
 | ⚪ Circular references | **0** | | n/a |
 
-**Total findings: 9** (3 hard ✅ closed, 4 soft, 2 missing markers).
+**Total findings: 9** (3 hard ✅ closed, 4 soft ✅ closed, 2 missing markers open).
 **Cycles:** none detected (clean DAG of cross-refs).
+
+**Resolution log (2026-04-19, soft leaks):**
+- **S-4** closed by `15-visualization/05-tabextend-column-view.md` §12 — tagged "P2 enhancement"; P1 ships optimistic local-only with `BroadcastChannel`.
+- **S-5** closed by `02-data-model/07-share.md` §Fields — `target_type` enum extended with `mindmap_layout`; rationale inline references S-5.
+- **S-6** closed by `12-history-undo/01-event-log.md` §4 — added "Event-kind catalog is forward-spec" header with per-phase emitter mapping.
+- **S-7** closed by `09-auth-accounts/07-org-membership.md` H1 header + per-section P0/P1/P2/P4 inline markers on §1.
 
 **Resolution log (2026-04-19, hard breaks):**
 - **S-1** closed by `15-visualization/06-resizable-sections.md` §3, §10 — split into P0 (local + `BroadcastChannel`) vs P2 (cross-device realtime, flag-gated).

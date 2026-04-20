@@ -17,6 +17,8 @@
 | SI-013 | 2026-04-20 | S2 | Unquoted `:` in Mermaid labels | Wrapped affected labels in `"..."` across 6 `flow-diagram.mmd` files: 04-extension, 07-features, 08-sharing-collab, 10-licensing-billing, 11-import-export, 14-search, 16-notifications-updates (3 missed in initial pass found via tighter grep, then fixed). Verified clean. (Phase 7) |
 | SI-014 | 2026-04-20 | S3 | Hierarchy §3.5 reference verified | **Verification artifact** — `### 3.5 Soft delete` exists at line 94 of `01-information-architecture/01-hierarchy.md`. Reference from `07-features/16-delete-with-undo.md` resolves correctly. No defect. (Phase 5 verification, formally closed Phase 7) |
 | SI-010 | 2026-04-20 | S2 | Feature-flags P0 contradicts no-impl mode | Clarified in `07-features/readme.md` Phase column + footer note: "P0" on `15-feature-flags-and-rollouts.md` means **spec authorship priority**, not implementation priority. Added `Spec: P0 · Impl: deferred` notation. Established convention `Spec: PN · Impl: PM` for future divergent rows. (Phase 8) |
+| SI-016 | 2026-04-20 | S3 | `02-data-model/05-item.md §3.1` appeared broken | **False positive** — text only appears as a syntax example in `13-spec-issues/01-naming-conventions.md §5` ("Always relative from `spec/21-app/` root: `02-data-model/05-item.md §3.1`."), not an actual cross-reference. No defect. Detection error in initial Phase-10 grep. (Phase 10) |
+| SI-017 | 2026-04-20 | S3 | `->` arrow found in markdown body of billing-webhooks | **False positive** — `10-licensing-billing/12-billing-webhooks.md:90` `(event, services) -> Result` is a TypeScript-style return-type signature, not a Mermaid arrow. Allowed in prose. (Phase 10) |
 
 ---
 

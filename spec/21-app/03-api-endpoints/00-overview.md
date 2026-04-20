@@ -127,6 +127,14 @@
 |---|---|---|---|---|
 | GET | `/v1/webhooks/_recent` | bearer+role(owner/admin) | Recent webhook deliveries (debug billing). | `17-billing-webhooks.md` |
 
+### 1.13 Account (cross-Org)
+
+> Account-scoped reads. `X-Organization-Id` header ignored.
+
+| Method | Path | Auth | Purpose | Source |
+|---|---|---|---|---|
+| GET | `/v1/me/entitlements` | bearer | (also listed under §1.11) Aggregate entitlements. | `16-licenses.md` |
+
 ---
 
 ## 2. POST — create, action, and command endpoints
@@ -277,6 +285,7 @@
 | POST | `/v1/imports/:import_id/cancel` | bearer+org | — | Cancel a running/queued import. | `15-import-export.md` |
 | POST | `/v1/exports` | bearer+org | Y | Start an export job (selectors + format). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/transfers/cross-org` | bearer+role(owner) | Y | Move data between two Orgs you own. | `15-import-export.md` |
+| POST | `/v1/me/gdpr-export` | bearer+reauth | Y (auto, 1/24h per Account) | Trigger Account-wide GDPR export job. Class **bulk**. | `19-account.md` |
 
 ### 2.14 Licenses & billing
 
@@ -313,6 +322,7 @@
 | PATCH | `/v1/tags/:id` | bearer+org | Rename / recolor a tag. | `09-tags.md` |
 | PATCH | `/v1/shares/:id` | bearer+org | Update share settings (mode, password, expiry, perms). | `10-shares.md` |
 | PATCH | `/v1/members/:id` | bearer+role(owner/admin) | Change a member's role. | `11-members-invites.md` |
+| PATCH | `/v1/account/preferences` | bearer | Update Account preferences (default view, theme, locale, layout). | `19-account.md` |
 
 ---
 

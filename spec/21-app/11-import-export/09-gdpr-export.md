@@ -33,7 +33,7 @@ Includes EVERYTHING associated with the Account:
 3. Confirms email destination.
 4. Job enqueued; UI shows "We'll email you within 24 hours".
 
-`POST /v1/me/gdpr-export`:
+`POST /v1/me/gdpr-export` (canonical contract: `03-api-endpoints/19-account.md`):
 - Idempotency-Key auto-set per Account per 24h (prevents abuse).
 - Returns `{ request_id, eta_hours: 24 }`.
 

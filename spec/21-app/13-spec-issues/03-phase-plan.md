@@ -89,10 +89,29 @@ After Phase 5 we re-plan Phases 6+ from the expanded list.
 
 ## Phases pending (placeholders, will be detailed after Phase 5)
 
-- **Phase 6:** Cross-reference repairs.
-- **Phase 7:** Diagram-label safety sweep.
-- **Phase 8:** Roles/permissions parity reconciliation.
-- **Phase 9:** Hierarchy reference repairs.
+- **Phase 6:** Cross-reference repairs. ✅ done.
+- **Phase 7:** Diagram-label safety sweep. ✅ done.
+- **Phase 8:** Roles/permissions parity reconciliation. ✅ done.
+- **Phase 9:** Hierarchy reference repairs (slot 21 — **blocked on user decision**).
+- **Phase 10:** Deep re-audit. ✅ done.
+- **Phase 11:** Allowed-TBD docs. ✅ done.
+- **Phase 12:** Endpoint parity sweep. ✅ done — opened SI-018/019/020.
+
+---
+
+## Phase 13 — Endpoint parity remediation (planned, awaiting "next")
+
+**Touches:** `03-api-endpoints/`, possibly `02-data-model/` for path-param normalization.
+**Issues closed:** SI-018, SI-019, SI-020 (split across sub-phases if needed).
+
+| Step | Action | File |
+|---|---|---|
+| 13.1 | Lock the path-param style (`:id` vs `{id}`) in `01-conventions.md` and add a one-line conformance note. | `03-api-endpoints/01-conventions.md` |
+| 13.2 | Add an "Aliases & shorthand" subsection to `01-conventions.md` (closes SI-019). | `03-api-endpoints/01-conventions.md` |
+| 13.3 | For each of the 38 missing endpoints (SI-020), add the row to its owning `NN-*.md` file and to `00-overview.md`. Group by domain to keep edits small. | `03-api-endpoints/*.md`, `00-overview.md` |
+| 13.4 | Re-run the parity grep (`/tmp/declared.txt` vs `/tmp/refs.txt`) and confirm the gap is `0` before closing SI-020. | (verification only) |
+
+**Definition of done for Phase 13:** `comm -23 /tmp/refs.txt /tmp/declared.txt` returns 0 lines after style normalization and additions. SI-018/019/020 move to `04-closed-issues.md`.
 
 ---
 

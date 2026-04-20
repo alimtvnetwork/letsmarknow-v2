@@ -42,6 +42,7 @@
 |---|---|---|---|---|
 | GET | `/v1/public/shares/:slug` | none / share-cookie | Resolve a share slug → metadata, mode (`public` / `password` / `invite`), gate state. | `02-public-share-viewer.md` |
 | GET | `/v1/public/shares/:slug/contents` | share-cookie (if gated) | Fetch the items/groups/notes the share exposes. | `02-public-share-viewer.md` |
+| GET | `/v1/public/shares/:slug/items` | share-cookie (if gated) | Paginated subset of items in the share (infinite scroll, embed widgets). | `02-public-share-viewer.md` |
 
 ### 1.3 Organizations & members
 
@@ -168,6 +169,7 @@
 | POST | `/v1/public/shares/:slug/unlock` | none | — | Submit password → set `lmn_share_<slug>` cookie. | `02-public-share-viewer.md` |
 | POST | `/v1/public/shares/:slug/views` | share-cookie | — | Record a viewer impression (analytics). | `02-public-share-viewer.md` |
 | POST | `/v1/public/shares/:slug/items/:item_id/clicks` | share-cookie | — | Record an item click. | `02-public-share-viewer.md` |
+| POST | `/v1/public/shares/:slug/comments` | varies by mode | — | Post a comment on a share (Phase 2 — collab). | `02-public-share-viewer.md` |
 
 ### 2.3 Organizations
 
@@ -248,6 +250,8 @@
 | POST | `/v1/shares/:id/revoke` | bearer+org | — | Disable share (returns 410 to viewers). | `10-shares.md` |
 | POST | `/v1/shares/:id/restore` | bearer+org | — | Re-enable a revoked share. | `10-shares.md` |
 | POST | `/v1/shares/:id/invites/resend` | bearer+org | — | Resend invite-mode emails. | `10-shares.md` |
+| POST | `/v1/shares/:id/purge` | bearer+role(owner/admin)+reauth | Y | Hard-delete a share (skips 90-day analytics grace). | `10-shares.md` |
+| POST | `/v1/shares/links/:id/revoke` | bearer+org | — | Revoke a single share-link (v2 multi-link). | `10-shares.md` |
 
 ### 2.10 Members & invites
 

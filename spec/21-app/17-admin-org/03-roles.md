@@ -7,6 +7,8 @@ Role definitions, the permission matrix, and the rules for combining them.
 ## 1. Role definitions
 
 > **Canonical enum (locked):** `owner, admin, editor, viewer, billing, guest, system`. This list MUST match `00-overview/02-glossary.md` and `02-data-model/08-member.md`. Do not add, rename, or remove a role without updating all three files in the same change.
+>
+> **Note on `share_viewer` (SI-011 closure, 2026-04-20):** `08-sharing-collab/permissions-matrix.json` defines a runtime pseudo-role named `share_viewer` with `"scope": "share"`. It is **NOT** part of the `org_role` enum and MUST NOT be added to the SQL type. It exists only inside share-link cookie/JWT claims and is never persisted in `member_roles`. The 7-value `org_role` enum is the persistent authority; `share_viewer` is a request-time auth context for unauthenticated share viewers.
 
 | Role | Invitable? | Purpose |
 |---|---|---|

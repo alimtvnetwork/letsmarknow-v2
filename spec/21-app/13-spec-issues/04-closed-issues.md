@@ -12,6 +12,7 @@
 | SI-007 | 2026-04-19 | S2 | `templates/` folder missing required `readme.md`/`overview`/`diagram` | Closed by exemption — `13-spec-issues/01-naming-conventions.md §3` Exempt-folders table now lists `templates/` (process-meta, not a domain). No files added. (Phase 1.4) |
 | SI-009 | 2026-04-19 | S3 | Audit chain claims 100/100 but post-100 backlog exists | Added "Post-100 backlog" row to Live Issue Tracker + score-invalidation note in Score-progression table. `audit-2026-04-19-ai-readiness-score.md` lines 40, 62. (Phase 3) |
 | SI-008 | 2026-04-20 | S2 | "TBD" markers remain in 2 locked spec files | Replaced TBDs in `00-overview/04-competitive-analysis.md` line 13 + `readme.md` line 327 with canonical free-tier cap (50 items). Documented remaining allowed TBDs in `01-naming-conventions.md §7`. (Phase 4) |
+| SI-011 | 2026-04-20 | S1 | `permissions-matrix.json` has 8 roles but locked enum has 7 | Documented `share_viewer` as a runtime-only pseudo-role (`scope: share`) NOT part of the `org_role` SQL enum. Added clarifying note in `08-sharing-collab/permissions-matrix.json` notes block + `17-admin-org/03-roles.md §1`. No enum change; AI codegen now has explicit guidance not to merge `share_viewer` into the enum. (Phase 6) |
 
 ---
 

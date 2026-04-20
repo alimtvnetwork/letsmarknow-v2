@@ -11,20 +11,20 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 5 re-audit)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 6)
 
-- Open: **5** (SI-001, SI-010, SI-011, SI-012, SI-013) — SI-014 verification-only, recorded but not counted
-- Closed: 8 (SI-002 fixed; SI-003/004/007 closed by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup)
-- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-011) · S2 = 3 (SI-010, SI-012, SI-013) · S3 = 0
+- Open: **4** (SI-001, SI-010, SI-012, SI-013)
+- Closed: 9 (SI-002 fixed; SI-003/004/007 closed by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope documented)
+- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 3 (SI-010, SI-012, SI-013) · S3 = 0
 
 ## Phase queue
 
-1. ✅ **Phase 1 — DONE 2026-04-19.** Locked rules, exemptions, slot 21 reserved. Closed SI-002, 003, 004, 005, 006, 007.
+1. ✅ **Phase 1 — DONE 2026-04-19.** Locked rules + exemptions. Closed SI-002, 003, 004, 005, 006, 007.
 2. ✅ **Phase 2 — collapsed into Phase 1.**
-3. ✅ **Phase 3 — DONE 2026-04-19.** Score-invalidation note added. Closed SI-009.
+3. ✅ **Phase 3 — DONE 2026-04-19.** Score-invalidation note. Closed SI-009.
 4. ✅ **Phase 4 — DONE 2026-04-20.** TBD cleanup. Closed SI-008.
 5. ✅ **Phase 5 — DONE 2026-04-20.** Re-audit sweep opened SI-011, SI-012, SI-013, SI-014.
-6. **Phase 6** — Resolve SI-011 (permissions-matrix.json role parity — 8 vs 7).
+6. ✅ **Phase 6 — DONE 2026-04-20.** Role-scope documentation. Closed SI-011.
 7. **Phase 7** — Resolve SI-012 + SI-013 (Mermaid label safety sweep across 10+5 diagrams).
 8. **Phase 8** — Resolve SI-010 (P0 vs no-impl mode for feature flags).
 9. **Phase 9** — Resolve SI-001 (slot 21 — keep Reserved or fill).

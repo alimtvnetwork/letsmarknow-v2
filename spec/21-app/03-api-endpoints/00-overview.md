@@ -144,6 +144,18 @@
 
 ---
 
+### 1.14 Jobs, flags & mindmap layouts
+
+> Generic async-job poller, runtime flag evaluation, and mindmap-layout reads.
+
+| Method | Path | Auth | Purpose | Source |
+|---|---|---|---|---|
+| GET | `/v1/jobs/:job_id` | bearer+org | Generic poller for any background job (returns normalized status envelope). | `20-jobs.md` |
+| GET | `/v1/mindmap-layouts` | bearer+org | List saved mindmap layouts for a scope. | `23-mindmap-layouts.md` |
+| GET | `/v1/mindmap-layouts/:id` | bearer+org | Get a single layout (full payload incl. node positions). | `23-mindmap-layouts.md` |
+
+---
+
 ## 2. POST — create, action, and command endpoints
 
 > Two flavors:
@@ -318,6 +330,18 @@
 | POST | `/v1/webhooks/stripe` | webhook-sig | — | Stripe events (subscription, invoice, charge). | `17-billing-webhooks.md` |
 | POST | `/v1/webhooks/paddle` | webhook-sig | — | Paddle events. | `17-billing-webhooks.md` |
 | POST | `/v1/webhooks/lifetime-redeem` | webhook-sig | — | AppSumo / PitchGround redeem callback. | `17-billing-webhooks.md` |
+| POST | `/v1/webhooks/email-in` | webhook-sig (Postmark/SES) | — | Inbound email-to-Org address; creates item-from-email job. | `17-billing-webhooks.md` |
+| POST | `/v1/webhooks/inbound/:webhook_token` | path-token (no bearer) | Idem-Key | Generic inbound webhook (Zapier / RSS bridges); creates item from JSON. | `17-billing-webhooks.md` |
+
+---
+
+### 2.16 Flags, layouts & internal
+
+| Method | Path | Auth | Idem. | Purpose | Source |
+|---|---|---|---|---|---|
+| POST | `/v1/flags/evaluate` | bearer+(org) | — | Evaluate feature flags for the current `(account, org, context)`. | `21-flags.md` |
+| POST | `/v1/mindmap-layouts` | bearer+org | Y | Create a saved mindmap layout for a scope. | `23-mindmap-layouts.md` |
+| POST | `/v1/internal/feedback` | bearer | Y | Submit in-app feedback / bug report (creates support ticket). | `22-internal.md` |
 
 ---
 
@@ -365,6 +389,7 @@
 | DELETE | `/v1/members/:id` | bearer+role(owner/admin) | Remove a member from the active Org. | `11-members-invites.md` |
 | DELETE | `/v1/members/:id/invite` | bearer+role(owner/admin) | Cancel a pending invite. | `11-members-invites.md` |
 | DELETE | `/v1/search/recent` | bearer | Clear recent searches (or one entry via `?q=...`). | `13-search.md` |
+| DELETE | `/v1/mindmap-layouts/:id` | bearer+org+(creator OR owner/admin) | Delete a saved mindmap layout; promotes new default if needed. | `23-mindmap-layouts.md` |
 
 ---
 
@@ -424,12 +449,12 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Count |
 |---|---|
-| GET | 36 |
-| POST | 81 |
+| GET | 39 |
+| POST | 86 |
 | PATCH | 8 |
 | PUT | 1 |
-| DELETE | 10 |
-| **Total** | **136** |
+| DELETE | 11 |
+| **Total** | **145** |
 
 > If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug.
 

@@ -4,7 +4,7 @@
 
 ## Reading order
 
-0. **`00-overview.md` — start here if you just want to see every endpoint.** Single index of all ~140 endpoints grouped by HTTP method (GET / POST / PATCH / PUT / DELETE), each with one-line purpose and a pointer to its detailed contract file.
+0. **`00-overview.md` — start here if you just want to see every endpoint.** Single index of all 145 endpoints grouped by HTTP method (GET / POST / PATCH / PUT / DELETE), each with one-line purpose and a pointer to its detailed contract file.
 1. `01-conventions.md` — read **first** before implementing. Defines base URL, versioning, auth headers, error envelope, pagination, idempotency, rate limits, ETag/concurrency, common types. Every other file in this folder assumes these.
 2. `02-public-share-viewer.md` — unauthenticated `/t/{slug}` endpoints. Read second because they have the loosest auth model.
 3. `03-auth.md` — sign-up, sign-in, OAuth, magic links, sessions, password reset.
@@ -19,26 +19,32 @@
 
 | File | Endpoints (count) | Auth |
 |---|---|---|
-| `00-overview.md` | 136 (index, all methods) | — |
+| `00-overview.md` | 145 (index, all methods) | — |
 | `01-conventions.md` | — | — |
-| `02-public-share-viewer.md` | 5 | none / share-cookie / OAuth |
+| `02-public-share-viewer.md` | 7 | none / share-cookie / OAuth |
 | `03-auth.md` | 14 | mixed |
-| `04-organizations.md` | 9 | bearer |
+| `04-organizations.md` | 10 | bearer |
 | `05-spaces.md` | 9 | bearer |
 | `06-collections.md` | 11 | bearer |
 | `07-groups.md` | 9 | bearer |
 | `08-items.md` | 13 | bearer |
 | `09-tags.md` | 7 | bearer |
-| `10-shares.md` | 9 | bearer (mgmt) / public (viewer) |
+| `10-shares.md` | 11 | bearer (mgmt) / public (viewer) |
 | `11-members-invites.md` | 11 | bearer |
 | `12-sessions-save.md` | 4 | bearer |
 | `13-search.md` | 4 | bearer |
-| `14-history.md` | 6 | bearer |
-| `15-import-export.md` | 8 | bearer |
-| `16-licenses.md` | 7 | bearer |
-| `17-billing-webhooks.md` | 4 | webhook signature |
+| `14-history.md` | 7 | bearer |
+| `15-import-export.md` | 14 | bearer / path-token |
+| `16-licenses.md` | 8 | bearer |
+| `17-billing-webhooks.md` | 6 | webhook signature / path-token |
+| `18-error-codes.md` | — (catalog) | — |
+| `19-account.md` | 2 | bearer (Account scope) |
+| `20-jobs.md` | 1 | bearer |
+| `21-flags.md` | 1 | bearer |
+| `22-internal.md` | 1 | bearer |
+| `23-mindmap-layouts.md` | 5 | bearer |
 
-Total: ~130 endpoints.
+Total: 145 endpoints.
 
 ## Endpoint template
 

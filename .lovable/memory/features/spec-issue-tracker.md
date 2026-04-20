@@ -11,12 +11,12 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7f)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7g)
 
-- Open: **2** (SI-001 decision-pending; SI-020c — 17/24 done, 7 remain)
-- Closed: 22
-- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 0 · S3 = 0
-- SI-020c progress: 17/24 endpoints declared. Phase 13.7f added 2: `GET /v1/billing/invoices/:id/pdf` (to `16-licenses.md`) and `GET /v1/organizations/:id/data-export/:export_id` (to `04-organizations.md`).
+- Open: **1** (SI-001 decision-pending — slot 21 reservation)
+- Closed: 23
+- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 0 · S3 = 0
+- ✅ **SI-020c CLOSED** — all 24/24 endpoints declared. New files added: `19-account.md`, `20-jobs.md`, `21-flags.md`, `22-internal.md`, `23-mindmap-layouts.md`. Existing files extended: `15-import-export.md`, `16-licenses.md`, `04-organizations.md`, `14-history.md`, `02-public-share-viewer.md`, `10-shares.md`, `17-billing-webhooks.md`. `00-overview.md` total: 136 → 145 endpoints.
 
 ## Phase queue
 

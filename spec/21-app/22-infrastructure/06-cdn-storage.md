@@ -11,7 +11,7 @@ Static asset delivery + bucket layout for user uploads, favicons, exports.
 | Web app SPA bundles | Lovable edge | `immutable, max-age=31536000` (hashed filenames) | None needed; new hash = new URL |
 | Marketing pages (SSR) | Lovable edge | `s-maxage=300, stale-while-revalidate=86400` | Tag-based purge on publish |
 | Public share viewer (`/t/{slug}`) | Lovable edge | `s-maxage=60, stale-while-revalidate=300` | Purge on share update / revoke |
-| API responses (read-only public) | edge | `s-maxage=30` for `/v1/share-public/*` | Tag purge on share update |
+| API responses (read-only public) | edge | `s-maxage=30` for `/v1/public/shares/*` | Tag purge on share update |
 | Favicons | edge cached from storage | `max-age=86400` | Purge on item URL change |
 | OG images | edge cached from storage | `max-age=604800` | Purge on share metadata change |
 | Exports (signed URLs) | not cached | — | n/a |

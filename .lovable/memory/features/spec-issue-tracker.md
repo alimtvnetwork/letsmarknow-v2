@@ -11,12 +11,12 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7c)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7d)
 
-- Open: **2** (SI-001 decision-pending; SI-020c — 4/24 done, 20 remain)
+- Open: **2** (SI-001 decision-pending; SI-020c — 9/24 done, 15 remain)
 - Closed: 22
 - By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 0 · S3 = 0
-- SI-020c progress: 4/24 endpoints declared (`GET /v1/auth/verify`, `PATCH /v1/account/preferences`, `POST /v1/me/gdpr-export`, `GET /v1/items/:id/history`).
+- SI-020c progress: 9/24 endpoints declared. Phase 13.7d added 4 new (`GET /v1/public/shares/:slug/items`, `POST .../comments`, `POST /v1/shares/:id/purge`, `POST /v1/shares/links/:id/revoke`) and reclaimed 1 via §16 alias (`/v1/shares/access` → existing `POST /v1/public/shares/:slug/unlock`). 4 referencing files swept; §16.3 grep clean.
 
 ## Phase queue
 

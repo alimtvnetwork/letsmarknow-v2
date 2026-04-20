@@ -253,18 +253,58 @@ Link: <https://docs.letsmarknow.com/migrations/v2>; rel="deprecation"
 
 ## 16. Aliases & shorthand (locked)
 
-The spec uses **one canonical path per endpoint**. Alias forms (different casing, separators, or group-placeholders) are forbidden in spec text because they break the AI's ability to build a single route table from `00-overview.md`.
+The spec uses **one canonical path per endpoint**. Alias forms (different casing, separators, group-placeholders, or shorthand omissions) are forbidden in spec text because they break the AI's ability to build a single route table from `00-overview.md`.
 
-### 16.1 Forbidden alias patterns
+### 16.1 Forbidden alias patterns (full table)
+
+Mappings verified against `00-overview.md` and per-domain files (current as of 2026-04-20, Phase 13.6).
+
+**Auth (`03-auth.md`)**
+
+| Forbidden | Canonical (declared at) | Reason |
+|---|---|---|
+| `POST /v1/auth/sign_in` | (no declared row — see 09-auth-accounts/02-signup-and-signin.md for actual signin path) | Snake_case forbidden in path segments. |
+| `POST /v1/auth/sign_up` | (same) | Snake_case forbidden. |
+| `POST /v1/auth/sign_out` | (same) | Snake_case forbidden. |
+| `POST /v1/auth/magic_link` | `POST /v1/auth/magic-link/send` (`00-overview.md:143`, `03-auth.md:82`) | Two-step magic-link flow is `magic-link/send` + `magic-link/consume`. |
+| `POST /v1/auth/magic/request` | `POST /v1/auth/magic-link/send` | Same as above; the `magic/request` form was an unimplemented draft. |
+| `POST /v1/auth/oauth/callback` | `GET /v1/auth/oauth/:provider/callback` (`00-overview.md`, `03-auth.md:142`) | OAuth callback is per-provider and is a `GET` redirect target, not `POST`. |
+| `POST /v1/auth/forgot` | `POST /v1/auth/password/forgot` (`03-auth.md:192`) | Use full `password/forgot` path — `forgot` alone is ambiguous. |
+
+**Bulk operations (`08-items.md`)**
+
+| Forbidden | Canonical (declared at) | Reason |
+|---|---|---|
+| `POST /v1/items:batch` | `POST /v1/bulk/items` (`00-overview.md:223`, `08-items.md` Bulk operations) | The `:` matrix-param style is not used in this API. The bulk endpoint lives under `/v1/bulk/`, not `/v1/items/`. |
+| `POST /v1/items/batch` | `POST /v1/bulk/items` | Same as above. |
+| `POST /v1/items/bulk` | `POST /v1/bulk/items` | Same. |
+| `POST /v1/bulk` | `POST /v1/bulk/items` | Resource name is required; `/v1/bulk` alone is not a real endpoint. |
+
+**Billing (`16-licenses.md`)**
+
+| Forbidden | Canonical (declared at) | Reason |
+|---|---|---|
+| `POST /v1/billing/checkout/session` | `POST /v1/organizations/:id/billing/checkout` (`16-licenses.md:95`) | Checkout is org-scoped; the global path strips the required `:id` segment. |
+| `POST /v1/billing/portal/session` | `POST /v1/organizations/:id/billing/portal` (`16-licenses.md:122`) | Same. |
+
+**Org admin (`04-organizations.md`, `11-members-invites.md`)**
+
+| Forbidden | Canonical (declared at) | Reason |
+|---|---|---|
+| `POST /v1/organizations/{id}/deletion` | `DELETE /v1/organizations/:id` (`04-organizations.md:163`) | Use the canonical DELETE; the synthetic `/deletion` POST does not exist. Also violates §1.1 (`{id}` not allowed). |
+| `POST /v1/organizations/{id}/exports` | `POST /v1/organizations/:id/data-export` (`04-organizations.md:214`) | Canonical name is `data-export` (GDPR-aligned). Also violates §1.1. |
+| `POST /v1/organizations/{id}/invites` | `POST /v1/members/invites` (`11-members-invites.md:64`) | Invites endpoint is org-implicit via `X-Organization-Id` header, not in path. Also violates §1.1. |
+
+**Collections (`06-collections.md`)**
+
+| Forbidden | Canonical (declared at) | Reason |
+|---|---|---|
+| `PATCH /v1/collections/:collection_id` | `PATCH /v1/collections/:id` (`06-collections.md:86`) | Use `:id` for the entity's own primary key; `:collection_id` is reserved for parent-disambiguation in nested paths (e.g. `/v1/collections/:collection_id/items`). See §1.1. |
+
+**Group placeholder (documentation only)**
 
 | Forbidden | Canonical | Reason |
 |---|---|---|
-| `POST /v1/auth/sign_in` | `POST /v1/auth/signin` | Snake_case in path segments. Use single-word kebab when needed; never underscore. |
-| `POST /v1/auth/sign_up` | `POST /v1/auth/signup` | Same. |
-| `POST /v1/auth/sign_out` | `POST /v1/auth/signout` | Same. |
-| `POST /v1/auth/magic_link` | `POST /v1/auth/magic/request` | The two-step magic-link flow is `magic/request` + `magic/callback`. |
-| `POST /v1/auth/oauth/callback` | `GET /v1/auth/oauth/:provider/callback` | OAuth callback is per-provider and is a `GET` redirect target. |
-| `POST /v1/items:batch` | `POST /v1/items/batch` | The `:` matrix-param style is not used in this API. Use a `/batch` sub-resource. |
 | `PATCH /v1/{collections\|groups\|tags\|spaces}/{id}` | declare each path explicitly | Group-placeholders are documentation shorthand only; never appear in declared rows or cross-references. |
 
 ### 16.2 Rule
@@ -273,4 +313,9 @@ When a feature file needs to reference an endpoint, copy the canonical path verb
 
 ### 16.3 Conformance check
 
-`grep -rE '/v1/auth/sign_(in\|up\|out)|/v1/auth/magic_link|/v1/items:batch|/v1/\{[a-z|]+\}' spec/21-app/` MUST return zero results.
+```
+grep -rE '/v1/auth/sign_(in|up|out)|/v1/auth/magic_link|/v1/auth/magic/request|/v1/auth/forgot([^/]|$)|/v1/items[:/](batch|bulk)|/v1/bulk([^/]|$)|/v1/billing/(checkout|portal)/session|/v1/organizations/\{[a-z_]+\}/(deletion|exports|invites)|/v1/collections/:collection_id([^/]|$)|/v1/\{[a-z|]+\}' spec/21-app/ \
+  | grep -v '13-spec-issues' | grep -v '23-audits'
+```
+
+MUST return zero results.

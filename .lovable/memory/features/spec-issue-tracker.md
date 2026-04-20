@@ -11,21 +11,24 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-19, UTC+8 — after Phase 3)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 5 re-audit)
 
-- Open: **2** (SI-001, SI-010)
-- Closed: 8 (SI-002 fixed; SI-003/004/007 closed by exemption clause; SI-005/006 false positives; SI-009 closed by process update; SI-008 closed by TBD cleanup)
-- By severity (open): S0 = 0 · S1 = 1 · S2 = 2 · S3 = 0
+- Open: **5** (SI-001, SI-010, SI-011, SI-012, SI-013) — SI-014 verification-only, recorded but not counted
+- Closed: 8 (SI-002 fixed; SI-003/004/007 closed by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup)
+- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-011) · S2 = 3 (SI-010, SI-012, SI-013) · S3 = 0
 
 ## Phase queue
 
-1. ✅ **Phase 1 — DONE 2026-04-19.** Locked rules in `01-naming-conventions.md` (Exemptions tables for audit files + templates folder + slot 21 reservation). Created `23-audits/readme.md`. Closed SI-002, 003, 004, 005, 006, 007.
-2. ✅ **Phase 2 — collapsed into Phase 1** (rules + audit-naming were edited together).
-3. ✅ **Phase 3 — DONE 2026-04-19.** Added Post-100 backlog row + score-invalidation note to `audit-2026-04-19-ai-readiness-score.md`. Closed SI-009.
-4. **Phase 4** — TBD/TODO stub cleanup. Closes SI-008.
-5. **Phase 5** — Re-audit sweep (will OPEN more issues).
-6. **Phase 6** — Resolve SI-010 (P0 vs no-impl mode for feature flags).
-7. **Phase 7** — Resolve SI-001 fully (slot 21 — currently documented as Reserved/empty).
+1. ✅ **Phase 1 — DONE 2026-04-19.** Locked rules, exemptions, slot 21 reserved. Closed SI-002, 003, 004, 005, 006, 007.
+2. ✅ **Phase 2 — collapsed into Phase 1.**
+3. ✅ **Phase 3 — DONE 2026-04-19.** Score-invalidation note added. Closed SI-009.
+4. ✅ **Phase 4 — DONE 2026-04-20.** TBD cleanup. Closed SI-008.
+5. ✅ **Phase 5 — DONE 2026-04-20.** Re-audit sweep opened SI-011, SI-012, SI-013, SI-014.
+6. **Phase 6** — Resolve SI-011 (permissions-matrix.json role parity — 8 vs 7).
+7. **Phase 7** — Resolve SI-012 + SI-013 (Mermaid label safety sweep across 10+5 diagrams).
+8. **Phase 8** — Resolve SI-010 (P0 vs no-impl mode for feature flags).
+9. **Phase 9** — Resolve SI-001 (slot 21 — keep Reserved or fill).
+10. **Phase 10** — Optional re-audit: full cross-ref sweep, glossary coverage, endpoint parity.
 
 ## Rules
 

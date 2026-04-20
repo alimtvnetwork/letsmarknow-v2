@@ -11,12 +11,13 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7g)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 9)
 
-- Open: **1** (SI-001 decision-pending — slot 21 reservation)
-- Closed: 23
-- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 0 · S3 = 0
-- ✅ **SI-020c CLOSED** — all 24/24 endpoints declared. New files added: `19-account.md`, `20-jobs.md`, `21-flags.md`, `22-internal.md`, `23-mindmap-layouts.md`. Existing files extended: `15-import-export.md`, `16-licenses.md`, `04-organizations.md`, `14-history.md`, `02-public-share-viewer.md`, `10-shares.md`, `17-billing-webhooks.md`. `00-overview.md` total: 136 → 145 endpoints.
+- Open: **0** 🎉
+- Closed: 24
+- By severity (open): S0 = 0 · S1 = 0 · S2 = 0 · S3 = 0
+- ✅ **SI-001 CLOSED** at S3 (downgraded from S1). Slot `21-` is now a **permanent intentional buffer** between per-domain folders (`00-`–`20-`) and meta folders (`22-`, `23-`). Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
+- ✅ **SI-020c CLOSED** at Phase 13.7g — 24/24 endpoints declared; `00-overview.md` total: 136 → 145.
 
 ## Phase queue
 

@@ -19,6 +19,7 @@
 | SI-010 | 2026-04-20 | S2 | Feature-flags P0 contradicts no-impl mode | Clarified in `07-features/readme.md` Phase column + footer note: "P0" on `15-feature-flags-and-rollouts.md` means **spec authorship priority**, not implementation priority. Added `Spec: P0 · Impl: deferred` notation. Established convention `Spec: PN · Impl: PM` for future divergent rows. (Phase 8) |
 | SI-016 | 2026-04-20 | S3 | `02-data-model/05-item.md §3.1` appeared broken | **False positive** — text only appears as a syntax example in `13-spec-issues/01-naming-conventions.md §5` ("Always relative from `spec/21-app/` root: `02-data-model/05-item.md §3.1`."), not an actual cross-reference. No defect. Detection error in initial Phase-10 grep. (Phase 10) |
 | SI-017 | 2026-04-20 | S3 | `->` arrow found in markdown body of billing-webhooks | **False positive** — `10-licensing-billing/12-billing-webhooks.md:90` `(event, services) -> Result` is a TypeScript-style return-type signature, not a Mermaid arrow. Allowed in prose. (Phase 10) |
+| SI-015 | 2026-04-20 | S2 | `15-sku-map.md` 7 `_TBD` Paddle SKU placeholders | Added `10-licensing-billing/15-sku-map.md` row to allowed-TBD table in `13-spec-issues/01-naming-conventions.md §7`. The `_TBD` suffix is now the canonical placeholder format for unprovisioned external IDs (machine-detectable, intentional). Real SKU values land when the Paddle account is created. (Phase 11) |
 
 ---
 

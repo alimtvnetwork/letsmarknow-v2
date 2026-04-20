@@ -6,6 +6,165 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 
 ---
 
+### Direct multipart upload (small files / single-shot)
+`POST /v1/imports/upload`
+
+**Auth:** bearer + `X-Organization-Id`
+**Idempotent:** Idempotency-Key (recommended)
+**Rate limit class:** `bulk` (5 / hour per Org for files ≤ 25 MB)
+
+> **When to use this vs `POST /v1/imports`.** `POST /v1/imports` is the **two-phase** flow: server returns a presigned `upload_url`, client PUTs the file, server processes async. `POST /v1/imports/upload` is the **one-shot** flow: client posts the file body directly as `multipart/form-data` and the server enqueues the job. Use one-shot for files ≤ 25 MB; use two-phase for larger files (presigned URLs bypass the API gateway body-size limit).
+
+**Request** — `multipart/form-data` with parts:
+- `file` (required) — the import payload (JSON / HTML / CSV)
+- `manifest` (required) — JSON blob with the same `source` / `destination` / `options` fields documented under `POST /v1/imports`
+
+**Response 202**
+```json
+{
+  "data": {
+    "import_id": "01J...",
+    "status": "queued",
+    "size_bytes": 184320,
+    "sha256": "...",
+    "preview_url": "/v1/imports/01J.../preview"
+  }
+}
+```
+
+**Errors**
+- `400 VALIDATION_FAILED` — manifest missing or invalid JSON
+- `403 ENTITLEMENT_REQUIRED` — bulk import is Pro+
+- `413 PAYLOAD_TOO_LARGE` — file > 25 MB; switch to `POST /v1/imports`
+- `415 UNSUPPORTED_MEDIA_TYPE` — `source` does not match detected MIME
+
+---
+
+### Preview parsed import (before commit)
+`GET /v1/imports/:id/preview`
+
+**Auth:** bearer + `X-Organization-Id`
+**Idempotent:** yes
+**Rate limit class:** `read`
+
+> **Why this exists.** After upload, the server parses the file but does NOT mutate the workspace until the user confirms. Preview returns a structured summary so the client can show "We found 312 bookmarks in 8 lists. 18 are duplicates of items you already have." with per-collection drill-down, and let the user adjust mapping/dedup before committing.
+
+**Response 200**
+```json
+{
+  "data": {
+    "import_id": "01J...",
+    "source": "toby",
+    "parsed_at": "2026-04-20T08:30:00Z",
+    "totals": {
+      "spaces": 1,
+      "collections": 8,
+      "groups": 3,
+      "items": 312,
+      "tags": 12
+    },
+    "duplicates": {
+      "by_url_in_org": 18,
+      "by_url_in_destination": 14,
+      "by_canonical_url": 22
+    },
+    "warnings": [
+      { "code": "MISSING_FAVICON", "count": 47 },
+      { "code": "INVALID_URL", "count": 3, "samples": ["javascript:void(0)"] }
+    ],
+    "tree": [
+      { "kind": "collection", "name": "Read Later", "items": 142, "groups": 2 }
+    ],
+    "expires_at": "2026-04-21T08:30:00Z"
+  }
+}
+```
+
+`tree` is paginated separately via `?cursor=` for large imports (> 1000 items).
+
+**Errors**
+- `404 NOT_FOUND` — import does not exist or expired
+- `409 CONFLICT` — import is still parsing; poll `/status` first
+- `410 GONE` — preview window closed (24 h after upload)
+
+---
+
+### Get import progress (polling)
+`GET /v1/imports/:id/status`
+
+**Auth:** bearer + `X-Organization-Id`
+**Idempotent:** yes
+**Rate limit class:** `read` (60 / min per import; SSE preferred for long jobs)
+
+> **Why this exists separately from `GET /v1/imports/:import_id`.** `GET /v1/imports/:import_id` returns the **full import record** (manifest, summary, errors_url, audit fields) — heavier payload, suitable for the import-detail page. `GET /v1/imports/:id/status` returns **only the live progress fields**, optimized for sub-second polling from the progress bar in the importer UI.
+
+**Response 200**
+```json
+{
+  "data": {
+    "import_id": "01J...",
+    "status": "running",
+    "phase": "writing_items",
+    "progress": { "processed": 187, "total": 312, "percent": 60 },
+    "eta_seconds": 24,
+    "updated_at": "2026-04-20T08:30:42Z"
+  }
+}
+```
+
+`phase` enum: `parsing | previewing | awaiting_commit | writing_spaces | writing_collections | writing_items | writing_tags | finalizing | done`.
+
+**SSE alternative:** `GET /v1/imports/:id/status?stream=sse` upgrades to text/event-stream emitting the same payload on every progress tick. Preferred over polling for jobs > 30 s.
+
+**Errors**
+- `404 NOT_FOUND` — same as preview
+
+---
+
+### Commit a previewed import
+`POST /v1/imports/:id/commit`
+
+**Auth:** bearer + `X-Organization-Id`
+**Idempotent:** Idempotency-Key (server stores result keyed by import_id; safe to retry)
+**Rate limit class:** `bulk`
+
+> **Why this exists.** A successful preview leaves the import in `awaiting_commit` state. The user reviews the preview, optionally adjusts options, and commits. Without an explicit commit, no rows are written. This is the user-confirmation gate that makes destructive imports (e.g. "merge with existing") safe.
+
+**Request body** (all optional — overrides values from the original manifest)
+```json
+{
+  "options": {
+    "dedupe_urls": true,
+    "on_duplicate": "skip",
+    "tag_prefix": "toby:"
+  },
+  "destination": {
+    "kind": "existing_collection",
+    "collection_id": "01J..."
+  }
+}
+```
+
+`on_duplicate` enum: `skip | overwrite | create_new | merge_tags`.
+
+**Response 202**
+```json
+{
+  "data": {
+    "import_id": "01J...",
+    "status": "queued",
+    "committed_at": "2026-04-20T08:30:00Z"
+  }
+}
+```
+
+**Errors**
+- `409 CONFLICT` — import not in `awaiting_commit` state
+- `410 GONE` — preview expired; client must re-upload
+- `422 UNPROCESSABLE_ENTITY` — destination override invalid (e.g. collection in another Org)
+
+---
+
 ### Start import job
 `POST /v1/imports`
 

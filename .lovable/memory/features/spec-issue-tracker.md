@@ -11,12 +11,12 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7e)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7f)
 
-- Open: **2** (SI-001 decision-pending; SI-020c — 15/24 done, 9 remain)
+- Open: **2** (SI-001 decision-pending; SI-020c — 17/24 done, 7 remain)
 - Closed: 22
 - By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 0 · S3 = 0
-- SI-020c progress: 15/24 endpoints declared. Phase 13.7e added 6 import/export endpoints (`POST /v1/imports/upload`, `GET /v1/imports/:id/preview`, `GET /v1/imports/:id/status`, `POST /v1/imports/:id/commit`, `POST /v1/exports/:export_id/refresh-url`, `GET /v1/exports/lmn-json/:account_token`).
+- SI-020c progress: 17/24 endpoints declared. Phase 13.7f added 2: `GET /v1/billing/invoices/:id/pdf` (to `16-licenses.md`) and `GET /v1/organizations/:id/data-export/:export_id` (to `04-organizations.md`).
 
 ## Phase queue
 

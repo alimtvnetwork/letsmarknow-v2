@@ -11,11 +11,12 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.6)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7a)
 
-- Open: **2** (SI-001 decision-pending; SI-020c missing-endpoint additions)
+- Open: **2** (SI-001 decision-pending; SI-020c — 1/24 done, 23 remain across sub-phases 13.7b–g)
 - Closed: 22 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid; SI-014 verification; SI-010 spec-vs-impl; SI-016/017 Phase-10 false positives; SI-015 allowed-TBD doc; SI-018/019 conventions lock; SI-020 reclassified; SI-020d folded; SI-020a withdrawn-marker; SI-020b 11-file alias sweep)
 - By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 0 · S3 = 0
+- SI-020c progress: 1/24 endpoints declared (`GET /v1/auth/verify`)
 
 ## Phase queue
 

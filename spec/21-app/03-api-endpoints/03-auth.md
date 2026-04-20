@@ -188,6 +188,20 @@ Side effect: revokes all refresh tokens of the Account; deletes all device sessi
 
 ---
 
+### Verify email (consume verification token)
+`GET /v1/auth/verify?token=lmn-vrf-...`
+
+**Auth:** none (token in query string is the credential)
+**Response 200**
+```json
+{ "data": { "email_verified_at": "2026-04-20T08:00:00Z" } }
+```
+Side effect: sets `email_verified_at` on the Account; revokes the verification token. Idempotent within token lifetime; second use returns 200 with same payload. Expired/unknown token → 410 `verification_token_expired`.
+
+Rate limit: 30/hour/IP per `09-auth-accounts/13-rate-limit-values.md`.
+
+---
+
 ### Request password reset
 `POST /v1/auth/password/forgot`
 

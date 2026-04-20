@@ -112,8 +112,11 @@
 | Method | Path | Auth | Purpose | Source |
 |---|---|---|---|---|
 | GET | `/v1/imports/:import_id` | bearer+org | Job status (`queued`/`running`/`done`/`failed`) + counters. | `15-import-export.md` |
+| GET | `/v1/imports/:id/preview` | bearer+org | Preview parsed import before commit (totals, duplicates, warnings, tree). | `15-import-export.md` |
+| GET | `/v1/imports/:id/status` | bearer+org | Lightweight progress polling / SSE stream (phase, percent, ETA). | `15-import-export.md` |
 | GET | `/v1/imports` | bearer+org | List recent imports. | `15-import-export.md` |
 | GET | `/v1/exports/:export_id` | bearer+org | Job status + signed download URL when ready. | `15-import-export.md` |
+| GET | `/v1/exports/lmn-json/:account_token` | path-token (no bearer) | Out-of-band scriptable export using migration token. | `15-import-export.md` |
 | GET | `/v1/exports` | bearer+org | List recent exports. | `15-import-export.md` |
 
 ### 1.11 Licenses & billing
@@ -286,9 +289,12 @@
 
 | Method | Path | Auth | Idem. | Purpose | Source |
 |---|---|---|---|---|---|
-| POST | `/v1/imports` | bearer+org | Y | Start an import job (multipart upload or remote URL). Class **bulk**. | `15-import-export.md` |
+| POST | `/v1/imports` | bearer+org | Y | Start an import job (two-phase: presigned PUT then process). Class **bulk**. | `15-import-export.md` |
+| POST | `/v1/imports/upload` | bearer+org | Y | One-shot multipart import for files ≤ 25 MB. Class **bulk**. | `15-import-export.md` |
+| POST | `/v1/imports/:id/commit` | bearer+org | Y | Commit a previewed import (writes rows). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/imports/:import_id/cancel` | bearer+org | — | Cancel a running/queued import. | `15-import-export.md` |
 | POST | `/v1/exports` | bearer+org | Y | Start an export job (selectors + format). Class **bulk**. | `15-import-export.md` |
+| POST | `/v1/exports/:export_id/refresh-url` | bearer+org | Y | Mint a fresh signed download URL for a completed export. | `15-import-export.md` |
 | POST | `/v1/transfers/cross-org` | bearer+role(owner) | Y | Move data between two Orgs you own. | `15-import-export.md` |
 | POST | `/v1/me/gdpr-export` | bearer+reauth | Y (auto, 1/24h per Account) | Trigger Account-wide GDPR export job. Class **bulk**. | `19-account.md` |
 

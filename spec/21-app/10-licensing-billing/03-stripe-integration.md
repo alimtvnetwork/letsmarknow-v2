@@ -22,7 +22,7 @@ Price IDs configured via env vars per environment; never hardcoded.
 
 ## 3. Checkout flow
 
-1. User clicks "Upgrade" → `POST /v1/billing/checkout/session` with `{ plan_code, qty?, success_url, cancel_url }`.
+1. User clicks "Upgrade" → `POST /v1/organizations/:id/billing/checkout` with `{ plan_code, qty?, success_url, cancel_url }`.
 2. Server creates Stripe Checkout Session (`mode=subscription`) with:
    - `customer` (existing or new via `customer_creation=if_required`).
    - `line_items` (price + quantity for Team seats).
@@ -36,7 +36,7 @@ Price IDs configured via env vars per environment; never hardcoded.
 
 ## 4. Customer Portal
 
-- "Manage billing" → `POST /v1/billing/portal/session` returns Stripe Portal URL.
+- "Manage billing" → `POST /v1/organizations/:id/billing/portal` returns Stripe Portal URL.
 - Portal allows: change card, change plan, cancel, view invoices, update tax ID.
 - Configuration enforces our allowed actions (no plan-product changes — handled in our app).
 

@@ -14,7 +14,7 @@ Both share the same backend ingestion pipeline.
 ## 2. API push
 
 ### Endpoint
-`POST /v1/items` (single) or `POST /v1/items:batch` (up to 100 per call).
+`POST /v1/items` (single) or `POST /v1/bulk/items` (up to 100 per call).
 
 ### Auth
 Bearer API token (issued in `/settings/api`). Token scopes:

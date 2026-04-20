@@ -15,17 +15,17 @@ Order of evaluation: edge → gateway → app → anti-bot challenge if score hi
 
 ## 2. Auth route limits
 
-> **Numeric source-of-truth:** `13-rate-limit-values.md` §2. Numbers below MUST match. Route names use the locked `sign_up` / `sign_in` form (snake_case verb pair) per `03-api-endpoints/01-conventions.md` §3.
+> **Numeric source-of-truth:** `13-rate-limit-values.md` §2. Numbers below MUST match. Route names use the canonical kebab/single-word form (`signup`, `signin`, `signout`, `magic-link/send`) per `03-api-endpoints/01-conventions.md` §16.
 
 | Route | Per-IP | Per-Email/Account | Notes |
 |---|---|---|---|
-| `POST /v1/auth/sign_up` | 10 / hour | 3 / 24h per email | Re-CAPTCHA on suspicion |
-| `POST /v1/auth/sign_in` | 30 / 5 min | 5 / 15 min per email | Backoff on consecutive fails |
-| `POST /v1/auth/magic_link` | 10 / hour | 5 / 24h per email | Generic success response |
-| `POST /v1/auth/forgot` | 5 / hour | 3 / 24h per email | Generic success |
+| `POST /v1/auth/signup` | 10 / hour | 3 / 24h per email | Re-CAPTCHA on suspicion |
+| `POST /v1/auth/signin` | 30 / 5 min | 5 / 15 min per email | Backoff on consecutive fails |
+| `POST /v1/auth/magic-link/send` | 10 / hour | 5 / 24h per email | Generic success response |
+| `POST /v1/auth/password/forgot` | 5 / hour | 3 / 24h per email | Generic success |
 | `GET /v1/auth/verify` | 30 / hour | n/a | Token bound |
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | Refresh hot path |
-| `POST /v1/auth/sign_out` | 30 / min | n/a | |
+| `POST /v1/auth/signout` | 30 / min | n/a | |
 | `POST /v1/shares/access` (password) | 10 / 15 min | 5 / 15 min per slug | Lockout at 100 fails / 24h on slug |
 | OAuth start/callback | 30 / hour | n/a | Per-IP only |
 | SCIM endpoints | 100 RPS per Org | n/a | Burst-tolerant |

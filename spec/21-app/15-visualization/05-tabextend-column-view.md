@@ -50,7 +50,7 @@ Per `06-ui-ux/09-drag-and-drop.md`.
 - Drag card between columns → moves item between Groups. Server: `PATCH /v1/items/{id}` with `{ group_id, position }` per `03-api-endpoints/08-items.md`.
 - Drag column header → reorder columns within Collection. Server: `PATCH /v1/groups/{id}` with `{ position }`.
 - Drag URL from browser → drop into column (creates new item via `POST /v1/items` per `03-api-endpoints/08-items.md`).
-- Drag multiple selected cards (multi-select via Shift/Cmd-Click) → batch move via `POST /v1/bulk` per `07-features/10-bulk-operations.md`.
+- Drag multiple selected cards (multi-select via Shift/Cmd-Click) → batch move via `POST /v1/bulk/items` per `07-features/10-bulk-operations.md`.
 - Visual: column being dragged-into highlights with primary border + soft fill (`bg-primary/8`).
 - Optimistic per `12-history-undo/02-undo-redo.md` §5; emits `item.moved` event per `12-history-undo/01-event-log.md` §4.
 

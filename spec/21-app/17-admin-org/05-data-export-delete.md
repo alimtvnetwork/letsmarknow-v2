@@ -11,7 +11,7 @@ Self-service Org-wide data export (GDPR/portability) and Org deletion (with grac
 ### Trigger
 
 - Settings → Danger Zone → "Export all Org data".
-- Or `POST /v1/organizations/{id}/exports`.
+- Or `POST /v1/organizations/:id/data-export`.
 
 ### Scope
 
@@ -92,7 +92,7 @@ Schema versioned (`schema_version: 1`). Future versions add fields backward-comp
    - Type Org name to confirm.
    - Re-enter Owner password.
    - Optional: feedback survey (why deleting?).
-3. Submit → `POST /v1/organizations/{id}/deletion`.
+3. Submit → `DELETE /v1/organizations/:id`.
 4. Org enters `pending_deletion` state immediately:
    - All members signed out.
    - All API tokens revoked.

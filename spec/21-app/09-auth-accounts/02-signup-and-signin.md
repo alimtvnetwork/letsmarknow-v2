@@ -46,14 +46,14 @@ All entry flows for getting an Account authenticated.
 
 | Verb | Path | Purpose | Auth |
 |---|---|---|---|
-| `POST` | `/v1/auth/magic/request` | Issue token, send email | none |
+| `POST` | `/v1/auth/magic-link/send` | Issue token, send email | none |
 | `GET`  | `/v1/auth/magic/callback?t={token}` | Consume token, sign in | none |
 
 Both routes obey the rate-limit envelope in `13-rate-limit-values.md` and return errors per `03-api-endpoints/18-error-codes.md` (UPPER_SNAKE_CASE per W-8 closure).
 
 ### 5.2 Request payload
 
-`POST /v1/auth/magic/request`
+`POST /v1/auth/magic-link/send`
 ```json
 { "email": "user@example.com", "next": "/dashboard" }
 ```
@@ -136,7 +136,7 @@ Response is **always** `202 ACCEPTED` with empty body — no enumeration of whet
 
 ## 9. Sign-out
 
-- `POST /v1/auth/sign_out` — invalidates current session.
+- `POST /v1/auth/signout` — invalidates current session.
 - "Sign out everywhere" — invalidates all sessions for Account; rotates a `token_version` claim.
 
 ## 10. UX details

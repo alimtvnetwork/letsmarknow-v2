@@ -44,7 +44,7 @@ Cleared on:
 
 ## 4. Server-side
 
-- Batch endpoints used (`POST /v1/items/batch`, etc.).
+- Batch endpoints used (`POST /v1/bulk/items`, etc.).
 - Operations in single transaction; on partial failure, returns per-item result; UI surfaces failures inline.
 - Concurrency safe: each item carries its own ETag if known; conflicts skipped per item with reason.
 

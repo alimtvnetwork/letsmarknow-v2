@@ -75,7 +75,7 @@ For `bulk` operations (e.g. multi-select tag), client uses `/v1/bulk/items` to k
 
 ## 7. Realtime invalidation
 
-> **Transport (locked, F-M06):** Supabase Realtime (Phoenix Channels over WebSocket). The previously-specced custom `wss://api.letsmarknow.com/v1/realtime` endpoint and the `POST /v1/realtime/ticket` ticket-exchange flow are **withdrawn**. There is no bespoke realtime endpoint to implement. See `08-sharing-collab/14-realtime-transport.md` for wire protocol, channel naming (`org:{org_id}`, `collection:{collection_id}`, `item:{item_id}`), JWT auth, reconnect policy, and heartbeat values.
+> **Transport (locked, F-M06):** Supabase Realtime (Phoenix Channels over WebSocket). The previously-specced custom `wss://api.letsmarknow.com/v1/realtime` endpoint and the ~~WITHDRAWN: POST /v1/realtime/ticket~~ ticket-exchange flow are **withdrawn**. There is no bespoke realtime endpoint to implement. See `08-sharing-collab/14-realtime-transport.md` for wire protocol, channel naming (`org:{org_id}`, `collection:{collection_id}`, `item:{item_id}`), JWT auth, reconnect policy, and heartbeat values.
 
 - Subscriber is connected when at least one surface is open AND the user enabled "Real-time updates" (default ON for Pro+; Free tier falls back to a 5-min poll via `lmn.sync-pull` alarm).
 - Channels the extension subscribes to per active Org:

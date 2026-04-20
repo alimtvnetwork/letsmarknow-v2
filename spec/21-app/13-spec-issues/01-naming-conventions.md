@@ -106,3 +106,35 @@ These rules govern names that appear *inside* a markdown file, not the markdown 
 When an audit finds a violation of any rule above:
 1. Append a row to `02-current-issues.md` with the rule number (e.g. "violates §1 row 3").
 2. The fix is *not* applied here. It lands in the owning folder once the user approves the phase in `03-phase-plan.md`.
+
+## 9. Withdrawn endpoints (locked)
+
+When a previously-specced endpoint is removed (e.g. replaced by a managed service, deprecated before launch, or design-rejected), the path string often must remain in the spec as historical context — but it must not pollute the endpoint-parity grep that powers `00-overview.md` audits.
+
+### 9.1 Marker convention
+
+Withdrawn endpoint paths in spec text MUST be wrapped in **strikethrough** (`~~...~~`) AND prefixed with the literal token `WITHDRAWN:`. The combination is unambiguous, human-readable, and machine-detectable.
+
+**Format:** `~~WITHDRAWN: METHOD /v1/path~~`
+
+**Example (canonical):**
+
+> The previously-specced ~~WITHDRAWN: POST /v1/realtime/ticket~~ ticket-exchange flow has been replaced by Supabase Realtime per `08-sharing-collab/14-realtime-transport.md`.
+
+### 9.2 Conformance
+
+The endpoint-parity grep used by Phase-12-style sweeps MUST exclude any path inside a `~~WITHDRAWN: ...~~` wrapper:
+
+```
+grep -rhoE '`(GET|POST|PUT|PATCH|DELETE) /v1/[^` ?&]+`' spec/21-app/ \
+  | tr -d '`' | sort -u
+# Then subtract:
+grep -rhoE '~~WITHDRAWN: (GET|POST|PUT|PATCH|DELETE) /v1/[^~]+~~' spec/21-app/ \
+  | sed -E 's/~~WITHDRAWN: ([^~]+)~~/\1/' | sort -u
+```
+
+### 9.3 What does NOT need the marker
+
+- Paths inside fenced code blocks describing protocol history (` ``` ... ``` ` is already excluded by the grep that targets backtick-wrapped inline paths).
+- Paths in `23-audits/` files (entire folder is append-only history, exempt per §1 audits exemption).
+- Paths in `13-spec-issues/` files (this folder enumerates defects, not active spec).

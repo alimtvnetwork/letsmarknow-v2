@@ -380,6 +380,94 @@ Server marks the code as `issued` in the licenses table; user redeems it later v
 
 ---
 
+### Inbound email-in webhook (per-org address)
+`POST /v1/webhooks/email-in`
+
+**Auth:** webhook signature (Postmark / SES per `22-infrastructure/11-email-provider.md`); NO bearer.
+**Idempotent:** yes (server dedupes by `provider_message_id`)
+**Rate limit class:** webhook (60 / min per Org address; see `09-auth-accounts/13-rate-limit-values.md §80`)
+
+> **Why this exists.** Each Org has a unique `inbox-<token>@in.letsmarknow.com` address (`11-import-export/08-email-in.md`). The provider POSTs every received message here; the server resolves the recipient → Org, then enqueues an item-create job from the email body / attachments. The endpoint is webhook-shaped (signature-verified, raw body) rather than API-shaped (bearer, JSON envelope).
+
+**Request body** — provider-native (Postmark JSON or SES SNS notification). Payload shape is documented by the provider; the server normalizes internally.
+
+**Required signature header**
+- Postmark: `X-Postmark-Signature` (HMAC-SHA256 of raw body with the per-Org webhook secret)
+- SES: `x-amz-sns-message-signature` validated against the SNS topic's public cert
+
+**Response 200**
+```json
+{
+  "data": {
+    "received": true,
+    "organization_id": "01J...",
+    "job_id": "01J...",
+    "deduped": false
+  }
+}
+```
+
+> Returns 200 even when the message is dropped (spam, unknown recipient, signature mismatch logged). The provider must NOT retry on 4xx.
+
+**Errors**
+- `401 UNAUTHENTICATED` — signature invalid → response logged but provider sees `200` to suppress retries (spec convention; protects against replay-storm from a compromised secret).
+- `413 PAYLOAD_TOO_LARGE` — body > 25 MB; provider should retry with smaller chunks (most do not — message is dropped).
+
+---
+
+### Inbound webhook (per-org token; generic)
+`POST /v1/webhooks/inbound/:webhook_token`
+
+**Auth:** path-embedded `webhook_token` is the credential (NO bearer, NO header signature).
+**Idempotent:** Idempotency-Key (caller-supplied; recommended)
+**Rate limit class:** webhook (300 / min per token)
+
+> **Why this exists.** Power-users and Zapier-style integrations need a no-signature, copy-paste-able URL to POST item-create payloads from arbitrary upstream tools (RSS-to-LMN bridges, "save to LMN" bookmarklets in legacy environments, Make/n8n flows). The token is generated in `/settings/integrations/webhooks` and is bearer-equivalent; rotating it invalidates all upstream wiring.
+>
+> **Security:** Tokens are scoped to an Org and (optionally) a single Collection. They cannot read, only write. They cannot create members, shares, or billing changes. See `19-security-privacy/01-threat-model.md` for the full ACL.
+
+**Path params**
+- `webhook_token` — opaque `lmn_wh_<base32>`, 40+ chars; rotates on revoke.
+
+**Request body**
+```json
+{
+  "kind": "item",
+  "url": "https://example.com/article",
+  "title": "Optional override",
+  "description": "Optional override",
+  "tags": ["ai", "tools"],
+  "destination": { "kind": "collection", "collection_id": "01J..." },
+  "source": { "name": "Zapier", "external_id": "zap-04823" }
+}
+```
+
+- `kind` enum (currently): `item`. Future: `note`, `session`.
+- `destination` — optional; falls back to the token's default collection.
+- `source.external_id` — used by the server for dedupe across retries when the caller cannot send `Idempotency-Key`.
+
+**Response 202**
+```json
+{
+  "data": {
+    "received": true,
+    "job_id": "01J...",
+    "item_id": null
+  }
+}
+```
+
+`item_id` is populated synchronously when the URL is small / the dedupe-store has a hit; otherwise the client polls `GET /v1/jobs/:job_id` (`20-jobs.md`).
+
+**Errors**
+- `401 UNAUTHENTICATED` — unknown / revoked token.
+- `403 FORBIDDEN` — token Org is suspended OR `destination` outside token's scope.
+- `429 RATE_LIMITED` — token exceeded per-minute budget.
+
+See also `11-import-export/07-webhooks-and-api-imports.md §63`.
+
+---
+
 ### Webhook delivery diagnostics (admin)
 `GET /v1/webhooks/_recent`
 

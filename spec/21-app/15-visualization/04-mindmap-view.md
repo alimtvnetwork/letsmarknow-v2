@@ -103,7 +103,7 @@ Entitlement: `view.mindmap.access` (Pro). See `readme.md` §C10.
 
 - "Save current view" snapshots `(node positions, filter state, zoom, pan)`.
 - Stored in new table `mindmap_layouts` with `(id, account_id, scope_type, scope_id, name, snapshot, created_at)` per `02-data-model/`.
-- API: `POST /v1/mindmap-layouts`, `GET /v1/mindmap-layouts?scope_type=collection&scope_id=...`, `DELETE /v1/mindmap-layouts/{id}`.
+- API: `POST /v1/mindmap-layouts`, `GET /v1/mindmap-layouts?scope_type=collection&scope_id=...`, `DELETE /v1/mindmap-layouts/:id`. Full contract: `03-api-endpoints/23-mindmap-layouts.md`.
 - Per-Account; sharable read-only with team via the standard share model `02-data-model/07-share.md` (scope: `mindmap_layout`).
 
 ## 8. Performance

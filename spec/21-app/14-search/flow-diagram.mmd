@@ -5,13 +5,13 @@ flowchart TD
     ENTRY -->|Inside a Collection| WS[Workspace search]
     ENTRY -->|Browser address bar| OMNI[Omnibox lmn ...]
 
-    QF --> QRY[Type query -> debounced]
+    QF --> QRY["Type query → debounced"]
     GS --> QRY
     WS --> QRY
     OMNI --> QRY
 
-    QRY --> ENG[Search engine: tsvector + trigram]
-    ENG --> RES[Ranked results: items · collections · tags]
-    RES --> FIL[Apply filters: tag · date · type · org]
+    QRY --> ENG["Search engine: tsvector + trigram"]
+    ENG --> RES["Ranked results: items · collections · tags"]
+    RES --> FIL["Apply filters: tag · date · type · org"]
     FIL --> CLK[User clicks result]
-    CLK --> JUMP[Jump-to-result: scroll + highlight OR open URL]
+    CLK --> JUMP["Jump-to-result: scroll + highlight OR open URL"]

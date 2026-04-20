@@ -1,7 +1,7 @@
 flowchart TD
     VIS[Visitor] --> CHO{Choose method}
     CHO -->|Email + password| EP[Enter email + password]
-    CHO -->|Magic link| ML[Enter email -> click link in inbox]
+    CHO -->|Magic link| ML["Enter email → click link in inbox"]
     CHO -->|Google| GO[Google OAuth]
     CHO -->|Apple| AP[Apple OAuth]
     CHO -->|Enterprise SSO| SSO[SAML IdP]
@@ -20,4 +20,4 @@ flowchart TD
     TOTP --> APP
 
     APP --> DEV[Device list · sign out other sessions]
-    APP --> DEL[Account deletion -> grace period -> hard delete]
+    APP --> DEL["Account deletion → grace period → hard delete"]

@@ -3,7 +3,7 @@ flowchart TD
     PICK --> MODE{Share mode}
     MODE -->|Public link| PUB[/t/:slug public/]
     MODE -->|Password| PWD[/t/:slug + password gate/]
-    MODE -->|Invite only| INV[Invite email -> Guest role]
+    MODE -->|Invite only| INV["Invite email → Guest role"]
     MODE -->|Embed| EMB["iframe widget on external site"]
 
     PUB --> VIEWER[Viewer opens link]
@@ -16,6 +16,6 @@ flowchart TD
     VIEWER -. if granted .-> EDIT[Edit]
 
     OWNER --> REV[Revoke or expire]
-    REV --> GONE[Viewer sees: share removed]
+    REV --> GONE["Viewer sees: share removed"]
 
     OWNER --> ANL[Share analytics: views · uniques]

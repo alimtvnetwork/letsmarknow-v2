@@ -1,5 +1,5 @@
 flowchart TD
-    REQ[Any request] --> AUTH[Auth check -> auth.uid]
+    REQ[Any request] --> AUTH["Auth check → auth.uid"]
     AUTH --> RLS[Row Level Security policies]
     RLS -->|allowed| DB[(Encrypted at rest)]
     RLS -->|denied| F403[403 FORBIDDEN]
@@ -12,4 +12,4 @@ flowchart TD
 
     USER[User] --> DSR{GDPR / CCPA request}
     DSR -->|Export| ARCH[Full archive within 30d]
-    DSR -->|Delete| HARD[Bypass 30d soft-delete -> hard delete PII]
+    DSR -->|Delete| HARD["Bypass 30d soft-delete → hard delete PII"]

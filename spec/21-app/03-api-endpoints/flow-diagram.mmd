@@ -6,5 +6,5 @@ flowchart TD
     RLS -->|yes| DB[(Insert into items)]
     DB --> LOG[(Append history_events)]
     LOG --> RES[201 + item payload]
-    RES --> TOAST[Toast: Saved -> item appears]
+    RES --> TOAST["Toast: Saved → item appears"]
     ERR --> ETOAST[Error toast with code]

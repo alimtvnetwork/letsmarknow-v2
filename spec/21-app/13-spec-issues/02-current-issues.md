@@ -14,7 +14,7 @@
 | ID | Sev | Title | Evidence | Owning file(s) for fix | Rule violated (`01-naming-conventions.md` §) |
 |---|---|---|---|---|---|
 | SI-001 | S1 | Folder slot `21` is empty (gap in numeric sequence) | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. Slot `21` now documented as Reserved in `01-naming-conventions.md §2`. | Either fill slot `21` with a future cross-cutting domain OR keep the Reserved note. Re-evaluate at next major spec revision. | §2 |
-| SI-010 | S2 | `15-feature-flags-and-rollouts.md` placement contradicts no-impl mode | Spec-only mode bans feature-flag implementation work, but `07-features/15-feature-flags-and-rollouts.md` is marked P0 in `07-features/readme.md` | `07-features/readme.md` (clarify: spec lives at P0, implementation deferred) | §7 |
+
 
 ---
 

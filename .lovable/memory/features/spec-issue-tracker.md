@@ -11,11 +11,11 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 7)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 8)
 
-- Open: **2** (SI-001, SI-010)
-- Closed: 12 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid sweep; SI-014 verification)
-- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 1 (SI-010) · S3 = 0
+- Open: **1** (SI-001)
+- Closed: 13 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid sweep; SI-014 verification; SI-010 spec-vs-impl phase clarification)
+- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 0 · S3 = 0
 
 ## Phase queue
 
@@ -26,7 +26,7 @@ type: feature
 5. ✅ **Phase 5 — DONE 2026-04-20.** Re-audit sweep opened SI-011, 012, 013, 014.
 6. ✅ **Phase 6 — DONE 2026-04-20.** Role-scope documentation. Closed SI-011.
 7. ✅ **Phase 7 — DONE 2026-04-20.** Mermaid label safety across 13 diagrams. Closed SI-012, 013, 014.
-8. **Phase 8** — Resolve SI-010 (P0 vs no-impl mode for feature flags).
+8. ✅ **Phase 8 — DONE 2026-04-20.** Spec-vs-Impl phase clarification. Closed SI-010.
 9. **Phase 9** — Resolve SI-001 (slot 21 — keep Reserved or fill).
 10. **Phase 10** — Optional re-audit: full cross-ref sweep, glossary coverage, endpoint parity.
 

@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-20 (after Phase 13.7d — 9/24 of SI-020c done; 5 share endpoints + 4 alias sweeps).
+**Last updated:** 2026-04-20 (after Phase 13.7e — 15/24 of SI-020c done; 6 import/export endpoints added).
 
 ---
 

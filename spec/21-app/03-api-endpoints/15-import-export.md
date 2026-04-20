@@ -325,6 +325,70 @@ Client then PUTs the file to `upload_url`. Server processes async.
 
 ---
 
+### Refresh expired download URL
+`POST /v1/exports/:export_id/refresh-url`
+
+**Auth:** bearer + `X-Organization-Id`
+**Idempotent:** yes (safe to retry; new URL each call)
+**Rate limit class:** `read` (10 / hour per export)
+
+> **Why this exists.** Export download URLs expire after 7 days. Rather than re-running the full export job (which can take minutes for large Orgs), this endpoint mints a fresh signed URL pointing at the same underlying object. Object-storage retention is 30 days; after that the export must be re-run.
+
+**Request body** (optional)
+```json
+{ "ttl_hours": 168 }
+```
+- `ttl_hours` — requested URL lifetime; max 168 (7 days), default 168.
+
+**Response 200**
+```json
+{
+  "data": {
+    "export_id": "01J...",
+    "download_url": "https://uploads.letsmarknow.com/exports/01J.../file?token=...",
+    "download_expires_at": "2026-04-27T08:30:00Z",
+    "object_expires_at": "2026-05-05T08:30:00Z"
+  }
+}
+```
+
+**Errors**
+- `404 NOT_FOUND` — export does not exist
+- `409 CONFLICT` — export not in `succeeded` state (still running, failed, canceled)
+- `410 GONE` — underlying object purged (> 30 days); re-run the export
+
+---
+
+### Migration-token export (out-of-band download)
+`GET /v1/exports/lmn-json/:account_token`
+
+**Auth:** none — the path-embedded `account_token` is the credential. NOT a bearer endpoint.
+**Idempotent:** yes
+**Rate limit class:** `bulk` (3 / day per token; `429 RATE_LIMITED` after)
+
+> **Why this exists.** Power-users who want to mirror their Lets Mark Now data into external tooling (cron jobs, personal scripts, alternative clients) need a stable, scriptable URL that does NOT require an interactive OAuth dance. The Account-scoped migration token is issued in `/settings/api/migration-token` (`11-import-export/10-migration-out.md §88`) and returns a streaming `lmn_native_json` of the user's primary Org.
+>
+> **Security:** The token is bearer-equivalent — anyone with it can download the user's full export. Tokens can be revoked at any time from settings. Never log the token in URLs (use header form `Authorization: Bearer lmn_mig_…` if the client supports it; the path form is provided only because most curl/wget pipelines do not).
+
+**Path params**
+- `account_token` — opaque string `lmn_mig_<base32>`, 40+ chars; rotates on revoke.
+
+**Response 200** — `Content-Type: application/json`, streamed.
+
+The body is identical to a successful `lmn_native_json` export from `POST /v1/exports`. No envelope wrapping; the JSON object IS the export.
+
+**Headers returned**
+- `Content-Disposition: attachment; filename="lmn-export-<org_slug>-<yyyy-mm-dd>.json"`
+- `X-Export-Sha256: <hex>`
+- `X-Export-Item-Count: <int>`
+
+**Errors**
+- `401 UNAUTHENTICATED` — unknown or revoked token
+- `403 FORBIDDEN` — token's Account is suspended or has no primary Org
+- `429 RATE_LIMITED` — daily cap exceeded
+
+---
+
 ### Move organization data to another Org (export-then-import combo)
 `POST /v1/transfers/cross-org`
 

@@ -263,9 +263,9 @@ Mappings verified against `00-overview.md` and per-domain files (current as of 2
 
 | Forbidden | Canonical (declared at) | Reason |
 |---|---|---|
-| `POST /v1/auth/sign_in` | (no declared row — see 09-auth-accounts/02-signup-and-signin.md for actual signin path) | Snake_case forbidden in path segments. |
-| `POST /v1/auth/sign_up` | (same) | Snake_case forbidden. |
-| `POST /v1/auth/sign_out` | (same) | Snake_case forbidden. |
+| `POST /v1/auth/sign_in` | `POST /v1/auth/signin` (`00-overview.md:142`, `03-auth.md:51`) | Snake_case forbidden in path segments; canonical is single-word kebab. |
+| `POST /v1/auth/sign_up` | `POST /v1/auth/signup` (`00-overview.md:141`, `03-auth.md:12`) | Same. |
+| `POST /v1/auth/sign_out` | `POST /v1/auth/signout` (`00-overview.md:146`, `03-auth.md:174`) | Same. |
 | `POST /v1/auth/magic_link` | `POST /v1/auth/magic-link/send` (`00-overview.md:143`, `03-auth.md:82`) | Two-step magic-link flow is `magic-link/send` + `magic-link/consume`. |
 | `POST /v1/auth/magic/request` | `POST /v1/auth/magic-link/send` | Same as above; the `magic/request` form was an unimplemented draft. |
 | `POST /v1/auth/oauth/callback` | `GET /v1/auth/oauth/:provider/callback` (`00-overview.md`, `03-auth.md:142`) | OAuth callback is per-provider and is a `GET` redirect target, not `POST`. |

@@ -153,7 +153,7 @@ Archived events kept in cold storage (Parquet) for compliance per audit log poli
 
 `GET /v1/history/:id` — single event detail.
 
-`GET /v1/items/:id/history` — convenience alias scoped to an item.
+`GET /v1/items/:id/history` — convenience alias scoped to an item. Canonical contract: `03-api-endpoints/14-history.md` (Per-item activity feed section).
 
 ## 9. UI surfaces
 

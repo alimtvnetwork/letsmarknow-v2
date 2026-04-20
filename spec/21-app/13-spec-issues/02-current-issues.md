@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-20 (after Phase 13.7e — 15/24 of SI-020c done; 6 import/export endpoints added).
+**Last updated:** 2026-04-20 (after Phase 13.7f — 17/24 of SI-020c done; 2 billing+org endpoints added).
 
 ---
 
@@ -16,7 +16,7 @@
 | SI-001 | S1 | Folder slot `21` is empty (gap in numeric sequence) | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. Slot `21` now documented as Reserved in `01-naming-conventions.md §2`. | Either fill slot `21` with a future cross-cutting domain OR keep the Reserved note. Re-evaluate at next major spec revision. **Decision required from user.** | §2 |
 | SI-020a | S2 | ✅ closed Phase 13.5 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-020b | S2 | ✅ closed Phase 13.6 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
-| SI-020c | S1 | 9 endpoints genuinely missing — need new declared rows | **Phase 13.7a-e (DONE):** 15/24 declared. Phase 13.7e added 6 import/export endpoints (`POST /v1/imports/upload`, `GET /v1/imports/:id/preview`, `GET /v1/imports/:id/status`, `POST /v1/imports/:id/commit`, `POST /v1/exports/:export_id/refresh-url`, `GET /v1/exports/lmn-json/:account_token`) to `15-import-export.md` and 6 rows to `00-overview.md`. **Still missing (9):** `DELETE /v1/mindmap-layouts/:id`, `GET /v1/billing/invoices/:id/pdf`, `GET /v1/jobs/:job_id`, `GET /v1/organizations/:id/data-export/:export_id`, `POST /v1/flags/evaluate`, `POST /v1/internal/feedback`, `POST /v1/mindmap-layouts`, `POST /v1/webhooks/email-in`, `POST /v1/webhooks/inbound/:webhook_token`. | Continue: 13.7f Billing+Org (2) → 13.7g New domains (Jobs, Flags, Internal, Webhooks, Mindmap-layouts — 7 endpoints, may need new files). | §1, §3 |
+| SI-020c | S1 | 7 endpoints genuinely missing — need new declared rows | **Phase 13.7a-f (DONE):** 17/24 declared. Phase 13.7f added `GET /v1/billing/invoices/:id/pdf` (to `16-licenses.md`) and `GET /v1/organizations/:id/data-export/:export_id` (to `04-organizations.md`); 2 rows added to `00-overview.md §1.11`. **Still missing (7):** `DELETE /v1/mindmap-layouts/:id`, `GET /v1/jobs/:job_id`, `POST /v1/flags/evaluate`, `POST /v1/internal/feedback`, `POST /v1/mindmap-layouts`, `POST /v1/webhooks/email-in`, `POST /v1/webhooks/inbound/:webhook_token`. | Phase 13.7g — New domains (Jobs, Flags, Internal, Webhooks, Mindmap-layouts). May need new endpoint files (e.g. `20-jobs.md`, `21-flags.md`, `22-internal.md`, `23-mindmap-layouts.md`); webhooks fold into existing `17-billing-webhooks.md`. | §1, §3 |
 
 
 ---

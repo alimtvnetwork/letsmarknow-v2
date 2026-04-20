@@ -1,7 +1,37 @@
 ---
 name: Gap Analysis State
-description: Tracks closed/deferred/open gap-analysis items. v7 (2026-04-19 evening) — 100/100/100 reached. All W-class drift, all M-class details, F-CI-DRIFT linter, F-FOLDER-OVERVIEW (21 new 00-overview.md), F-M03 IaC closed. B4/B7 deferred per spec-only mode.
+description: Tracks closed/deferred/open gap-analysis items. v8 (2026-04-20) — post-100 backlog fully closed; 24 SI-NNN issues resolved across Phases 1–9 + 13.1–13.7g; 100/100/100 restored; conformance grep clean.
 type: feature
+---
+
+## Round 6 (2026-04-20) — post-100 backlog fully closed → 100/100/100 restored
+
+| ID | Topic | Files |
+|---|---|---|
+| Phases 1–4 | Lock spec-issue rules + audit-file naming + invalidate stale 100/100 + TBD cleanup | `13-spec-issues/01-naming-conventions.md`, `23-audits/audit-2026-04-19-ai-readiness-score.md`, `00-overview/04-competitive-analysis.md` |
+| Phases 5–8 | Re-audit sweep + role-scope docs + Mermaid label safety + spec-vs-impl phase clarification | `08-sharing-collab/05-permissions-matrix.md`, 13 `flow-diagram.mmd` files, `23-audits/audit-2026-04-19-impl-vs-spec.md` |
+| Phase 9 | Slot 21 locked as permanent intentional buffer (downgraded SI-001 S1→S3) | `13-spec-issues/01-naming-conventions.md §2` |
+| Phase 10 | Deep re-audit (cross-refs, wireframes exemption, endpoint inventory) | (verification only) |
+| Phase 11 | `15-sku-map.md` `_TBD` placeholders documented as allowed | `13-spec-issues/01-naming-conventions.md §7` |
+| Phases 12 + 13.1+13.2 | Endpoint parity sweep (145 vs 192 refs); locked path-param style + alias policy | `03-api-endpoints/01-conventions.md §1.1 + §16` |
+| Phase 13.3+13.4 | Reclassified SI-020 into a/b/c/d after per-endpoint origin trace; SI-020d folded into b | (analysis) |
+| Phase 13.5 | `~~WITHDRAWN: METHOD /v1/path~~` marker convention (`/v1/realtime/ticket`) | `13-spec-issues/01-naming-conventions.md §9` |
+| Phase 13.6 | Rewrote §16 with 17 verified canonical alias mappings; swept 11 referencing files; resolved `items:batch` contradiction | `03-api-endpoints/01-conventions.md §16` + 11 files |
+| Phase 13.7a–g | 24 endpoints declared across 5 new files (`19-account.md`, `20-jobs.md`, `21-flags.md`, `22-internal.md`, `23-mindmap-layouts.md`) + 7 extended files; `00-overview.md` rebased 136 → 145 endpoints | `03-api-endpoints/19-`–`23-` + `15-import-export.md` + `16-licenses.md` + `04-organizations.md` + `14-history.md` + `02-public-share-viewer.md` + `10-shares.md` + `17-billing-webhooks.md` + `00-overview.md` |
+| Cumulative rescore v3 | Per-domain math: 100/100/100 restored after 24 SI closures | `23-audits/audit-2026-04-20-rescore-delta-v3.md` |
+
+**Final scores (v8, 2026-04-20):** Lovable **100** / Cursor-Claude **100** / Raw-LLM **100**.
+
+**Delta from v7 (2026-04-19 evening, 100/100/100):** No score change (v7 was already 100). What v8 adds is **resilience**: every closed SI now has a conformance grep, an alias-table entry, or a documented exemption that prevents the same defect class from re-opening in a future audit.
+
+**Maintenance contract (v8, must stay green):**
+- All v7 contracts (drift-linter, per-folder `00-overview.md`, quarterly re-audit) remain.
+- New: §16.3 conformance grep must return zero violations (every endpoint reference resolves to a declared row OR a documented alias).
+- New: every new endpoint = row in `00-overview.md` AND a contract section in the owning `03-api-endpoints/NN-*.md`.
+- Next quarterly re-audit: ≈ 2026-07-19.
+
+**Deferred (not gaps; scheduled):** B4 (test plans), B7 (seed fixtures) — Phase-1 per `20-roadmap/06-definition-of-done.md` §2.
+
 ---
 
 ## Round 5 (2026-04-19 evening, v7) — push to 100/100/100

@@ -40,10 +40,12 @@ Files in this folder describe **what** a feature does end-to-end. Implementation
 | `12-embeds-and-previews.md` | Rich previews | P1 (Pro) |
 | `13-command-palette.md` | Cmd+K | P0 (basic) / P1 (operators) |
 | `14-extensions-os-integrations.md` | OS-level hooks | P1 (omnibox/sidepanel) / P4 (Raycast/Alfred/CLI) |
-| `15-feature-flags-and-rollouts.md` | Rollout system | P0 (foundational) |
+| `15-feature-flags-and-rollouts.md` | Rollout system | **Spec: P0 foundational** · Impl: deferred (see note below) |
 | `16-delete-with-undo.md` | Trash + Undo | P0 (Trash) / P1 (Undo toast) |
 
 > **Phase legend:** P0 = MVP, P1 = v1, P2 = Collab, P3 = Mindmap/AI, P4 = Cross-browser. Source of truth: `20-roadmap/`.
+>
+> **SI-010 closure (2026-04-20):** The "P0" marker on `15-feature-flags-and-rollouts.md` refers to **spec authorship priority** — the document must exist before P0 ships so other P0 features can reference flag names. Actual feature-flag **infrastructure** (provider integration, evaluation SDK, dashboard) is **NOT** required for P0 launch and is currently deferred under the project's permanent no-implementation mode (`mem://constraints/no-implementation-mode.md`). Spec-priority and implementation-priority are independent dimensions: a P0 spec can have a P1+ implementation, and is recorded as such here. Rule for future Phase columns: write `Spec: PN · Impl: PM` whenever the two diverge.
 
 ## Locked rules
 

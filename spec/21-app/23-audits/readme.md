@@ -22,6 +22,7 @@ Audit files are dated, not numbered. Read in chronological order:
 12. `audit-2026-04-19-rescore-delta-v2.md` — v2 rescore (all 21 domains → 100).
 13. `audit-2026-04-19-ai-readiness-score.md` — **canonical scoreboard.** Live Issue Tracker + per-domain scores.
 14. `audit-2026-04-19-100-retrospective.md` — closing narrative once the corpus hit 100/100/100.
+15. `audit-2026-04-20-rescore-delta-v3.md` — v3 rescore (post-100 backlog fully closed; 24 SI-NNN issues resolved across Phases 1–9 + 13.1–13.7g; 100/100/100 restored).
 
 ## Files
 

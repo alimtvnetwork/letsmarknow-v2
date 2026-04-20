@@ -389,6 +389,7 @@
 | DELETE | `/v1/members/:id` | bearer+role(owner/admin) | Remove a member from the active Org. | `11-members-invites.md` |
 | DELETE | `/v1/members/:id/invite` | bearer+role(owner/admin) | Cancel a pending invite. | `11-members-invites.md` |
 | DELETE | `/v1/search/recent` | bearer | Clear recent searches (or one entry via `?q=...`). | `13-search.md` |
+| DELETE | `/v1/mindmap-layouts/:id` | bearer+org+(creator OR owner/admin) | Delete a saved mindmap layout; promotes new default if needed. | `23-mindmap-layouts.md` |
 
 ---
 
@@ -448,12 +449,12 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Count |
 |---|---|
-| GET | 36 |
-| POST | 81 |
+| GET | 39 |
+| POST | 86 |
 | PATCH | 8 |
 | PUT | 1 |
-| DELETE | 10 |
-| **Total** | **136** |
+| DELETE | 11 |
+| **Total** | **145** |
 
 > If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug.
 

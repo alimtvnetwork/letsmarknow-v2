@@ -11,11 +11,11 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.1+13.2)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.3 classification)
 
-- Open: **2** (SI-001 decision-pending; SI-020 endpoint additions pending)
-- Closed: 18 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid; SI-014 verification; SI-010 spec-vs-impl; SI-016/017 Phase-10 false positives; SI-015 allowed-TBD doc; SI-018/019 conventions lock)
-- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020) · S2 = 0 · S3 = 0
+- Open: **5** (SI-001 decision-pending; SI-020a/b/c/d from SI-020 split)
+- Closed: 19 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid; SI-014 verification; SI-010 spec-vs-impl; SI-016/017 Phase-10 false positives; SI-015 allowed-TBD doc; SI-018/019 conventions lock; SI-020 reclassified into 4 sub-issues)
+- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 3 (SI-020a, SI-020b, SI-020d) · S3 = 0
 
 ## Phase queue
 
@@ -30,10 +30,14 @@ type: feature
 9. **Phase 9** — DECISION REQUIRED on SI-001 (slot 21 — keep Reserved permanently / fill / renumber).
 10. ✅ **Phase 10 — DONE 2026-04-20.** Deep re-audit: 16 cross-refs verified, wireframes exemption verified, endpoint inventory captured. Opened SI-015; closed SI-016/017 as false positives on discovery.
 11. ✅ **Phase 11 — DONE 2026-04-20.** Closed SI-015 by adding `15-sku-map.md` to allowed-TBD table in `01-naming-conventions.md §7`.
-12. ✅ **Phase 12 — DONE 2026-04-20.** Endpoint parity sweep: 145 declared vs 192 referenced. Opened SI-018 (`{id}` vs `:id` style, 4 endpoints, S2), SI-019 (7 alias paths, S2), SI-020 (38 truly-missing endpoints, S1).
-13. ✅ **Phase 13.1+13.2 — DONE 2026-04-20.** Locked path-param style in `03-api-endpoints/01-conventions.md §1.1` and added §16 Aliases & shorthand. Closed SI-018/019.
-14. **Phase 13.3** — Add the 38 missing endpoints (SI-020) to per-domain files + `00-overview.md`. Normalize `{id}`→`:id` + aliases→canonical in same sweep.
-15. **Phase 14** — Optional: glossary term coverage sweep across feature files.
+12. ✅ **Phase 12 — DONE 2026-04-20.** Endpoint parity sweep: 145 declared vs 192 referenced. Opened SI-018/019/020.
+13. ✅ **Phase 13.1+13.2 — DONE 2026-04-20.** Locked path-param style + aliases policy. Closed SI-018/019.
+14. ✅ **Phase 13.3 (classification) — DONE 2026-04-20.** Reclassified SI-020 into SI-020a/b/c/d after per-endpoint origin trace. SI-020 closed as "split". No spec rows added yet.
+15. **Phase 13.4** — Resolve SI-020d phantoms (re-run stricter grep, close as false positive or fold into SI-020c). Smallest scope, do first.
+16. **Phase 13.5** — Resolve SI-020a (withdrawn-endpoint marker convention in `01-conventions.md` or `01-naming-conventions.md`).
+17. **Phase 13.6** — Resolve SI-020b (extend §16 alias table with 14 mappings + sweep referencing files; reconcile `items:batch` contradiction).
+18. **Phase 13.7** — Resolve SI-020c (add 17-24 new declared rows across 7-12 files). Largest, do last.
+19. **Phase 14** — Optional: glossary term coverage sweep across feature files.
 
 ## Rules
 

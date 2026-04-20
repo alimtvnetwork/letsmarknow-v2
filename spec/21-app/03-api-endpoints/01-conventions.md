@@ -11,6 +11,13 @@
 - All endpoints under `/v1/`.
 - `/v1/health` is the unversioned health check (also `/health`).
 
+### 1.1 Path-parameter style (locked)
+
+- **Use `:name` only.** All path parameters in declared endpoints, examples, and cross-references use the colon-prefix form: `/v1/items/:id`, `/v1/collections/:collection_id/items`.
+- **Do NOT use `{name}`.** The brace form (`/v1/items/{id}`) is forbidden in the spec because it produces parity drift with the declared route table in `00-overview.md`.
+- **Path-param naming:** lower_snake_case. Use `:id` for the entity's own primary key; use `:<entity>_id` only when the parent entity is needed for disambiguation (e.g. `/v1/collections/:collection_id/items`).
+- **Conformance check:** `grep -rE '/v1/[^"]*\{[a-z_]+\}' spec/21-app/` MUST return zero results. CI will fail if any `{...}` path-param appears in a `/v1/...` URL.
+
 ## 2. Auth
 
 ### 2.1 Bearer (primary)
@@ -243,3 +250,27 @@ Sunset: Wed, 01 Jul 2026 00:00:00 GMT
 Deprecation: true
 Link: <https://docs.letsmarknow.com/migrations/v2>; rel="deprecation"
 ```
+
+## 16. Aliases & shorthand (locked)
+
+The spec uses **one canonical path per endpoint**. Alias forms (different casing, separators, or group-placeholders) are forbidden in spec text because they break the AI's ability to build a single route table from `00-overview.md`.
+
+### 16.1 Forbidden alias patterns
+
+| Forbidden | Canonical | Reason |
+|---|---|---|
+| `POST /v1/auth/sign_in` | `POST /v1/auth/signin` | Snake_case in path segments. Use single-word kebab when needed; never underscore. |
+| `POST /v1/auth/sign_up` | `POST /v1/auth/signup` | Same. |
+| `POST /v1/auth/sign_out` | `POST /v1/auth/signout` | Same. |
+| `POST /v1/auth/magic_link` | `POST /v1/auth/magic/request` | The two-step magic-link flow is `magic/request` + `magic/callback`. |
+| `POST /v1/auth/oauth/callback` | `GET /v1/auth/oauth/:provider/callback` | OAuth callback is per-provider and is a `GET` redirect target. |
+| `POST /v1/items:batch` | `POST /v1/items/batch` | The `:` matrix-param style is not used in this API. Use a `/batch` sub-resource. |
+| `PATCH /v1/{collections\|groups\|tags\|spaces}/{id}` | declare each path explicitly | Group-placeholders are documentation shorthand only; never appear in declared rows or cross-references. |
+
+### 16.2 Rule
+
+When a feature file needs to reference an endpoint, copy the canonical path verbatim from `00-overview.md`. If a needed endpoint is not in `00-overview.md`, file an `SI-NNN` against `13-spec-issues/02-current-issues.md` instead of inventing an alias.
+
+### 16.3 Conformance check
+
+`grep -rE '/v1/auth/sign_(in\|up\|out)|/v1/auth/magic_link|/v1/items:batch|/v1/\{[a-z|]+\}' spec/21-app/` MUST return zero results.

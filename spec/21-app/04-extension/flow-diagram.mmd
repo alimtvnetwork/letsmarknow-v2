@@ -2,8 +2,8 @@ flowchart TD
     START[User in Chrome] --> CHOICE{How to capture?}
     CHOICE -->|Click toolbar icon| POPUP[Popup opens]
     CHOICE -->|Press shortcut| POPUP
-    CHOICE -->|Right-click page| CTX[Context menu: Save to Collection]
-    CHOICE -->|Type in address bar| OMNI[Omnibox: lmn <query>]
+    CHOICE -->|Right-click page| CTX["Context menu: Save to Collection"]
+    CHOICE -->|Type in address bar| OMNI["Omnibox: lmn query"]
     CHOICE -->|Open new tab| NEWTAB[New-tab page = dashboard]
 
     POPUP --> SAVE1[Save current tab]
@@ -14,4 +14,4 @@ flowchart TD
 
     SAVE1 --> SYNC[Service worker syncs to backend]
     SAVE2 --> SYNC
-    SYNC --> DONE[Toast: Saved]
+    SYNC --> DONE["Toast: Saved"]

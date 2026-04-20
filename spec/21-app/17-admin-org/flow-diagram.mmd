@@ -6,12 +6,12 @@ flowchart TD
     SET --> DAT[Data export · delete]
 
     MEM --> INV[Invite by email]
-    MEM --> ROLE[Change role: viewer/editor/admin/billing]
+    MEM --> ROLE["Change role: viewer/editor/admin/billing"]
     MEM --> RM[Remove member]
-    MEM --> XFER[Transfer ownership -> Owner only]
+    MEM --> XFER["Transfer ownership → Owner only"]
 
-    INV --> NOTIF[Invitee gets email -> accepts -> joins Org]
-    ROLE --> RLS[has_role updates -> RLS enforces instantly]
+    INV --> NOTIF["Invitee gets email → accepts → joins Org"]
+    ROLE --> RLS["has_role updates → RLS enforces instantly"]
     RM --> ITEMS[User's items stay in Org · created_by retained]
     DAT --> EXP[Download full Org archive]
-    DAT --> DEL[Delete Org -> 30d grace]
+    DAT --> DEL["Delete Org → 30d grace"]

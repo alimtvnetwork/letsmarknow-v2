@@ -10,8 +10,8 @@ flowchart TD
     POC & RAI & TBE & BMK & CSV & EML & API --> UP[Upload / connect]
     UP --> MAP[Mapping + dedup preview]
     MAP --> QUE[Queued import job]
-    QUE --> DONE[Toast: imported N items into Collection X]
+    QUE --> DONE["Toast: imported N items into Collection X"]
 
     DONE --> EXP{Need to leave?}
-    EXP -->|Export| FILE[Download zip: JSON + HTML + CSV]
-    EXP -->|GDPR| GDP[Verified DSR -> full archive]
+    EXP -->|Export| FILE["Download zip: JSON + HTML + CSV"]
+    EXP -->|GDPR| GDP["Verified DSR → full archive"]

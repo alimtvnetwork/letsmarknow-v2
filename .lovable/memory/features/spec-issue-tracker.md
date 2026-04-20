@@ -11,11 +11,11 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.3 classification)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.4)
 
-- Open: **5** (SI-001 decision-pending; SI-020a/b/c/d from SI-020 split)
-- Closed: 19 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid; SI-014 verification; SI-010 spec-vs-impl; SI-016/017 Phase-10 false positives; SI-015 allowed-TBD doc; SI-018/019 conventions lock; SI-020 reclassified into 4 sub-issues)
-- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 3 (SI-020a, SI-020b, SI-020d) · S3 = 0
+- Open: **4** (SI-001 decision-pending; SI-020a/b/c)
+- Closed: 20 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid; SI-014 verification; SI-010 spec-vs-impl; SI-016/017 Phase-10 false positives; SI-015 allowed-TBD doc; SI-018/019 conventions lock; SI-020 reclassified into 4 sub-issues; SI-020d folded into SI-020b)
+- By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 2 (SI-020a, SI-020b) · S3 = 0
 
 ## Phase queue
 
@@ -33,7 +33,7 @@ type: feature
 12. ✅ **Phase 12 — DONE 2026-04-20.** Endpoint parity sweep: 145 declared vs 192 referenced. Opened SI-018/019/020.
 13. ✅ **Phase 13.1+13.2 — DONE 2026-04-20.** Locked path-param style + aliases policy. Closed SI-018/019.
 14. ✅ **Phase 13.3 (classification) — DONE 2026-04-20.** Reclassified SI-020 into SI-020a/b/c/d after per-endpoint origin trace. SI-020 closed as "split". No spec rows added yet.
-15. **Phase 13.4** — Resolve SI-020d phantoms (re-run stricter grep, close as false positive or fold into SI-020c). Smallest scope, do first.
+15. ✅ **Phase 13.4 — DONE 2026-04-20.** SI-020d phantoms verified as real alias defects in `17-admin-org/`. Folded into SI-020b (now 17 mappings instead of 14). SI-020d closed.
 16. **Phase 13.5** — Resolve SI-020a (withdrawn-endpoint marker convention in `01-conventions.md` or `01-naming-conventions.md`).
 17. **Phase 13.6** — Resolve SI-020b (extend §16 alias table with 14 mappings + sweep referencing files; reconcile `items:batch` contradiction).
 18. **Phase 13.7** — Resolve SI-020c (add 17-24 new declared rows across 7-12 files). Largest, do last.

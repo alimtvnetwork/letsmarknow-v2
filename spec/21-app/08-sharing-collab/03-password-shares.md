@@ -19,7 +19,7 @@ Same as public: `https://letsmarknow.com/t/{slug}` — but loads a password gate
 ## 3. Auth flow
 
 1. Viewer hits `/t/{slug}` → server detects `mode=password` → renders gate page.
-2. Viewer submits password → `POST /v1/shares/access` `{ slug, password }`.
+2. Viewer submits password → `POST /v1/public/shares/:slug/unlock` `{ password }`.
 3. Server verifies (constant-time argon2id) → on success issues `share_session` JWT (HttpOnly cookie, 24 h, scoped to that slug).
 4. Viewer reloads → server validates cookie → renders share.
 

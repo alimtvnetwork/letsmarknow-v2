@@ -26,7 +26,7 @@ Order of evaluation: edge → gateway → app → anti-bot challenge if score hi
 | `GET /v1/auth/verify` | 30 / hour | n/a | Token bound |
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | Refresh hot path |
 | `POST /v1/auth/signout` | 30 / min | n/a | |
-| `POST /v1/shares/access` (password) | 10 / 15 min | 5 / 15 min per slug | Lockout at 100 fails / 24h on slug |
+| `POST /v1/public/shares/:slug/unlock` (password) | 10 / 15 min | 5 / 15 min per slug | Lockout at 100 fails / 24h on slug |
 | OAuth start/callback | 30 / hour | n/a | Per-IP only |
 | SCIM endpoints | 100 RPS per Org | n/a | Burst-tolerant |
 

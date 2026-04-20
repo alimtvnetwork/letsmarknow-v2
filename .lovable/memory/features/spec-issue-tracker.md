@@ -13,8 +13,8 @@ type: feature
 
 ## Counts (updated 2026-04-19, UTC+8 — after Phase 3)
 
-- Open: **3** (SI-001, SI-008, SI-010)
-- Closed: 7 (SI-002 fixed; SI-003/004/007 closed by exemption clause; SI-005/006 false positives; SI-009 closed by process update)
+- Open: **2** (SI-001, SI-010)
+- Closed: 8 (SI-002 fixed; SI-003/004/007 closed by exemption clause; SI-005/006 false positives; SI-009 closed by process update; SI-008 closed by TBD cleanup)
 - By severity (open): S0 = 0 · S1 = 1 · S2 = 2 · S3 = 0
 
 ## Phase queue

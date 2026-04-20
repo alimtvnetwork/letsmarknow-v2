@@ -136,7 +136,7 @@ Response is **always** `202 ACCEPTED` with empty body — no enumeration of whet
 
 ## 9. Sign-out
 
-- `POST /v1/auth/sign_out` — invalidates current session.
+- `POST /v1/auth/signout` — invalidates current session.
 - "Sign out everywhere" — invalidates all sessions for Account; rotates a `token_version` claim.
 
 ## 10. UX details

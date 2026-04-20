@@ -60,7 +60,7 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 
 ## 5. Sign-out
 
-- `POST /v1/auth/sign_out` — revokes current `Session` and clears cookie.
+- `POST /v1/auth/signout` — revokes current `Session` and clears cookie.
 - "Sign out everywhere" — sets `account.token_version = token_version + 1`; all access tokens with old `tv` rejected immediately (no waiting for 15-min TTL).
 - Triggers `auth.signed_out` realtime event to other tabs.
 

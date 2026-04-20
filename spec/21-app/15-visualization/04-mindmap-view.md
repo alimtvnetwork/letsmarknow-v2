@@ -82,7 +82,7 @@ Web Worker runs `forceSimulation`; main thread does only render. Comm via `Atomi
 | `Space` + drag | Pan canvas |
 
 All mutations route through standard endpoints in `03-api-endpoints/`:
-- Rename node → `PATCH /v1/{collections|groups|tags|spaces}/{id}` per the entity's API file.
+- Rename node → `PATCH /v1/collections/:id`, `PATCH /v1/groups/:id`, `PATCH /v1/tags/:id`, or `PATCH /v1/spaces/:id` per the entity's API file.
 - Color change → same endpoints.
 - Delete → `DELETE` of same; cascades per `02-data-model/`.
 - Bulk operations → `POST /v1/bulk/items` per `07-features/10-bulk-operations.md`.

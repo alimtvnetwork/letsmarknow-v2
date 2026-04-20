@@ -22,7 +22,7 @@ Order of evaluation: edge → gateway → app → anti-bot challenge if score hi
 | `POST /v1/auth/sign_up` | 10 / hour | 3 / 24h per email | Re-CAPTCHA on suspicion |
 | `POST /v1/auth/sign_in` | 30 / 5 min | 5 / 15 min per email | Backoff on consecutive fails |
 | `POST /v1/auth/magic_link` | 10 / hour | 5 / 24h per email | Generic success response |
-| `POST /v1/auth/forgot` | 5 / hour | 3 / 24h per email | Generic success |
+| `POST /v1/auth/password/forgot` | 5 / hour | 3 / 24h per email | Generic success |
 | `GET /v1/auth/verify` | 30 / hour | n/a | Token bound |
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | Refresh hot path |
 | `POST /v1/auth/sign_out` | 30 / min | n/a | |

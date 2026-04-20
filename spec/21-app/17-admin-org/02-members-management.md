@@ -30,7 +30,7 @@ Invite, suspend, remove, transfer ownership. The single source of truth for who'
   - Role per row (default: Viewer).
   - Optional: target Collection access list.
   - Personal message (≤ 500 chars).
-- Submit → `POST /v1/organizations/{id}/invites` (per `03-api-endpoints/11-members-invites.md`).
+- Submit → `POST /v1/members/invites` (per `03-api-endpoints/11-members-invites.md`).
 - Each invitee gets email with magic-link valid for 7 days.
 - Pending invites visible in table with "Resend" / "Revoke" actions.
 

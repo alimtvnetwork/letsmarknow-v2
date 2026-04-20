@@ -85,7 +85,7 @@ All mutations route through standard endpoints in `03-api-endpoints/`:
 - Rename node → `PATCH /v1/{collections|groups|tags|spaces}/{id}` per the entity's API file.
 - Color change → same endpoints.
 - Delete → `DELETE` of same; cascades per `02-data-model/`.
-- Bulk operations → `POST /v1/bulk` per `07-features/10-bulk-operations.md`.
+- Bulk operations → `POST /v1/bulk/items` per `07-features/10-bulk-operations.md`.
 
 ## 6. Filters
 

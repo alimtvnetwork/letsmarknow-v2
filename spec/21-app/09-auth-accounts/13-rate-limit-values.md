@@ -40,7 +40,7 @@ When both IP and account exist, the **stricter** of the two applies.
 | `POST /v1/auth/sign_up` | 10 / hour | 3 / 24 h per email | 24-h email block after 5 signups same email |
 | `POST /v1/auth/sign_in` | 30 / 5 min | 5 / 15 min per email | 15-min lockout on `(email, IP)` after 5 consecutive failures; account lock after 100 fails / 24 h |
 | `POST /v1/auth/magic_link` | 10 / hour | 5 / 24 h per email | — |
-| `POST /v1/auth/forgot` | 5 / hour | 3 / 24 h per email | — |
+| `POST /v1/auth/password/forgot` | 5 / hour | 3 / 24 h per email | — |
 | `GET /v1/auth/verify` | 30 / hour | n/a | — |
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | — |
 | `POST /v1/auth/sign_out` | 30 / min | n/a | — |
@@ -53,7 +53,7 @@ When both IP and account exist, the **stricter** of the two applies.
 |---|---|---|---|
 | `GET /v1/items`, `/v1/collections`, `/v1/spaces` (reads) | 1000 | 1 min | Class `read` per `01-conventions.md` §8 |
 | `POST /v1/items` (save tab) | 200 | 1 min | Class `write` |
-| `POST /v1/items/bulk` | 20 | 1 min | Class `bulk`; max 500 items per call |
+| `POST /v1/bulk/items` | 20 | 1 min | Class `bulk`; max 500 items per call |
 | `PATCH /v1/items/:id` | 200 | 1 min | Class `write` |
 | `DELETE /v1/items/:id` | 200 | 1 min | Class `write` |
 | `POST /v1/sessions/save` | 30 | 1 min | Each session = up to 200 items |

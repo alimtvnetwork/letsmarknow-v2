@@ -31,14 +31,14 @@ Same `plan_code` strings used everywhere internally; processor abstraction layer
 ## 4. Checkout flow
 
 - Paddle Billing v4 (Hosted Checkout).
-- `POST /v1/billing/checkout/session` returns Paddle transaction URL.
+- `POST /v1/organizations/:id/billing/checkout` returns Paddle transaction URL.
 - Custom data carried via `custom_data`: `{ org_id, account_id, plan_code }`.
 - Paddle handles tax, payment, invoice generation.
 
 ## 5. Customer Portal
 
 - Hosted Paddle Billing portal for card update, plan change, cancellation.
-- We expose link via `POST /v1/billing/portal/session` (returns Paddle URL).
+- We expose link via `POST /v1/organizations/:id/billing/portal` (returns Paddle URL).
 
 ## 6. Subscription state
 

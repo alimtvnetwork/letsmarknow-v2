@@ -322,7 +322,7 @@ When a feature file needs to reference an endpoint, copy the canonical path verb
 ### 16.3 Conformance check
 
 ```
-grep -rE '/v1/auth/sign_(in|up|out)|/v1/auth/magic_link|/v1/auth/magic/request|/v1/auth/forgot([^/]|$)|/v1/items[:/](batch|bulk)|/v1/bulk([^/]|$)|/v1/billing/(checkout|portal)/session|/v1/organizations/\{[a-z_]+\}/(deletion|exports|invites)|/v1/collections/:collection_id([^/]|$)|/v1/\{[a-z|]+\}' spec/21-app/ \
+grep -rE '/v1/auth/sign_(in|up|out)|/v1/auth/magic_link|/v1/auth/magic/request|/v1/auth/forgot([^/]|$)|/v1/items[:/](batch|bulk)|/v1/bulk([^/]|$)|/v1/billing/(checkout|portal)/session|/v1/organizations/\{[a-z_]+\}/(deletion|exports|invites)|/v1/collections/:collection_id([^/]|$)|/v1/\{[a-z|]+\}|/v1/share-public/|/v1/public/shares/[^ ]*/comment([^s]|$)|/v1/shares/access' spec/21-app/ \
   | grep -v '13-spec-issues' | grep -v '23-audits'
 ```
 

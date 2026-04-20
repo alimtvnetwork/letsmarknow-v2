@@ -39,7 +39,7 @@ The following file classes are exempt — they appear in numbered folders but do
 | Slot | Status | Owner / reason |
 |---|---|---|
 | `13-spec-issues/` | **In use** as of 2026-04-19 | Spec-issues catalogue + phase plan. |
-| `21-` | **Reserved (empty)** | Held for a future cross-cutting domain. The folder name `spec/21-app/` is unrelated and must not be confused with this slot. Re-evaluate at next major spec revision. Do NOT silently fill — open an issue first. |
+| `21-` | **Permanently reserved (empty) — locked 2026-04-20 (Phase 9)** | Held indefinitely as a buffer between the per-domain folders (`00-`–`20-`) and the meta folders (`22-infrastructure/`, `23-audits/`). The empty slot is **intentional and load-bearing**: it gives auditors and AI codegen tools a deterministic visual break between "what the product is" (`00-`–`20-`) and "how it runs / how we audit it" (`22-`+). Do NOT fill this slot. The folder name `spec/21-app/` is unrelated to this numeric slot and must not be confused with it. SI-001 was closed at S3 cosmetic on 2026-04-20 with this rule. |
 
 ## 3. Intra-folder file sequence
 

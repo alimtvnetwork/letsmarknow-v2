@@ -231,4 +231,50 @@ All data deleted permanently; cannot be undone.
   }
 }
 ```
-Polled via `GET /v1/organizations/:id/data-export/:export_id` (see `11-import-export/`).
+Polled via `GET /v1/organizations/:id/data-export/:export_id` (declared below).
+
+---
+
+### Get organization data-export status
+`GET /v1/organizations/:id/data-export/:export_id`
+
+**Auth:** bearer + `X-Organization-Id` + role(`owner` | `admin`)
+**Idempotent:** yes
+**Rate limit class:** `read` (60 / min per export)
+
+> **Why this exists separately from the global `GET /v1/exports/:export_id`.** The Org-scoped GDPR export is a regulated data-residency artifact (see `19-security-privacy/04-gdpr-ccpa.md`). It carries an additional `legal_basis`, an audit-log entry, and is restricted to Owner/Admin roles regardless of the global export ACL. Mounting it under `/v1/organizations/:id/...` makes the audit trail unambiguous and prevents leakage via the general-purpose export listing.
+
+**Path params**
+- `id` — Organization id (must match `X-Organization-Id`).
+- `export_id` — id returned by `POST /v1/organizations/:id/data-export`.
+
+**Response 200**
+```json
+{
+  "data": {
+    "export_id": "01J...",
+    "organization_id": "01J...",
+    "status": "succeeded",
+    "format": "json",
+    "include": ["spaces","collections","groups","items","tags","shares","members","history"],
+    "progress": { "processed": 4123, "total": 4123, "percent": 100 },
+    "download_url": "https://uploads.letsmarknow.com/gdpr/01J.../file?token=...",
+    "download_expires_at": "2026-04-27T08:30:00Z",
+    "size_bytes": 1843200,
+    "sha256": "...",
+    "legal_basis": "gdpr_art_15",
+    "requested_by_account_id": "01J...",
+    "requested_at": "2026-04-20T08:30:00Z",
+    "completed_at": "2026-04-20T08:42:00Z"
+  }
+}
+```
+
+`status` enum: `queued | running | succeeded | failed | expired`.
+
+**Errors**
+- `403 FORBIDDEN` — role lacks GDPR-export privilege OR export belongs to another Org
+- `404 NOT_FOUND` — export id does not exist for this Org
+- `410 GONE` — download URL expired AND object purged (> 30 days); request a new export
+
+See also `11-import-export/09-gdpr-export.md`.

@@ -11,12 +11,12 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7b)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 13.7c)
 
-- Open: **2** (SI-001 decision-pending; SI-020c — 3/24 done, 21 remain)
+- Open: **2** (SI-001 decision-pending; SI-020c — 4/24 done, 20 remain)
 - Closed: 22
 - By severity (open): S0 = 0 · S1 = 2 (SI-001, SI-020c) · S2 = 0 · S3 = 0
-- SI-020c progress: 3/24 endpoints declared (`GET /v1/auth/verify`, `PATCH /v1/account/preferences`, `POST /v1/me/gdpr-export`). New file `03-api-endpoints/19-account.md` hosts account-scoped endpoints.
+- SI-020c progress: 4/24 endpoints declared (`GET /v1/auth/verify`, `PATCH /v1/account/preferences`, `POST /v1/me/gdpr-export`, `GET /v1/items/:id/history`).
 
 ## Phase queue
 

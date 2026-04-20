@@ -67,9 +67,9 @@ Per-Org caps mirror per-Account at 5× (per `01-conventions.md` §8).
 | Endpoint | Identifier | Limit |
 |---|---|---|
 | `GET /t/:slug` (HTML) | ip | 60 / min per slug |
-| `GET /v1/share-public/:slug/items` | ip | 120 / min per slug |
-| `POST /v1/share-public/:slug/comment` (if enabled) | ip | 10 / min per slug |
-| `POST /v1/shares/access` (password verify) | ip + slug | 10 / 15 min per slug; 5 / 15 min per IP; lockout at 100 fails / 24 h on slug |
+| `GET /v1/public/shares/:slug/items` | ip | 120 / min per slug |
+| `POST /v1/public/shares/:slug/comments` (if enabled) | ip | 10 / min per slug |
+| `POST /v1/public/shares/:slug/unlock` (password verify) | ip + slug | 10 / 15 min per slug; 5 / 15 min per IP; lockout at 100 fails / 24 h on slug |
 
 ## 5. Webhook endpoints (inbound)
 

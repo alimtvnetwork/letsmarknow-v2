@@ -301,6 +301,14 @@ Mappings verified against `00-overview.md` and per-domain files (current as of 2
 |---|---|---|
 | `PATCH /v1/collections/:collection_id` | `PATCH /v1/collections/:id` (`06-collections.md:86`) | Use `:id` for the entity's own primary key; `:collection_id` is reserved for parent-disambiguation in nested paths (e.g. `/v1/collections/:collection_id/items`). See §1.1. |
 
+**Public share viewer (`02-public-share-viewer.md`) — Phase 13.7d additions**
+
+| Forbidden | Canonical (declared at) | Reason |
+|---|---|---|
+| `GET /v1/share-public/:slug/items` | `GET /v1/public/shares/:slug/items` (`00-overview.md:45`, `02-public-share-viewer.md`) | Path prefix is `public/shares`, not `share-public`. The `share-public` form was a draft alias. |
+| `POST /v1/share-public/:slug/comment` | `POST /v1/public/shares/:slug/comments` (`00-overview.md:172`, `02-public-share-viewer.md`) | Same prefix fix; also pluralize collection segment per REST convention (`comments`, not `comment`). |
+| `POST /v1/shares/access` | `POST /v1/public/shares/:slug/unlock` (`00-overview.md:168`, `02-public-share-viewer.md:57`) | Password verify is per-slug under the public-viewer namespace, not a global `/v1/shares/access` endpoint. |
+
 **Group placeholder (documentation only)**
 
 | Forbidden | Canonical | Reason |
@@ -314,7 +322,7 @@ When a feature file needs to reference an endpoint, copy the canonical path verb
 ### 16.3 Conformance check
 
 ```
-grep -rE '/v1/auth/sign_(in|up|out)|/v1/auth/magic_link|/v1/auth/magic/request|/v1/auth/forgot([^/]|$)|/v1/items[:/](batch|bulk)|/v1/bulk([^/]|$)|/v1/billing/(checkout|portal)/session|/v1/organizations/\{[a-z_]+\}/(deletion|exports|invites)|/v1/collections/:collection_id([^/]|$)|/v1/\{[a-z|]+\}' spec/21-app/ \
+grep -rE '/v1/auth/sign_(in|up|out)|/v1/auth/magic_link|/v1/auth/magic/request|/v1/auth/forgot([^/]|$)|/v1/items[:/](batch|bulk)|/v1/bulk([^/]|$)|/v1/billing/(checkout|portal)/session|/v1/organizations/\{[a-z_]+\}/(deletion|exports|invites)|/v1/collections/:collection_id([^/]|$)|/v1/\{[a-z|]+\}|/v1/share-public/|/v1/public/shares/[^ ]*/comment([^s]|$)|/v1/shares/access' spec/21-app/ \
   | grep -v '13-spec-issues' | grep -v '23-audits'
 ```
 

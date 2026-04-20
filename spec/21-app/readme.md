@@ -324,7 +324,7 @@ These problems from the references are **must-fix** and tracked across the spec:
 2. **Tab Extend's search is slow & broken** → we ship instant fuzzy search with jump-to-result (`14-search/`).
 3. **Tab Extend has no undo/redo** → every mutation is an event in history; Ctrl+Z always works (`12-history-undo/`).
 4. **Tab Extend caps at 8 categories / 12-15 groups** → no caps in any paid tier; Free tier limits documented in `10-licensing-billing/01-plans-matrix.md`.
-5. **Toby's free tier caps at 60 saved tabs** → we set a different free cap (TBD in plans matrix) and remove all paid caps.
+5. **Toby's free tier caps at 60 saved tabs** → we set 50 items Free tier cap per `10-licensing-billing/01-plans-matrix.md`.
 6. **Toby has no per-item edit-mode for tags inline** → inline tag editor on every item card.
 7. **Both lack a true "+" hover-add button** → spec'd in `07-features/add-item-hover-button.md`.
 8. **Both lack mind-map / bubble visualization** → spec'd in `15-visualization/04-mindmap-view.md`.

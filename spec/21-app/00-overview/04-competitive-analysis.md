@@ -10,7 +10,7 @@ A side-by-side breakdown of **Toby** vs **Tab Extend** vs **Lets Mark Now**, plu
 |---|---|---|---|
 | Hierarchy depth | 3 (Workspace→Space→Collection) | 3 (Workspace→Category→Group) | **5** (Account→Organization→Space→Collection→Group→Item) |
 | Group-inside-group | ❌ | ✅ (1 level) | ✅ (1 level, sharable) |
-| Free tier item cap | 60 saved tabs | 8 categories | TBD — see `10-licensing-billing/01-plans-matrix.md` |
+| Free tier item cap | 60 saved tabs | 8 categories | 200 items (see `10-licensing-billing/01-plans-matrix.md §2`) |
 | Paid tier caps | Removed | Some remain | **None** |
 | Public share link | ✅ ugly URLs | ❌ | ✅ `letsmarknow.com/t/{slug}` |
 | Custom slug | ❌ | ❌ | ✅ Pro+ |

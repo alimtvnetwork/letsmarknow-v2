@@ -93,6 +93,13 @@ These rules govern names that appear *inside* a markdown file, not the markdown 
 - No emoji in headers (allowed in narrative prose for status: ✅ ⚠️ ❌).
 - No "TBD" / "TODO" / "FIXME" / "TKTK" left in locked spec files. If a value is genuinely unknown, write `(unresolved — see SI-NNN)`.
 
+### Allowed TBD/TODO (documented intentional cases)
+
+| File | Line(s) | Why permitted |
+|---|---|---|
+| `22-infrastructure/03-env-vars.md` | ~93 | Describes a linter **pattern** (meta-code), not a missing spec value. |
+| `23-audits/*.md` | various | Historical audit prose; append-only archive. TBD marks items that were genuinely unknown at the time of writing. |
+
 ## 8. How violations become issues
 
 When an audit finds a violation of any rule above:

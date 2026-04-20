@@ -144,6 +144,18 @@
 
 ---
 
+### 1.14 Jobs, flags & mindmap layouts
+
+> Generic async-job poller, runtime flag evaluation, and mindmap-layout reads.
+
+| Method | Path | Auth | Purpose | Source |
+|---|---|---|---|---|
+| GET | `/v1/jobs/:job_id` | bearer+org | Generic poller for any background job (returns normalized status envelope). | `20-jobs.md` |
+| GET | `/v1/mindmap-layouts` | bearer+org | List saved mindmap layouts for a scope. | `23-mindmap-layouts.md` |
+| GET | `/v1/mindmap-layouts/:id` | bearer+org | Get a single layout (full payload incl. node positions). | `23-mindmap-layouts.md` |
+
+---
+
 ## 2. POST — create, action, and command endpoints
 
 > Two flavors:

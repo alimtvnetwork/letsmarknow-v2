@@ -56,7 +56,7 @@ The active view per Collection is stored on the **Collection** row, not on the A
 ### C3 — API surface for view changes
 
 - `PATCH /v1/collections/{collection_id}` body: `{ "view_settings": { ... } }`. See `03-api-endpoints/06-collections.md`.
-- `PATCH /v1/account/preferences` body: `{ "default_view": "..." }`. See `03-api-endpoints/04-organizations.md` (account-scoped section).
+- `PATCH /v1/account/preferences` body: `{ "default_view": "..." }`. See `03-api-endpoints/19-account.md`.
 - Both return `200` with the updated record. Client applies optimistically per `12-history-undo/02-undo-redo.md` §5 and reconciles on response.
 
 ### C4 — Items payload for any view

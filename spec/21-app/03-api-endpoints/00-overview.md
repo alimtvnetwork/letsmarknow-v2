@@ -285,6 +285,7 @@
 | POST | `/v1/imports/:import_id/cancel` | bearer+org | — | Cancel a running/queued import. | `15-import-export.md` |
 | POST | `/v1/exports` | bearer+org | Y | Start an export job (selectors + format). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/transfers/cross-org` | bearer+role(owner) | Y | Move data between two Orgs you own. | `15-import-export.md` |
+| POST | `/v1/me/gdpr-export` | bearer+reauth | Y (auto, 1/24h per Account) | Trigger Account-wide GDPR export job. Class **bulk**. | `19-account.md` |
 
 ### 2.14 Licenses & billing
 

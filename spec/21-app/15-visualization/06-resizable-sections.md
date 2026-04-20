@@ -28,7 +28,7 @@ Drag-handle splitters between sidebar / main / inspector / preview panes. Phase 
 Stored per Account, per surface (web vs extension new tab) — NOT per Collection (panes are app-shell, not view-mode).
 
 - Field: `account.preferences.layout: jsonb` shaped `{ web: { sidebar: 280, inspector: 360, ... }, extension: { ... } }`.
-- API: `PATCH /v1/account/preferences` per `03-api-endpoints/04-organizations.md` (account-scoped section).
+- API: `PATCH /v1/account/preferences` per `03-api-endpoints/19-account.md`.
 - **P0 (no realtime infra required):** load on page load, PATCH on debounced change. Single-device only. Cross-tab in same browser uses `BroadcastChannel('lmn.layout')` per `15-visualization/readme.md` §C5 — pure browser API, zero infra.
 - **P2 enhancement (per sequencing audit S-1, 2026-04-19):** cross-device live sync via realtime channel `account:{account_id}` per `08-sharing-collab/14-realtime-transport.md` §2. Realtime infra ships P2 per `20-roadmap/03-phase-2-collab.md` §4 — do not pull the Supabase Realtime client SDK into P0 to satisfy this section.
 - Reset via Settings → Layout → "Restore default sizes" (PATCH with `null` → server applies defaults from §1).

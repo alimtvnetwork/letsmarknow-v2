@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-20 (after Phase 7 — Mermaid sweep).
+**Last updated:** 2026-04-20 (after Phase 10 deep re-audit).
 
 ---
 
@@ -13,7 +13,8 @@
 
 | ID | Sev | Title | Evidence | Owning file(s) for fix | Rule violated (`01-naming-conventions.md` §) |
 |---|---|---|---|---|---|
-| SI-001 | S1 | Folder slot `21` is empty (gap in numeric sequence) | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. Slot `21` now documented as Reserved in `01-naming-conventions.md §2`. | Either fill slot `21` with a future cross-cutting domain OR keep the Reserved note. Re-evaluate at next major spec revision. | §2 |
+| SI-001 | S1 | Folder slot `21` is empty (gap in numeric sequence) | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. Slot `21` now documented as Reserved in `01-naming-conventions.md §2`. | Either fill slot `21` with a future cross-cutting domain OR keep the Reserved note. Re-evaluate at next major spec revision. **Decision required from user.** | §2 |
+| SI-015 | S2 | `15-sku-map.md` contains 7 `_TBD` SKU placeholders for Paddle product IDs | `10-licensing-billing/15-sku-map.md` lines 42-48: `pro_paddle_TBD`, `team_paddle_TBD`, etc. These are real spec values awaiting Paddle account provisioning, not formatting violations. Per `01-naming-conventions.md §7`, unknown values should use `(unresolved — see SI-NNN)` form. | `10-licensing-billing/15-sku-map.md` (replace `_TBD` suffix with `(unresolved — see SI-015)` OR add `_TBD` Paddle SKU to allowed-TBD table in `01-naming-conventions.md §7`) | §7 |
 
 
 ---

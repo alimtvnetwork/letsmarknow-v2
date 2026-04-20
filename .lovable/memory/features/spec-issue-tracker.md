@@ -11,11 +11,11 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 8)
+## Counts (updated 2026-04-20, UTC+8 — after Phase 10)
 
-- Open: **1** (SI-001)
-- Closed: 13 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid sweep; SI-014 verification; SI-010 spec-vs-impl phase clarification)
-- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 0 · S3 = 0
+- Open: **2** (SI-001 decision-pending, SI-015 SKU placeholders)
+- Closed: 15 (SI-002 fixed; SI-003/004/007 by exemption; SI-005/006 false positives; SI-009 process; SI-008 TBD cleanup; SI-011 role-scope doc; SI-012/013 Mermaid; SI-014 verification; SI-010 spec-vs-impl; SI-016/017 Phase-10 false positives)
+- By severity (open): S0 = 0 · S1 = 1 (SI-001) · S2 = 1 (SI-015) · S3 = 0
 
 ## Phase queue
 
@@ -27,8 +27,11 @@ type: feature
 6. ✅ **Phase 6 — DONE 2026-04-20.** Role-scope documentation. Closed SI-011.
 7. ✅ **Phase 7 — DONE 2026-04-20.** Mermaid label safety across 13 diagrams. Closed SI-012, 013, 014.
 8. ✅ **Phase 8 — DONE 2026-04-20.** Spec-vs-Impl phase clarification. Closed SI-010.
-9. **Phase 9** — Resolve SI-001 (slot 21 — keep Reserved or fill).
-10. **Phase 10** — Optional re-audit: full cross-ref sweep, glossary coverage, endpoint parity.
+9. **Phase 9** — DECISION REQUIRED on SI-001 (slot 21 — keep Reserved permanently / fill / renumber).
+10. ✅ **Phase 10 — DONE 2026-04-20.** Deep re-audit: 16 cross-refs verified, wireframes exemption verified, endpoint inventory captured. Opened SI-015 (Paddle SKU placeholders); closed SI-016/017 as false positives on discovery.
+11. **Phase 11** — Resolve SI-015 (Paddle `_TBD` SKU placeholders).
+12. **Phase 12** — Optional: endpoint parity sweep (150 declared vs 195 referenced — investigate 45-route gap).
+13. **Phase 13** — Optional: glossary term coverage sweep across feature files.
 
 ## Rules
 

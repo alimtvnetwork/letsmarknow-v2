@@ -37,13 +37,13 @@ When both IP and account exist, the **stricter** of the two applies.
 
 | Route | Per-IP | Per-Email/Account | Lockout |
 |---|---|---|---|
-| `POST /v1/auth/sign_up` | 10 / hour | 3 / 24 h per email | 24-h email block after 5 signups same email |
-| `POST /v1/auth/sign_in` | 30 / 5 min | 5 / 15 min per email | 15-min lockout on `(email, IP)` after 5 consecutive failures; account lock after 100 fails / 24 h |
-| `POST /v1/auth/magic_link` | 10 / hour | 5 / 24 h per email | — |
+| `POST /v1/auth/signup` | 10 / hour | 3 / 24 h per email | 24-h email block after 5 signups same email |
+| `POST /v1/auth/signin` | 30 / 5 min | 5 / 15 min per email | 15-min lockout on `(email, IP)` after 5 consecutive failures; account lock after 100 fails / 24 h |
+| `POST /v1/auth/magic-link/send` | 10 / hour | 5 / 24 h per email | — |
 | `POST /v1/auth/password/forgot` | 5 / hour | 3 / 24 h per email | — |
 | `GET /v1/auth/verify` | 30 / hour | n/a | — |
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | — |
-| `POST /v1/auth/sign_out` | 30 / min | n/a | — |
+| `POST /v1/auth/signout` | 30 / min | n/a | — |
 | `POST /v1/auth/mfa/verify` | n/a | 5/min per account | 15-min lockout after 10 failures |
 | `POST /v1/auth/oauth/callback` | 30 / hour | n/a | — |
 

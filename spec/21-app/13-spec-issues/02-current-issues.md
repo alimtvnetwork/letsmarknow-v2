@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-20 (after Phase 11 — SI-015 closed via allowed-TBD documentation).
+**Last updated:** 2026-04-20 (after Phase 12 — endpoint parity sweep opened SI-018/019/020).
 
 ---
 
@@ -14,6 +14,9 @@
 | ID | Sev | Title | Evidence | Owning file(s) for fix | Rule violated (`01-naming-conventions.md` §) |
 |---|---|---|---|---|---|
 | SI-001 | S1 | Folder slot `21` is empty (gap in numeric sequence) | `ls spec/21-app/` shows `…20, 22, 23`. Slot `13` filled by this folder. Slot `21` now documented as Reserved in `01-naming-conventions.md §2`. | Either fill slot `21` with a future cross-cutting domain OR keep the Reserved note. Re-evaluate at next major spec revision. **Decision required from user.** | §2 |
+| SI-018 | S2 | Path-param style inconsistency (`{id}` vs `:id`) | 4 referenced endpoints use `{id}` while declared rows use `:id`: `GET /v1/collections/{id}`, `GET /v1/items/{id}`, `PATCH /v1/groups/{id}`, `PATCH /v1/items/{id}`. Mixed style breaks AI route-table generation. | Pick one style (recommend `:id` per existing 145-row table) in `03-api-endpoints/01-conventions.md`, then sweep `02-data-model/05-item.md`, `03-collection.md`, `04-group.md`, and `15-visualization/04-mindmap-view.md` to normalize. | §1 (consistency) |
+| SI-019 | S2 | Endpoint aliases used without canonical mapping | 7 referenced paths are non-canonical aliases of declared endpoints: `POST /v1/auth/{sign_in,sign_up,sign_out,magic_link,oauth/callback}` (declared form uses kebab/path-style), `POST /v1/items:batch` vs `/v1/items/batch`, and the placeholder `PATCH /v1/{collections\|groups\|tags\|spaces}/{id}`. | Add an "Aliases & shorthand" subsection to `03-api-endpoints/01-conventions.md` either (a) declaring aliases as forbidden and rewriting referencing files, or (b) listing each alias → canonical mapping. | §1 |
+| SI-020 | S1 | 38 endpoints referenced spec-wide but missing from `03-api-endpoints/00-overview.md` | After excluding SI-018 path-style and SI-019 aliases, 38 distinct method+path pairs are used in domain files but not present in the overview index. Examples: `POST /v1/billing/checkout/session`, `POST /v1/realtime/ticket`, `POST /v1/flags/evaluate`, `GET /v1/jobs/:job_id`, `POST /v1/me/gdpr-export`, `DELETE /v1/mindmap-layouts/{id}`, `POST /v1/webhooks/email-in`, `POST /v1/internal/feedback`. Full list in `/tmp/gap.txt` of Phase 12 sweep, reproducible via the recipe in §"Discovery method" below. | Add the 38 missing rows to the appropriate `03-api-endpoints/NN-*.md` per-domain file AND surface them in `00-overview.md`. Likely owners: `03-auth.md`, `10-shares.md`, `15-import-export.md`, `17-billing-webhooks.md`, plus new sections for `realtime`, `flags`, `jobs`, `mindmap-layouts`, `internal/feedback`, `webhooks/email-in`. | §1, §3 |
 
 
 ---

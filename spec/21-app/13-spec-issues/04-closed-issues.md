@@ -16,6 +16,7 @@
 | SI-012 | 2026-04-20 | S2 | Mermaid `->` arrow inside node labels | Replaced `->` with `→` (Unicode arrow) and wrapped affected labels in `"..."` across 10 `flow-diagram.mmd` files: 01-IA, 03-api-endpoints, 04-extension, 07-features, 09-auth-accounts, 10-licensing-billing, 11-import-export, 14-search, 17-admin-org, 19-security-privacy. Verified clean via grep sweep. (Phase 7) |
 | SI-013 | 2026-04-20 | S2 | Unquoted `:` in Mermaid labels | Wrapped affected labels in `"..."` across 6 `flow-diagram.mmd` files: 04-extension, 07-features, 08-sharing-collab, 10-licensing-billing, 11-import-export, 14-search, 16-notifications-updates (3 missed in initial pass found via tighter grep, then fixed). Verified clean. (Phase 7) |
 | SI-014 | 2026-04-20 | S3 | Hierarchy §3.5 reference verified | **Verification artifact** — `### 3.5 Soft delete` exists at line 94 of `01-information-architecture/01-hierarchy.md`. Reference from `07-features/16-delete-with-undo.md` resolves correctly. No defect. (Phase 5 verification, formally closed Phase 7) |
+| SI-010 | 2026-04-20 | S2 | Feature-flags P0 contradicts no-impl mode | Clarified in `07-features/readme.md` Phase column + footer note: "P0" on `15-feature-flags-and-rollouts.md` means **spec authorship priority**, not implementation priority. Added `Spec: P0 · Impl: deferred` notation. Established convention `Spec: PN · Impl: PM` for future divergent rows. (Phase 8) |
 
 ---
 

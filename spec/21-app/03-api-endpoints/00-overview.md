@@ -112,8 +112,11 @@
 | Method | Path | Auth | Purpose | Source |
 |---|---|---|---|---|
 | GET | `/v1/imports/:import_id` | bearer+org | Job status (`queued`/`running`/`done`/`failed`) + counters. | `15-import-export.md` |
+| GET | `/v1/imports/:id/preview` | bearer+org | Preview parsed import before commit (totals, duplicates, warnings, tree). | `15-import-export.md` |
+| GET | `/v1/imports/:id/status` | bearer+org | Lightweight progress polling / SSE stream (phase, percent, ETA). | `15-import-export.md` |
 | GET | `/v1/imports` | bearer+org | List recent imports. | `15-import-export.md` |
 | GET | `/v1/exports/:export_id` | bearer+org | Job status + signed download URL when ready. | `15-import-export.md` |
+| GET | `/v1/exports/lmn-json/:account_token` | path-token (no bearer) | Out-of-band scriptable export using migration token. | `15-import-export.md` |
 | GET | `/v1/exports` | bearer+org | List recent exports. | `15-import-export.md` |
 
 ### 1.11 Licenses & billing

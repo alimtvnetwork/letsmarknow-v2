@@ -108,6 +108,29 @@ Convenience wrapper around list. Caches well; safe to poll every 30 s.
 
 ---
 
+### Per-item activity feed (alias)
+`GET /v1/items/:id/history`
+
+Convenience alias for `GET /v1/history/for/item/:id`. Powers the item History tab in the right pane (`05-web-app/03-dashboard.md`).
+
+**Auth:** bearer + `X-Organization-Id`
+**Query** (subset of `GET /v1/history`)
+- `event_type` (csv)
+- `since`, `until` (ISO timestamps)
+- `include_undone` (bool, default true)
+- `limit` (default 25, max 100), `cursor`
+
+**Response 200** same shape as list. Server-side this is a thin redirect to the per-entity wrapper above; the alias exists so client routing layers can fetch item activity without constructing the polymorphic path.
+
+**Errors**
+- `404 NOT_FOUND` — item does not exist or is not visible in active Org.
+
+**Cross-references:**
+- `12-history-undo/01-event-log.md §8` — reading the log.
+- `02-data-model/09-history-event.md` — event shape.
+
+---
+
 ### Trash (soft-deleted entities ready to review/restore)
 `GET /v1/trash`
 

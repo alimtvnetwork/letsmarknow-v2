@@ -99,6 +99,7 @@ These rules govern names that appear *inside* a markdown file, not the markdown 
 |---|---|---|
 | `22-infrastructure/03-env-vars.md` | ~93 | Describes a linter **pattern** (meta-code), not a missing spec value. |
 | `23-audits/*.md` | various | Historical audit prose; append-only archive. TBD marks items that were genuinely unknown at the time of writing. |
+| `10-licensing-billing/15-sku-map.md` | 42-48 | Paddle SKU placeholders (`pro_paddle_TBD`, `team_paddle_TBD`, etc.) await Paddle account provisioning. The `_TBD` suffix is the **canonical placeholder format** for unprovisioned external IDs — it is intentional and machine-detectable. Replace with real SKU values when the Paddle account is created. |
 
 ## 8. How violations become issues
 

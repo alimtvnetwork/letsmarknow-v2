@@ -195,3 +195,45 @@ All require bearer auth + `X-Organization-Id` (except `/me`).
 ### Stack additional lifetime code (for seats / tier upgrade)
 `POST /v1/organizations/:id/billing/lifetime/stack`
 Same body. Adds seats or upgrades tier per code's stack rules. Response includes new totals.
+
+---
+
+### Download an invoice as PDF
+`GET /v1/billing/invoices/:id/pdf`
+
+**Auth:** bearer + `X-Organization-Id` + role(`owner` | `admin` | `billing`)
+**Idempotent:** yes (302 redirect; safe to retry)
+**Rate limit class:** `read` (30 / hour per Account)
+
+> **Why this exists.** Invoices are rendered and stored by the payment processor (Stripe / Paddle). Rather than re-rendering server-side, we 302-redirect to the processor's signed PDF URL. This means LMN never holds the PDF bytes (smaller attack surface, no file storage cost) and the URL always reflects the processor's latest tax/legal template.
+
+**Path params**
+- `id` — `invoice.id`. The Org context comes from `X-Organization-Id`; the server verifies the invoice belongs to that Org before redirecting.
+
+**Response 302** — `Location: <processor-signed-url>`, expires per processor (Stripe: 30 days; Paddle: 24 h).
+
+**Response 200** (when `Accept: application/json`)
+```json
+{
+  "data": {
+    "invoice_id": "01J...",
+    "processor": "stripe",
+    "pdf_url": "https://files.stripe.com/.../invoice.pdf",
+    "pdf_url_expires_at": "2026-05-20T08:30:00Z",
+    "number": "LMN-2026-04-00042",
+    "amount_total_cents": 1900,
+    "currency": "USD",
+    "issued_at": "2026-04-20T08:30:00Z"
+  }
+}
+```
+
+> Clients that prefer to render the link without following the redirect should send `Accept: application/json`.
+
+**Errors**
+- `403 FORBIDDEN` — role lacks billing access OR invoice belongs to another Org
+- `404 NOT_FOUND` — invoice does not exist
+- `409 CONFLICT` — invoice in `draft` state (no PDF yet)
+- `502 BAD_GATEWAY` — processor unreachable; client may retry
+
+See also `10-licensing-billing/08-invoices-and-tax.md §87`.

@@ -12,7 +12,9 @@
     "'pro_plus' qualifier means action requires Pro / Team / Lifetime entitlement.",
     "'team_only' qualifier means action requires Team entitlement.",
     "'enabled' on share-viewer means the Share's per-feature flag is on.",
-    "Boolean false = always denied for that role. Conditions narrow an otherwise-true grant."
+    "Boolean false = always denied for that role. Conditions narrow an otherwise-true grant.",
+    "SYSTEM ACTOR BYPASS: The `system` role does NOT appear in per-action grants. It is enforced via SECURITY DEFINER functions, edge-function service-role key, and trusted-context middleware that bypass JWT/RLS layers 1-3 by construction. See `05-permissions-matrix.md §10.5`. Codegen MUST treat any rule referencing `auth.role() = 'system'` as 'allow always' and emit no per-table policy for it; instead, system writes are gated by signed-context proof in the calling function.",
+    "GUEST ROLE COVERAGE: Anonymous public-link viewers (`guest`) only appear in actions whose entity supports share-link reads (Space/Collection/Group/Item read, comment.read/create when share opts in, reaction.toggle when share opts in, share.request_access). Every other action denies `guest` by default; codegen SHOULD assume default-deny when no explicit grant is present."
   ],
 
   "roles": {

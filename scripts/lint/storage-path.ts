@@ -110,6 +110,12 @@ function walk(dir: string, out: string[] = []): string[] {
   return out;
 }
 
+// Rule A is gated by storage-context anchors on the same line. This eliminates
+// false positives from filesystem paths (`migrations/`, `infra/`, `modules/`)
+// and content-archive paths (`organizations/<slug>/`, `schemas/...`) that
+// legitimately appear in IaC, observability, and GDPR-export specs.
+const STORAGE_ANCHOR_RE = /\b(bucket|buckets|object\s+storage|signed[\s-]?url|signed[\s-]?upload|S3|CDN|presigned|storage[\s-]?bucket|storage[\s-]?path|upload\s+to|download\s+from|`bucket`)\b/i;
+
 function scanFile(file: string, catalog: Set<string>, allow: { files: Set<string>; pairs: Set<string> }) {
   const rel = relative('.', file).replace(/\\/g, '/');
   if (allow.files.has(rel)) return;
@@ -125,7 +131,8 @@ function scanFile(file: string, catalog: Set<string>, allow: { files: Set<string
     if (inFence) continue;
     if (/^#{1,6}\s/.test(line)) continue;
 
-    // Rule B: legacy lmn- prefix collisions.
+    // Rule B: legacy lmn- prefix collisions. NOT context-gated — the
+    // `lmn-<canonical-bucket>` form is unambiguously a storage path.
     LEGACY_RE.lastIndex = 0;
     let lm: RegExpExecArray | null;
     while ((lm = LEGACY_RE.exec(line))) {
@@ -141,17 +148,19 @@ function scanFile(file: string, catalog: Set<string>, allow: { files: Set<string
       });
     }
 
-    // Rule A: backticked bucket-shaped path with unknown bucket.
+    // Rule A: backticked bucket-shaped path with unknown bucket — gated
+    // by storage-context anchor on the same line (or line ±1 for robustness).
+    const ctx = (lines[i - 1] ?? '') + '\n' + line + '\n' + (lines[i + 1] ?? '');
+    if (!STORAGE_ANCHOR_RE.test(ctx)) continue;
+
     PATH_REF_RE.lastIndex = 0;
     let pm: RegExpExecArray | null;
     while ((pm = PATH_REF_RE.exec(line))) {
       const token = pm[1];
       if (NOT_A_BUCKET.has(token)) continue;
       if (catalog.has(token)) continue;
-      // Skip date-shaped first segments (audit-archive uses `2026/04/19/...`)
       if (/^\d{4}$/.test(token)) continue;
-      // Skip path templates with placeholder roots
-      if (token.startsWith('lmn-')) continue; // handled by Rule B
+      if (token.startsWith('lmn-')) continue;
       const pairKey = `${rel}:${token}`;
       if (allow.pairs.has(pairKey)) continue;
       const col = pm.index + 1;

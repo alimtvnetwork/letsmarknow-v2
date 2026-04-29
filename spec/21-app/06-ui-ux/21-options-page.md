@@ -2,7 +2,7 @@
 
 > **Audience.** Engineers building the extension's Options page (chrome://extensions → Mark Now → Details → Extension options) and the equivalent in-app `Settings` surface.
 >
-> **Scope.** UI structure, sections, and bindings for the **extension Options page** (manifest `options_ui.page`). The web-app Settings page mirrors most of this surface (`07-features/16-settings.md`); divergences are noted per section.
+> **Scope.** UI structure, sections, and bindings for the **extension Options page** (manifest `options_ui.page`). The web-app Settings page mirrors most of this surface (planned at `07-features/` — settings doc); divergences are noted per section.
 
 ---
 
@@ -15,7 +15,7 @@
 | Route inside extension | `options.html#/<section>` (hash router so deep links work without server) |
 | Web-app mirror | `app.letsmarknow.com/settings/<section>` (same section keys) |
 | Auth required | Signed-in only. Unauthenticated visitors are redirected to `popup.html#/signin` then bounced back. |
-| Org context | Inherits the active Organization from `04-extension/05-state-sync.md`. A header dropdown switches Org without leaving the page. |
+| Org context | Inherits the active Organization from `04-extension/10-sync-and-offline.md`. A header dropdown switches Org without leaving the page. |
 
 ---
 
@@ -117,5 +117,5 @@ Per `04-extension/14-analytics-telemetry.md`. Events:
 - `04-extension/02-surfaces.md` — Options is one of 5 extension surfaces.
 - `04-extension/08-keyboard-shortcuts.md` — rebinding flow.
 - `06-ui-ux/22-keyboard-cheatsheet.md` — `?` modal spec.
-- `07-features/16-settings.md` — web-app Settings page.
+- Web-app Settings page — planned spec doc in `07-features/` (mirrors most sections of this Options page).
 - `19-security-privacy/06-extension-privacy.md` — privacy controls behavior.

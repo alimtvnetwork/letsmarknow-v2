@@ -146,4 +146,4 @@ The catalog is bundled, so the modal cannot fail to load. If catalog parsing thr
 - `06-ui-ux/21-options-page.md` — rebind UI (Shortcuts section).
 - `04-extension/08-keyboard-shortcuts.md` — extension manifest `commands` block.
 - `06-ui-ux/16-print-stylesheet.md` — print rendering.
-- `17-i18n-a11y/extension-strings.md` — string catalog (planned per SI-026).
+- Extension i18n string catalog — planned in `17-i18n-a11y/` folder (per SI-026).

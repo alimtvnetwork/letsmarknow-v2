@@ -1,0 +1,20 @@
+# linter: money-units
+# purpose: Exempt files that legitimately quote the forbidden money-unit terms when documenting the W-10 lock itself — the linter rule definition, the closure notes, the audit history, the rejection-criteria template, and the gap-analysis tracker. These references reinforce the rule rather than violate it.
+# review-by: 2026-10-26
+
+# PR:#0 reason:data-model overview defines the lock by quoting the rejected aliases ("Money in amount_cents, not amount_minor, not amount_in_cents")
+spec/21-app/02-data-model/00-overview.md
+# PR:#0 reason:15-sku-map.md §W-10 closure note quotes the withdrawn amount_minor alias to document what was swept
+spec/21-app/10-licensing-billing/15-sku-map.md
+# PR:#0 reason:09-ci-cd.md §2.1.1 row defines the linter itself by listing the forbidden terms it disallows
+spec/21-app/22-infrastructure/09-ci-cd.md
+# PR:#0 reason:audit history — W-10 closure entry quotes amount_minor
+spec/21-app/23-audits/audit-2026-04-19-ai-readiness-score.md
+# PR:#0 reason:audit history — W-10 narrative quotes amount_minor
+spec/21-app/23-audits/audit-2026-04-19-rescore-delta.md
+# PR:#0 reason:audit history — W-10 root W-issue catalogue quotes both forbidden terms
+spec/21-app/23-audits/audit-2026-04-19-spec-wide.md
+# PR:#0 reason:audit history — gap-analysis tracker row for W-10 quotes amount_minor
+spec/21-app/23-audits/gap-analysis.md
+# PR:#0 reason:folder-overview template includes a checklist line listing forbidden terms as anti-patterns to verify against
+spec/21-app/templates/folder-overview.md

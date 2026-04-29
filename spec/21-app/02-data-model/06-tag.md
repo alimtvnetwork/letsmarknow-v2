@@ -2,7 +2,7 @@
 
 ## Purpose
 
-A short, color-coded label that can be attached to Collections, Groups, and Items within an Organization. Powers filtering and search.
+A short, color-coded label that can be attached to **three entity types — Collection, Group, and Item** — within an Organization. Powers filtering and search. Tag attachment is stored as `tag_ids[]` on each attachable entity (see `03-collection.md`, `04-group.md`, `05-item.md`); there is no separate join table.
 
 ## Fields
 

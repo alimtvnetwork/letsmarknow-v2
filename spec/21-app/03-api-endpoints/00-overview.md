@@ -128,6 +128,7 @@
 | GET | `/v1/me/entitlements` | bearer | Aggregate entitlements for the Account across all Orgs. | `16-licenses.md` |
 | GET | `/v1/organizations/:id/billing` | bearer+role(owner/admin/billing) | Plan, seats, next renewal, invoices summary. | `16-licenses.md` |
 | GET | `/v1/organizations/:id/data-export/:export_id` | bearer+role(owner/admin) | Poll an Org GDPR data-export job (status + signed download URL). | `04-organizations.md` |
+| GET | `/v1/organizations/:id/billing/invoices` | bearer+role(owner/admin/billing) | Paginated list of invoices for the Org (id, period, total, status, PDF link). | `16-licenses.md` |
 | GET | `/v1/billing/invoices/:id/pdf` | bearer+role(owner/admin/billing) | 302 to processor's signed invoice PDF; JSON form available via `Accept: application/json`. | `16-licenses.md` |
 
 ### 1.12 Webhooks (admin diagnostics)

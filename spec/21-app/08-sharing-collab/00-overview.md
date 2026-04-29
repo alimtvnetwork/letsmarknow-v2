@@ -9,7 +9,7 @@
 1. **Share model.** v1 is a **single-table** model (`02-data-model/07-share.md`). The richer multi-table v2 design lives here as a *design note only*, not a contradiction.
 2. **Audiences.** Public link, password-protected link, invite-only (named users).
 3. **Permissions matrix.** Role × action × target → allow/deny. Source of truth for RLS policies and API guards.
-4. **Real-time.** Presence, comments, reactions over Supabase Realtime (W-2 lock); channel naming `lmn:org:{org}:space:{space}` etc. (W-4 lock — `{id}` placeholders only).
+4. **Real-time.** Presence, comments, reactions over Supabase Realtime (W-2 lock); channel naming `org:{org_id}`, `space:{space_id}`, `collection:{collection_id}`, `item:{item_id}`, `share:{share_token}`, `account:{account_id}` (W-4 lock — see `14-realtime-transport.md §2`).
 5. **Notifications.** Email + in-app toasts for share invites, comments, role changes.
 6. **Audit log.** What gets logged, where it surfaces, retention.
 7. **Embed widget.** Iframe-able read-only viewer for shared Collections.

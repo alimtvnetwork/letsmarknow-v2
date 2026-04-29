@@ -360,6 +360,7 @@
 | POST | `/v1/mindmap-layouts` | bearer+org | Y | Create a saved mindmap layout for a scope. | `23-mindmap-layouts.md` |
 | POST | `/v1/internal/feedback` | bearer | Y | Submit in-app feedback / bug report (creates support ticket). | `22-internal.md` |
 | POST | `/v1/internal/feedback/attachments` | bearer | Y | Upload screenshot / log attachment for a feedback ticket; returns signed URL stored on the ticket. | `22-internal.md` |
+| POST | `/v1/realtime/ticket` | bearer+org | — | Mint a short-lived ticket (≤ 60 s) the extension/web client exchanges with the realtime transport (WS/SSE) to subscribe to Org channels. | `../04-extension/10-sync-and-offline.md` |
 
 ---
 

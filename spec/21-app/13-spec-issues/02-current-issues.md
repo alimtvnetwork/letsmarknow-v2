@@ -18,6 +18,25 @@
 | SI-020b | S2 | ✅ closed Phase 13.6 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-020c | S1 | ✅ closed Phase 13.7g — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-021 | S1 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-toby-parity-delta.md` | (moved) | (moved) | (moved) |
+| SI-022 | S2 | 19 endpoints referenced in spec but missing from `00-overview.md` inventory (post-SI-020c residue) | Inverse-sweep audit `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Sources: 4 in `03-api-endpoints/` sub-files (`21-flags.md`, `22-internal.md`, `23-mindmap-layouts.md`, `14-history.md`) declare routes the central inventory never absorbed; 15 in feature/extension/billing/auth files reference routes that were never declared. Excludes 17 forbidden-alias examples in `01-conventions.md` §16 (intentional). | `03-api-endpoints/00-overview.md` (add 19 rows split across §1–§16) plus possible per-file canonical fixes if any reference is itself wrong | n/a (parity defect, not naming) |
+
+**SI-022 endpoint groups (for batched fix):**
+
+*Group B — endpoint files declaring own routes overview missed (4):*
+- `GET /v1/flags` → `21-flags.md`
+- `POST /v1/internal/feedback/attachments` → `22-internal.md`
+- `PATCH /v1/mindmap-layouts/:id` → `23-mindmap-layouts.md`
+- `GET /v1/history/for/item/:id` → `14-history.md`
+
+*Group C — feature files referencing undeclared routes (15):*
+- Auth: `GET /v1/auth/magic/callback`, `POST /v1/auth/oauth/callback`
+- Items/Collections: `GET /v1/collections/:collection_id/items`, `PATCH /v1/collections/:collection_id`, `GET /v1/items/search`
+- Billing: `GET /v1/organizations/:id/billing/invoices`, `POST /v1/billing/webhooks/stripe`, `POST /v1/billing/webhooks/paddle`
+- Extension/sync: `GET /v1/health/extension`, `GET /v1/sync/since`, `POST /v1/realtime/ticket`
+- Org admin: `POST /v1/organizations/:id/imports`
+- Other: `GET /v1/whats-new`, `POST /v1/imports/:id/parse`, `POST /v1/sessions/:id/undo`
+
+---
 
 ---
 

@@ -324,6 +324,7 @@
 | POST | `/v1/imports` | bearer+org | Y | Start an import job (two-phase: presigned PUT then process). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/imports/upload` | bearer+org | Y | One-shot multipart import for files ≤ 25 MB. Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/imports/:id/commit` | bearer+org | Y | Commit a previewed import (writes rows). Class **bulk**. | `15-import-export.md` |
+| POST | `/v1/imports/:id/parse` | bearer+org | Y | Trigger the parse phase on a previously-uploaded import source (`?source=<id>`). Spawns background job; status via `GET /v1/imports/:id/status`. Class **bulk**. | `../11-import-export/03-import-pipeline.md` |
 | POST | `/v1/imports/:import_id/cancel` | bearer+org | — | Cancel a running/queued import. | `15-import-export.md` |
 | POST | `/v1/exports` | bearer+org | Y | Start an export job (selectors + format). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/exports/:export_id/refresh-url` | bearer+org | Y | Mint a fresh signed download URL for a completed export. | `15-import-export.md` |

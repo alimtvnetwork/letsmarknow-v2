@@ -100,7 +100,7 @@ Options page "Send debug report" button:
 
 ## 9. Compliance
 
-- Telemetry is described in the privacy policy (see `19-security-privacy/privacy-policy.md`).
+- Telemetry is described in the privacy policy (see `19-security-privacy/07-privacy-policy.md`).
 - Toggle reflected in CWS "Privacy practices" form.
 - We honor "Do Not Track" implicitly: opt-out by default in EU/UK/CH; opt-in elsewhere is OK per CWS rules but we still default to opt-OUT for new installs everywhere starting with v1.4 (decided to be safer than sorry).
 

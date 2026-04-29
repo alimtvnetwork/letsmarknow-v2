@@ -31,7 +31,7 @@ Gate: **all green** required to merge to `main`.
 
 ### 2.1.1 `spec-drift-linter` — anti-regression guard for the spec corpus
 
-Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness-score.md`, the F-FOLDER-OVERVIEW closure from `23-audits/audit-2026-04-19-100-retrospective.md`, AND the Toby-parity invariants from SI-021 / SI-023 / SI-024 (per DoD §6 Locked rule #5) so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` and `src/**/*.{ts,tsx,css}` on every PR. Composite of seventeen sub-checks, each of which fails the job independently with a precise error.
+Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness-score.md`, the F-FOLDER-OVERVIEW closure from `23-audits/audit-2026-04-19-100-retrospective.md`, AND the Toby-parity invariants from SI-021 / SI-023 / SI-024 (per DoD §6 Locked rule #5) so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` and `src/**/*.{ts,tsx,css}` on every PR. Composite of eighteen sub-checks, each of which fails the job independently with a precise error.
 
 | Sub-check | Tool | What it asserts | Fix-source it locks |
 |---|---|---|---|
@@ -53,6 +53,7 @@ Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness
 | `toast-placement` | `scripts/lint/toast-placement.ts` | (a) Exactly one `<Toaster />` (sonner) instance in the whole `src/` tree, mounted at app root. (b) Its `position` prop MUST resolve to `bottom-right` on desktop and `top-center` on mobile (responsive prop or two instances tied to a media-query helper, both acceptable). (c) No file passes `position="bottom-left"` or `position="top-right"` — both rejected by SI-024. (d) Any spec file under `06-ui-ux/` or `07-features/` mentioning toast placement MUST cite `06-ui-ux/11-feedback.md §2.1` rather than restating coordinates. | SI-024. |
 | `endpoint-counts` | `scripts/lint/endpoint-counts.ts` | (a) Walks every table row across `03-api-endpoints/0[1-9]-*.md` … `03-api-endpoints/1[0-7]-*.md` (excludes `00-overview.md` and `18-error-codes.md`), parses the leading `METHOD /path` cell, and computes: total rows, distinct `(METHOD, path)` pairs, and per-method counts (`GET, POST, PATCH, PUT, DELETE`). (b) Re-reads `03-api-endpoints/00-overview.md §7` and asserts the printed numbers match the computed ones exactly. Off-by-one fails. (c) Asserts `distinct ≤ total` and that the difference equals the number of duplicate rows the script enumerates in its error message (so authors see *which* paths are duplicated). (d) Asserts every method bucket sum equals `total`. (e) On `--write` flag (used only by a maintainer-run script, never CI), regenerates §7 in place — CI itself runs read-only. | Counter Discipline rule (added 2026-04-29 after the 181→182 off-by-one in `00-overview.md §7`). Closes the audit gap that required manual Python sweeps. |
 | `allowlist-discipline` | `scripts/lint/allowlist-discipline.ts` | Enforces the **Allowlist Discipline** meta-rule (see §2.1.3). For every file matching `scripts/lint/*.allowlist.txt`: (a) MUST start with a header block of comment lines (`#`-prefixed) declaring `# linter:` (matching one of the 16 sibling sub-check names), `# purpose:` (one-line reason this allowlist exists at all), and `# review-by:` (ISO date ≤ 180 days from today). (b) Every non-comment, non-blank line MUST be immediately preceded by a `#` comment line carrying `PR:#<number>` and `reason:<≥10 chars>`. Bare entries fail. (c) The whole file MUST be ≤ 50 non-comment lines — past that, the underlying rule is too loose and needs redesign, not more exceptions. (d) `# review-by:` dates that are in the past fail (forces quarterly re-justification). (e) Asserts every linter referenced in the §2.1.1 table either has zero allowlist file OR a compliant one — no orphan allowlists, no allowlists for sub-checks not in the table. | Allowlist Discipline meta-rule (added 2026-04-29). Prevents quiet exception-creep — the failure mode where a linter slowly becomes useless because every violation gets allowlisted instead of fixed. |
+| `audit-cadence` | `scripts/lint/audit-cadence.ts` | Enforces the **Audit Cadence** meta-rule (see §2.1.4). For every file matching `spec/21-app/23-audits/audit-*.md`: (a) MUST contain a top-of-file metadata block with `audit-date: YYYY-MM-DD`, `next-audit-by: YYYY-MM-DD`, `audit-type: <one of: ai-readiness, endpoint-sweep, glossary, parity, retrospective, post-fix, ad-hoc>`, and `status: <open|closed|superseded>`. (b) `next-audit-by` MUST be ≤ 365 days after `audit-date`. (c) Any audit with `status: open` whose `next-audit-by` is in the past fails CI — forces a deliberate re-audit or status change. (d) Per `audit-type`, at most one audit may carry `status: open` at a time (newer one closes/supersedes the older); orphan opens fail. (e) `23-audits/00-overview.md` MUST contain a table listing every audit file with its type, date, status, and next-audit-by — auto-generated from the metadata blocks; out-of-sync rows fail. (f) `audit.md` (the legacy un-prefixed file) and `readme.md` are exempt; `audit-*.md` is the only enforced glob. | Audit Cadence meta-rule (added 2026-04-29). Prevents the failure mode where audits accumulate as historical artifacts and silently go stale — the corpus has 22 audit files spanning 11 days; without cadence enforcement, a 100/100 score from April 19 could still be cited a year from now even after major spec drift. Sibling to Counter Discipline + Allowlist Discipline. |
 
 Implementation contract:
 - Each linter is a standalone `ts-node` script under `scripts/lint/`.
@@ -89,6 +90,34 @@ Allowlists are escape hatches. Every escape hatch is a future regression unless 
 **Why this is a meta-rule, not a regular linter rule:** the regular sub-checks lock specific invariants (role enum, brand pink, toast placement). Allowlist Discipline locks the *process* by which exceptions to those invariants get admitted. Without it, a single careless PR can permanently weaken any linter by appending one line to its allowlist. With it, every exception is auditable, time-bound, and visible in `git blame`.
 
 **Locked in `mem://index` Core (2026-04-29).** Sibling rule to Counter Discipline — both meta-rules govern the linter system itself, not the spec content.
+
+### 2.1.4 Audit Cadence (meta-rule)
+
+Audits are dated artifacts. Without an explicit expiry, every audit silently becomes a permanent claim — a 100/100 score from April 19 keeps being cited a year later even after the spec has drifted. Audit Cadence forces every audit to declare when it stops being authoritative.
+
+**Schema** — every file matching `spec/21-app/23-audits/audit-*.md` MUST start with this metadata block (HTML comment block, so it doesn't render in the audit body):
+
+```html
+<!--
+audit-date: YYYY-MM-DD
+next-audit-by: YYYY-MM-DD       # ≤ 365 days after audit-date
+audit-type: ai-readiness | endpoint-sweep | glossary | parity | retrospective | post-fix | ad-hoc
+status: open | closed | superseded
+supersedes: audit-YYYY-MM-DD-<slug>.md   # only if status=superseded
+-->
+```
+
+**Hard rules:**
+- `next-audit-by` ≤ 365 days after `audit-date`. Longer windows fail — pick a shorter cadence and re-audit on schedule.
+- At most ONE audit of each `audit-type` may carry `status: open` at any time. Newer audits MUST set the older one's status to `closed` or `superseded` in the same PR.
+- `status: open` audits whose `next-audit-by` is in the past fail CI immediately. Either re-audit (new file, new dates), close the audit, or mark it superseded.
+- `status: superseded` MUST cite `supersedes:` pointing to the file it replaces. Bare supersede claims fail.
+- Closing an audit (`open` → `closed`) requires a one-line `closed-on: YYYY-MM-DD` and `closed-because: <≥10 chars>` comment appended to the metadata block.
+- `23-audits/00-overview.md` MUST contain a generated table (one row per audit file) with columns `file | type | audit-date | next-audit-by | status`. Out-of-sync rows fail. Maintainer-run script regenerates this table on `--write`; CI runs read-only.
+
+**Why this is a meta-rule:** Counter Discipline locks numbers. Allowlist Discipline locks exceptions. Audit Cadence locks **time** — the third axis along which the linter system itself can rot. Without it, audits accumulate as historical sediment rather than working artifacts. Together the three meta-rules make the spec corpus self-governing across content, process, and time.
+
+**Locked in `mem://index` Core (2026-04-29).** Third sibling in the meta-rule trilogy.
 
 ### 2.1.2 Pre-commit hook (developer-side)
 

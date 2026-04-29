@@ -1530,3 +1530,38 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 1. **Fix F6 + F7** — small edits to `01-threat-model.md` (Argon2id replaces Bcrypt on line 36; replace `|` with `→` on lines 109–110).
 2. **Decide F5** — residency regions; needs your call (expand policy to 4 regions OR shrink data-handling to 2).
 3. **Open SI-029 formally** for F4 (privacy-pack stub expansion before launch) — needs legal-counsel owner naming.
+
+---
+
+## Session 55 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (Session 54 task #1: fix F6 + F7):** Two small edits to `19-security-privacy/01-threat-model.md`.
+
+**Resolutions:**
+- **F6 closed.** Line 36 changed from "Bcrypt-hashed; 5 attempts..." to "Argon2id-hashed (parameters in `19-security-privacy/05-share-link-security.md`); 5 attempts...". Now consistent with `00-overview.md §1.3` Argon2id lock.
+- **F7 closed.** Lines 109–110 (Top-10 risks rows 9 and 10) changed `|` separator to `→`, restoring the visual pattern of rows 1–8 and fixing markdown table render.
+
+**Verification:** `grep -n Bcrypt` returns empty across `19-security-privacy/01-threat-model.md`; `sed -n '36p;109p;110p'` confirms all three lines are clean.
+
+**Files changed:**
+- edited `spec/21-app/19-security-privacy/01-threat-model.md` (lines 36, 109, 110)
+- edited `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` (added `progress:` header line tracking 6 of 8 closed)
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md`
+
+**Linter status:** unchanged — 17/17 green.
+
+**Audit progress:** `audit-2026-04-29-security-privacy-sweep.md` — **6 of 8 findings closed** (F1, F2, F3, F6, F7, F8). Remaining 2 require user input:
+- **F4** — Privacy-pack stub expansion before launch. Needs explicit user OK to open SI-029 and naming of legal-counsel owner.
+- **F5** — Residency-region count mismatch (4 in data-handling vs 2 in privacy policy). Needs product decision: expand policy to AU/Sydney + ROW, OR shrink data-handling to EU+US for v1.
+
+**Remaining tasks:**
+1. **Decide F5** — residency regions; choose "match policy down to EU+US for v1" (recommended) or "expand policy to 4 regions". Spec edit on either side.
+2. **Open SI-029 formally for F4** — needs your nod + legal-counsel owner naming.

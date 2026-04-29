@@ -64,6 +64,7 @@ function walk(dir: string): void {
     if (st.isDirectory()) {
       if (isHidden(name)) continue;
       if (name === 'templates') continue; // non-domain folder
+      if (allowlist.has(rel)) continue; // allowlisted non-domain folder; skip recursion + naming check
       const m = name.match(DIR_RE);
       if (m) {
         const n = parseInt(m[1], 10);

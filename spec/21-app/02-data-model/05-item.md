@@ -59,6 +59,8 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 4. `tag_ids` all from same Org.
 5. Position scoped to `(collection_id, group_id)` so reordering inside a Group does not affect siblings outside it.
 6. `open_count` and `last_opened_at` updated atomically.
+7. `starred_pin_position` is non-null iff `is_starred = true`. Toggling `is_starred=false` MUST null the pin position; toggling to `true` MUST assign `max(starred siblings in same collection_id+group_id scope)+1024` if no explicit value provided. (SI-021.)
+8. `color_label` is purely visual; it does NOT affect search, sort, or entitlement gating.
 
 ## Indexes (recommended)
 

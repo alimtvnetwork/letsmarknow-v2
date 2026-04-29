@@ -8,8 +8,8 @@ Inbound webhook handling for Stripe + Paddle.
 
 | Path | Processor |
 |---|---|
-| `POST /v1/billing/webhooks/stripe` | Stripe |
-| `POST /v1/billing/webhooks/paddle` | Paddle |
+| `POST /v1/webhooks/stripe` | Stripe |
+| `POST /v1/webhooks/paddle` | Paddle |
 
 Each endpoint:
 1. Verifies signature.

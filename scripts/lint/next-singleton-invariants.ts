@@ -78,7 +78,8 @@ function loadAllowlist(): Set<string> {
   for (const line of readFileSync(ALLOWLIST_PATH, 'utf8').split('\n')) {
     const t = line.trim();
     if (!t || t.startsWith('#')) continue;
-    out.add(t);
+    // Allowlist Discipline schema: "<path> PR:#<n> reason:<text>" — first token is the path.
+    out.add(t.split(/\s+/)[0]);
   }
   return out;
 }

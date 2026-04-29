@@ -58,9 +58,9 @@ These cross-cutting rules override anything in domain-specific files.
 - Public share viewer (`/s/:token`, `/t/{slug}`) is plain web HTML — works in any browser by virtue of standards; **no per-browser QA in v1**.
 
 ### 2.7 Roadmap (`20-roadmap/`)
-- `02-phase-1-v1.md` non-goals: keep "Firefox / Safari / Edge extensions (Phase 4)" as already stated.
-- `04-phase-3-mindmap-ai.md` non-goals: keep "Cross-browser parity beyond Chrome (Phase 4)" as already stated.
-- `05-phase-4-cross-browser.md` is the single home for all post-Chrome work.
+- `20-roadmap/02-phase-1-v1.md` non-goals: keep "Firefox / Safari / Edge extensions (Phase 4)" as already stated.
+- `20-roadmap/04-phase-3-mindmap-ai.md` non-goals: keep "Cross-browser parity beyond Chrome (Phase 4)" as already stated.
+- `20-roadmap/05-phase-4-cross-browser.md` is the single home for all post-Chrome work.
 
 ### 2.8 Notifications & updater (`16-notifications-updates/02-app-updater.md`)
 - v1 update flow is **Chrome Web Store only**.

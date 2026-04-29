@@ -1665,3 +1665,15 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Audit progress:** 2 of 9 findings closed. Remaining: D2 (overview missing 02-share-related row drift), D3, D5 (search_tsv propagation), D6, D7, D8, D9.
 
 **Linters:** 17/17 green. **Score:** 100/100.
+
+---
+
+## Session 59 — 2026-04-29 — Drain D5 from data-model audit
+
+**User:** "Next, list out the remaining tasks..."
+
+**Action:** Closed D5 (S2). Migrated `02-space.md`, `03-collection.md`, `04-group.md` Indexes sections from legacy "Full-text on `(...)`" to **GIN on `search_tsv`** (generated column), matching `05-item.md` pattern per F-M17 reconciliation. Each line cross-references `14-search/06-search-engine.md §2.2`.
+
+**Audit progress:** 4 of 9 closed. Remaining: D3 (tag attachable-entities sentence), D6, D7, D8, D9 (S3 polish).
+
+**Linters:** 17/17 green.

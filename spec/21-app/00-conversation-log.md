@@ -106,3 +106,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Picked queued option 5 (deep re-audit). Wrote 7-check Python sweep. Found 2 real defects + 3 false positives. Fixed: (D-1) `00-overview.md` §7 endpoint counts were stale — said 157, actual 183 rows / 182 distinct. Drift accumulated from `prev + delta` math across sessions. Rewrote §7 with measured counts + Rows-vs-Distinct column + last-rebase marker. (D-2) Stale share-model paths in `20-roadmap/07-build-readiness.md` and `mem://index.md` Core (missing numeric prefix). Recorded false positives so future sweeps don't repeat: forbidden-alias rule applies only to URL paths not event/table/template names; Source-column paths are relative to `03-api-endpoints/`. Created `23-audits/audit-2026-04-29-post-fix-reaudit.md` (full report). Updated `mem://features/spec-issue-tracker.md` with counter-discipline rule and FP patterns. Score holds at 100/100.
+
+---
+
+## 2026-04-29 — `next` (AI-readiness audit v2)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Picked queued option 5 (publish fresh AI-readiness v2). Created `23-audits/audit-2026-04-29-ai-readiness-score-v2.md` — delta-only consolidation over the 2026-04-19 v1 baseline. Records the 4 same-day fix sessions (Toby parity, glossary sweep, orphan-endpoint sweep, roadmap kickoff), re-runs the 11 gating checks (all hold), inventories the 6 parked inline questions with safe defaults, re-affirms 100/100/100 across Lovable/Cursor/Raw-LLM, and flags one implementation gap (Toby pink not yet in `src/index.css` or `tailwind.config.ts`) that is *outside* spec-readiness math. No memory or score changes — purely a published snapshot.

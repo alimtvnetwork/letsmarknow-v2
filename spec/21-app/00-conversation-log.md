@@ -1270,3 +1270,33 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 4. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
 5. **Lift `no-implementation-mode`** — major phase transition, unlocks 4 src-dependent linters.
 6. **Rest** — 46 sessions, 17/17 green linters, 1 open SI (SI-026, 8 entries).
+
+---
+
+## Session 47 — 2026-04-29 — Author 10-licensing-billing/16-billing-emails.md (SI-026 drain −1)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action.** Picked S46 suggestion #1. Authored `spec/21-app/10-licensing-billing/16-billing-emails.md` (9 sections: taxonomy, 16-row catalog, typed envelope, decline-reason humanization map, localization, send transport, footer, audit, refs). **Slot decision:** original ref called `07-billing-emails.md` but slot 07 is occupied by `07-seats-and-quotas.md`; chose next free slot `16-` per locked NN- naming rule. Updated citing ref in `03-api-endpoints/17-billing-webhooks.md:345`. Removed allowlist entry. Fixed 2 self-introduced unresolved refs (`22-infrastructure/05-email-transport.md` → `11-email-provider.md`; `19-security-privacy/legal-entity.md` → folded into `07-privacy-policy.md` controller section). Linter clean (2009 paths / 307 files).
+
+**Result.** SI-026 backlog 8 → 7. Open SI count unchanged (1).
+
+**Files touched.**
+- created `spec/21-app/10-licensing-billing/16-billing-emails.md`
+- edited `spec/21-app/03-api-endpoints/17-billing-webhooks.md`
+- edited `scripts/lint/backticked-path-resolution.allowlist.txt`
+- edited `spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.lovable/memory/index.md`
+- edited `spec/21-app/00-conversation-log.md`
+
+**Next.**
+1. **Author root-level `payments-integration.md`** — single-file SI-026 drop (1 allowlist entry).
+2. **Author `17-i18n-a11y/` folder + `00-overview.md` + `extension-strings.md`** — needs new folder (3 files for 1 allowlist entry).
+3. **Convert remaining `08-sharing-collab/share-model.md` ref to prose** — locked as v2-only design note per memory; converting the `03-api-endpoints/10-shares.md` citation to plain text closes 1 allowlist entry without authoring v2.
+4. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
+5. **Lift `no-implementation-mode`** — major phase transition.
+6. **Rest** — 47 sessions, 17/17 green linters, 1 open SI (SI-026, 7 entries).

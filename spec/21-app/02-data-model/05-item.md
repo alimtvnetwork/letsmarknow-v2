@@ -71,7 +71,7 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - **GIN on `search_tsv`** for global / item / workspace search — definition lives in `14-search/06-search-engine.md` §2.2
 - `(organization_id, last_opened_at DESC)` for "Recently opened"
 
-> **Note on full-text search:** The legacy line "Full-text on `(title, description, notes, url)`" is superseded by the generated `search_tsv` column above. Analogous `search_tsv` columns also exist on `collections`, `spaces`, and `groups` per the same source spec.
+> Analogous `search_tsv` columns also exist on `spaces`, `collections`, and `groups` per `14-search/06-search-engine.md §2.2`.
 
 ## Lifecycle
 

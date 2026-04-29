@@ -37,7 +37,7 @@ The `.test` TLD is reserved by RFC 2606 and never resolves — these emails cann
 
 Each seed account ships with:
 - 1 default Space.
-- 3 Collections (varying `kind` values per `02-data-model/collection.md`).
+- 3 Collections (varying `kind` values per `02-data-model/03-collection.md`).
 - ~15 Items spread across the Collections (mix of bookmarks, saved-tabs, notes).
 - 1 `next` Collection (the singleton per `07-features/17-next-queue.md`) with 5 open items + 2 done items.
 

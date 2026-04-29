@@ -26,7 +26,7 @@ Inventory of every user-visible UI surface the extension exposes. Each links to 
 ## 4. Options Page (`options_ui.page`)
 - **File:** `options/index.html`, `open_in_tab: true`
 - **Purpose:** Account, sync settings, keyboard shortcuts, theme, Privacy/data, sign-out, about.
-- **Spec:** see `06-ui-ux/options-page.md`.
+- **Spec:** see `06-ui-ux/21-options-page.md`.
 
 ## 5. Omnibox (`omnibox.keyword = "lmn"`)
 - **Trigger:** type `lmn ` in URL bar.

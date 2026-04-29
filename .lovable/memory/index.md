@@ -9,7 +9,7 @@ Conversation logging: append every user instruction verbatim to `spec/21-app/00-
 Instruction handling: write immediately. Only stop to ask when genuinely ambiguous (conflicting locked rules, missing data, multiple valid interpretations).
 Identifiers: UUIDv7 everywhere. Never ULID.
 Role enum is locked: owner, admin, editor, viewer, billing, guest, system. Do not introduce new roles without updating glossary + member.md together.
-Share model v1 = single-table (`02-data-model/share.md`). `08-sharing-collab/share-model.md` is a v2 design note only.
+Share model v1 = single-table (`02-data-model/07-share.md`). `08-sharing-collab/01-share-model.md` is a v2 design note only.
 File naming: `NN-name.md` numbered prefix convention. Locked rules in `spec/21-app/13-spec-issues/01-naming-conventions.md`.
 Spec issues: open list at `spec/21-app/13-spec-issues/02-current-issues.md`. Phase plan at `03-phase-plan.md`. Never fix in `13-`, fixes land in owning folder.
 The 100/100 readiness score in `23-audits/audit-2026-04-19-ai-readiness-score.md` is STALE while `13-spec-issues/02-current-issues.md` open count > 0.

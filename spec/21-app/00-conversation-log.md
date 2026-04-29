@@ -166,3 +166,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Closed SI-024. Locked global toast placement in `06-ui-ux/11-feedback.md §2.1`: bottom-right desktop, top-center mobile (`< md`, 768px), 16px edge inset, max 3 stacked FIFO, `--z-toast = 90`, single `<Toaster />` at app root, no per-surface overrides. Added §2.2 duration table with hover/focus pause, §2.5 a11y rules (`role=status` vs `role=alert`, `aria-keyshortcuts=Mod+Z` for Undo, `prefers-reduced-motion` instant). Save Session v1's bottom-left request **rejected** to maintain one global convention; rewrote refs in `07-features/02-save-session.md §14.4` and `04-extension/09-save-session.md §11` to point at canonical placement. Moved SI-024 to `04-closed-issues.md`. Open 1 → 0, Closed 27 → 28. Score back to 100/100.
+
+---
+
+## 2026-04-29 — `next` (DoD walkthrough)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Walked `20-roadmap/06-definition-of-done.md` end-to-end. Verified all 11 cross-referenced files exist (`03-api-endpoints/18-error-codes.md`, wireframes folder with 5 numbered files + readme + overview, copy-strings, breakpoints, a11y, telemetry events, rate-limit values, env-vars, secrets, cron, storage-layout, permissions-matrix.json). Identified 4 gaps from recent SI closes: (G-1) brand pink HSL not enforced as DoD line, (G-2) `--color-label-*` token usage ungated, (G-3) toast placement compliance ungated post-SI-024, (G-4) `Collection.kind` immutability + session events ungated post-SI-023. Patched §1 UI block with 3 new lines (Toby-pink anchor, color-label tokens, toast placement). Added §3 "Collections / Sessions (SI-021, SI-023)" with 7 per-domain checks (kind immutability, captured_at parity, source_window_id scope, 3 session events, conditional menu actions, starred_pin invariant, drag-drop matrix). Added §6 Locked rule #5 requiring CI lint enforcement of Toby-parity invariants. Added §7 walkthrough log row for traceability. No content removed; only additive hardening.

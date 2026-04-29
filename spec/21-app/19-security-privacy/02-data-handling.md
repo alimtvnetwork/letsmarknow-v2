@@ -89,13 +89,18 @@ DSR portal also at `privacy.letsmarknow.com` for non-account holders (e.g., shar
 
 ## 7. Sub-processors
 
-Maintained list at `letsmarknow.com/legal/subprocessors`:
-- Cloud infra (AWS / Cloudflare).
-- Email delivery (Postmark).
-- Payments (Stripe / Paddle — see `10-licensing-billing/`).
-- Customer support (Plain / front).
+> **Single source of truth:** `19-security-privacy/07-privacy-policy.md §3`. This section mirrors that table for engineering convenience; if the two ever differ, the privacy policy wins.
 
-Each has DPA in place; user notified 30 d before adding new sub-processor.
+| Sub-processor | Purpose | Underlying infra | Region |
+|---|---|---|---|
+| Lovable Cloud (managed Supabase) | Database, auth, storage, edge functions | per `22-infrastructure/01-hosting.md` | EU (default) / US (opt-in for US-billed Orgs) |
+| Stripe | Payment processing (primary) | — | US/EU per Stripe routing |
+| Paddle | Payment processing (Merchant-of-Record alternative, see `10-licensing-billing/04-paddle-integration.md`) | — | US/EU per Paddle routing |
+| Resend | Transactional email (primary, locked in `22-infrastructure/11-email-provider.md`) | — | EU |
+| Postmark | Transactional email (failover only, locked in `22-infrastructure/11-email-provider.md`) | — | US |
+
+Public list mirrored at `letsmarknow.com/legal/subprocessors`. Adding a sub-processor requires: updating `07-privacy-policy.md §3`, mirroring here, publishing 30-day advance notice, and updating the deployed policy. Each sub-processor has a DPA in place.
+
 
 ## 8. Backup strategy
 

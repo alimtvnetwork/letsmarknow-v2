@@ -984,3 +984,51 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 2. **Re-paste full Toby spec** — closes 6 inline ergonomics defaults parked in `20-roadmap/`. Content-heavy, needs your re-paste.
 3. **Lift `no-implementation-mode`** — start Phase 0 build; unlocks the 4 src-dependent linters in one sweep. Major phase transition.
 4. **Rest** — 39 sessions, 17/17 green linters, 1 open SI (now 18 entries, was 21).
+
+---
+
+## Session 40 — 2026-04-29 — `next` (SI-026 drain: release-ops stubs)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken.** Picked option #1 from S39's suggested actions: author the 3 `20-release-ops/` stub files. Decision: rather than create a new top-level `20-release-ops/` folder (slot 20 already taken by `20-roadmap`, no upstream commitment to a new folder, and the three docs are all extension-shipping concerns), **rehome them inside `04-extension/`** as slots 17, 18, 19. This matches the folder's existing scope (manifest/dev-loop/rollout already live there).
+
+**Files created (3 stubs):**
+- `04-extension/17-store-listing.md` — Chrome Web Store listing fields (name, descriptions, category, screenshots, promo tiles, permissions justification). Tables for image asset inventory + per-permission justification placeholders. Marked `Status: Stub authored Session 40 to close SI-026 forward-ref. Content to be expanded before v1 Phase 1 store submission.`
+- `04-extension/18-firefox-port.md` — Phase 4 deltas (MV3 namespace, polyfill, AMO signing, `webextension-polyfill`). v1 source-level portability rules to keep the port mechanical.
+- `04-extension/19-staging-seed.md` — Fixed roster of 8 seed accounts (`qa-free`, `qa-pro`, `qa-team-{owner,admin,editor,viewer,billing}`, `qa-guest`), nightly 02:00 UTC reset, per-account fixture data contract.
+
+**Files updated:**
+- `04-extension/01-manifest.md` line 176: `20-release-ops/store-listing.md` → `04-extension/17-store-listing.md`.
+- `04-extension/13-update-and-rollout.md` line 113: `20-release-ops/firefox-port.md` → `04-extension/18-firefox-port.md`.
+- `04-extension/15-dev-loop.md` line 83: `20-release-ops/staging-seed.md` → `04-extension/19-staging-seed.md`.
+- `04-extension/00-overview.md` §2 file-by-file table: added rows for 16, 17, 18, 19 (16 was missing too — drive-by fix).
+- `scripts/lint/backticked-path-resolution.allowlist.txt`: removed 3 `20-release-ops/*` entries; added 2 new entries for `19-security-privacy/privacy-policy.md` and `17-i18n-a11y/extension-strings.md` cited from the new `17-store-listing.md` stub (still SI-026 forward-refs).
+- `13-spec-issues/02-current-issues.md`: SI-026 row updated 18 → 15; last-updated note refreshed.
+
+**Drift fixed during verification (drive-by, in the new stubs):**
+- `02-data-model/collection.md` → `02-data-model/03-collection.md`.
+- `09-auth-accounts/04-member.md` (doesn't exist) → `09-auth-accounts/07-org-membership.md`.
+- `10-licensing-billing/02-plans.md` → `10-licensing-billing/01-plans-matrix.md`.
+- `13-spec-issues/02-current-issues.md` last-updated note had illustrative `20-roadmap/0X-...md` token caught as drift; replaced with prose.
+
+**Verification.**
+- `backticked-path-resolution`: clean — 1886 backticked paths resolved across 300 files.
+- `link-check`: clean — 36 relative links resolved across 300 files.
+- `folder-overview`: clean.
+- `naming-convention`: clean.
+- `allowlist-discipline`: clean — 12 allowlist files validated against 21 known sub-checks.
+
+**SI-026 backlog: 15 entries remaining** spanning planned files in `19-security-privacy/` (2), `06-ui-ux/` (2), `17-i18n-a11y/` (1), `08-sharing-collab/` (2), `07-features/` (1), `10-licensing-billing/` (1), root-level `payments-integration.md` (1), plus duplicate citing-file refs.
+
+**Remaining tasks for this session:** none — verification clean.
+
+**Suggested next actions:**
+1. **Continue draining SI-026** — author the 2 `19-security-privacy/` stubs (`extension-privacy.md`, `privacy-policy.md`). Cohesive group, would drop backlog 15 → 13.
+2. **Author `06-ui-ux/options-page.md` + `06-ui-ux/keyboard-cheatsheet.md`** — cohesive UI-surface group, drops backlog further.
+3. **Re-paste full Toby spec** — closes 6 ergonomics defaults parked in `20-roadmap/`. Needs your re-paste.
+4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
+5. **Rest** — 40 sessions, 17/17 green linters, SI-026 trending down (21 → 15 in 2 sessions).

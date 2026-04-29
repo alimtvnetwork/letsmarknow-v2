@@ -36,6 +36,10 @@
 | `13-update-and-rollout.md` | Web Store publish workflow, staged rollout %, kill switch via remote config. |
 | `14-analytics-telemetry.md` | What the extension reports, opt-in respect, redaction rules. |
 | `15-dev-loop.md` | Local dev with `web-ext` / Vite, hot reload constraints in MV3, test profiles. |
+| `16-open-tabs-panel.md` | Open-tabs panel surface inside the extension popup/new-tab. |
+| `17-store-listing.md` | Chrome Web Store listing copy, screenshots, promo tiles, permissions justification. |
+| `18-firefox-port.md` | Phase 4 Firefox/AMO port deltas and source-level portability rules to keep v1 port-ready. |
+| `19-staging-seed.md` | Fixed roster of staging seed accounts and seed-data contract; staging DB nightly reset. |
 
 ---
 

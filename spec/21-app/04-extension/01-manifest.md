@@ -173,5 +173,5 @@ The exact `manifest.json` shape, permission model, and rationale for each entry.
 
 - Category: **Productivity**
 - Single purpose statement: "Save and organize browser tabs and bookmarks visually."
-- Long description, screenshots, promo tile: see `20-release-ops/store-listing.md`.
+- Long description, screenshots, promo tile: see `04-extension/17-store-listing.md`.
 - Privacy practices: see `19-security-privacy/extension-privacy.md`.

@@ -110,4 +110,4 @@ All Chromium-based; the same CRX works. We submit to:
 
 Brave & Arc auto-pull from CWS by default (no separate submission needed).
 
-Firefox: separate XPI build with WebExtensions polyfill (`browser.*` namespace). Tracked as a future milestone — see `20-release-ops/firefox-port.md`.
+Firefox: separate XPI build with WebExtensions polyfill (`browser.*` namespace). Tracked as a future milestone — see `04-extension/18-firefox-port.md`.

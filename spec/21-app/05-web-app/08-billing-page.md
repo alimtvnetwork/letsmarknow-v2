@@ -2,7 +2,7 @@
 
 Plans, seats, invoices, lifetime, portal. UI for `03-api-endpoints/16-licenses.md`.
 
-> **Pricing source of truth:** `10-licensing-billing/01-plans-matrix.md`. All numbers shown here are illustrative; the implementation MUST read live values from the entitlements/plans API. If this file disagrees with `01-plans-matrix.md`, **the matrix wins**.
+> **Pricing source of truth:** `../10-licensing-billing/01-plans-matrix.md`. All numbers shown here are illustrative; the implementation MUST read live values from the entitlements/plans API. If this file disagrees with `../10-licensing-billing/01-plans-matrix.md`, **the matrix wins**.
 
 Owner and Billing role can access; others see "Billing is managed by your Owner" placeholder.
 
@@ -53,11 +53,11 @@ If `status="trialing"`: "Free trial ends in 4 days · [Add payment]".
 └──────────────────────────────────────────────┘
 ```
 
-Per-seat price comes from `01-plans-matrix.md` §1 — Team plan is **$9/seat/mo or $84/seat/yr**. Adding seats: inline stepper + cost estimate ("Add 2 seats — $18/mo prorated today"). Submits via `/billing/change`.
+Per-seat price comes from `../10-licensing-billing/01-plans-matrix.md` §1 — Team plan is **$9/seat/mo or $84/seat/yr**. Adding seats: inline stepper + cost estimate ("Add 2 seats — $18/mo prorated today"). Submits via `/billing/change`.
 
 ## 4. Plan picker (Change plan modal)
 
-- 3 cards side-by-side: **Free** ($0), **Pro** ($5/mo or $48/yr), **Team** ($9/seat/mo or $84/seat/yr). Sourced from `01-plans-matrix.md` §1.
+- 3 cards side-by-side: **Free** ($0), **Pro** ($5/mo or $48/yr), **Team** ($9/seat/mo or $84/seat/yr). Sourced from `../10-licensing-billing/01-plans-matrix.md` §1.
 - Toggle Monthly/Yearly (annual ≈ 20% discount per §4 of plans matrix).
 - "Current" badge on current plan.
 - Switch CTA → confirms → calls `/billing/change` → 200 means immediate effect with proration.

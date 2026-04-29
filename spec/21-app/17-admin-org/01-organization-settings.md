@@ -34,7 +34,7 @@ Owner / Admin surface for configuring Org-wide behavior.
 - **Require MFA for all members** (Team+).
 - **Session timeout**: 1d / 7d / 30d / never (per device).
 - **Domain-restricted invites** (Team+): only `@acme.com` emails can join.
-- **Restrict to stable channel** (per `03-release-channels.md`).
+- **Restrict to stable channel** (per `../16-notifications-updates/03-release-channels.md`).
 - **IP allowlist** (Enterprise): CIDR list; outside requests get `403`.
 - **Public sharing**: enabled / disabled / Owner-approval-required.
 - **Member-created shares default expiry**: never / 7 d / 30 d.

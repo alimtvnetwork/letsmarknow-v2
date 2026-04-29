@@ -16,7 +16,7 @@ Three environments. No more, no less. Promotion is one-way: `dev → staging →
 | Email sender | `noreply@dev.letsmarknow.dev` | `noreply@staging.letsmarknow.dev` | `noreply@letsmarknow.com` |
 | Stripe / Paddle | test mode | test mode | live mode |
 | OAuth client IDs | dev clients | staging clients | prod clients |
-| Feature flags | all ON by default | mirrors prod | per `15-feature-flags-and-rollouts.md` |
+| Feature flags | all ON by default | mirrors prod | per `../07-features/15-feature-flags-and-rollouts.md` |
 | Telemetry sink | dev PostHog project | staging PostHog project | prod PostHog project |
 | Error reporter | dev DSN | staging DSN | prod DSN |
 | Allowed signups | any email | `@letsmarknow.com` + invite list | open |

@@ -91,7 +91,7 @@ Defer reload until safe; show "Reload pending" indicator in shell.
 ## 9. Rollout pacing
 
 - New extension version: published to Chrome Web Store with rollout percentage (10% → 50% → 100% over 48 h) when feature is risky.
-- Web app: progressive rollout via CDN feature flag (`X-Build-Variant` header) — see `15-feature-flags-and-rollouts.md`.
+- Web app: progressive rollout via CDN feature flag (`X-Build-Variant` header) — see `../07-features/15-feature-flags-and-rollouts.md`.
 
 ## 10. Telemetry
 

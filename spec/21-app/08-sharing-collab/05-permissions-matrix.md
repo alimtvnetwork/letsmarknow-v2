@@ -35,7 +35,7 @@ The role enum is **locked** (Core memory + `02-data-model/08-member.md` + `17-ad
 | Transfer ownership | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Manage members (invite/remove/role) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Manage SSO/SAML (Team) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Manage billing / view invoices | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Manage billing / view invoices | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
 | Configure brand (Pro+) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Configure webhooks (Team) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
 | View audit log (Team) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |

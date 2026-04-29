@@ -1608,3 +1608,46 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - Audit a different folder (e.g. `08-sharing-collab/`, `02-data-model/`, `10-licensing-billing/`).
 - Re-paste any external reference (Toby, competitor docs).
 - Refresh AI-readiness score: `audit-2026-04-19-ai-readiness-score.md` may need a fresh delta now that 56 sessions of changes have accumulated.
+
+---
+
+## Session 57 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (suggested action #1: audit `02-data-model/`):** Authored `spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md` — first dedicated audit of this folder since pre-Phase-9. Surfaced **9 findings** (1×S1, 5×S2, 3×S3).
+
+**Headline:**
+- **D1 (S1, codegen-blocker)** — `09-history-event.md` `target_type` enum is missing `next_item` AND `account`. Any audit-log row for those entities crashes on first write. LLM building from spec would replicate the bug verbatim.
+- **D2 (S2)** — `00-overview.md §2` File-by-file table lists 11 of 13 files; `09-history-event.md`, `11-account.md`, `12-next-item.md` are orphaned from the index.
+- **D4 (S2)** — `00-overview.md` line 29 calls Share's discriminator `target_kind` and lists a non-existent `audience` field; actual columns are `target_type` and `mode`.
+- **D5 (S2)** — `search_tsv` migration is partial. `05-item.md` migrated; `02-space.md`, `03-collection.md`, `04-group.md` still carry legacy "Full-text on `(...)`" lines despite `05-item.md` line 74 explicitly stating analogous columns exist.
+- **D3 (S2)** — Tag attachment-scope phrasing drifts between `06-tag.md` and `00-overview.md §2`.
+- **D6, D7, D8, D9 (S3)** — Audit Block placeholder, design-decision documentation, orphan-Group lifecycle prose, stale superseded-line note.
+
+**Drain plan (none require user input):**
+1. Next session: D1 + D4 (two single-line fixes; D1 has highest leverage).
+2. Following: D2 + D3 + D6 + D7 (`00-overview.md` + `06-tag.md` polish).
+3. Then: D5 (3-file `search_tsv` migration).
+4. Then: D8 + D9 (cleanup).
+
+**Files changed:**
+- created `spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md`
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md`
+
+**Linter status:** unchanged — 17/17 green (audit file declares all 4 audit-cadence headers + status `open`).
+
+**Open SIs:** still 1 in tracker (SI-029, blocked on legal counsel). The 9 D-findings here are tracked via the audit file itself (lightweight, agent-resolvable, no SI needed unless a human-input blocker emerges).
+
+**Remaining tasks:**
+1. **D1 + D4 in `09-history-event.md` and `00-overview.md`** — two-edit batch, highest leverage (D1 unblocks NextItem + Account event logging).
+2. **D2 + D3 + D6 + D7** — `00-overview.md §2` row additions and `06-tag.md` polish.
+3. **D5** — propagate `search_tsv` to Space/Collection/Group entities.
+4. **D8 + D9** — documentation cleanup.
+5. **SI-029** — still blocked on legal counsel (informational only).

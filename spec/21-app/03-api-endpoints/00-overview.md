@@ -453,12 +453,12 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Count |
 |---|---|
-| GET | 39 |
-| POST | 86 |
-| PATCH | 8 |
+| GET | 41 |
+| POST | 87 |
+| PATCH | 9 |
 | PUT | 1 |
 | DELETE | 11 |
-| **Total** | **145** |
+| **Total** | **149** |
 
 > If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug.
 

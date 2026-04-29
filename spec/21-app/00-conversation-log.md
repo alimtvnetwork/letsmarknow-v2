@@ -238,3 +238,13 @@ next
 ```
 
 **Refactored into:** Added 18th sub-check `audit-cadence` to `spec-drift-linter` and a new §2.1.4 "Audit Cadence (meta-rule)" in `22-infrastructure/09-ci-cd.md`. Schema: every `23-audits/audit-*.md` MUST carry an HTML-comment metadata block declaring `audit-date`, `next-audit-by` (≤365d), `audit-type` (one of 7 enum values), `status` (open/closed/superseded), and `supersedes:` when applicable. At most one `status: open` per `audit-type`; expired open audits fail CI immediately. `23-audits/00-overview.md` MUST carry a generated table mirroring all metadata blocks. Closes the failure mode where a 100/100 score from April 19 could still be cited a year later despite spec drift. Completes the meta-rule trilogy: Counter Discipline (numbers) + Allowlist Discipline (exceptions) + Audit Cadence (time). Updated header from "seventeen" to "eighteen sub-checks". Locked in `mem://index` Core. Also reconciled stale `mem://index` Memories pointer (was "1 open / 25 closed", now "0 open / 28 closed, score 100/100"). No spec content changed — pure self-governance hardening. Score holds at 100/100.
+
+---
+
+## 2026-04-29 — Session 15: Backfill Audit Cadence metadata
+
+```
+next
+```
+
+**Refactored into:** Backfilled the §2.1.4 Audit Cadence metadata block into all 18 existing `23-audits/audit-*.md` files via `/tmp/backfill.py` (idempotent — skips files that already have the block). Classification: 1 retrospective, 1 glossary, 2 parity, 2 endpoint-sweep, 5 ai-readiness, 7 ad-hoc. Status distribution: 1 open (`audit-2026-04-29-ai-readiness-score-v2.md` — the live 100/100 baseline), 4 superseded (full ai-readiness chain v1 → delta → delta-v2 → delta-v3 → v2; orphan-endpoint-sweep → post-fix-reaudit), 13 closed. Verified the "at most one open per audit-type" invariant holds: only `ai-readiness` has an open row. Generated the cadence registry table and inserted it as a new "## Audit cadence registry" section in `23-audits/00-overview.md` before "## Cross-references". Cadence policy: ai-readiness 90 days, parity/endpoint-sweep 180 days, glossary/retrospective/ad-hoc 365 days. The `audit-cadence` sub-check (spec'd Session 14, 18th in `spec-drift-linter`) now has clean ground truth on day one — no expired open audits, no orphan opens, no missing metadata blocks. Score holds at 100/100.

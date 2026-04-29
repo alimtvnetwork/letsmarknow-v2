@@ -22,7 +22,7 @@
 
 | File | Owns |
 |---|---|
-| `01-share-model.md` | v2 design note (multi-table). v1 is `02-data-model/07-share.md`. |
+| `01-share-model.md` | ⚠️ **v2-future design note (do NOT implement for v1).** v1 is the single-table model in `02-data-model/07-share.md`. |
 | `02-public-shares.md` | Anonymous read; cookie-less except for view-mode preference; rate limit. |
 | `03-password-shares.md` | Argon2id-hashed password; unlock cookie; rotation rules. |
 | `04-invite-only-shares.md` | Named-user invites via email; token hash; expiry. |

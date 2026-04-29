@@ -38,7 +38,8 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 2. Moving across Organizations is forbidden (export/import only).
 3. `tag_ids` must all belong to same `organization_id`.
 4. `position` re-balanced periodically.
-5. Cascade soft/hard delete to Groups and Items.
+5. `starred_pin_position` is non-null iff `is_starred = true`. Toggling `is_starred` to `false` MUST null the pin position; toggling to `true` MUST assign `max(starred siblings)+1024` unless an explicit value is provided. (SI-021.)
+6. Cascade soft/hard delete to Groups and Items.
 
 ## Indexes (recommended)
 

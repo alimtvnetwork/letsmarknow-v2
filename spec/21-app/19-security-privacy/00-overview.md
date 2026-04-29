@@ -23,6 +23,8 @@
 | `03-encryption.md` | TLS, at-rest, hashing parameters, key management, rotation. |
 | `04-gdpr-ccpa.md` | Lawful basis, subject rights, DPA, RoPA, sub-processor list. |
 | `05-share-link-security.md` | Slug entropy, password hashing, unlock cookie, rate limiting, lockout. |
+| `06-extension-privacy.md` | Chrome Web Store "Privacy practices" disclosures, per-permission justification narrative. |
+| `07-privacy-policy.md` | Public, user-facing privacy policy text published at `letsmarknow.com/privacy`. |
 
 ---
 

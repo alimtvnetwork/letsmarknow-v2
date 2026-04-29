@@ -909,3 +909,39 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 - Lift `no-implementation-mode` and start Phase 0 build — unlocks the 4 src-dependent linters in one sweep
 - Backticked-path-resolution linter (Session 36 newly identified gap; not in §2.1.1 plan) — small, defer-or-ship decision
 - Rest — 37 sessions, full-green + audited milestone is a clean stopping cut-point
+
+---
+
+## Session 38 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Picked suggested next-action #3 — shipped the **`backticked-path-resolution`** linter (Session 36 newly identified gap). 17 active linters now, all green.
+
+**Files changed:**
+- created `scripts/lint/backticked-path-resolution.ts` — sister to link-check; scans 1843 backticked markdown-path strings across 297 files; tries (a) relative-to-file-dir + (b) relative-to-spec-root resolution; built-in skips for frozen files (conv-log, 23-audits/, templates/, 06-ui-ux/wireframes/, 13-spec-issues/01-naming-conventions.md, 13-spec-issues/03-phase-plan.md, 13-spec-issues/04-closed-issues.md, 15-visualization/readme.md) and bare uppercase `README.md` / `Readme.md` (export-bundle artifacts).
+- created `scripts/lint/backticked-path-resolution.allowlist.txt` — 21 per-occurrence forward-ref entries, all carrying `PR:#0 reason:SI-026 — ...` per-entry comments per Allowlist Discipline.
+- edited `spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1` — registered the new linter row (anchored after `next-singleton-invariants`); also fixed 3 self-referential basename drifts surfaced by the new linter (`18-error-codes.md` → `../03-api-endpoints/18-error-codes.md`, `audit.md` → `../23-audits/audit.md`, `spec/21-app/templates/folder-overview.md` → `../templates/folder-overview.md`).
+- edited 14 active spec files to fix bare-basename backticked refs (added `../<folder>/` prefix where the target lived in a sibling folder): `06-ui-ux/17-copy-strings.md`, `06-ui-ux/20-accessibility-wcag.md`, `08-sharing-collab/13-share-link.md`, `08-sharing-collab/14-realtime-transport.md`, `09-auth-accounts/13-rate-limit-values.md` (5 refs), `02-data-model/11-account.md`, `07-features/04-collections.md`, `07-features/17-next-queue.md` (tooltip → `../06-ui-ux/03-component-library.md`), `13-spec-issues/02-current-issues.md`, `17-admin-org/01-organization-settings.md`, `17-admin-org/03-roles.md`, `05-web-app/08-billing-page.md` (3 refs to `../10-licensing-billing/01-plans-matrix.md`), `20-roadmap/03-phase-2-collab.md`, `20-roadmap/06-definition-of-done.md`, `20-roadmap/07-build-readiness.md` (5 refs), `16-notifications-updates/02-app-updater.md`, `16-notifications-updates/03-release-channels.md`, `22-infrastructure/02-environments.md`, `04-extension/16-open-tabs-panel.md`, `19-security-privacy/04-gdpr-ccpa.md`, `03-api-endpoints/18-error-codes.md`. ~30 ref fixes total.
+- edited `spec/21-app/13-spec-issues/02-current-issues.md` — opened **SI-026** (S3) tracking the 21 forward-ref allowlist entries; closure = author the planned files (or convert refs to `(planned)` prose).
+- edited `.lovable/memory/index.md` — refreshed spec-issue-tracker memory (1 open / 31 closed; 17/19 linters shipped).
+
+**Discovery:** First scan reported **513 violations across 56 files**. Built-in skip lists eliminated 457 (frozen files); ref-fix sweep eliminated 34 (real basename drift in active files); final 21 are genuine forward-refs to planned-but-not-yet-authored docs (`20-release-ops/`, `17-i18n-a11y/`, `share-model.md` v2, `06-ui-ux/options-page.md`, `07-features/add-item-hover-button.md`, `payments-integration.md`, etc.) — all allowlisted with SI-026 reason.
+
+**Allowlist Discipline lesson:** every allowlist entry needs a preceding `# PR:#<n> reason:<text>` comment — grouping multiple entries under one comment header fails. Caught and fixed in this session (initial allowlist used grouped headers; rewritten to per-entry).
+
+**§2.1.1 row authoring lesson:** when describing a new linter's rules in CI/CD §2.1.1, do NOT include backticked path-shaped example strings (`` `path/to/file.md` ``, `02-keyboard-shortcuts.md`) in the description — the new linter (and adjacent ones like `storage-path`) will scan §2.1.1 and treat them as real refs. Use prose form ("backticks around a slash-segmented path ending in dot-md") instead. Also caught and fixed.
+
+**Linter sweep result: 17 of 17 active linters fully green.** New canonical line: `backticked-path-resolution: clean — 1843 backticked paths resolved across 297 files`.
+
+**Score: 100/100.** Open SI count: 1 (SI-026 — forward-ref backlog).
+
+**Remaining work in this project family:**
+- Re-paste full Toby spec (6 inline ergonomics defaults parked in roadmap)
+- Lift `no-implementation-mode` and start Phase 0 build
+- 4 src-dependent linters (blocked on the lift)
+- SI-026 closure (author the 21 forward-ref planned files OR convert refs to `(planned)` prose)

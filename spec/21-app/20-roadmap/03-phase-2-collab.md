@@ -21,7 +21,7 @@
 ### Multi-user Orgs
 - **Team plan** with per-seat billing.
 - **Member management**: invite, suspend, remove, transfer ownership.
-- **Roles**: Owner, Admin, Editor, Viewer (per `03-roles.md`).
+- **Roles**: Owner, Admin, Editor, Viewer (per `../17-admin-org/03-roles.md`).
 - **Member profile drawer** with sessions + 2FA + activity.
 - **Bulk invite** via CSV.
 - **Domain-restricted invites**.

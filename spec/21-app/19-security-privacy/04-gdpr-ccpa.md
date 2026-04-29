@@ -43,7 +43,7 @@ CCPA equivalents (right to know / delete / opt-out / non-discrimination) handled
 ## 4. Consent management
 
 - Granular toggles in `/account/privacy`: analytics, crash reports, marketing.
-- Default per region (per `01-opt-in-analytics.md` § 1).
+- Default per region (per `../18-analytics-telemetry/01-opt-in-analytics.md` § 1).
 - Withdrawable any time without account impact.
 - Audit-logged with timestamps.
 - Cookie banner only loads when needed (analytics consent gates cookies; essential cookies clearly labeled).

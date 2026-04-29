@@ -88,7 +88,7 @@ Design tokens in `06-ui-ux/01-design-tokens.md` MUST pass AA at intended pairing
 
 ## 7. Keyboard shortcut conflicts
 
-Registry maintained at `spec/21-app/06-ui-ux/08-keyboard-input.md`. New shortcuts MUST be added there with conflict check; CI fails on duplicates.
+Registry maintained at `08-keyboard-input.md`. New shortcuts MUST be added there with conflict check; CI fails on duplicates.
 
 ## 8. Locked rules
 

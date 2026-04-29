@@ -90,7 +90,7 @@ Account (human user)
 | E8 | Bulk operations | Select N items in a Collection → "Add to Next" | `collection` |
 
 **Tooltip on the bookmark icon:** `Add to Next` (200 ms hover delay; see
-`06-ui-ux/03-tooltips.md` for the canonical tooltip recipe).
+`../06-ui-ux/03-component-library.md` for the canonical tooltip recipe).
 
 **Idempotency:** adding an Item that is already in Next and **not done** is a
 no-op with an info toast `Already in Next`. Adding an Item that is in Next and

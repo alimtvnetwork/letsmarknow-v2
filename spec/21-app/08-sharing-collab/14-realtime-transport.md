@@ -53,7 +53,7 @@
 
 - **Strategy:** Last-Write-Wins (LWW) on per-field basis, server clock authoritative.
 - **Tie-break:** Lower `account_id` UUIDv7 wins (deterministic).
-- **Compound moves** (drag item between collections): wrapped in DB transaction; if 409 `STALE_RESOURCE` (per `18-error-codes.md`), client retries with new parent revision once, then surfaces toast.
+- **Compound moves** (drag item between collections): wrapped in DB transaction; if 409 `STALE_RESOURCE` (per `../03-api-endpoints/18-error-codes.md`), client retries with new parent revision once, then surfaces toast.
 - **Phase-3 upgrade path:** When mind-map editing ships, switch to Y.js per-document with this channel layer carrying CRDT updates. The channel name and auth policy remain unchanged.
 
 ## 6. Reconnect & offline

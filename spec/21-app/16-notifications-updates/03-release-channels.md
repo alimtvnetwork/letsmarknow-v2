@@ -61,7 +61,7 @@ No `dev` / `nightly` channel exposed publicly.
 |---|---|---|
 | Low (UI tweak) | 100% beta for 3 days | Next stable cycle |
 | Medium (new feature) | 100% beta for 1-2 weeks | After feedback triage |
-| High (data model change) | 100% beta for 1 month + small stable cohort (1%) | Phased rollout per `15-feature-flags-and-rollouts.md` |
+| High (data model change) | 100% beta for 1 month + small stable cohort (1%) | Phased rollout per `../07-features/15-feature-flags-and-rollouts.md` |
 | Critical (auth, billing) | Beta + internal-only flag for 2 weeks | Manual approval from 2 engineers |
 
 ## 8. Channel-specific telemetry

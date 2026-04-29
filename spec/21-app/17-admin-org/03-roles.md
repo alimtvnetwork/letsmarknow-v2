@@ -157,7 +157,7 @@ When a Guest accesses a shared Collection:
 ## 9. Server enforcement
 
 - Every API endpoint checks via `has_role(auth.uid(), org_id, required_role)`.
-- Reject with `403 FORBIDDEN` and machine-readable `code: INSUFFICIENT_ROLE` (UPPER_SNAKE_CASE per `03-api-endpoints/01-conventions.md` §4 / `18-error-codes.md`).
+- Reject with `403 FORBIDDEN` and machine-readable `code: INSUFFICIENT_ROLE` (UPPER_SNAKE_CASE per `../03-api-endpoints/01-conventions.md` §4 / `../03-api-endpoints/18-error-codes.md`).
 - Front-end pre-checks for UX (hide buttons), but never trusts itself.
 
 ## 10. Telemetry

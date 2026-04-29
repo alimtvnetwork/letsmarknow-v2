@@ -30,7 +30,7 @@ Configurable blocklist appendable by ops.
 
 ## 4. Custom slug entitlement
 
-Gated by License entitlement `custom_share_slug` (Pro+, see `10-licensing-billing/01-plans-matrix.md` and `02-entitlements-engine.md`). Free users get only auto-generated slugs.
+Gated by License entitlement `custom_share_slug` (Pro+, see `../10-licensing-billing/01-plans-matrix.md` and `../10-licensing-billing/02-entitlements-engine.md`). Free users get only auto-generated slugs.
 
 ## 5. SEO / indexability
 

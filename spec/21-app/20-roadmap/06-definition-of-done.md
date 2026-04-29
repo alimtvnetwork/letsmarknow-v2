@@ -81,7 +81,7 @@ Everything else in §1 still applies in Phase 0.
 ### Import/export
 - [ ] Dedup algorithm runs (M12).
 - [ ] Large-import path (> 1 000 items) batched and resumable.
-- [ ] Export download URL expires per `12-storage-layout.md`.
+- [ ] Export download URL expires per `../22-infrastructure/12-storage-layout.md`.
 
 ### Collections / Sessions (SI-021, SI-023)
 - [ ] `Collection.kind` immutable after create (cannot promote `manual` ↔ `session`).

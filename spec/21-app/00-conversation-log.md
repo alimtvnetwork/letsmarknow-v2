@@ -1696,3 +1696,25 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Audit status:** `closed` (closed-on: 2026-04-29). 9 of 9 findings closed.
 **Open SIs:** SI-029 only (blocked on legal counsel).
 **Linters:** 17/17 green (no schema/lint touch).
+
+---
+
+## Session 61 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Opened new gap-sweep audit `audit-2026-04-29-sharing-collab-sweep.md` (folder `08-sharing-collab/` — first dedicated audit).
+
+**9 findings recorded** (1×S1, 4×S2, 4×S3):
+- **SH1 (S1):** Permissions matrix is missing locked roles `guest` and `system`. RLS code-gen would silently deny system actors. Launch-blocker.
+- **SH2 (S2):** `00-overview.md §2` row for v2 design note lacks ⚠️ marker.
+- **SH3 (S2):** v2 share-model uses `scope_type`/`scope_id` (third naming variant; v1 is `target_type`/`target_id`).
+- **SH4 (S2):** `00-overview.md §1.4` channel name `lmn:org:{org}:space:{space}` contradicts W-4 lock (`org:{org_id}` etc., no `lmn:` prefix).
+- **SH5 (S2):** v2 ShareLink missing `memorable_slug` (locked v1 feature).
+- **SH6/SH7/SH8/SH9 (S3):** doc polish.
+
+**Audit status:** open. Drain plan: 3–4 sessions.
+**Linters:** untouched (audit file only).

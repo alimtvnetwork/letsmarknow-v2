@@ -1,0 +1,6 @@
+# linter: folder-overview
+# purpose: Exempt folders whose `00-overview.md` legitimately uses a different schema. `03-api-endpoints/` is an HTTP-method index (## 1. GET — read endpoints, ## 2. POST — ..., etc.), not a folder-overview narrative; the numbered headings serve a different semantic role and renumbering them would destroy the index utility.
+# review-by: 2026-10-26
+
+# PR:#0 reason:03-api-endpoints/00-overview.md is the canonical endpoint-method index — schema validated by endpoint-counts sub-check, not folder-overview
+spec/21-app/03-api-endpoints

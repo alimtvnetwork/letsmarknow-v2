@@ -10,71 +10,84 @@ Server enforces; client mirrors for UX. Drift = bug.
 
 ## 1. Roles
 
-| Role | Where granted | Notes |
-|---|---|---|
-| **Owner** | Org-level | Full control + billing; one minimum per Org |
-| **Admin** | Org-level | Full control except billing & ownership transfer |
-| **Editor** | Org-level | Read/write content; cannot manage members |
-| **Viewer** | Org-level | Read-only |
-| **Billing** | Org-level | Billing + invoices only; no content access |
-| **Share viewer** | Per-share | Read-only (or comment/react if enabled) |
+The role enum is **locked** (Core memory + `02-data-model/08-member.md` + `17-admin-org/03-roles.md §2`). All seven values appear below; `share_viewer` is a runtime-only pseudo-role attached to a share-link session (not a member of the SQL `org_role` enum, per SI-011 closure).
+
+| Role | Scope | Where granted | Notes |
+|---|---|---|---|
+| **Owner** | org | Org-level | Full control + billing; one minimum per Org |
+| **Admin** | org | Org-level | Full control except billing & ownership transfer |
+| **Editor** | org | Org-level | Read/write content; cannot manage members |
+| **Viewer** | org | Org-level | Read-only |
+| **Billing** | org | Org-level | Billing + invoices only; no content access |
+| **Guest** | share | Per-share (anonymous public link) | Anonymous public-link viewer. Same caps as Share viewer minus comments unless Share opts in. |
+| **System** | internal | Server-issued (cron, webhooks, API tokens, importers) | Synthetic actor. **Bypasses RLS via `SECURITY DEFINER` functions** — no per-action grants in the tables below. Audit log records `actor=system` with caller context (`cron_job_id` / `webhook_id` / `api_token_id`). |
+| **Share viewer** | share | Per-share (named/invited) | Read-only (or comment/react if enabled) |
+
+> **Why `System` has no grant columns.** The `system` actor never executes through the JWT-authorised request path; it runs in trusted server contexts (Postgres `SECURITY DEFINER`, edge-function service-role key, cron). Adding it to per-action tables would either be all-✅ (noisy) or imply gating that does not exist. Enforcement layer §10.5 below documents this explicitly.
 
 ## 2. Org-level actions
 
-| Action | Owner | Admin | Editor | Viewer | Billing |
-|---|:---:|:---:|:---:|:---:|:---:|
-| View Org dashboard | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Edit Org name/logo | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Delete Org | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Transfer ownership | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Manage members (invite/remove/role) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Manage SSO/SAML (Team) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Manage billing / view invoices | ✅ | ❌ | ❌ | ❌ | ✅ |
-| Configure brand (Pro+) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Configure webhooks (Team) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| View audit log (Team) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| Configure feature flags / rollouts | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Action | Owner | Admin | Editor | Viewer | Billing | Guest |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| View Org dashboard | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Edit Org name/logo | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Delete Org | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Transfer ownership | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Manage members (invite/remove/role) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Manage SSO/SAML (Team) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Manage billing / view invoices | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Configure brand (Pro+) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Configure webhooks (Team) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| View audit log (Team) | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Configure feature flags / rollouts | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+
+> Guest never sees Org-level surfaces; column included only to make denial explicit for codegen.
 
 ## 3. Space-level actions
 
-| Action | Owner | Admin | Editor | Viewer |
-|---|:---:|:---:|:---:|:---:|
-| Create Space | ✅ | ✅ | ✅ (within Org) | ❌ |
-| Rename / recolor / re-icon | ✅ | ✅ | ✅ (own) | ❌ |
-| Delete / restore Space | ✅ | ✅ | ✅ (own) | ❌ |
-| Set Space-level visibility | ✅ | ✅ | ✅ (own) | ❌ |
-| Manage Space members (Pro+) | ✅ | ✅ | ❌ | ❌ |
+| Action | Owner | Admin | Editor | Viewer | Guest |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Create Space | ✅ | ✅ | ✅ (within Org) | ❌ | ❌ |
+| Rename / recolor / re-icon | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Delete / restore Space | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Set Space-level visibility | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Manage Space members (Pro+) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Read Space (when shared as `target_type=space`) | ✅ | ✅ | ✅ | ✅ | ✅ if Share active |
 
 ## 4. Collection / Group / Item actions
 
-| Action | Owner | Admin | Editor | Viewer |
-|---|:---:|:---:|:---:|:---:|
-| Create / edit / delete | ✅ | ✅ | ✅ | ❌ |
-| Move across Spaces | ✅ | ✅ | ✅ | ❌ |
-| Star (private) | ✅ | ✅ | ✅ | ✅ |
-| Pin (collaborative) | ✅ | ✅ | ✅ | ❌ |
-| Add tags | ✅ | ✅ | ✅ | ❌ |
-| Add notes / descriptions | ✅ | ✅ | ✅ | ❌ |
-| Restore from Trash | ✅ | ✅ | ✅ (own) | ❌ |
-| Permanent purge | ✅ | ✅ | ❌ | ❌ |
+| Action | Owner | Admin | Editor | Viewer | Guest |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Create / edit / delete | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Move across Spaces | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Star (private) | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Pin (collaborative) | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Add tags | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Add notes / descriptions | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Restore from Trash | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Permanent purge | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Read shared Collection/Group/Item via public link | ✅ | ✅ | ✅ | ✅ | ✅ if Share active |
+| Clone shared target to own workspace | ✅ | ✅ | ✅ | ✅ | ✅ if `allow_clone_to_my_account` |
 
 ## 5. Sharing actions
 
-| Action | Owner | Admin | Editor | Viewer |
-|---|:---:|:---:|:---:|:---:|
-| Create Share (any scope) | ✅ | ✅ | ✅ | ❌ |
-| Modify Share settings | ✅ | ✅ | ✅ (own) | ❌ |
-| Set / change memorable `lmk/` slug | ✅ | ✅ | ✅ (own) | ❌ |
-| Repoint orphaned Share to new target | ✅ | ✅ | ✅ (own) | ❌ |
-| Revoke any Share | ✅ | ✅ | ✅ (own) | ❌ |
-| Revoke another member's Share | ✅ | ✅ | ❌ | ❌ |
-| Handle access requests (approve/decline) | ✅ | ✅ | ❌ | ❌ |
-| Configure custom domain | ✅ | ✅ | ❌ | ❌ |
+| Action | Owner | Admin | Editor | Viewer | Guest |
+|---|:---:|:---:|:---:|:---:|:---:|
+| Create Share (any scope) | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Modify Share settings | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Set / change memorable `lmk/` slug | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Repoint orphaned Share to new target | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Revoke any Share | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
+| Revoke another member's Share | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Handle access requests (approve/decline) | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Configure custom domain | ✅ | ✅ | ❌ | ❌ | ❌ |
+| Request access to a Share (`mode=invite_only`) | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 **Notes.**
 - "Create Share" and "Modify Share settings" both cover **either** URL surface (the random `/t/{slug}` and the optional memorable `lmk/{...}`) — they are the same Share row per `02-data-model/07-share.md`. No separate permission for the memorable surface itself; the row above ("Set / change memorable `lmk/` slug") exists only to surface the `custom_share_slug` entitlement requirement (Pro+).
 - "Repoint orphaned Share" is the recovery action defined in `08-sharing-collab/13-share-link.md` §7 and invariant §10 of `02-data-model/07-share.md`. The new target must belong to the same Org and have the same `target_type`. Editors may only repoint Shares they originally created.
 - "Handle access requests" covers responding to `share.access_requested` events emitted by the request-access page (`08-sharing-collab/13-share-link.md` §8).
+- Guest grants on read actions are **conditional on the Share being active** (`revoked_at IS NULL` AND `expires_at IS NULL OR > now()` AND password/invite gate satisfied).
 
 
 ## 6. Comments / reactions (Pro+)
@@ -113,8 +126,9 @@ The default Personal Org has only the Account holder as Owner; cannot add member
 2. **Server middleware** — checks role + ownership per route.
 3. **Database RLS (Lovable Cloud)** — secondary defense via `auth.uid()` + role check function.
 4. **Client guards** — disable buttons + tooltips ("Editors can't manage members").
+5. **System actor bypass** — server-only contexts (cron jobs, edge-function service-role key, Postgres `SECURITY DEFINER` functions, signed webhook handlers) execute as `role=system` and skip layers 1–3 by construction. The audit log records `actor=system` with the calling-context id (`cron_job_id` / `webhook_id` / `api_token_id`) so every system action remains attributable. `system` is NEVER issued to a user-facing JWT.
 
-Any action MUST pass all three (1–3); client guard alone never sufficient.
+Any action MUST pass all three (1–3) for human/share-viewer actors; client guard alone never sufficient. Layer 5 applies only to server-issued contexts.
 
 ## 11. Audit (Team)
 

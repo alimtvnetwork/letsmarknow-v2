@@ -8,11 +8,49 @@ This file covers the **URL surface** of a Share — slug rules, reservations, cu
 
 ## 1. URL pattern
 
+The Share entity exposes **two** parallel URL surfaces. Both resolve to the same target; both honor the same access mode (`public` / `password` / `invite_only`).
+
+### 1.1 Random-slug surface (always available)
+
 `https://letsmarknow.com/t/{slug}`
 
 - `{slug}`: `[a-z0-9-]{3,64}`, lowercase, hyphen-separated, no leading/trailing/double hyphen.
-- Auto-generated default: `[a-z0-9]{10}` (collision-checked).
-- Custom slug: Pro+ entitlement (`custom_share_slug`).
+- Auto-generated default: `[a-z0-9]{10}` (collision-checked, globally unique).
+- Custom slug on this surface: Pro+ entitlement (`custom_share_slug`).
+- Globally unique across all Organizations.
+
+### 1.2 Memorable-shortlink surface (`lmk/...`, opt-in)
+
+`https://letsmarknow.com/lmk/{org_handle}/{memorable_slug}`
+
+Browser-native shorthand (when the Mark Now extension is installed): typing `lmk/{memorable_slug}` in the address bar resolves against the **active Organization**, so members rarely need to type the `{org_handle}` segment.
+
+- `{memorable_slug}`: `[a-z0-9-]{1,60}`, lowercase, hyphen-separated, no leading/trailing/double hyphen, no consecutive hyphens. Validation regex: `^[a-z0-9](?:[a-z0-9]|-(?!-))*[a-z0-9]$|^[a-z0-9]$`.
+- Uniqueness: `(organization_id, memorable_slug)` is unique (case-insensitive). Two Organizations may both have `lmk/hr`.
+- Optional: a Share may have a `memorable_slug` set, or only the random `/t/{slug}`, or both. The random surface is the universal fallback.
+- Reserved memorable slugs: same list as §2 plus `lmk`, `t`, `new`, `edit`.
+- Entitlement: memorable slugs are **Pro+** on personal Spaces, included in all paid Org plans (`custom_share_slug` covers both surfaces).
+- Resolver behavior is specified in §1.4.
+
+### 1.3 Canonical & redirects
+
+- The **canonical** for SEO/OG is whichever surface the user copies via the "Share" UI. The `<link rel="canonical">` is set per response to the requested surface.
+- A Share with both surfaces enabled: hitting either renders the same page; no cross-surface redirect (avoids confusing copy-paste flows).
+- Surface mismatch (e.g. memorable slug typed against wrong org handle) → 404 with "Did you mean `lmk/{guess}`?" suggestion if a near-match exists in another visible Org.
+
+### 1.4 Address-bar resolver (extension-mediated)
+
+When the Mark Now Chrome extension is installed and the user is signed in, typing `lmk/{slug}` in the omnibox is intercepted (per `04-extension/06-omnibox.md` — keyword `lmk`):
+
+| Case | Resolver behavior |
+|---|---|
+| `{slug}` exists in the active Organization | Navigate to that Share's `target` page within ≤ 300 ms. `Alt+Enter` opens in new tab. |
+| `{slug}` exists in another Org the user belongs to but not active | Switch to that Org, then navigate. Toast: "Switched to {org_name}". |
+| `{slug}` exists in multiple of the user's Orgs | Show disambiguation page listing matches with org name + target preview. |
+| `{slug}` does not exist anywhere | Redirect to `https://letsmarknow.com/lmk/new?slug={slug}` (Create-Share dialog pre-filled). |
+| Extension not installed (web-only) | The full `https://letsmarknow.com/lmk/{org_handle}/{slug}` URL is the only path; no omnibox shortcut. Server-side 302 still works for the full URL. |
+
+
 
 ## 2. Reserved slugs
 

@@ -11,15 +11,15 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29 Session 17, UTC+8 — after SI-025 opened)
+## Counts (updated 2026-04-29 Session 18, UTC+8 — after SI-025 close)
 
-- Open: **1** (SI-025)
-- Closed: 28
+- Open: **0**
+- Closed: 29
 - ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity.
-- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep. Inventory: 183 rows / 182 distinct.
+- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep.
 - ✅ **SI-023 CLOSED** 2026-04-29. `Collection.kind` enum + `captured_at` + `source_window_id` added.
 - ✅ **SI-024 CLOSED** 2026-04-29. Toast placement locked.
-- 🔴 **SI-025 OPEN** 2026-04-29. `endpoint-counts` linter POC found 17-row drift between computed (166) and §7 published (183). PATCH/PUT match exactly; GET/POST/DELETE drift. Either §7 is over-counted or some endpoints are declared in forms the linter doesn't catch. The Counter Discipline meta-rule just proved its own value by catching what the manual sweep missed.
+- ✅ **SI-025 CLOSED** 2026-04-29 Session 18. §7 rebased 183/182 → 171/171 via `--write`. Counter Discipline meta-rule earned its keep on day one. **Endpoint inventory now: 171 canonical declarations, 0 duplicates, linter green.**
 
 ## Counter discipline (lesson from 2026-04-29 re-audit)
 

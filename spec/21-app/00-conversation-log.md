@@ -278,3 +278,25 @@ Opened **SI-025** (S2) in `13-spec-issues/02-current-issues.md`. Either §7 is o
 Updated tracker memory (Open: 0 → 1) and `mem://index` Memories pointer. Score adjusted 100 → 97 per the locked rule "100 score is stale while open count > 0".
 
 **This is the most important finding of the day:** the spec said "100/100, implementation-ready" but the very first linter to actually execute against the spec found drift. Lesson: a self-governing system is only as good as the day its first enforcer runs. The trilogy of meta-rules works.
+
+---
+
+## 2026-04-29 — Session 18: Triage and close SI-025
+
+```
+next
+```
+
+**Refactored into:** Triaged the 17-row §7 drift opened by SI-025 in Session 17. Two-phase fix:
+
+**Phase 1 — Linter regex fix (gap 17→12):** The `ROW_BACKTICK` regex required `$` after the closing backtick, which excluded valid declarations carrying trailing prose like `` `POST /v1/trash/restore` body `{...}` — bulk restore. ``. Broadened to `(?:\s|$)` after the closing backtick. Caught 5 real declarations the linter had missed: `POST /v1/trash/restore`, `POST /v1/trash/purge`, `POST /v1/trash/empty`, `DELETE /v1/collections/:id`, `DELETE /v1/search/recent`. Computed count rose 166 → 171.
+
+**Phase 2 — §7 rebase (gap 12→0):** Python sweep found 10 remaining method+path mentions in non-canonical positions; all 10 verified as cross-references (`- METHOD /v1/... → declared in ...`), forbidden-alias rows in §16, or callouts (lines starting `>`). **No further missing canonical declarations.** The 12-row gap was therefore §7 over-count, accumulated across prior hand-rebases. Per Counter Discipline meta-rule ("re-scan, then write"), ran `npx tsx scripts/lint/endpoint-counts.ts --write` to regenerate §7 from 183/182 hand-claimed → 171/171 linter-computed. Final per-method: GET 50, POST 99, PATCH 10, PUT 1, DELETE 11.
+
+**Updated §7 prose** to reflect the new authoritative methodology: counts = canonical declarations only (backtick-header / `### METHOD /v1/path` markdown header / table-row inline); cross-refs and forbidden-aliases excluded; maintainer rebases via `--write`. Documented the rebase history in the "Last rebase" line.
+
+**Linter now exits 0** against live spec: `[endpoint-counts] OK — 21 files, 171 rows, 171 distinct, 0 duplicate path(s)`.
+
+Closed SI-025. Open SI count: 0. Score restored 97 → 100. Tracker memory + index updated.
+
+**Meta-lesson:** The spec corpus carried 12 phantom endpoint-count rows for 18+ days that 11 manual sweeps never caught. The Counter Discipline meta-rule (spec'd Session 12) + first real linter implementation (Session 17) earned their existence by catching real drift on day one. **The trilogy works.**

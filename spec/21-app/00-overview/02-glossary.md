@@ -95,6 +95,11 @@
 | **Favicon** | The 16×16 / 32×32 site icon associated with an Item. Cached server-side. |
 | **Position** | Integer used to order siblings inside a parent. Higher = later. Re-balanced periodically. |
 | **Command Palette** | The Ctrl+K dialog for fuzzy-finding actions and content. |
+| **Trash** | The system-managed area holding soft-deleted entities during their `History Window`. Surface: `05-web-app/09-trash.md`. Emptying Trash invokes Purge. |
+| **Supabase Realtime** | The WebSocket-based pub/sub channel layer used for live presence, item updates, and conflict broadcasts. Spec: `08-sharing-collab/14-realtime-transport.md`. Replaced earlier `/rt` placeholder per F-M06. |
+| **Feature Flag** | A server-evaluated boolean / multivariate / percentage-rollout switch controlling whether a code path is active for a given Account or Org. Spec: `07-features/15-feature-flags-and-rollouts.md`. Three kinds: **Boolean**, **Multivariate** (named variants), **Percentage rollout** (deterministic hash bucket). |
+| **Kill Switch** | A Feature Flag with a single Boolean variant whose OFF state disables a feature globally within ≤ 60 seconds. Used for incident response. |
+| **GDPR DSR** | General Data Protection Regulation — Data Subject Request. The user's right to access, rectify, port, or erase their personal data. Honored within 30 days. Spec: `19-security-privacy/04-gdpr-ccpa.md` and `11-import-export/09-gdpr-export.md`. |
 
 ## Forbidden synonyms
 

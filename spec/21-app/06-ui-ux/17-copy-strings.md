@@ -343,7 +343,7 @@
 
 ---
 
-## 14. Toast messages (`toast.*`) — used by `18-error-codes.md`
+## 14. Toast messages (`toast.*`) — used by `../03-api-endpoints/18-error-codes.md`
 
 ### 14.1 Auth
 | Key | EN |
@@ -546,4 +546,4 @@
 - **Sentence case** for buttons, labels, titles. Never Title Case.
 - **No exclamation marks** except in confirmed marketing/onboarding moments.
 - **Errors don't blame the user.** "We couldn't…" beats "You did wrong."
-- **All toast messages** map 1:1 to an `error_code` in `18-error-codes.md` or to a system event.
+- **All toast messages** map 1:1 to an `error_code` in `../03-api-endpoints/18-error-codes.md` or to a system event.

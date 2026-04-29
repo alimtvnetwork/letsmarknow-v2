@@ -41,7 +41,7 @@ The `is_starred` flag and `collapsed_collections` are per-Account, not per-Space
 
 - `(organization_id, position)` for sidebar render
 - `(organization_id, deleted_at)`
-- `(organization_id, name)` for search
+- **GIN on `search_tsv`** (generated column over `(name, description)`) for global / workspace search — definition lives in `14-search/06-search-engine.md` §2.2 (F-M17 reconciliation, 2026-04-19). Never written by application code.
 
 ## Lifecycle
 

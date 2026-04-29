@@ -46,7 +46,7 @@ Optional sub-container inside a Collection (Tab Extend's "group inside group"). 
 - `(collection_id, position)`
 - `(organization_id, deleted_at)`
 - GIN on `tag_ids`
-- Full-text on `(name, description, notes)`
+- **GIN on `search_tsv`** (generated column over `(name, description, notes)`) for global / workspace search — definition lives in `14-search/06-search-engine.md` §2.2 (F-M17 reconciliation, 2026-04-19). Supersedes legacy "Full-text on `(name, description, notes)`". Never written by application code.
 
 ## Lifecycle
 

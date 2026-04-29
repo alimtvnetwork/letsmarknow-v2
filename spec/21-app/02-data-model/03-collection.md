@@ -57,7 +57,7 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `(space_id, position)` for render
 - `(organization_id, deleted_at)`
 - GIN index on `tag_ids` for tag filter
-- Full-text index on `(name, description, notes)` for search
+- **GIN on `search_tsv`** (generated column over `(name, description, notes)`) for global / workspace search — definition lives in `14-search/06-search-engine.md` §2.2 (F-M17 reconciliation, 2026-04-19). Supersedes legacy "Full-text on `(name, description, notes)`". Never written by application code.
 
 ## Lifecycle
 

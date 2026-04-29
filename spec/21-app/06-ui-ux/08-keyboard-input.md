@@ -97,6 +97,30 @@ Markdown-lite editor follows standard:
 
 User-rebindable in `chrome://extensions/shortcuts`.
 
+### 2.7 Next (focused to-do queue)
+
+> Per `07-features/17-next-queue.md §8`. The Next queue is a per-Account
+> singleton; these shortcuts work in both web app and extension dashboard
+> wherever the Next surface is visible. The `Cmd/Ctrl+Shift+N` global shortcut
+> ALSO works on any page (entry point E5 of the feature spec).
+
+| Keys | Action | Scope |
+|---|---|---|
+| `Cmd/Ctrl+Shift+N` | "Add to Next" — adds the active browser tab (extension) or focused item (web) | Global (any focus) |
+| `N` | Focus the Next sidebar entry / open Next view | Web + ext dashboard, no input focused |
+| `↑` / `↓` | Move focus between Next rows | Next list focused |
+| `Enter` | Open focused row in same tab (`→`) | Next row focused |
+| `Cmd/Ctrl+Enter` | Open focused row in new tab (`↗`) | Next row focused |
+| `Space` | Toggle done state on focused row | Next row focused |
+| `Backspace` / `Delete` | Remove focused row from Next (5 s undo toast) | Next row focused |
+| `Cmd/Ctrl+Z` | Undo last destructive Next action (within undo window) | Global on Next surface |
+| `Alt+↑` / `Alt+↓` | Reorder focused row up / down | Next row focused |
+
+Conflict notes:
+- `N` is suppressed when any input has focus (per §4 conflict resolution rule).
+- `Backspace` on a Next row triggers Remove (with undo); on an editor it deletes a character — Next-list focus is the discriminator.
+- The global `Cmd/Ctrl+Shift+N` shortcut is declared in the extension's MV3 manifest alongside §2.6 entries; on web it's a `keydown` listener at app root.
+
 ## 3. Focus management
 
 - **Focus visible** always (`:focus-visible` ring; never use `outline: none` without a replacement).

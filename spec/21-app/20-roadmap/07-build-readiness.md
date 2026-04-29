@@ -58,18 +58,18 @@ Spec coverage for every Phase-0 deliverable in `01-phase-0-mvp.md` §1:
 
 ## 4. Inline open questions parked for full Toby spec re-paste
 
-These are **not** spec defects — they are design choices deferred until the user re-pastes the truncated Toby reference (the original was cut at ~25 k chars). Each has a stub answer that won't block Phase-0 build:
+**Status (Session 52, 2026-04-29):** ✅ all 6 entries resolved by promoting the documented defaults to locked decisions. The original Toby reference was unavailable for re-paste; if Toby's actual values differ from these locks, future change lands as a normal spec patch with rationale.
 
-| # | File | Section | Question | Default if not answered |
-|---|---|---|---|---|
-| 1 | `07-features/04-collections.md` | §13.9 | Open All — cap at how many tabs? | 50 (browser perf safe) |
-| 2 | `07-features/04-collections.md` | §13.9 | Nested Groups — allowed depth? | 1 (Group cannot contain Group) |
-| 3 | `07-features/04-collections.md` | §13.9 | Color label palette size — extend to 16? | 9 (locked enum) |
-| 4 | `04-extension/16-open-tabs-panel.md` | §15 | Save All — cap at how many tabs? | 100 (matches Save Session limit) |
-| 5 | `04-extension/16-open-tabs-panel.md` | §15 | Display Chrome tab groups in panel? | No (flat list in v1) |
-| 6 | `04-extension/16-open-tabs-panel.md` | §15 | Incognito windows — show in panel? | No (`incognito: split` mode in `manifest`) |
+| # | File | Section | Final lock |
+|---|---|---|---|
+| 1 | `07-features/04-collections.md` §13.9 | Open All cap | **50 tabs**, confirm dialog above |
+| 2 | `07-features/04-collections.md` §13.9 | Nested Groups depth | **1** (Group cannot contain Group) |
+| 3 | `07-features/04-collections.md` §13.9 | Color label palette size | **9** (locked enum, not extensible in v1) |
+| 4 | `04-extension/16-open-tabs-panel.md` §15 | Save All cap | **100 tabs**, matches Save Session |
+| 5 | `04-extension/16-open-tabs-panel.md` §15 | Chrome tab groups in panel | **No** (flat list in v1) |
+| 6 | `04-extension/16-open-tabs-panel.md` §15 | Incognito windows in panel | **No** (`incognito: split` mode) |
 
-Build can proceed using defaults; user override lands as a spec patch.
+No Phase-0 build blockers remain from this list.
 
 ## 5. Recommended build sequencing (within Phase 0)
 

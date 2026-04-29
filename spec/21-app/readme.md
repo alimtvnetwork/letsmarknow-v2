@@ -212,14 +212,21 @@ spec/21-app/
 ├── 10-licensing-billing/
 │   ├── README.md
 │   ├── 01-plans-matrix.md                    (Free / Pro / Team / Lifetime feature matrix)
-│   ├── pricing.md
-│   ├── license-manager.md                 (key validation, device limits)
-│   ├── payments-integration.md            (Stripe/Paddle abstraction)
-│   ├── discounts-coupons.md
-│   ├── trials.md
-│   ├── invoices-receipts.md
-│   ├── seat-management.md                 (Team plan)
-│   └── 14-support-system.md                  (ticketing, contact, SLA)
+│   ├── 02-entitlements-engine.md             (entitlement resolution)
+│   ├── 03-stripe-integration.md              (Stripe webhooks, customers, subscriptions)
+│   ├── 04-paddle-integration.md              (Paddle equivalent)
+│   ├── 05-lifetime-licenses.md               (key validation, device limits)
+│   ├── 06-proration-and-upgrades.md
+│   ├── 07-seats-and-quotas.md                (Team plan)
+│   ├── 08-invoices-and-tax.md
+│   ├── 09-dunning-and-recovery.md
+│   ├── 10-coupons-and-promotions.md
+│   ├── 11-revenue-reporting.md
+│   ├── 12-billing-webhooks.md
+│   ├── 13-cancellations-and-refunds.md
+│   ├── 14-support-system.md                  (ticketing, contact, SLA)
+│   ├── 15-sku-map.md
+│   └── 16-billing-emails.md                  (transactional billing email catalog)
 ├── 11-shortcuts/
 │   ├── README.md
 │   ├── global-shortcuts.md
@@ -341,7 +348,7 @@ These are flagged inline in the relevant folders and will be asked one folder at
 - Custom-slug rules for `letsmarknow.com/t/{slug}` (length, charset, reservation, collisions).
 - Mind-map interaction model (zoom, pan, edge creation, layout algorithm).
 - Real-time collab transport (WebSocket vs SSE vs polling) — stays vendor-neutral in the API spec.
-- Payments provider (Stripe vs Paddle) — abstracted behind `payments-integration.md`.
+- Payments provider (Stripe vs Paddle) — abstracted across `10-licensing-billing/03-stripe-integration.md` and `10-licensing-billing/04-paddle-integration.md` (twin adapters with shared webhook contract in `10-licensing-billing/12-billing-webhooks.md`).
 - SSO providers for Team plan (Google Workspace, Okta, Azure AD, generic SAML).
 - Audit log retention by tier.
 - Mobile companion app (out of scope for v1, noted in roadmap).

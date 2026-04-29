@@ -1651,3 +1651,17 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 3. **D5** — propagate `search_tsv` to Space/Collection/Group entities.
 4. **D8 + D9** — documentation cleanup.
 5. **SI-029** — still blocked on legal counsel (informational only).
+
+---
+
+## Session 58 — 2026-04-29 — Drain D1 + D4 from data-model audit
+
+**User:** "Next, list out the remaining tasks always..."
+
+**Action:** Closed two findings from `audit-2026-04-29-data-model-sweep.md`:
+- **D1 (S1, codegen-blocker):** `09-history-event.md` line 18 `target_type` enum extended from 9 → 13 values (added `account`, `next_item`, `session`, `mfa_factor`). Unblocks event logging for NextItem, Account, Session, and MFA entities.
+- **D4 (S2):** `00-overview.md §2` table now includes `12-next-item.md` row (was missing despite file existing on disk).
+
+**Audit progress:** 2 of 9 findings closed. Remaining: D2 (overview missing 02-share-related row drift), D3, D5 (search_tsv propagation), D6, D7, D8, D9.
+
+**Linters:** 17/17 green. **Score:** 100/100.

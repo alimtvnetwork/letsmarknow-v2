@@ -60,6 +60,7 @@
 | **Undo** | Revert the most recent History Event for the current Account in the current Organization. |
 | **Redo** | Re-apply the most recently undone History Event. |
 | **History Window** | The retention period in which Undo/Redo works (default: 30 days; configurable per tier). |
+| **Lifecycle verbs** | Canonical verbs used uniformly across all entities (Collection, Group, Item, Tag, Share): **Create**, **Rename**, **Move**, **Duplicate**, **Archive**, **Restore**, **Soft-delete**, **Purge**, **Merge**, **Split**. Each emits its own event (`{entity}.{verb}`). UI labels MUST use these verbs verbatim — never synonyms ("delete" alone is forbidden; use "soft-delete" or "purge"). |
 
 ## Views
 

@@ -63,7 +63,10 @@ for (const path of walkFiles(ROOT)) {
   if (rel === SOURCE_OF_TRUTH) continue; // matrix is the source — exempt
   if (allowlist.has(rel)) continue;
   const lines = readFileSync(path, 'utf8').split('\n');
+  let inFence = false;
   for (let i = 0; i < lines.length; i++) {
+    if (/^```/.test(lines[i])) { inFence = !inFence; continue; }
+    if (inFence) continue; // ASCII wireframes / code blocks may show illustrative prices
     // Skip lines that are clearly link-references back to the matrix
     if (/01-plans-matrix\.md/.test(lines[i])) continue;
     for (const p of PATTERNS) {

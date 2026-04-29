@@ -141,6 +141,38 @@ Toby pink. Anchor `--brand-500 = 343 79% 60%` ≈ `#EC4868`. Locked by SI-021 (2
 
 Org accent injected at `<html>` level when active Org has a brand color.
 
+### 1.6 Item color labels (SI-021)
+
+Resolves the `color_label` enum on Item (`02-data-model/05-item.md`). 8 hues + `none`. Used as the 4px left-border accent on Item cards (grid + list views) and as the colored dot in compact view. Hues chosen for ≥4.5:1 contrast on both light and dark surfaces. `none` renders as a transparent border (no accent).
+
+```css
+:root {
+  --color-label-none:    0    0%  0% / 0;     /* transparent */
+  --color-label-red:     0    78% 55%;
+  --color-label-orange:  24   88% 55%;
+  --color-label-yellow:  45   90% 50%;
+  --color-label-green:   142  68% 42%;
+  --color-label-teal:    175  72% 40%;
+  --color-label-blue:    214  84% 56%;
+  --color-label-purple:  268  72% 60%;
+  --color-label-pink:    330  78% 60%;
+}
+
+.dark {
+  --color-label-red:     0    78% 65%;
+  --color-label-orange:  24   88% 62%;
+  --color-label-yellow:  45   90% 58%;
+  --color-label-green:   142  60% 52%;
+  --color-label-teal:    175  64% 50%;
+  --color-label-blue:    214  84% 66%;
+  --color-label-purple:  268  72% 70%;
+  --color-label-pink:    330  78% 68%;
+}
+```
+
+Tailwind wiring (per §11): each `--color-label-*` is exposed as `border-label-{hue}`, `bg-label-{hue}`, and `text-label-{hue}`.
+
+
 ## 2. Typography
 
 ```css

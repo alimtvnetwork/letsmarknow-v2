@@ -1491,3 +1491,42 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 2. **Fix F6, F7** — small edits to `01-threat-model.md` (Argon2id, table arrows).
 3. **Decide F5** — expand policy regions OR shrink data-handling regions; user/legal call.
 4. **Open SI-029 formally** in `13-spec-issues/02-current-issues.md` with checklist.
+
+---
+
+## Session 54 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (Session 53 task #1: drain F1+F2+F3):** Batched fix of sub-processor / email-provider / hosting drift across `19-security-privacy/` and `10-licensing-billing/`.
+
+**Resolutions:**
+- **F1 closed.** `02-data-handling.md §7` rewritten as a 5-row table mirroring `07-privacy-policy.md §3` with a "single source of truth" disclaimer. `04-gdpr-ccpa.md §5` rewritten the same way. Both files now agree with the privacy policy.
+- **F2 closed.** Postmark→Resend (primary) + Postmark (failover) lock from `22-infrastructure/11-email-provider.md` now reflected everywhere it was drifting: both privacy files plus `10-licensing-billing/16-billing-emails.md` lines 115 + 142.
+- **F3 closed.** "AWS / Cloudflare (infra)" leakage removed; replaced with "Lovable Cloud (managed Supabase) — see `22-infrastructure/01-hosting.md`".
+- **F8 closed.** Orphan "Plain / front" customer-support sub-processor dropped (folded into F1 cleanup; not re-added because it does not appear in `07-privacy-policy.md`).
+- **Bonus.** "Self-hosted Sentry, PostHog (no third party)" removed from `04-gdpr-ccpa.md §5`; observability is internal-only and does not belong in the sub-processor list.
+- **Schema fix.** `16-billing-emails.md §8` audit row schema renamed `message_id (Postmark)` → `provider_message_id, provider_name (resend|postmark)` so it survives the Resend/Postmark provider switch without a migration.
+
+**Verification:** `grep -rn` confirms no remaining "AWS / Cloudflare" or bare-"Postmark" references; all 3 surviving Postmark mentions correctly label it as failover.
+
+**Files changed:**
+- edited `spec/21-app/19-security-privacy/02-data-handling.md` §7
+- edited `spec/21-app/19-security-privacy/04-gdpr-ccpa.md` §5
+- edited `spec/21-app/10-licensing-billing/16-billing-emails.md` lines 115 + 142
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md`
+
+**Linter status:** unchanged — 17/17 green (changes are within frozen-scope-exempt files; new `22-infrastructure/01-hosting.md` and `04-paddle-integration.md` cross-refs already exist as targets).
+
+**Open audit:** `audit-2026-04-29-security-privacy-sweep.md` — 4 of 8 findings closed (F1, F2, F3, F8). **Remaining: F4, F5, F6, F7.** Audit file remains `status: open` until SI-029 is formally opened and drained.
+
+**Remaining tasks:**
+1. **Fix F6 + F7** — small edits to `01-threat-model.md` (Argon2id replaces Bcrypt on line 36; replace `|` with `→` on lines 109–110).
+2. **Decide F5** — residency regions; needs your call (expand policy to 4 regions OR shrink data-handling to 2).
+3. **Open SI-029 formally** for F4 (privacy-pack stub expansion before launch) — needs legal-counsel owner naming.

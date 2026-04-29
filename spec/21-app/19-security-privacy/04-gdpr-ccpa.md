@@ -55,11 +55,14 @@ CCPA equivalents (right to know / delete / opt-out / non-discrimination) handled
 - Email notification to all Org Owners (Pro+).
 - DPAs in place with each.
 
-Current expected list:
-- AWS / Cloudflare (infra).
-- Stripe / Paddle (payments).
-- Postmark (transactional email).
-- Self-hosted Sentry, PostHog (no third party).
+**Single source of truth:** `19-security-privacy/07-privacy-policy.md §3`. The current list is:
+
+- Lovable Cloud (managed Supabase) — database, auth, storage, edge functions; see `22-infrastructure/01-hosting.md`.
+- Stripe — payment processing (primary).
+- Paddle — payment processing (Merchant-of-Record alternative); see `10-licensing-billing/04-paddle-integration.md`.
+- Resend — transactional email (primary); locked in `22-infrastructure/11-email-provider.md`.
+- Postmark — transactional email (failover only); locked in `22-infrastructure/11-email-provider.md`.
+
 
 ## 6. Data Protection Officer
 

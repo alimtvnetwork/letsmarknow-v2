@@ -112,7 +112,7 @@ Mapping table lives in `lib/billing/decline-reasons.ts` (planned). Updates requi
 
 ## 6. Send transport & delivery guarantees
 
-- Provider: Postmark (transactional stream `mn-billing`). Configured per `22-infrastructure/11-email-provider.md`.
+- Provider: **Resend** (primary, transactional stream `mn-billing`) with **Postmark** as failover. Locked in `22-infrastructure/11-email-provider.md`. The `provider_message_id` field below is provider-agnostic.
 - Idempotency: every send uses `(email_id, account_id, trigger_event_id)` as the idempotency key. Re-deliveries from webhook retries do **not** re-send.
 - Delivery target: 99.5% delivered within 60 s of webhook receipt. Bounces and complaints feed the `notifications.bounce` event in `18-analytics-telemetry/03-events.md`.
 - Hard-bounce: account flagged; subsequent billing emails switch to in-app banner only until a new email is verified.
@@ -139,7 +139,7 @@ Each send writes an `Audit` row (`08-sharing-collab/09-audit-log.md`) with:
 {
   action: "billing_email.sent",
   email_id, account_id, recipient_user_id, template_version,
-  message_id (Postmark), trigger_event_id
+  provider_message_id, provider_name (resend|postmark), trigger_event_id
 }
 ```
 

@@ -26,7 +26,7 @@
 | `04-group.md` | `groups`, `group_items` | Many-to-many between Group and Item; group order via `position` int. |
 | `05-item.md` | `items` | URL canonicalisation, favicon ref, OG metadata fields, `last_visited_at`, `position`. |
 | `06-tag.md` | `tags`, `item_tags` | Tags are Org-scoped; case-insensitive uniqueness per Org. |
-| `07-share.md` | `shares` | **v1 single-table model** (locked). `target_kind`, `target_id`, `audience`, `password_hash`, `expires_at`, `slug`. |
+| `07-share.md` | `shares` | **v1 single-table model** (locked). `target_type`, `target_id`, `mode`, `password_hash`, `expires_at`, `slug`, `memorable_slug`. |
 | `08-member.md` | `org_members`, `org_invites` | 7-value role enum (canonical); invite token hash + expiry. |
 | `09-history-event.md` | `history_events` | Append-only event log feeding undo/redo and audit log. |
 | `10-license.md` | `licenses`, `subscriptions` | SKU references, `amount_cents`, provider tuple `(provider, event_id)` for idempotency. |

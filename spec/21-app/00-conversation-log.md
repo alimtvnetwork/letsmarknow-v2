@@ -683,3 +683,29 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 **Tuning lesson (recorded in readme):** initial unanchored synonym scan flagged 12 generic English uses ("human contributor", "open-source maintainer", "collaborator slots") with 100% noise rate. Adding a role-context co-occurrence anchor (line must also contain `role`/`RLS`/`permission`/`auth.role`/`has_role`/`org_role`) eliminated all false positives without weakening the rule for actual role-system drift. **Pattern:** when a forbidden token has legitimate generic-English uses, gate it on a co-occurring domain anchor. Same lesson as Session 28's `pricing-source` (narrow scope to plan-cadence patterns).
 
 **Linter tally: 13 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real drift catch rate stays 4/13 (31%).
+
+---
+
+## Session 31 — 2026-04-29 (`error-code-casing` linter)
+
+**User instruction:** "Next" — picked #1 from prior queue (implement `error-code-casing` linter).
+
+**Files changed (4):**
+- NEW `scripts/lint/error-code-casing.ts` — two-rule cross-file linter: (A) casing format check, (B) catalog membership check. Catalog (84 codes) auto-extracted from `03-api-endpoints/18-error-codes.md §3.x` table column-1.
+- NEW `scripts/lint/error-code-casing.allowlist.txt` — 4 entries: 2 file-level (conversation log, closed issues) + 2 per-occurrence (QUOTA_EXCEEDED in rule-teaching contexts).
+- `scripts/lint/readme.md` — row updated ⏳ → ✅ with first-run finding.
+- `.lovable/memory/index.md` — linter tally bumped 13/19 → 14/19.
+
+**Linter result:** clean — 296 files scanned, 0 violations after triage; catalog size = 84.
+
+**First-run finding (no SI opened):** `QUOTA_EXCEEDED` referenced in 2 places. Triaged as legitimate meta-documentation:
+1. `09-auth-accounts/13-rate-limit-values.md:15` — row literally documents the rule itself: `Org-quota error code | 18-error-codes.md §3.6 (BILLING_QUOTA_EXCEEDED) | ✅ aligned (no invented QUOTA_EXCEEDED)`. The forbidden form must be quoted for the lock to be teachable. Same pattern as glossary's forbidden-synonym sentence (Session 29 next-singleton-invariants).
+2. `23-audits/audit-2026-04-19-m-gaps.md:129` — closed audit M-1 records the original drift fix; closure evidence requires quoting the bad form.
+
+Both per-occurrence allowlisted with `<file>:<TOKEN>` schema. The rule remains armed for any future real `QUOTA_EXCEEDED` drift in non-meta contexts.
+
+**Why no SI:** the catalog already has the canonical fix (`BILLING_QUOTA_EXCEEDED`) and the rate-limit-values file already references it correctly on the same line. There's no live drift to track — only documentation of a pre-existing closed conflict.
+
+**Pattern reinforced (3rd session in a row):** when a linter's forbidden token has legitimate meta-uses (rule documentation, audit history quoting), prefer per-occurrence allowlisting over weakening the rule. Sessions 28 (pricing-source narrowing), 29 (next-singleton glossary allowlist), 30 (role-enum context anchor), 31 (error-code per-occurrence) all converge on the same principle: **the cure for false positives is a tighter allowlist or a tighter context anchor, never a weaker pattern**.
+
+**Linter tally: 14 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real drift catch rate: 4/14 (29%) — all 4 historical, no new lint-detected drift since Session 28.

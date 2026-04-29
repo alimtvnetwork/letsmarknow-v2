@@ -19,7 +19,7 @@ Always list remaining tasks at end of each work session; if all done, suggest ne
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
 
 ## Memories
-- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live counts + phase queue mirror of `spec/21-app/13-spec-issues/`. Open=2 (SI-023 Collection.kind, SI-024 toast placement), Closed=26. Both opened 2026-04-29 from Save Session v1 reconciliation. Build-readiness summary at `spec/21-app/20-roadmap/07-build-readiness.md`.
+- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Open=1 (SI-024 toast placement), Closed=27. SI-023 closed 2026-04-29 (`Collection.kind` discriminator added).
 - [Gap analysis state](mem://features/gap-analysis-state.md) — Older closure tracker for the original W-/F-/M- issue chain.
 - [Audit tracker protocol](mem://preference/audit-tracker-protocol.md) — Rules for updating the readiness-score audit file after each fix.
 - [No implementation mode](mem://constraints/no-implementation-mode.md) — Spec-only mode is permanent. Never write code.

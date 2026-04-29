@@ -665,3 +665,21 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 - Realtime channel: `account:{account_id}:next` (W-4 curly-brace form).
 
 **Linter tally: 12 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real-drift catch rate stays 4/12 (33%) — this linter is preventive (greenfield feature, no historical drift to catch).
+
+---
+
+## Session 30 — 2026-04-29 (`role-enum` linter)
+
+**User instruction:** "Next" — picked #1 from prior queue (implement `role-enum` linter).
+
+**Files changed (4):**
+- NEW `scripts/lint/role-enum.ts` — two-rule linter (enum-drift + foreign-role).
+- NEW `scripts/lint/role-enum.allowlist.txt` — 1 entry (conversation log).
+- `scripts/lint/readme.md` — row updated ⏳ → ✅ with tuning note.
+- `.lovable/memory/index.md` — linter tally bumped 12/19 → 13/19.
+
+**Linter result:** clean — 296 files scanned, 0 violations.
+
+**Tuning lesson (recorded in readme):** initial unanchored synonym scan flagged 12 generic English uses ("human contributor", "open-source maintainer", "collaborator slots") with 100% noise rate. Adding a role-context co-occurrence anchor (line must also contain `role`/`RLS`/`permission`/`auth.role`/`has_role`/`org_role`) eliminated all false positives without weakening the rule for actual role-system drift. **Pattern:** when a forbidden token has legitimate generic-English uses, gate it on a co-occurring domain anchor. Same lesson as Session 28's `pricing-source` (narrow scope to plan-cadence patterns).
+
+**Linter tally: 13 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real drift catch rate stays 4/13 (31%).

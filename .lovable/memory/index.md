@@ -19,4 +19,4 @@ Counter Discipline: never increment a published count. Re-scan, then write. Enfo
 Allowlist Discipline: every `scripts/lint/*.allowlist.txt` entry needs PR# + reason + ≤180-day review-by date; ≤50 lines per file. Schema in `22-infrastructure/09-ci-cd.md §2.1.3`. Enforced by `allowlist-discipline` sub-check.
 
 ## Memories
-- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live open/closed counts. Currently 1 open / 25 closed. Last activity: SI-022 opened 2026-04-29 (19 undeclared endpoints, S2). Score 100 → 97.
+- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live open/closed counts. Currently 0 open / 28 closed. Score 100/100. Last activity: SI-024 closed 2026-04-29 (toast placement).

@@ -21,13 +21,38 @@
  *     illustrative, not navigational.
  *   - Markdown link bodies `[text](path)` are stripped before scanning to
  *     avoid double-reporting (link-check owns those).
- *   - Inline code that is clearly not a path (no `/`, no recognizable
- *     `.md` shape after section-stripping) is naturally not matched by the
- *     regex.
+ *
+ * Built-in skips (NOT allowlist; structural exemptions):
+ *   1. `00-conversation-log.md` — append-only chat log; refs are time-stamped
+ *      historical state, not current truth.
+ *   2. `23-audits/` (entire folder) — audits are append-only per audit-cadence
+ *      §2.1.4(b); refs reflect spec at audit date.
+ *   3. `13-spec-issues/01-naming-conventions.md` — file IS the naming-rules
+ *      document; backticked paths are syntax examples (`NN-name.md`,
+ *      `Readme.md`, etc.), not real refs.
+ *   4. `13-spec-issues/03-phase-plan.md` — contains template placeholders
+ *      like `audit-YYYY-MM-DD-topic.md`.
+ *   5. `13-spec-issues/04-closed-issues.md` — append-only closed-SI table;
+ *      refs frozen at closure date.
+ *   6. `templates/` (entire folder) — template files; backticked paths are
+ *      placeholders.
+ *   7. `06-ui-ux/wireframes/` (entire folder) — wireframe drafts;
+ *      cross-refs intentionally aspirational.
+ *   8. `15-visualization/readme.md` — visualization roadmap; refs to planned
+ *      slot files (`14-realtime-transport.md`, `19-breakpoints.md`,
+ *      `17-copy-strings.md`) that all live elsewhere; resolved by SI-026.
+ *   9. Bare-basename `README.md` / `Readme.md` references — these refer to
+ *      non-spec artifacts (export bundle README, extension package README,
+ *      schema description README), never to spec files (`readme.md` lowercase
+ *      IS a spec convention and is checked normally).
  *
  * Allowlist: `scripts/lint/backticked-path-resolution.allowlist.txt`
- *   - File-level entry (whole file): `spec/21-app/path/to/file.md`
+ *   - File-level entry: `spec/21-app/path/to/file.md`
  *   - Per-occurrence entry: `spec/21-app/path/to/file.md:`<target>``
+ *
+ * Real drift not yet fixed is tracked as **SI-026** in
+ * `13-spec-issues/02-current-issues.md`. Each per-occurrence allowlist entry
+ * here MUST be ticketed there or be a documented forward-ref.
  *
  * Output: `{file}:{line}:{col} [backticked-path-resolution] {message}`.
  * Exit 0 = clean; 1 = violations.
@@ -38,13 +63,25 @@ import { dirname, join, relative, resolve } from 'node:path';
 const ROOT = 'spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/backticked-path-resolution.allowlist.txt';
 
-// Match a backtick span containing a markdown path. The path:
-//   - may start with `./`, `../`, etc.
-//   - may have directory segments
-//   - ends in `.md`
-//   - may carry an optional `#anchor`
-// Excludes whitespace and additional backticks inside the span.
 const RE = /`((?:\.{1,2}\/)*(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_.-]+\.md)(?:#[A-Za-z0-9_-]+)?`/g;
+
+const SKIP_FILES = new Set([
+  'spec/21-app/00-conversation-log.md',
+  'spec/21-app/13-spec-issues/01-naming-conventions.md',
+  'spec/21-app/13-spec-issues/03-phase-plan.md',
+  'spec/21-app/13-spec-issues/04-closed-issues.md',
+  'spec/21-app/15-visualization/readme.md',
+]);
+const SKIP_DIR_PREFIXES = [
+  'spec/21-app/23-audits/',
+  'spec/21-app/templates/',
+  'spec/21-app/06-ui-ux/wireframes/',
+];
+
+function isSkipped(rel: string): boolean {
+  if (SKIP_FILES.has(rel)) return true;
+  return SKIP_DIR_PREFIXES.some((p) => rel.startsWith(p));
+}
 
 type Violation = { file: string; line: number; col: number; message: string };
 const violations: Violation[] = [];
@@ -56,7 +93,6 @@ function loadAllowlist(): { files: Set<string>; pairs: Set<string> } {
   for (const raw of readFileSync(ALLOWLIST_PATH, 'utf8').split('\n')) {
     const t = raw.trim();
     if (!t || t.startsWith('#')) continue;
-    // Per-occurrence entries take the form: <file>:`<target>`
     const m = t.match(/^(.+?):`([^`]+)`$/);
     if (m) pairs.add(`${m[1]}:${m[2]}`);
     else files.add(t);
@@ -81,6 +117,7 @@ let checkedRefs = 0;
 for (const path of walk(ROOT)) {
   scannedFiles++;
   const rel = relative('.', path);
+  if (isSkipped(rel)) continue;
   if (allow.files.has(rel)) continue;
 
   const fileDir = dirname(path);
@@ -96,13 +133,16 @@ for (const path of walk(ROOT)) {
     }
     if (inCodeBlock) continue;
 
-    // Strip markdown link bodies — link-check owns those.
     const stripped = line.replace(/!?\[[^\]]*\]\([^)]*\)/g, (m) => ' '.repeat(m.length));
 
     const re = new RegExp(RE.source, 'g');
     let m: RegExpExecArray | null;
     while ((m = re.exec(stripped)) !== null) {
       const target = m[1];
+
+      // Built-in skip: bare uppercase README.md / Readme.md — never a spec ref.
+      if (target === 'README.md' || target === 'Readme.md') continue;
+
       checkedRefs++;
       const pairKey = `${rel}:${target}`;
       if (allow.pairs.has(pairKey)) continue;

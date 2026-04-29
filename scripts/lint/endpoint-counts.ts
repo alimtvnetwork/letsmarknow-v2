@@ -49,7 +49,7 @@ function discoverFiles(): string[] {
 //   2. Markdown header:             `### POST /v1/items`           (used in some sub-sections)
 //   3. Table-row inline:            `| GET /v1/items | … |`        (used sparingly)
 //   4. Table-row split-cell:        `| GET | \`/v1/items\` | …`    (used in 00-overview.md only — excluded)
-const ROW_BACKTICK = /^`(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s`]+)`\s*$/;
+const ROW_BACKTICK = /^`(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s`]+)`(?:\s|$)/;
 const ROW_HEADER = /^#{2,4}\s+(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s]+)\s*$/;
 const ROW_INLINE = /^\|\s*(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s|`]+)\s*\|/;
 

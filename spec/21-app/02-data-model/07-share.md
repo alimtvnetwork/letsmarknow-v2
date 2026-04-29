@@ -46,10 +46,14 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 5. `expires_at` MUST be in the future at create time.
 6. Custom slug only allowed when Org's License entitlement includes `custom_share_slug`.
 7. Soft-deleting the target entity revokes all its Shares atomically (sets `revoked_at`).
+8. `memorable_slug` is OPTIONAL. When set, `(organization_id, memorable_slug)` is unique case-insensitively. The random `slug` is the universal fallback and remains globally unique whether or not `memorable_slug` is set.
+9. `memorable_slug` follows reserved-slug rules in `08-sharing-collab/13-share-link.md` §2 plus extras: `lmk`, `t`, `new`, `edit`.
+10. Repointing a Share to a new target (orphaned-state recovery) is allowed only when the new target shares the same `target_type` and `organization_id`. Logs `share.target_repointed` and clears `revoked_at`.
 
 ## Indexes (recommended)
 
 - `(slug)` unique
+- `(organization_id, memorable_slug)` unique partial where `memorable_slug is not null`
 - `(organization_id, target_type, target_id)`
 - `(expires_at)` partial where not null
 - `(revoked_at)` partial where null

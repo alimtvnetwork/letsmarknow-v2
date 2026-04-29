@@ -507,3 +507,36 @@ Combined with the meta-rule trilogy (Counter Discipline + Audit Cadence + Allowl
 **Real-drift catch rate stays 3/8 (37.5%):** SI-025 (12 phantom endpoint rows), S22 heading drift (3 files), SI-026 (`discount_minor` W-10 survivor). The two clean-on-first-run W-issue linters (W-6, W-13) are still high-value because they prevent FUTURE drift — the failure mode is not detection of past bugs but locking against new ones.
 
 **No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.
+
+---
+
+## 2026-04-29 — Session 26: Implement `realtime-channel-syntax` linter — W-4 enforced
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote ninth real linter at `scripts/lint/realtime-channel-syntax.ts` (~95 lines, zero deps). Implements W-4 lock from §2.1.1 row 8: forbids the `<scope>:<placeholder>` angle-bracket form in realtime channel templates. Canonical form is `<scope>:{<scope>_id}` with curly braces (per `00-overview/02-glossary.md` channel naming convention).
+
+**Scope decision (interpretation needed):** The §2.1.1 rule reads "Channel and route templates use `{id}` placeholders, never `<id>` or `:id`." Taken literally this would forbid `:id` everywhere — but the corpus has **171 canonical REST endpoint declarations using `:id`** as the Express-style param syntax (per `03-api-endpoints/01-conventions.md`). Cross-referenced the W-4 audit (`audit-2026-04-19-spec-wide.md` §W-4) which confirms: the rule targets **realtime channel/topic templates only**, not REST routes. Implemented accordingly:
+- Scoped to `08-sharing-collab/**` (realtime/presence/comments folder) + `04-extension/10-sync-and-offline.md` (extension's realtime transport reference).
+- Pattern: `\b([a-z][a-z_]*):<([a-z_][a-z0-9_]*)>` — catches `collection:<collection_id>`, `item:<id>`, `org:<org_id>`, etc. Word boundary on the left avoids false positives in HTML-like prose.
+- The `:id` half of the original W-4 rule applies only inside this scope by virtue of the scope itself; REST routes outside the scope keep their `:id`.
+
+Recorded the interpretation in the linter file's docstring so future maintainers don't trip on it.
+
+**First-run result: 17 files scanned, 0 violations.** W-4 sweep on 2026-04-19 was thorough — all 3 originally-flagged files (`06-realtime-presence.md`, `14-realtime-transport.md`, `07-comments-and-reactions.md`) were correctly fixed. **No allowlist needed** — scope-narrowing pattern from Session 25 keeps the documentation/audit references out of reach automatically.
+
+**Negative-test:** Confirmed the regex catches both historical-drift forms (`collection:<collection_id>` → suggests `collection:{collection_id}`; `item:<id>` → suggests `item:{id}`). Lock is real, not vacuous.
+
+Updated `scripts/lint/readme.md` status table: **9 of 19 sub-checks now ✅ implemented**. The two W-locks families are both done:
+- **W-issue trio (semantics):** W-6 (sku) ✅, W-10 (money) ✅, W-13 (pagination) ✅
+- **W-template-syntax pair:** W-4 (channel) ✅, W-12 (env-var) ⏳
+
+10 sub-checks still ⏳: 5 spec-only (`link-check`, `role-enum`, `error-code-casing`, `env-var-naming`, `pricing-source`, `storage-path`) and 4 src-dependent (blocked by `no-implementation-mode`). The remaining spec-only batch are all moderate complexity (cross-file lookups against canonical sources).
+
+**No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.

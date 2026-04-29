@@ -180,3 +180,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Walked `20-roadmap/06-definition-of-done.md` end-to-end. Verified all 11 cross-referenced files exist (`03-api-endpoints/18-error-codes.md`, wireframes folder with 5 numbered files + readme + overview, copy-strings, breakpoints, a11y, telemetry events, rate-limit values, env-vars, secrets, cron, storage-layout, permissions-matrix.json). Identified 4 gaps from recent SI closes: (G-1) brand pink HSL not enforced as DoD line, (G-2) `--color-label-*` token usage ungated, (G-3) toast placement compliance ungated post-SI-024, (G-4) `Collection.kind` immutability + session events ungated post-SI-023. Patched §1 UI block with 3 new lines (Toby-pink anchor, color-label tokens, toast placement). Added §3 "Collections / Sessions (SI-021, SI-023)" with 7 per-domain checks (kind immutability, captured_at parity, source_window_id scope, 3 session events, conditional menu actions, starred_pin invariant, drag-drop matrix). Added §6 Locked rule #5 requiring CI lint enforcement of Toby-parity invariants. Added §7 walkthrough log row for traceability. No content removed; only additive hardening.
+
+---
+
+## 2026-04-29 — `next` (back DoD rule #5 with CI lint specs)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Backed yesterday's DoD §6 Locked Rule #5 ("Toby-parity invariants checked by CI lint, not by humans alone") with concrete linter specs in `22-infrastructure/09-ci-cd.md §2.1.1`. Added 4 new sub-checks to the `spec-drift-linter` registry: (1) `brand-pink-anchor` — verifies `--primary` resolves to `343 79% 60%`, blocks literal `#EC4868` outside the token site, blocks the rejected `347 81% 60%` value. (2) `color-label-tokens` — verifies all 9 locked enum tokens defined for light + dark, blocks `gray` (the Save Session v1 paste tried to add it), blocks hex literals in label rendering. (3) `collection-kind-discriminator` — verifies 2-value enum (`manual`, `session`) in spec + TS + SQL, gates UI conditionals on `kind===session` not `captured_at`, blocks post-create mutation. (4) `toast-placement` — verifies single `<Toaster />` at app root with bottom-right desktop / top-center mobile, blocks rejected `bottom-left`. Updated registry header from "twelve sub-checks" to "fifteen sub-checks" and broadened scope from `spec/21-app/**/*.md` only to also cover `src/**/*.{ts,tsx,css}` so the brand + token rules can fire on actual code. Each new linter cites its originating SI for traceability. Result: DoD Rule #5 is now executable, not aspirational.

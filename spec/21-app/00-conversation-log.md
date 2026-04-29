@@ -386,3 +386,29 @@ The self-policing layer is fully enforced. Any future linter that ships an allow
 Updated `scripts/lint/readme.md` status table: **4 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline). Remaining 15 are content-class enforcement, 4 of which require lifting `no-implementation-mode` first (need `src/` to scan).
 
 **No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress, but a structurally significant milestone: the meta-rules — the rules that protect the rules — are all live.
+
+---
+
+## 2026-04-29 — Session 22: Implement `folder-overview` linter — caught real drift on day one
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote fifth real linter at `scripts/lint/folder-overview.ts` (~90 lines, zero deps). Implements the F-FOLDER-OVERVIEW invariant locked Session 19 retrospective: every directory under `spec/21-app/` (recursive, excluding hidden, `templates/`, allowlist, and root itself) MUST contain `00-overview.md` with ≥40 lines and the 5 canonical headings (Responsibilities, File-by-file behaviour|behavior, Tasks performed by this folder, What this folder is NOT, Cross-references). Heading regex tolerates the British/American spelling split for §2.
+
+**First-run drift caught — 11 violations across 3 files:**
+
+1. `spec/21-app/00-overview/00-overview.md` — heading 1 was `## 1. Responsibilities of this folder` (trailing suffix). **Fixed:** renamed to canonical `## 1. Responsibilities`.
+2. `spec/21-app/23-audits/00-overview.md` — all 5 headings were unnumbered (`## Responsibilities`, `## File-by-file behaviour`, `## Tasks performed`, `## What this folder is NOT`, `## Cross-references`). **Fixed:** renumbered all 5 to canonical form. Side-effect: the standalone `## Audit cadence registry` section (between 4 and 5) is now correctly identified as a non-canonical extension, which is fine — the linter only requires the 5 canonical headings exist, not that no others do.
+3. `spec/21-app/03-api-endpoints/00-overview.md` — legitimate semantic mismatch. This file is an **HTTP-method index** where `## 1. GET — read endpoints`, `## 2. POST — ...`, `## 3. PATCH`, `## 4. PUT`, `## 5. DELETE` carry method-bucket semantics, not folder-overview semantics. Renumbering would destroy the index utility (and the file is already validated by the `endpoint-counts` sub-check, which is the right rule for it). **Allowlisted** in `scripts/lint/folder-overview.allowlist.txt` with PR:#0 + reason citing the alt-schema rationale + 2026-10-26 review-by.
+
+**Cascade benefit — `allowlist-discipline` self-validates:** Adding the new allowlist file automatically triggered the Session-21 meta-rule linter to validate it. Result: `allowlist-discipline: clean — 2 allowlist file(s) validated against 19 known sub-checks`. The trilogy enforcement worked exactly as designed: a new exception got auto-policed without any extra wiring.
+
+**Final state:** `folder-overview: clean`. Both linters now green. Updated `scripts/lint/readme.md`: **5 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline, folder-overview). Two of the five (folder-overview + naming-convention) caught real drift on first run — strong validation that the linter program is paying off. Allowlists in corpus: 2 (`naming-convention.allowlist.txt`, `folder-overview.allowlist.txt`).
+
+**Spec changes:** 7 line edits across 2 files (1 line in `00-overview/00-overview.md`, 6 lines in `23-audits/00-overview.md`). No semantic changes — pure heading normalization. No SI movement. Score stays 100/100.

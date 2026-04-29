@@ -1202,3 +1202,40 @@ Plus a clarifying row for "Set / change memorable `lmk/` slug" so readers see th
 3. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
 4. **Lift `no-implementation-mode`** — major phase transition.
 5. **Rest** — 44 sessions, 17/17 green linters, 1 open SI (SI-026, 12 entries).
+
+---
+
+## Session 45 — 2026-04-29 — Author 06-ui-ux/{options-page,keyboard-cheatsheet}.md (SI-026 drain −2)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action.** Picked suggestion #1 from S44. Authored two UI-surface stubs:
+- `spec/21-app/06-ui-ux/21-options-page.md` (9 sections: surface, layout, sections table, persistence, save semantics, empty/error/loading, accessibility, telemetry, refs).
+- `spec/21-app/06-ui-ux/22-keyboard-cheatsheet.md` (11 sections: trigger, layout, content sources, groups, OS/surface awareness, filter/search, customize/print, accessibility, telemetry, empty/error, refs).
+
+Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-keyboard-shortcuts.md:48` to use NN- prefixed paths. Removed both allowlist entries. Fixed 4 self-introduced unresolved refs (state-sync → sync-and-offline; converted 2 forward-refs to plain prose). Linter `backticked-path-resolution` re-ran clean (1966 paths / 305 files).
+
+**Result.** SI-026 backlog 12 → 10. Open SI count unchanged (1).
+
+**Files touched.**
+- created `spec/21-app/06-ui-ux/21-options-page.md`
+- created `spec/21-app/06-ui-ux/22-keyboard-cheatsheet.md`
+- edited `spec/21-app/04-extension/02-surfaces.md`
+- edited `spec/21-app/04-extension/08-keyboard-shortcuts.md`
+- edited `scripts/lint/backticked-path-resolution.allowlist.txt`
+- edited `spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.lovable/memory/index.md`
+- edited `spec/21-app/00-conversation-log.md`
+
+**Next.**
+1. **Author `07-features/add-item-hover-button.md`** — closes 2 allowlist citations (Toby parity, called from `00-overview/04-competitive-analysis.md` + `readme.md`).
+2. **Author `10-licensing-billing/07-billing-emails.md`** — single-file SI-026 drop.
+3. **Author root-level `payments-integration.md`** — single-file SI-026 drop.
+4. **Author `17-i18n-a11y/extension-strings.md`** — single-file SI-026 drop (folder doesn't exist yet; would need folder + `00-overview.md`).
+5. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
+6. **Lift `no-implementation-mode`** — major phase transition.
+7. **Rest** — 45 sessions, 17/17 green linters, 1 open SI (SI-026, 10 entries).

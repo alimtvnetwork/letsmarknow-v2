@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 (SI-023 closed — `Collection.kind` discriminator added to data model; open count = 1).
+**Last updated:** 2026-04-29 (SI-024 closed — toast placement locked in `06-ui-ux/11-feedback.md §2.1`; open count = 0).
 
 ---
 
@@ -20,7 +20,7 @@
 | SI-021 | S1 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-toby-parity-delta.md` | (moved) | (moved) | (moved) |
 | SI-022 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Final inventory: 157 declared, 0 undeclared (verified). | (moved) | (moved) | (moved) |
 | SI-023 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. `Collection.kind` enum + `captured_at` + `source_window_id` added to `02-data-model/03-collection.md` with 3 invariants and 3 events. | (moved) | (moved) | (moved) |
-| SI-024 | S2 | Toast placement convention undefined. Save Session v1 spec asks bottom-left max-3-stacked; sonner default in current `src/main.tsx` is top-right. Need a global decision in `06-ui-ux/` so all features stay consistent. | Save Session v1 §8; `src/main.tsx` Toaster config | `06-ui-ux/12-empty-error-loading.md` or new `06-ui-ux/13-toasts.md`; downstream code in `src/main.tsx` | n/a (UX convention, not naming) |
+| SI-024 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. Toast placement locked: bottom-right desktop / top-center mobile, max 3 stacked, no per-surface overrides. Save Session v1's bottom-left request rejected; refs in `07-features/02-save-session.md §14.4` and `04-extension/09-save-session.md §11` updated to point at `06-ui-ux/11-feedback.md §2.1`. | (moved) | (moved) | (moved) |
 
 ---
 

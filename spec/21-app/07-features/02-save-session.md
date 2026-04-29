@@ -147,7 +147,7 @@ Tooltip = pink filled pill (bg `--primary`, text `--primary-foreground`, radius 
 2. Create local `Collection { kind:"session", capturedAt:now, sourceWindowId }` at `order:0`.
 3. Optimistic insert at top of grid with 200ms slide-down + fade (skip when `prefers-reduced-motion`).
 4. Queue sync to server via `POST /v1/sessions/save` (existing API, `03-api-endpoints/12-sessions-save.md`).
-5. Toast bottom-left: `"Session saved · {N} tabs"` with `Undo` (5s) + `View`. See SI-024 for placement convention.
+5. Toast (canonical placement per `06-ui-ux/11-feedback.md §2.1`: bottom-right desktop, top-center mobile): `"Session saved · {N} tabs"` with `Undo` (5s) + `View`.
 6. Browser tabs are **not** closed unless user setting `Close tabs after saving session` is on.
 
 ### 14.5 Restore

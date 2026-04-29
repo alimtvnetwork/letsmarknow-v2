@@ -116,4 +116,4 @@ Authoritative trigger surfaces inside the extension. Keeps prior popup CTA + sho
 
 **Saving state** (≤500ms): icon swaps to 20×20 spinner; replaced by icon when toast appears.
 
-Toast placement for Save Session = bottom-left, max 3 stacked (see SI-024 for the global toast-placement convention).
+Toast placement follows the canonical convention in `06-ui-ux/11-feedback.md §2.1` (bottom-right desktop, top-center mobile, max 3 stacked). Save Session does NOT override placement.

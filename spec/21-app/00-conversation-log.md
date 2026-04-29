@@ -1565,3 +1565,46 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Remaining tasks:**
 1. **Decide F5** — residency regions; choose "match policy down to EU+US for v1" (recommended) or "expand policy to 4 regions". Spec edit on either side.
 2. **Open SI-029 formally for F4** — needs your nod + legal-counsel owner naming.
+
+---
+
+## Session 56 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (Session 55 tasks #1 + #2, recommended defaults):** Closed F5 by shrinking residency to EU+US for v1, and formally opened SI-029 for F4 with TBD legal-counsel owner.
+
+**Resolutions:**
+- **F5 closed.** `19-security-privacy/02-data-handling.md §3` rewritten to two regions (EU+UK+CH default, US+CA opt-in for US-billed Orgs), matching `07-privacy-policy.md §3`. Added a v1-scope-locked note explicitly deferring AU/Sydney + Rest-of-world to v2 with the three preconditions (new policy row, 30-day notice, residency-migration tool).
+- **F4 promoted.** New row added to `13-spec-issues/02-current-issues.md` as **SI-029** (S2, OPEN, owner TBD legal counsel, two-item checklist gating v1 Phase 1 launch). Tracker header counter updated from "Open count = 0" to "Open count = 1". Score noted as 100/100 unchanged because SI-029 is a launch-gate, not an AI-codegen blocker.
+- **Audit closed.** `23-audits/audit-2026-04-29-security-privacy-sweep.md` flipped from `status: open` to `status: closed` with `closed-on: 2026-04-29` and `closed-because:` summary citing 7-of-8 spec-resolved + F4-promoted-to-SI-029.
+
+**Net spec changes since Session 53 audit opened:**
+- 6 spec files edited (`02-data-handling.md` ×2, `04-gdpr-ccpa.md`, `01-threat-model.md` ×3 lines, `16-billing-emails.md` ×2 lines, `current-issues.md`)
+- 0 new files
+- 1 audit closed
+- 1 SI opened
+- 17/17 linters still green
+
+**Files changed (this session):**
+- edited `spec/21-app/19-security-privacy/02-data-handling.md` §3 (residency table)
+- edited `spec/21-app/13-spec-issues/02-current-issues.md` (SI-029 row + header)
+- edited `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` (status closed)
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md`
+
+**Open SIs:** **1** (SI-029, S2, blocked on human legal review). **Score:** 100/100.
+
+**Remaining tasks:**
+1. **SI-029 cannot be drained autonomously** — it gates v1 launch and requires legal counsel to write the policy copy + per-permission justifications. Surfaces here only as a tracked launch-gate.
+2. No other open spec work. All 8 findings from the security-privacy audit resolved or tracked.
+
+**Suggested next allowed actions (spec-only, per `mem://constraints/no-implementation-mode.md`):**
+- Audit a different folder (e.g. `08-sharing-collab/`, `02-data-model/`, `10-licensing-billing/`).
+- Re-paste any external reference (Toby, competitor docs).
+- Refresh AI-readiness score: `audit-2026-04-19-ai-readiness-score.md` may need a fresh delta now that 56 sessions of changes have accumulated.

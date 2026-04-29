@@ -10,7 +10,7 @@
 > |---|---|---|
 > | All paths use `/v1/` prefix | `03-api-endpoints/01-conventions.md` §3 | ✅ aligned |
 > | Auth limit numbers | `09-auth-accounts/11-rate-limits-and-abuse.md` §2 (narrative) | ✅ aligned |
-> | 429 / 402 envelope shape | `03-api-endpoints/01-conventions.md` §4 + `18-error-codes.md` §1 | ✅ aligned |
+> | 429 / 402 envelope shape | `../03-api-endpoints/01-conventions.md` §4 + `../03-api-endpoints/18-error-codes.md` §1 | ✅ aligned |
 > | Rate-limit error codes | `../03-api-endpoints/18-error-codes.md` §3.8 (`RATE_LIMITED`, `RATE_LIMITED_AUTH`, `RATE_LIMITED_SHARE_PASSWORD`) | ✅ aligned |
 > | Org-quota error code | `../03-api-endpoints/18-error-codes.md` §3.6 (`BILLING_QUOTA_EXCEEDED`) | ✅ aligned (no invented `QUOTA_EXCEEDED`) |
 > | `Retry-After` HTTP header | mirrors `retry_after_ms` (seconds, rounded up) | ✅ aligned |

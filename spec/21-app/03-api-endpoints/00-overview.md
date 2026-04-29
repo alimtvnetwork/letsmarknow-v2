@@ -97,6 +97,7 @@
 | GET | `/v1/search/quick` | bearer+org | Latency-optimized for the omnibox / popup quick-find. | `13-search.md` |
 | GET | `/v1/search/suggest` | bearer+org | Type-ahead suggestions (entity + tag + saved-search). | `13-search.md` |
 | GET | `/v1/search/recent` | bearer | List the Account's recent search queries. | `13-search.md` |
+| GET | `/v1/items/search` | bearer+org | Item-scoped search (subset of `/v1/search`, returns only item results with snippets/highlights). Used by in-Collection filter bars. | `../14-search/02-item-search.md` |
 
 ### 1.9 History, undo & trash
 

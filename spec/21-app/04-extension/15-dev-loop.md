@@ -80,7 +80,7 @@ HMR triggers SW reload; UI surfaces auto-refresh via `@crxjs/vite-plugin` inject
 
 ## 6. Test accounts
 
-Staging seed accounts (managed in `20-release-ops/staging-seed.md`):
+Staging seed accounts (managed in `04-extension/19-staging-seed.md`):
 - `qa-free@letsmarknow.test` — Free tier
 - `qa-pro@letsmarknow.test` — Pro
 - `qa-team-owner@letsmarknow.test` — Team Owner with 4 invited members

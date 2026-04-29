@@ -112,3 +112,79 @@ Pro+ feature: server clusters saved tabs into Groups by domain ("YouTube · 12 t
 - Cypress (extension test harness): mock `chrome.tabs.query`; assert preview, batch save, undo.
 - Backend: idempotency test with same `client_request_id`.
 - Load test: 500 tabs in one session — server holds < 1.5 s.
+
+---
+
+## 14. Save Session v1 — reconciled subspec (2026-04-29)
+
+> Sourced from "Save Session — AI-Readable Feature Specification v1.0" (full paste in `00-conversation-log.md`). Reconciled against locked rules. **Conflicts resolved:** brand pink stays `343 79% 60%` (locked SI-021); `colorLabel` enum stays the locked 9-value set (no `gray`); `Collection.kind` adopted as additive — see SI-023.
+
+### 14.1 Sessions are first-class Collections
+
+A Session = `Collection` with two extra fields:
+```ts
+{ kind: "session", capturedAt: ISO8601, sourceWindowId?: string }
+```
+Default `kind: "manual"` for all existing collections. Every Collection feature (rename, share, star, tag, export, delete, drag tabs in/out) applies to Sessions automatically. New SI-023 tracks the schema migration.
+
+### 14.2 Three trigger surfaces (canonical)
+
+| # | Surface | Visual | Tooltip |
+|---|---|---|---|
+| 1 | Open Tabs Panel — per-window header | 20×20 download-tray icon (`lucide:Download`), `--primary` tint | `"Save Session"` |
+| 2 | Extension popup — space-switcher row | Same icon next to `+` | `"Save Session as new collection"` |
+| 3 | Keyboard (optional) | — | `⌘/Ctrl+Shift+S` saves focused window |
+
+Tooltip = pink filled pill (bg `--primary`, text `--primary-foreground`, radius `6px`, padding `6px 10px`, top arrow notch). Disabled state tooltip: `"No tabs to save"`.
+
+### 14.3 Default name
+
+`defaultName(window) = "Window {n} — {Mon D, h:mm A}"` in user locale + timezone. Collision suffix ` (2)`, ` (3)`, …
+
+### 14.4 Save flow (non-destructive by default)
+
+1. Snapshot `tabs` preserving order; preserve `pinned: true` per tab.
+2. Create local `Collection { kind:"session", capturedAt:now, sourceWindowId }` at `order:0`.
+3. Optimistic insert at top of grid with 200ms slide-down + fade (skip when `prefers-reduced-motion`).
+4. Queue sync to server via `POST /v1/sessions/save` (existing API, `03-api-endpoints/12-sessions-save.md`).
+5. Toast bottom-left: `"Session saved · {N} tabs"` with `Undo` (5s) + `View`. See SI-024 for placement convention.
+6. Browser tabs are **not** closed unless user setting `Close tabs after saving session` is on.
+
+### 14.5 Restore
+
+- `Restore session` → opens every tab in current window in original order; originally-active tab focused last. Pinned flag re-applied.
+- `Restore in new window` → fresh window.
+- `chrome://` and `about:` URLs saved but skipped on restore with notice toast `"Skipped {n} unsupported tabs"`.
+- Restore never deletes the session.
+
+### 14.6 Re-capture
+
+3-dot menu → `Re-capture from current window` (visible only when `sourceWindowId` is still alive). Replaces `tabs` and updates `capturedAt` after destructive-style confirm. No diff history in v1.
+
+### 14.7 Settings (`Settings → Sessions`)
+
+| Setting | Default |
+|---|---|
+| Close tabs after saving session | off |
+| Default session name template (tokens: `{n}`, `{date}`, `{time}`, `{count}`, `{domain}`) | `Window {n} — {date} {time}` |
+| Confirm before restore in current window | on |
+| Auto-save session on browser quit (`runtime.onSuspend`) | off |
+
+### 14.8 Edge cases (additive to §9)
+
+- Incognito windows: Save Session icon hidden entirely.
+- 0 tabs: button disabled; never create empty sessions.
+- Pinned tabs: round-trip via `pinned: true`.
+- Duplicate URLs: kept (no dedupe within a single session).
+- > 500 tabs: virtualized tab list on the card; toast reads `"Saved {N} tabs (large session)"`.
+- Favicon-less: hashed pastel monogram from first letter of title.
+- Concurrent edit: last-write-wins on `updatedAt`; loser sees toast `"This session changed elsewhere — refreshed"`.
+
+### 14.9 Acceptance checklist (30 items — see conversation log §15 of source paste for canonical list)
+
+The 30-item checklist in the source paste is authoritative for QA. Key invariants:
+- All colors via semantic tokens; no hardcoded hex in components.
+- Brand `--primary` = `343 79% 60%` (locked, NOT `347 81%`).
+- Save button has `aria-label="Save session for Window {n}"`; tooltip via `aria-describedby` on focus.
+- Local-first: closing network mid-save still produces a usable session, marked `cloud-off` until sync.
+- Sessions appear/behave as first-class Collections everywhere (search, tag, export, share, star).

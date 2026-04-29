@@ -11,15 +11,16 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29, UTC+8 — after post-fix deep re-audit)
+## Counts (updated 2026-04-29, UTC+8 — after Save Session v1 reconciliation)
 
-- Open: **0**
+- Open: **2** (SI-023 S2, SI-024 S2)
 - Closed: 26
-- By severity (open): all zero
-- ✅ **SI-001 CLOSED** at S3. Slot `21-` is a **permanent intentional buffer**. Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
+- ✅ **SI-001 CLOSED** at S3. Slot `21-` is a **permanent intentional buffer**. Locked in `13-spec-issues/01-naming-conventions.md §2`.
 - ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity. Audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`.
-- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep: all 19 routes resolved. Inventory rebased to actual: 183 rows / 182 distinct (was reported as 157, drift fixed in post-fix re-audit). Score 100/100.
-- ✅ **SI-020c CLOSED** at Phase 13.7g — endpoints declared; `00-overview.md` rebased 2026-04-29 to actual count **183 rows / 182 distinct**.
+- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep. Inventory: 183 rows / 182 distinct. Score 100/100.
+- ✅ **SI-020c CLOSED** at Phase 13.7g — endpoints declared.
+- 🆕 **SI-023 OPEN** 2026-04-29. `Collection.kind` discriminator (`manual`|`session`) needed in `02-data-model/03-collection.md` per Save Session v1 spec. S2.
+- 🆕 **SI-024 OPEN** 2026-04-29. Toast placement convention undefined globally; Save Session v1 wants bottom-left. Decide in `06-ui-ux/`. S2.
 
 ## Counter discipline (lesson from 2026-04-29 re-audit)
 

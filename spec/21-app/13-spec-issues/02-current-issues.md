@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-20 (after Phase 9 — SI-001 CLOSED at S3; open count = 0).
+**Last updated:** 2026-04-29 (Save Session v1 reconciliation — SI-023 + SI-024 opened at S2; open count = 2).
 
 ---
 
@@ -19,6 +19,8 @@
 | SI-020c | S1 | ✅ closed Phase 13.7g — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-021 | S1 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-toby-parity-delta.md` | (moved) | (moved) | (moved) |
 | SI-022 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Final inventory: 157 declared, 0 undeclared (verified). | (moved) | (moved) | (moved) |
+| SI-023 | S2 | `Collection.kind` discriminator (`manual`\|`session`) introduced by Save Session v1 spec but not yet present in `02-data-model/03-collection.md`. Sessions currently distinguished only by presence of `capturedAt`. Adding `kind` clarifies queries, list-view filtering, and 3-dot menu wiring (`Restore session` only for `kind=session`). | Save Session v1 paste (conv log 2026-04-29 §4 entry); `02-data-model/03-collection.md` lacks the field. | `02-data-model/03-collection.md` (add field), `07-features/02-save-session.md` §14.1 (already references it), `02-data-model/00-overview.md` (enum table) | §4 (enum locking) |
+| SI-024 | S2 | Toast placement convention undefined. Save Session v1 spec asks bottom-left max-3-stacked; sonner default in current `src/main.tsx` is top-right. Need a global decision in `06-ui-ux/` so all features stay consistent. | Save Session v1 §8; `src/main.tsx` Toaster config | `06-ui-ux/12-empty-error-loading.md` or new `06-ui-ux/13-toasts.md`; downstream code in `src/main.tsx` | n/a (UX convention, not naming) |
 
 ---
 

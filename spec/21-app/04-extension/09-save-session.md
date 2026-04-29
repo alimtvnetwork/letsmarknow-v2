@@ -95,3 +95,25 @@ For sessions > 50 tabs, popup shows progress bar driven by:
 - Tab URLs only leave the browser when the user actually clicks Save.
 - Preview filtering happens locally; only filtered list goes to server.
 - No background scanning of tabs.
+
+---
+
+## 11. v1 entry-point matrix (2026-04-29 reconciliation)
+
+Authoritative trigger surfaces inside the extension. Keeps prior popup CTA + shortcut, adds the per-window download-tray icon and tooltip strings from Save Session v1 spec.
+
+| Surface | Element | Icon | Tooltip | Action |
+|---|---|---|---|---|
+| Popup — current-window header | Pink download tray | `lucide:Download` 20px, `--primary` | `"Save Session as new collection"` | `saveSession(currentWindowId)`, popup auto-closes 600ms after toast |
+| Popup — bottom strip | "Save all N tabs as session" CTA | text button | — | Same as above (legacy surface kept for discoverability) |
+| Popup — space-switcher row | Pink download tray next to `+` | `lucide:Download` 20px | `"Save Session as new collection"` | Same |
+| Keyboard | `Alt+Shift+W` (existing) or `⌘/Ctrl+Shift+S` (v1 suggested) | — | — | Saves focused window |
+| Web app (Open Tabs panel) | Per-window header download tray | `lucide:Download` 20px, `--primary` | `"Save Session"` | Calls extension via `externally_connectable` |
+
+**Disabled state** (window has 0 includable tabs): icon at 50% opacity, tooltip `"No tabs to save"`, `aria-disabled="true"`.
+
+**Active click**: icon scales to `0.92` for 80ms; respects `prefers-reduced-motion`.
+
+**Saving state** (≤500ms): icon swaps to 20×20 spinner; replaced by icon when toast appears.
+
+Toast placement for Save Session = bottom-left, max 3 stacked (see SI-024 for the global toast-placement convention).

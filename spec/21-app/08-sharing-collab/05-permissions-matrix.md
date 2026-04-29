@@ -64,9 +64,18 @@ Server enforces; client mirrors for UX. Drift = bug.
 |---|:---:|:---:|:---:|:---:|
 | Create Share (any scope) | ✅ | ✅ | ✅ | ❌ |
 | Modify Share settings | ✅ | ✅ | ✅ (own) | ❌ |
+| Set / change memorable `lmk/` slug | ✅ | ✅ | ✅ (own) | ❌ |
+| Repoint orphaned Share to new target | ✅ | ✅ | ✅ (own) | ❌ |
 | Revoke any Share | ✅ | ✅ | ✅ (own) | ❌ |
 | Revoke another member's Share | ✅ | ✅ | ❌ | ❌ |
+| Handle access requests (approve/decline) | ✅ | ✅ | ❌ | ❌ |
 | Configure custom domain | ✅ | ✅ | ❌ | ❌ |
+
+**Notes.**
+- "Create Share" and "Modify Share settings" both cover **either** URL surface (the random `/t/{slug}` and the optional memorable `lmk/{...}`) — they are the same Share row per `02-data-model/07-share.md`. No separate permission for the memorable surface itself; the row above ("Set / change memorable `lmk/` slug") exists only to surface the `custom_share_slug` entitlement requirement (Pro+).
+- "Repoint orphaned Share" is the recovery action defined in `08-sharing-collab/13-share-link.md` §7 and invariant §10 of `02-data-model/07-share.md`. The new target must belong to the same Org and have the same `target_type`. Editors may only repoint Shares they originally created.
+- "Handle access requests" covers responding to `share.access_requested` events emitted by the request-access page (`08-sharing-collab/13-share-link.md` §8).
+
 
 ## 6. Comments / reactions (Pro+)
 

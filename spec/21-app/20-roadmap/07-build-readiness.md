@@ -24,7 +24,7 @@ The following are normative and any code MUST conform:
 
 - **Identifiers:** UUIDv7 everywhere. Never ULID. (`mem://index.md` Core)
 - **Role enum:** `owner, admin, editor, viewer, billing, guest, system`. New roles require glossary + `02-data-model/08-member.md` update in same PR.
-- **Share model:** v1 = single-table per `02-data-model/07-share.md`. `08-sharing-collab/share-model.md` is a v2 design note **only**.
+- **Share model:** v1 = single-table per `02-data-model/07-share.md`. `08-sharing-collab/01-share-model.md` is a v2 design note **only**.
 - **Folder slot 21:** permanent intentional buffer between domain (`00-`–`20-`) and meta (`22-`, `23-`).
 - **Brand `--primary`:** Toby pink `#EC4868` / HSL `343 79% 60%`. Defined in `06-ui-ux/01-design-tokens.md` §1.1. Never hard-code.
 - **Toby Workspace mapping:** SPLIT — Workspace-as-collection-container = our **Space**; Workspace-as-admin-surface = our **Organization**. Never collapse.

@@ -92,3 +92,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Picked queued option 4 (Roadmap kickoff prep). Audited `20-roadmap/`: all 23 cross-refs valid. Found gap: Toby parity (color_label, starred_pin, Open Tabs panel) was not in any phase scope. Added them to `01-phase-0-mvp.md` §1 under "Toby parity essentials". Created new `20-roadmap/07-build-readiness.md` — single-page snapshot of corpus state (157 endpoints, 59 glossary terms, 0 open SI), locked decisions inventory, Phase-0 deliverable-to-spec coverage matrix (zero gaps), 6 inline open questions parked with safe defaults, recommended 5-week build sequence within the 8-week MVP sprint. Constraint `no-implementation-mode` stays in force — only a user decision blocks code work now.
+
+---
+
+## 2026-04-29 — `next` (Post-fix deep re-audit)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Picked queued option 5 (deep re-audit). Wrote 7-check Python sweep. Found 2 real defects + 3 false positives. Fixed: (D-1) `00-overview.md` §7 endpoint counts were stale — said 157, actual 183 rows / 182 distinct. Drift accumulated from `prev + delta` math across sessions. Rewrote §7 with measured counts + Rows-vs-Distinct column + last-rebase marker. (D-2) Stale share-model paths in `20-roadmap/07-build-readiness.md` and `mem://index.md` Core (missing numeric prefix). Recorded false positives so future sweeps don't repeat: forbidden-alias rule applies only to URL paths not event/table/template names; Source-column paths are relative to `03-api-endpoints/`. Created `23-audits/audit-2026-04-29-post-fix-reaudit.md` (full report). Updated `mem://features/spec-issue-tracker.md` with counter-discipline rule and FP patterns. Score holds at 100/100.

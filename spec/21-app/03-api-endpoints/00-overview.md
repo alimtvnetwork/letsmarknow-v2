@@ -468,16 +468,20 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 ## 7. Endpoint counts (sanity check)
 
-| Method | Count |
-|---|---|
-| GET | 46 |
-| POST | 90 |
-| PATCH | 9 |
-| PUT | 1 |
-| DELETE | 11 |
-| **Total** | **157** |
+> Counts are **rows in this file** (which means a deliberately-duplicated row like `GET /v1/me/entitlements` listed in both §1.11 and §1.13 counts twice). Distinct endpoints = 181.
 
-> If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug.
+| Method | Rows | Distinct |
+|---|---|---|
+| GET | 59 | 58 |
+| POST | 102 | 102 |
+| PATCH | 10 | 10 |
+| PUT | 1 | 1 |
+| DELETE | 11 | 11 |
+| **Total** | **183** | **182** |
+
+> The single duplicate is `GET /v1/me/entitlements` — listed under both §1.11 (Licenses & billing) and §1.13 (Account cross-Org) by design, with the §1.13 row marked `(also listed under §1.11)`. All other rows are unique by `(method, path)`.
+
+> If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug. Last rebase: 2026-04-29 (post deep re-audit, after SI-022 closure).
 
 ---
 

@@ -11,12 +11,13 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-20, UTC+8 — after Phase 9)
+## Counts (updated 2026-04-29, UTC+8 — after SI-021 opened)
 
-- Open: **0** 🎉
+- Open: **1** (SI-021, S1 — Toby Collections parity, 8 sub-tasks)
 - Closed: 24
-- By severity (open): S0 = 0 · S1 = 0 · S2 = 0 · S3 = 0
+- By severity (open): S0 = 0 · S1 = 1 · S2 = 0 · S3 = 0
 - ✅ **SI-001 CLOSED** at S3 (downgraded from S1). Slot `21-` is now a **permanent intentional buffer** between per-domain folders (`00-`–`20-`) and meta folders (`22-`, `23-`). Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
+- 🆕 **SI-021 OPEN** — Toby Collections feature parity. Container mapping resolved as **split**: Space owns Collection hierarchy; Org owns admin/billing/members. 8 sub-tasks listed in `02-current-issues.md`.
 - ✅ **SI-020c CLOSED** at Phase 13.7g — 24/24 endpoints declared; `00-overview.md` total: 136 → 145.
 
 ## Phase queue

@@ -126,8 +126,9 @@ The default Personal Org has only the Account holder as Owner; cannot add member
 2. **Server middleware** — checks role + ownership per route.
 3. **Database RLS (Lovable Cloud)** — secondary defense via `auth.uid()` + role check function.
 4. **Client guards** — disable buttons + tooltips ("Editors can't manage members").
+5. **System actor bypass** — server-only contexts (cron jobs, edge-function service-role key, Postgres `SECURITY DEFINER` functions, signed webhook handlers) execute as `role=system` and skip layers 1–3 by construction. The audit log records `actor=system` with the calling-context id (`cron_job_id` / `webhook_id` / `api_token_id`) so every system action remains attributable. `system` is NEVER issued to a user-facing JWT.
 
-Any action MUST pass all three (1–3); client guard alone never sufficient.
+Any action MUST pass all three (1–3) for human/share-viewer actors; client guard alone never sufficient. Layer 5 applies only to server-issued contexts.
 
 ## 11. Audit (Team)
 

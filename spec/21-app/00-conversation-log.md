@@ -350,3 +350,39 @@ Updated `scripts/lint/readme.md` status table: **3 of 18 sub-checks now ✅ impl
 **Meaningful side-effect:** The allowlist is now the first real exception file in the corpus, which means the `allowlist-discipline` meta-rule sub-check has its first ground truth to validate against. That linter is now unblocked from its chicken-and-egg state — implementing it next would close the meta-rule trilogy enforcement (Counter, Audit Cadence, Allowlist Discipline all green).
 
 **No SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.
+
+---
+
+## 2026-04-29 — Session 21: Implement `allowlist-discipline` linter — meta-rule trilogy COMPLETE
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote fourth real linter at `scripts/lint/allowlist-discipline.ts` (~140 lines, zero deps). Implements all 6 invariants from §2.1.3 Allowlist Discipline meta-rule + §2.1.1 row 18:
+
+(a) Header block validation: requires `# linter:`, `# purpose:`, `# review-by:` as contiguous comment lines at top of file (header ends at first blank line).
+(b) Linter-name cross-validation: `# linter: <name>` must (i) match the filename stem and (ii) appear in the §2.1.1 sub-check table of `09-ci-cd.md`. Cross-validation is dynamic — extracts the table at runtime via regex `^\|\s*\`([a-z][a-z0-9-]+)\`\s*\|`, picks up 19 names today (16 enforcement + 3 meta-rules).
+(c) Per-entry justification: every non-comment, non-blank line must be immediately preceded (skipping blanks) by a `#` comment carrying `PR:#<digits>` AND `reason:<≥10 chars>`. Bare entries fail with line number.
+(d) Hard cap: ≤50 non-comment lines per file.
+(e) Review-by window: must parse as YYYY-MM-DD, must be ≥today (forces deliberate re-review), must be ≤180 days out (forces quarterly re-justification rather than indefinite drift).
+(f) Orphan detection: filename stem (`X.allowlist.txt` → `X`) must match a known sub-check; otherwise the allowlist is orphaned (linter was renamed/removed but exception file lingers).
+
+**Validation result:** Green on first run against the corpus's only allowlist (`naming-convention.allowlist.txt` from Session 20): `allowlist-discipline: clean — 1 allowlist file(s) validated against 19 known sub-checks`.
+
+**Negative test:** Synthesized a deliberately bad `role-enum.allowlist.txt` with 4 distinct defects (mismatched linter name, unknown sub-check, far-future review-by, bare entry, short reason). All 5 expected violations fired with correct line numbers and messages — confirming each invariant is independently enforced, not bundled.
+
+**Meta-rule trilogy now COMPLETE:**
+- ✅ Counter Discipline (`endpoint-counts`, Session 17/18 — caught 12 phantom rows in §7)
+- ✅ Audit Cadence (`audit-cadence`, Session 19 — validates 18 audit files)
+- ✅ Allowlist Discipline (`allowlist-discipline`, Session 21 — validates 1 allowlist file, dormant-ready for the next 16)
+
+The self-policing layer is fully enforced. Any future linter that ships an allowlist will be auto-validated. Any linter that gets renamed without cleaning up its allowlist will fail CI on the next run. The "exception silently becomes policy" failure mode is closed.
+
+Updated `scripts/lint/readme.md` status table: **4 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline). Remaining 15 are content-class enforcement, 4 of which require lifting `no-implementation-mode` first (need `src/` to scan).
+
+**No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress, but a structurally significant milestone: the meta-rules — the rules that protect the rules — are all live.

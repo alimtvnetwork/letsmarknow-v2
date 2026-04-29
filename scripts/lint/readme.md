@@ -26,7 +26,7 @@ This directory holds the implementations of the 18 sub-checks composing `spec-dr
 | `color-label-tokens` | ⏳ | Same — needs `src/` to exist. |
 | `collection-kind-discriminator` | ⏳ | Same — needs `src/` + `migrations/`. |
 | `toast-placement` | ⏳ | Same — needs `src/`. |
-| `allowlist-discipline` | ⏳ | Allowlist Discipline meta-rule. Implement after first non-meta linter ships its first allowlist file. |
+| `allowlist-discipline` | ✅ `allowlist-discipline.ts` | Allowlist Discipline meta-rule. Shipped Session 21. Validates header (`# linter:`, `# purpose:`, `# review-by:`), per-entry `PR:#<n> reason:<≥10 chars>` justifications, ≤50 non-comment lines, review-by window (≥today, ≤180d), and orphan-allowlist detection (filename stem must match §2.1.1 sub-check). Cross-validates against the §2.1.1 table extracted from `09-ci-cd.md` (19 known sub-checks). Currently green: 1 allowlist file (`naming-convention.allowlist.txt`). Negative-tested with 5 forced violations — all fire cleanly. |
 
 ## Conventions
 

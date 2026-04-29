@@ -9,7 +9,7 @@
 ### Naming
 - **Format:** `domain.subject.verb` or `domain.verb` — dot-namespaced, lowercase, snake_case segments.
 - **Stability:** event names are PUBLIC API. Renames require a deprecation cycle (emit both for ≥ 1 release).
-- **Domains:** `extension`, `web`, `save`, `quickfind`, `search`, `item`, `collection`, `group`, `space`, `tag`, `share`, `member`, `org`, `auth`, `entitlements`, `upsell`, `sync`, `offline`, `import`, `export`, `billing`, `share_analytics`, `history`, `error`, `perf`, `system`.
+- **Domains:** `extension`, `web`, `save`, `quickfind`, `search`, `item`, `collection`, `group`, `space`, `tag`, `share`, `member`, `org`, `auth`, `entitlements`, `upsell`, `sync`, `offline`, `import`, `export`, `billing`, `share_analytics`, `history`, `next`, `error`, `perf`, `system`.
 
 ### Envelope (every event)
 ```json

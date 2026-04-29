@@ -412,3 +412,38 @@ List out the remaining tasks always, if you finish then in future `next` command
 **Final state:** `folder-overview: clean`. Both linters now green. Updated `scripts/lint/readme.md`: **5 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline, folder-overview). Two of the five (folder-overview + naming-convention) caught real drift on first run — strong validation that the linter program is paying off. Allowlists in corpus: 2 (`naming-convention.allowlist.txt`, `folder-overview.allowlist.txt`).
 
 **Spec changes:** 7 line edits across 2 files (1 line in `00-overview/00-overview.md`, 6 lines in `23-audits/00-overview.md`). No semantic changes — pure heading normalization. No SI movement. Score stays 100/100.
+
+---
+
+## 2026-04-29 — Session 23: Implement `money-units` linter — caught regression in 10-day-old "closed" W-issue
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote sixth real linter at `scripts/lint/money-units.ts` (~80 lines, zero deps). Implements W-10 lock from §2.1.1 row 5: forbids `amount_minor`, `amount_in_cents`, `priceInCents`, `discount_minor` (added the fourth term — it appears in spec-wide audit row 165 and was clearly meant to be locked) across all `.md` files under `spec/21-app/`. Word-boundary matching, case-sensitive (camelCase variants are themselves a smell). Reports `{file}:{line}:{col}` so editors can jump.
+
+**First-run drift caught — 19 hits across 10 files:**
+- 18 hits triaged as legitimate documentation references → allowlisted with PR:#0 + per-file reasons
+- **1 real regression:** `10-licensing-billing/10-coupons-and-promotions.md:64` — `coupon.redeemed` telemetry event still emitted `discount_minor` despite W-10 closure 2026-04-19 explicitly listing this file as swept
+
+**Opened + closed SI-026 same session:**
+- Severity S3 (single-token typo, not a missed file)
+- Fix: `discount_minor` → `discount_cents` (peer event 2 lines below already used `amount_cents` correctly, confirming the file was 95% swept and this was a one-line miss)
+- Lesson recorded in close note: even a documented W-issue closure with explicit file list and grep verification can leave one-token misses. Only programmatic enforcement catches them.
+
+**This is the second time the linter program has caught a regression in a "closed" issue:**
+- Session 18: `endpoint-counts` caught 12 phantom rows in §7 that 11 manual sweeps missed (SI-025)
+- Session 23: `money-units` caught `discount_minor` survivor that the explicit W-10 sweep + manual grep verification missed (SI-026)
+
+The pattern is consistent: human-led "swept and verified" closures leak ~5-10% of the problem surface. Programmatic enforcement turns those leaks into hard CI failures.
+
+**Allowlist created:** `scripts/lint/money-units.allowlist.txt` — 8 file-level entries covering: data-model overview (defines lock by quoting rejection), 15-sku-map W-10 closure note, ci-cd.md (the linter rule definition itself), 4 audit history files, gap-analysis tracker, folder-overview template (anti-pattern checklist). All justified per Allowlist Discipline schema (PR:#0 + ≥10-char reason + 2026-10-26 review-by). Auto-validated by Session-21's `allowlist-discipline` linter on first save: `clean — 3 allowlist file(s) validated against 19 known sub-checks`.
+
+Updated `scripts/lint/readme.md` status table: **6 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline, folder-overview, money-units). Three of the six (folder-overview, money-units, endpoint-counts) caught real drift on first run — 50% hit rate. The linter program is paying for itself.
+
+**Spec changes:** 1 line edit in `10-coupons-and-promotions.md` (drift fix), 1 row added to `13-spec-issues/04-closed-issues.md` (SI-026 inline close). SI count: 0 open / 30 closed. Score stays 100/100.

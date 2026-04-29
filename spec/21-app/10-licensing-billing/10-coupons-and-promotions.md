@@ -61,7 +61,7 @@ Each coupon configured with:
 
 ## 8. Telemetry
 
-- `coupon.redeemed` `{ coupon_id, plan, discount_minor, currency }`
+- `coupon.redeemed` `{ coupon_id, plan, discount_cents, currency }`
 - `coupon.invalid` `{ coupon_id, reason }`
 - `referral.link_visited` `{ ref_code }`
 - `referral.signup_attributed` `{ ref_code }`

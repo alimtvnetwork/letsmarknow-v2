@@ -14,7 +14,7 @@ This directory holds the implementations of the 18 sub-checks composing `spec-dr
 | `naming-convention` | ✅ `naming-convention.ts` | Shipped Session 20. Asserts `^\d{2}-[a-z0-9-]+\.md$`, lowercase `readme.md`, contiguous numbering. Allowlist: `naming-convention.allowlist.txt` (22 entries: 19 audit corpus files, 1 dir gap for `21-app` slot, 1 wireframes asset folder, 1 legacy root index). Currently green. |
 | `role-enum` | ⏳ | |
 | `error-code-casing` | ⏳ | |
-| `money-units` | ⏳ | |
+| `money-units` | ✅ `money-units.ts` | Shipped Session 23. Forbids `amount_minor`, `amount_in_cents`, `priceInCents`, `discount_minor` across `spec/21-app/**/*.md`. Caught real drift on first run: `discount_minor` survived in `10-coupons-and-promotions.md:64` despite W-10's documented 2026-04-19 sweep claiming this file was clean — opened + closed SI-026 same session. Allowlist: `money-units.allowlist.txt` (8 entries: linter rule definition, W-10 closure notes, audit history, gap-analysis, template). Currently green. |
 | `sku-naming` | ⏳ | |
 | `pagination-param` | ⏳ | |
 | `realtime-channel-syntax` | ⏳ | |

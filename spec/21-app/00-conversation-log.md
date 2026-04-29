@@ -1392,3 +1392,30 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 2. **Lift `no-implementation-mode`** — major phase transition, unlocks the 4 src-dependent linters (was blocked while spec was the focus).
 3. **Audit recap** — generate a `23-audits/audit-2026-04-29-si-026-closure.md` documenting the 12-session drain pattern + lessons (line_replace prefix bug, slot collisions, allowlist orphans).
 4. **Rest** — 50 sessions, **0 open SIs**, 17/17 green linters, score 100/100.
+
+---
+
+## Session 51 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (suggestion #3):** Authored `spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md` — append-only retrospective documenting the SI-026 drain (21 → 0 over S38–S50). Captures: per-session drain table, file-author vs prose-rewrite decision rule, four recurring tooling failure modes (`line_replace` prefix bug, slot collisions in NN- folders, orphan allowlist entries, citing-ref discovery), final allowlist composition (4 non-SI-026 entries), score impact (held 100/100 throughout, +13 spec files net), and 4 recommendations for future bulk SIs.
+
+**Files changed:**
+- created `spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md`
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md` (Session 51 marker)
+
+**Linter status:** unchanged — 17/17 green. Audit file passes audit-cadence sub-check (declares `audit-date`, `next-audit-by`, `audit-type`, `status`).
+
+**Open SIs:** 0. **Score:** 100/100.
+
+**Remaining tasks (from memory):**
+1. Re-paste remaining Toby spec — 6 ergonomics defaults parked in `20-roadmap/`.
+2. Lift `no-implementation-mode` — phase transition, unlocks 4 src-dependent linters.
+3. Rest.

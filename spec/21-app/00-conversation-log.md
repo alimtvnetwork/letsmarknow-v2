@@ -78,3 +78,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Closed SI-022 fully. `03-api-endpoints/00-overview.md` extended with 7 new endpoints (new §1.15 + 4 single rows); 7 caller files fixed (`09-auth-accounts/13`, `10-licensing-billing/{03,04,12}`, `15-visualization/readme`, `17-admin-org/05`); 1 false-positive (`POST /v1/realtime/ticket` is WITHDRAWN). Inventory 149 → 157. Re-sweep: 0 undeclared. SI-022 row moved from `13-spec-issues/02-current-issues.md` → `04-closed-issues.md`. Audit `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md` §8 closure note appended. Memory + index updated. Score restored to 100/100.
+
+---
+
+## 2026-04-29 — `next` (Roadmap kickoff prep)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Picked queued option 4 (Roadmap kickoff prep). Audited `20-roadmap/`: all 23 cross-refs valid. Found gap: Toby parity (color_label, starred_pin, Open Tabs panel) was not in any phase scope. Added them to `01-phase-0-mvp.md` §1 under "Toby parity essentials". Created new `20-roadmap/07-build-readiness.md` — single-page snapshot of corpus state (157 endpoints, 59 glossary terms, 0 open SI), locked decisions inventory, Phase-0 deliverable-to-spec coverage matrix (zero gaps), 6 inline open questions parked with safe defaults, recommended 5-week build sequence within the 8-week MVP sprint. Constraint `no-implementation-mode` stays in force — only a user decision blocks code work now.

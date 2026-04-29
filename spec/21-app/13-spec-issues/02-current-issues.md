@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 50 — **SI-026 CLOSED** (drained 21 → 0 over 12 sessions, S38–S50). Open count = 0. All open issues resolved. Score: 100/100.
+**Last updated:** 2026-04-29 Session 56 — **SI-029 OPENED** (privacy-pack stubs need pre-launch expansion; gates v1 Phase 1 launch; owner TBD legal counsel). Open count = 1. Score: 100/100 (S2 launch-gate, not a codegen blocker).
 
 ---
 
@@ -23,6 +23,7 @@
 | SI-024 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. Toast placement locked: bottom-right desktop / top-center mobile, max 3 stacked, no per-surface overrides. Save Session v1's bottom-left request rejected; refs in `07-features/02-save-session.md §14.4` and `04-extension/09-save-session.md §11` updated to point at `06-ui-ux/11-feedback.md §2.1`. | (moved) | (moved) | (moved) |
 | SI-025 | S2 | ✅ closed Session 18 — see `04-closed-issues.md`. §7 rebased from 183/182 → 171/171 via `npx tsx scripts/lint/endpoint-counts.ts --write`. 5 real undeclared endpoints found and added; remaining 12-row gap was §7 over-count from prior hand-rebases. Linter now exits 0. | (moved) | (moved) | (moved) |
 | SI-026 (renamed SI-028) | S3 | ✅ closed 2026-04-29 Session 50 — see `04-closed-issues.md`. Forward-ref backlog drained 21 → 0 over S38–S50. Final allowlist: 4 non-SI-026 entries. | (moved) | (moved) | (moved) |
+| SI-029 | S2 | 🟡 **OPEN** 2026-04-29 Session 56 — Privacy-pack stubs need pre-launch expansion. Source: `23-audits/audit-2026-04-29-security-privacy-sweep.md` F4. Owner: **TBD (legal counsel)**. Two checklist items: (a) full per-permission justification narrative in `19-security-privacy/06-extension-privacy.md §4` (currently table with "draft target" placeholders); (b) full legal-reviewed copy for all 14 sections of `19-security-privacy/07-privacy-policy.md §2` (currently a section template). Gates: v1 Phase 1 launch (CWS submission + public privacy policy publish). Cannot be agent-resolved; requires human legal review. | `19-security-privacy/06-extension-privacy.md`, `19-security-privacy/07-privacy-policy.md` | n/a (content gap, not naming) |
 
 ---
 

@@ -2,10 +2,11 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: open
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-29
+closed-because: 7 of 8 findings resolved by spec edits (F1, F2, F3, F5, F6, F7, F8). F4 promoted to SI-029 in `13-spec-issues/02-current-issues.md` as a tracked v1-launch-gate (needs legal counsel; cannot be agent-resolved).
 scope: 19-security-privacy/ folder + sub-processor consistency across spec
-progress: 6 of 8 closed (F1, F2, F3, F6, F7, F8 done in S54+S55). Remaining: F4 (stub-file launch ownership, needs SI-029 + legal counsel), F5 (residency-region count, needs product decision).
 -->
 
 # Audit — Security & Privacy Sweep (Session 53)

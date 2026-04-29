@@ -36,12 +36,12 @@ Per-class retention:
 
 | Region | Where data lives |
 |---|---|
-| EU + UK + Switzerland | Frankfurt + Dublin (multi-AZ) |
-| US + Canada | Virginia + Oregon |
-| AU + NZ | Sydney |
-| Rest of world | User chooses at signup; default to nearest |
+| EU + UK + Switzerland (default) | Frankfurt + Dublin (multi-AZ) |
+| US + Canada (opt-in for US-billed Orgs) | Virginia + Oregon |
 
-- Residency declared at Org creation; not migratable post-creation (would require export/import).
+> **v1 scope (locked Session 56).** Only EU and US regions are offered in v1, matching the public privacy policy `19-security-privacy/07-privacy-policy.md §3`. AU/Sydney and Rest-of-world were spec'd in earlier drafts but are **deferred to v2**; opening them requires (a) a new sub-processor row in the policy, (b) a 30-day advance notice, and (c) a residency-migration tool (export → re-import in target region — out of v1 scope).
+
+- Residency declared at Org creation; not migratable post-creation in v1 (would require export/import; planned for v2).
 - Backups stay in same region.
 - Cross-region access only for support troubleshooting (with user consent).
 

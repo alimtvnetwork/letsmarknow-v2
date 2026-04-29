@@ -84,3 +84,5 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 - `share.item_clicked` (analytics-only)
 - `share.cloned_to_account` (when `allow_clone_to_my_account` is used)
 - `share.hard_deleted`
+- `share.target_repointed` (orphaned-state recovery, see invariant §10)
+- `share.access_requested` (visitor without access submits the request-access form, see `08-sharing-collab/13-share-link.md` §8)

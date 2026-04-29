@@ -167,7 +167,7 @@ behind the gear icon in the Next view.
 
 ## 8. Keyboard shortcuts
 
-Listed in `06-ui-ux/02-keyboard-shortcuts.md` "Next" section (new sub-section).
+Listed in `06-ui-ux/08-keyboard-input.md §2.7` (canonical source).
 Summary:
 
 | Shortcut | Action |
@@ -243,7 +243,7 @@ LWW.
 - Glossary: `00-overview/02-glossary.md` "Next" section.
 - Popup wireframe: `04-extension/04-popup.md §14`.
 - Hover toolbar (bookmark icon source): `07-features/09-hover-to-jump.md`.
-- Keyboard shortcuts: `06-ui-ux/02-keyboard-shortcuts.md` "Next" section.
+- Keyboard shortcuts: `06-ui-ux/08-keyboard-input.md §2.7` "Next" sub-section.
 - Realtime channel: `08-sharing-collab/14-realtime-transport.md` (channel
   `account:{account_id}:next`).
 - Roadmap: `20-roadmap/02-phase-1-v1.md` (Next ships in v1, NOT MVP-Phase-0).

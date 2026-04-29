@@ -87,8 +87,8 @@ Toby pink. Anchor `--brand-500 = 343 79% 60%` ≈ `#EC4868`. Locked by SI-021 (2
   --card-foreground:   210 40% 98%;
   --popover:           222 47% 8%;
   --popover-foreground:210 40% 98%;
-  --primary:           220 88% 64%;
-  --primary-foreground:222 47% 6%;
+  --primary:           343 82% 68%;   /* Toby-pink, lifted for dark contrast */
+  --primary-foreground:343 60%  8%;
   --secondary:         217 33% 17%;
   --secondary-foreground: 210 40% 98%;
   --muted:             217 33% 17%;

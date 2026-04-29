@@ -11,15 +11,25 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29, UTC+8 — after SI-022 fully closed)
+## Counts (updated 2026-04-29, UTC+8 — after post-fix deep re-audit)
 
 - Open: **0**
 - Closed: 26
 - By severity (open): all zero
 - ✅ **SI-001 CLOSED** at S3. Slot `21-` is a **permanent intentional buffer**. Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
 - ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity. Audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`.
-- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep: all 19 routes resolved (Group B 4 promoted, Group C 7 declared + 7 callers fixed + 1 false-positive WITHDRAWN marker). Inventory 145 → 157. Re-sweep verified 0 undeclared. Score restored 97 → 100.
-- ✅ **SI-020c CLOSED** at Phase 13.7g — 24/24 endpoints declared; `00-overview.md` total: 136 → 145 → **157**.
+- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep: all 19 routes resolved. Inventory rebased to actual: 183 rows / 182 distinct (was reported as 157, drift fixed in post-fix re-audit). Score 100/100.
+- ✅ **SI-020c CLOSED** at Phase 13.7g — endpoints declared; `00-overview.md` rebased 2026-04-29 to actual count **183 rows / 182 distinct**.
+
+## Counter discipline (lesson from 2026-04-29 re-audit)
+
+**Never increment `00-overview.md` §7 counts.** Always re-scan and rewrite the table from a fresh row count. Audit `23-audits/audit-2026-04-29-post-fix-reaudit.md` D-1 documents how 26 rows of drift accumulated silently across 3 sessions doing `prev + delta` math.
+
+## False-positive patterns (do not re-flag)
+
+Recorded in `23-audits/audit-2026-04-29-post-fix-reaudit.md` §2:
+- FP-1/FP-2: §16 forbidden-alias rule (`sign_in`, `magic_link`, etc.) applies **only to `/v1/...` URL path segments**, not to event names, table names, or email template ids. Anchor any forbidden-alias regex to URL paths.
+- FP-3: `00-overview.md` Source-column paths are relative to `03-api-endpoints/` (no `../` prefix).
 
 ## Phase queue
 

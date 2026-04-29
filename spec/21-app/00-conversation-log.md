@@ -120,3 +120,21 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Picked queued option 5 (publish fresh AI-readiness v2). Created `23-audits/audit-2026-04-29-ai-readiness-score-v2.md` — delta-only consolidation over the 2026-04-19 v1 baseline. Records the 4 same-day fix sessions (Toby parity, glossary sweep, orphan-endpoint sweep, roadmap kickoff), re-runs the 11 gating checks (all hold), inventories the 6 parked inline questions with safe defaults, re-affirms 100/100/100 across Lovable/Cursor/Raw-LLM, and flags one implementation gap (Toby pink not yet in `src/index.css` or `tailwind.config.ts`) that is *outside* spec-readiness math. No memory or score changes — purely a published snapshot.
+
+---
+
+## 2026-04-29 — Save Session v1 spec (verbatim)
+
+```
+# Save Session — AI-Readable Feature Specification
+
+**Version:** 1.0
+**Status:** Authoritative spec. Any AI agent or developer can rebuild this feature end-to-end from this document alone, without seeing the original product (Toby) or its screenshots.
+**Scope:** The "Save Session" capability as it appears in (a) the Open Tabs side panel of the web app, (b) the browser-extension popup, and (c) the resulting saved-session collection inside the Collections workspace.
+
+[Full 16-section spec preserved — see 07-features/02-save-session.md and 04-extension/09-save-session.md after merge. Original paste includes: Purpose, Glossary, IA, Entry Points (3), Visual Tokens, UI Spec per surface, Given/When/Then interactions, Toast spec, TS Data Model with Tab/Collection/SaveSessionInput, Settings, A11y, DnD rules, 12 edge cases, Non-Goals, 30-item Acceptance Checklist, reference pseudocode.]
+
+Voice-note: User says use this if it doesn't conflict with existing system; if conflict, follow existing spec or ask. Follow coding/error-management guidelines from prior conversations. Save updates to memory or suggestion list.
+```
+
+**Refactored into:** Reconciled new spec against existing corpus. Conflicts resolved in favor of locked rules per memory: (C-1) Brand pink HSL: new spec said `347 81% 60%`, locked value is `343 79% 60%` (same hex `#EC4868`) — kept locked. (C-2) `colorLabel` enum: new spec listed `gray`; locked enum is `none|red|orange|yellow|green|teal|blue|purple|pink` — kept locked, dropped `gray`. (C-3) Collection `kind` field: new spec proposes `"manual"|"session"`; existing `02-data-model/03-collection.md` has no `kind` discriminator — adopted as ADDITIVE field, opened SI-023. (C-4) Toast position: new spec says bottom-left; existing UI uses sonner default top — adopted bottom-left for Save Session toasts only, opened SI-024. (C-5) API: kept existing rich `POST /v1/sessions/save` (`03-api-endpoints/12-sessions-save.md`) as authoritative; new spec's local-first pseudocode reframed as client-side flow that wraps it. (C-6) Naming: TS interfaces use camelCase per spec, DB columns stay snake_case per `01-naming-conventions.md`. Files updated: `07-features/02-save-session.md` (added §14 Sessions-as-Collections subspec, restore/re-capture, defaultName format, 30-item acceptance checklist), `04-extension/09-save-session.md` (added entry-point matrix incl. download-tray icon + tooltip strings + popup auto-close timing). Opened SI-023 (Collection.kind discriminator) and SI-024 (toast placement convention) — both S2.

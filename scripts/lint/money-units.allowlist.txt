@@ -21,3 +21,6 @@ spec/21-app/templates/folder-overview.md
 
 # PR:#0 reason:append-only verbatim instruction log — Sessions 23/26 quote forbidden money-unit terms (amount_minor, amount_in_cents, priceInCents, discount_minor) when documenting the W-10 lock and SI-026 closure
 spec/21-app/00-conversation-log.md
+
+# PR:#0 reason:closed-issues SI-026 closure entry quotes discount_minor as before/after evidence (W-10 retroactive sweep)
+spec/21-app/13-spec-issues/04-closed-issues.md

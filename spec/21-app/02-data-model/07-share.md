@@ -14,7 +14,7 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 | `target_id` | uuid | no | — | must exist & belong to same Org | The target entity id. |
 | `slug` | slug | no | random `[a-z0-9]{10}` | unique globally, `[a-z0-9-]{3,64}` | URL component → `letsmarknow.com/t/{slug}`. Custom slug only on Pro+. |
 | `is_custom_slug` | bool | no | false | — | True if user picked the slug. |
-| `memorable_slug` | slug | yes | null | `[a-z0-9-]{1,60}`, no leading/trailing/double hyphen, regex `^[a-z0-9](?:[a-z0-9]\|-(?!-))*[a-z0-9]$\|^[a-z0-9]$`, unique per `(organization_id, memorable_slug)` case-insensitive | Optional memorable shortlink → `letsmarknow.com/lmk/{org_handle}/{memorable_slug}`. Org-scoped uniqueness (two Orgs may share `lmk/hr`). Pro+ entitlement (`custom_share_slug`). Reserved-slug list per `08-sharing-collab/13-share-link.md` §2 plus extras: `lmk`, `t`, `new`, `edit`. |
+| `memorable_slug` | slug | yes | null | per `08-sharing-collab/13-share-link.md` §1.2 (1–60 chars, no leading/trailing/double hyphen) | Optional memorable shortlink → `letsmarknow.com/lmk/{org_handle}/{memorable_slug}`. Org-scoped uniqueness (two Orgs may share `lmk/hr`). Pro+ entitlement (`custom_share_slug`). Reserved-slug list per `08-sharing-collab/13-share-link.md` §2 plus extras: `lmk`, `t`, `new`, `edit`. |
 | `mode` | enum(`public`\|`password`\|`invite_only`) | no | `public` | — | Access mode. |
 | `password_hash` | string(255) | yes | null | argon2id | Required when `mode=password`. Never returned by API. |
 | `expires_at` | timestamp | yes | null | future or null | When the share stops working. Null = never. |

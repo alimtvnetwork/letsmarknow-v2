@@ -4,8 +4,6 @@
 
 # PR:#0 reason:SI-026 — `17-i18n-a11y/` folder planned for extension i18n strings
 spec/21-app/04-extension/07-context-menu.md:`17-i18n-a11y/extension-strings.md`
-# PR:#0 reason:SI-026 — share-model.md is the v2 multi-link design (per memory rule)
-spec/21-app/03-api-endpoints/10-shares.md:`08-sharing-collab/share-model.md`
 # PR:#0 reason:SI-026 — payments-integration.md planned root-level feature doc
 spec/21-app/readme.md:`payments-integration.md`
 # PR:#0 reason:reference to extension package's bundled README, not a spec doc

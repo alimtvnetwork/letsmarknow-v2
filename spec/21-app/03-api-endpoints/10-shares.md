@@ -210,7 +210,7 @@ Allowed within 7 days of revoke; same slug restored.
 ### Revoke a single share-link (v2 multi-link)
 `POST /v1/shares/links/:id/revoke`
 
-> **Status:** declared in P0 spec for forward-compatibility. **Emitter ships when v2 multi-link share model lands** (`08-sharing-collab/share-model.md`). Until then, server returns `403 FEATURE_NOT_AVAILABLE`.
+> **Status:** declared in P0 spec for forward-compatibility. **Emitter ships when the v2 multi-link share model lands** (planned design note in `08-sharing-collab/`, deliberately unauthored — Share v1 is single-table per the locked memory rule). Until then, server returns `403 FEATURE_NOT_AVAILABLE`.
 
 In v1, one Share has one slug. In v2, a Share owns N independently revocable Links (different slugs, different perms, different expiries). This endpoint revokes one Link without affecting siblings.
 

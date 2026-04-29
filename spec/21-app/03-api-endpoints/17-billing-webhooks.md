@@ -342,7 +342,7 @@ These are the **exact** subset of fields the handler reads. All money values are
 }
 ```
 - **Required:** `customer_id`, `subscription_id`, `payments[0].error_code`.
-- **Action:** Set License `status="past_due"`; trigger dunning email (`07-billing-emails.md`); schedule entitlements downgrade to `free` after 7 days unless resolved. Emit `invoice.payment_failed` History Event with `{ amount_cents, currency, decline_code: payments[0].error_code }`. Map `error_code` to canonical `BILLING_PAYMENT_FAILED` envelope per `18-error-codes.md` §3.6 when surfacing to admin UI.
+- **Action:** Set License `status="past_due"`; trigger dunning email (`10-licensing-billing/16-billing-emails.md`); schedule entitlements downgrade to `free` after 7 days unless resolved. Emit `invoice.payment_failed` History Event with `{ amount_cents, currency, decline_code: payments[0].error_code }`. Map `error_code` to canonical `BILLING_PAYMENT_FAILED` envelope per `18-error-codes.md` §3.6 when surfacing to admin UI.
 
 **Idempotency contract (all Paddle events):**
 - Dedup key is `(provider, event_id)` — the `event_id` field, NOT `notification_id`. Store in `webhook_events` with PK `(provider, event_id)`. Second arrival → 200 OK with no side effects.

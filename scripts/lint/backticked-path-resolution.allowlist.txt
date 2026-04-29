@@ -2,8 +2,6 @@
 # purpose: Exempt forward-references to planned spec files that have not yet been authored. Each entry is a real cross-reference whose target is intentionally aspirational (release-ops folder, v2 share-model, i18n-a11y folder, extension-package artifacts, etc.). Real drift in non-frozen files that is not a forward-ref must be FIXED, not silenced here. Tracked in aggregate as SI-026 in `13-spec-issues/02-current-issues.md`. Frozen files (conv-log, audits, naming-conventions, templates, wireframes, closed-issues) are skipped via built-in skip lists in the linter source, not allowlisted here.
 # review-by: 2026-10-26
 
-# PR:#0 reason:SI-026 — `17-i18n-a11y/` folder planned for extension i18n strings
-spec/21-app/04-extension/07-context-menu.md:`17-i18n-a11y/extension-strings.md`
 # PR:#0 reason:reference to extension package's bundled README, not a spec doc
 spec/21-app/00-overview/05-browser-scope.md:`04-extension/README.md`
 # PR:#0 reason:reference to export-bundle notes.md artifact, not a spec doc
@@ -18,5 +16,3 @@ spec/21-app/13-spec-issues/02-current-issues.md:`share-model.md`
 spec/21-app/13-spec-issues/02-current-issues.md:`06-ui-ux/options-page.md`
 # PR:#0 reason:SI-026 self-reference — examples cited in SI-026's own row in current-issues
 spec/21-app/13-spec-issues/02-current-issues.md:`07-features/add-item-hover-button.md`
-# PR:#0 reason:SI-026 — extension-strings.md cited from new store-listing stub (S39)
-spec/21-app/04-extension/17-store-listing.md:`17-i18n-a11y/extension-strings.md`

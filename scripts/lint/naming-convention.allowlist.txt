@@ -39,6 +39,8 @@ spec/21-app/23-audits/audit-2026-04-29-orphan-endpoint-sweep.md
 spec/21-app/23-audits/audit-2026-04-29-post-fix-reaudit.md
 # PR:#0 reason:audit-cadence-owned filename
 spec/21-app/23-audits/audit-2026-04-29-toby-parity-delta.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-full-green-milestone.md
 # PR:#0 reason:legacy un-prefixed audit file explicitly exempted by audit-cadence §2.1.4(f); pending merge or deletion
 spec/21-app/23-audits/audit.md
 # PR:#0 reason:supporting analysis doc for audit corpus, not itself an audit

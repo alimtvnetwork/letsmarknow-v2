@@ -112,7 +112,7 @@ Mapping table lives in `lib/billing/decline-reasons.ts` (planned). Updates requi
 
 ## 6. Send transport & delivery guarantees
 
-- Provider: Postmark (transactional stream `mn-billing`). Configured per `22-infrastructure/05-email-transport.md`.
+- Provider: Postmark (transactional stream `mn-billing`). Configured per `22-infrastructure/11-email-provider.md`.
 - Idempotency: every send uses `(email_id, account_id, trigger_event_id)` as the idempotency key. Re-deliveries from webhook retries do **not** re-send.
 - Delivery target: 99.5% delivered within 60 s of webhook receipt. Bounces and complaints feed the `notifications.bounce` event in `18-analytics-telemetry/03-events.md`.
 - Hard-bounce: account flagged; subsequent billing emails switch to in-app banner only until a new email is verified.
@@ -124,7 +124,7 @@ Mapping table lives in `lib/billing/decline-reasons.ts` (planned). Updates requi
 
 Every billing email includes a footer with:
 
-- Sender legal entity (from `19-security-privacy/legal-entity.md`).
+- Sender legal entity (per `19-security-privacy/07-privacy-policy.md` "Controller" section).
 - Mailing address.
 - "You're receiving this because you're the billing contact for {account_name}. Billing emails are required and cannot be unsubscribed. To change the billing contact, [link]."
 - Support link → `10-licensing-billing/14-support-system.md`.

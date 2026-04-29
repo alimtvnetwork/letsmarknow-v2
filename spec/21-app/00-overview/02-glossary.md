@@ -127,3 +127,16 @@ When porting concepts from other bookmark/tab managers, translate their containe
 | **Open Tabs panel** | Toby | extension surface | See `04-extension/16-open-tabs-panel.md`. Not a data-model entity. |
 
 **Rationale for the Toby Workspace split:** Toby conflates "container of Collections" and "billing/members boundary" into a single Workspace concept. Our locked hierarchy `Organization → Space → Collection → (Group\|Item)` separates those concerns. Mapping Workspace → Organization alone would invalidate ~200 spec files and the 145-endpoint inventory; mapping to Space alone would lose the admin/billing surface. Split mapping preserves both. Tracked in SI-021 (`13-spec-issues/02-current-issues.md`).
+
+## Next (the to-do queue)
+
+| Term | Definition |
+|---|---|
+| **Next** | The **per-Account, global** singleton to-do queue of saved Tabs. Modeled as a `Collection` of `kind = next` (one per Account, system-created, not user-creatable / shareable / deletable). Spans all Organizations and Spaces the Account belongs to. See `07-features/17-next-queue.md`. |
+| **Next Item** | One row inside Next. A join-row entity that wraps a reference to an `Item` plus queue-specific state (`done`, `completed_at`, `position`, `source_kind`). Schema: `02-data-model/12-next-item.md`. |
+| **Add to Next** | The canonical action verb for pushing an Item / Tab onto the Next queue. UI strings MUST use this exact phrasing — never "Add to To-do", "Save for later", or "Bookmark for Next". |
+| **Source Collection** | The Collection an item was added from (`source_collection_id` on NextItem). Nullable; surviving the source's deletion is by design. |
+| **Tombstone (Next)** | A NextItem whose source `Item` was hard-purged. The row keeps the last-known URL/title/favicon snapshot so the user can still open it; rendered with a degraded UI. |
+
+> 📌 **Mapping to Toby:** Toby's "Next" tab in the toolbar popup is 1:1 with our Next, with two intentional differences: (a) ours is per-Account/cross-Org rather than per-Workspace; (b) ours is modeled as a Collection-kind so it inherits the existing Item, sharing, history, and search machinery instead of duplicating it. See SI-021-style external-product mapping rationale.
+

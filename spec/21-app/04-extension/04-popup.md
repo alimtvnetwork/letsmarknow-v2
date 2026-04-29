@@ -134,3 +134,104 @@ offline ──► queued ──► (synced when online) ──► saved
 - Bundle size: < 80 KB gzipped for popup chunk (excluding shared vendor).
 - TTFCP < 100 ms (popup is local file, no network blocking initial paint).
 - All network calls fired in parallel; popup renders progressively.
+
+---
+
+## 14. "Next" tab — body region
+
+> Authoritative wireframe + interaction reference for the **Next** body the
+> popup renders when the user taps the **Next** entry in §2's tab bar (or on
+> first open, since `popup_default_tab = next`). The behavior, settings, entry
+> points, and data model live in `07-features/17-next-queue.md` and
+> `02-data-model/12-next-item.md` — this section is UI-only.
+
+### 14.1 Layout
+
+```
++---------------------------------------------+
+| Next                                        |  Section title 18/24 semibold
+| Here is what you have up next!              |  Subtitle 13/18, muted
+|                                             |
+| +---------------------------------------+ O |  Row container 56 px + checkbox 24 px
+| | favicon  <title — 1 line ellipsis>    |   |
+| |                            [→]   [↗]  |   |
+| +---------------------------------------+   |
+| +---------------------------------------+ O |
+| | favicon  <title>                      |   |
+| |                            [→]   [↗]  |   |
+| +---------------------------------------+   |
+| +---------------------------------------+ O |
+| | favicon  <title>                      |   |
+| |                            [→]   [↗]  |   |
+| +---------------------------------------+   |
++---------------------------------------------+
+```
+
+### 14.2 Item row anatomy
+
+- **Container:** `bg-card`, `border border-border rounded-lg`, padding `px-3.5 py-2.5`,
+  hover `shadow-card-hover` (token in `06-ui-ux/01-design-tokens.md`).
+- **Favicon:** 24×24 circle. Missing → colored monogram disc using the source
+  Item's `color_label` token (or hashed-from-domain), white first-letter glyph.
+- **Title:** 14/20 medium, `text-foreground`, single-line, `truncate`. Native
+  `title=` for hover full-text.
+- **`→` (open here):** 24×24 ghost button, icon `text-primary`. Tooltip `Open here`.
+- **`↗` (open new tab):** 24×24 ghost button, icon `text-primary`. Tooltip `Open in new tab`.
+- **Checkbox:** real `<input type="checkbox">`, lives **outside** the row container,
+  12 px to the right. Unchecked = 1.5 px `border-muted-foreground/40` ring; checked =
+  `bg-primary` filled + white check icon. On check: row container animates to
+  opacity 0.5 + line-through over 180 ms.
+
+### 14.3 Drag handle
+
+- Appears on row hover at the left edge, `cursor-grab`.
+- While dragging: row at opacity 0.6, `scale-[1.02]`, `shadow-pink-glow`.
+- Drop indicator: 2 px `bg-primary` bar between rows.
+- Persist new `position` via fractional indexing.
+
+### 14.4 Empty state
+
+```
+        ┌────┐
+        │ 📑 │   64 px outlined bookmark icon, text-muted-foreground
+        └────┘
+   Nothing up next yet
+   Add a tab from any collection or click "Save Tab"
+   above to start your queue.
+        [  Save current tab  ]   bg-primary, h-10, rounded-md
+```
+
+- Title 16/24 semibold `text-foreground`. Body 13/20 `text-muted-foreground`,
+  max-width 280 px, centered.
+- Button click = entry point E3 from `07-features/17-next-queue.md §5`.
+
+### 14.5 All-done state
+
+- Triggered when every row has `done = true` AND `next_hide_completed = false`.
+- First time the **last** open row flips done in a session: confetti burst (1.2 s)
+  ONLY if `prefers-reduced-motion: no-preference`.
+- Sticky banner at top: `You're all caught up!` + text-link `Clear completed`.
+
+### 14.6 Loading state
+
+- 3 skeleton rows, animated shimmer, height 56 px, `rounded-lg`, `bg-muted`.
+
+### 14.7 Error state
+
+- Inline alert: `bg-destructive/10`, `text-destructive`, icon `AlertCircle`.
+- Copy: `Couldn't load Next.` + `Retry` text-link.
+
+### 14.8 Multi-Org grouping
+
+When the Account is a member of >1 Organization AND Next contains rows
+sourced from >1 Org, group rows under collapsible Org headers. Header row:
+Org avatar (24×24) + Org name (14/20 medium) + open-count badge. Single-Org
+Accounts see a flat list (no header). See `07-features/17-next-queue.md §6.3`.
+
+### 14.9 Active-tab styling for the Next tab in the popup tab-bar
+
+- Icon swaps to a filled bookmark glyph on a `bg-primary/10` pill,
+  56×48 px `rounded-xl`.
+- Label color stays `text-foreground` (not pink) — only the icon changes color.
+- Underline indicator: 2 px `bg-primary` bar at the bottom edge of the column,
+  full-width minus 16 px padding.

@@ -628,3 +628,40 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 
 **Linter tally: 11 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real-drift catch rate now 4/11 (36%).
 
+
+---
+
+## Session 29 — 2026-04-29 (Toby Next feature spec)
+
+**User instruction (verbatim, condensed):** Pasted the full Toby "Next" feature spec (a smarter tab manager with built-in to-do list, hover bookmark icon, extension popup Next tab, per-workspace queue, etc.) and said: take the idea, build it for our spec, use our own data model, ask if ambiguous, manipulate freely to avoid conflict with locked decisions.
+
+**Clarifying questions asked:** 4 (scope, modeling, done semantics, linter coverage).
+
+**User answers (LOCKED):**
+1. Scope: **Per-Account, global** (one Next per human user, spans all Orgs/Spaces).
+2. Model: **New Collection kind: `next` (singleton)** — reuses Item/share/history/RLS infra.
+3. Done state: **on the join row** (`next_item.done`, `next_item.completed_at`).
+4. Coverage: **spec + one linter** (`next-singleton-invariants`).
+
+**Files changed (12):**
+- `spec/21-app/07-features/17-next-queue.md` — NEW. Authoritative feature spec; scope decisions, IA, 8 entry points, settings, shortcuts, edge cases, acceptance checklist (28 items).
+- `spec/21-app/02-data-model/12-next-item.md` — NEW. Join entity wrapping Item ref + done state + source provenance + tombstone fields. RLS, indexes, lifecycle, realtime channel.
+- `spec/21-app/02-data-model/03-collection.md` — `kind` enum extended to `manual|session|next` + new `account_id` column; Invariants 10–13 added (singleton uniqueness, hierarchy escape, immutability, no direct Items).
+- `spec/21-app/00-overview/02-glossary.md` — new "Next" section (5 terms locked: Next, Next Item, Add to Next, Source Collection, Tombstone).
+- `spec/21-app/04-extension/04-popup.md` — §14 "Next tab body region" appended; full UI wireframe + row anatomy + drag/empty/all-done/loading/error states + multi-Org grouping + active-tab styling.
+- `scripts/lint/next-singleton-invariants.ts` — NEW. 5 cross-cutting rules: stale `kind` enum detection; `source_kind` value drift; verb synonym ban ("Add to To-do", "Save for later", etc.); scope phrase ban ("per-workspace Next", etc.); bad realtime channel ban (canonical = `account:{account_id}:next`).
+- `scripts/lint/next-singleton-invariants.allowlist.txt` — NEW. 3 file-level entries (conversation log, closed issues, glossary's own forbidden-list sentence).
+- `scripts/lint/readme.md` — added row for new linter.
+- `.lovable/memory/index.md` — counts updated.
+
+**Linter result:** clean — 296 files scanned, 0 violations. Confirms no other corner of the spec has stale `kind` enums or rejected verb/scope phrases.
+
+**Decisions documented (so future sessions don't re-debate):**
+- Next is **per-Account**, NOT per-Org / per-Space / per-Workspace. Cross-Org grouping is a UI concern (popup §14.8).
+- Next is a Collection-kind, NOT a sibling primitive. `space_id IS NULL`, `organization_id IS NULL`, `account_id` non-null when `kind = next`.
+- Done state on the **join row** so the same Item in a regular Collection retains its un-done appearance.
+- Source provenance = `source_kind` (5-value locked enum) + optional `source_collection_id`; survives source deletion.
+- Hard-purge of source Item → row becomes a **tombstone** with stored URL/title/favicon snapshot, not deleted.
+- Realtime channel: `account:{account_id}:next` (W-4 curly-brace form).
+
+**Linter tally: 12 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real-drift catch rate stays 4/12 (33%) — this linter is preventive (greenfield feature, no historical drift to catch).

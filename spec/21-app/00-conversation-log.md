@@ -709,3 +709,32 @@ Both per-occurrence allowlisted with `<file>:<TOKEN>` schema. The rule remains a
 **Pattern reinforced (3rd session in a row):** when a linter's forbidden token has legitimate meta-uses (rule documentation, audit history quoting), prefer per-occurrence allowlisting over weakening the rule. Sessions 28 (pricing-source narrowing), 29 (next-singleton glossary allowlist), 30 (role-enum context anchor), 31 (error-code per-occurrence) all converge on the same principle: **the cure for false positives is a tighter allowlist or a tighter context anchor, never a weaker pattern**.
 
 **Linter tally: 14 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real drift catch rate: 4/14 (29%) — all 4 historical, no new lint-detected drift since Session 28.
+
+---
+
+### 2026-04-29 · Session 32 — `next` (env-var-naming linter, W-12)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Picked:** sub-check #15 of 19 — `env-var-naming` (W-12). Every `process.env.*` / `import.meta.env.*` / `Deno.env.get(...)` reference in spec must be SCREAMING_SNAKE and declared in `22-infrastructure/03-env-vars.md`.
+
+**Files changed (4):**
+- NEW `scripts/lint/env-var-naming.ts` — two-rule cross-file linter. Reference patterns: `process.env.X`, `process.env['X']`, `import.meta.env.X`, `Deno.env.get('X')`. Catalog (57 vars) auto-extracted from `03-env-vars.md` table column-1 + backticked prose tokens (so the W-12 closure note's `EXT_OAUTH_CLIENT_ID` reference also counts as canonical).
+- NEW `scripts/lint/env-var-naming.allowlist.txt` — Allowlist Discipline schema; 1 entry (conversation log, file-level, review-by 2026-10-29).
+- `scripts/lint/readme.md` — row updated ⏳ → ✅.
+- `.lovable/memory/index.md` — linter tally bumped 14/19 → 15/19.
+
+**Linter result:** clean on first run — 296 files scanned, 57 cataloged vars, 0 violations. Greenfield (W-12 catalog is referentially intact).
+
+**Design note:** scans inside fenced code blocks intentionally — env vars in code samples are first-class references. If a snippet says `process.env.SOMETHING_NEW` it must be declared, period. Counter to the `error-code-casing` design which skips fences (because code samples there might legitimately illustrate non-canonical formats).
+
+**Linter tally: 15 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real drift catch rate stays 4/15 (27%) — no new drift caught.
+
+**Remaining sub-checks (4):**
+- `storage-path` (W-7) — spec-only, can ship now
+- `brand-pink-anchor` — needs `src/`, blocked by no-implementation-mode
+- `color-label-tokens` — needs `src/`, blocked
+- `collection-kind-discriminator` — needs `src/` + migrations, blocked
+- `toast-placement` — needs `src/`, blocked
+
+So `storage-path` is the only remaining shippable linter without lifting implementation mode.

@@ -103,7 +103,8 @@
 |---|---|---|---|---|
 | GET | `/v1/history` | bearer+org | Paginated event log for the active Org. | `14-history.md` |
 | GET | `/v1/history/:id` | bearer+org | One event's full diff. | `14-history.md` |
-| GET | `/v1/history/for/:entity_type/:entity_id` | bearer+org | Sidebar activity feed for one entity. | `14-history.md` |
+| GET | `/v1/history/for/:entity_type/:entity_id` | bearer+org | Sidebar activity feed for one entity (generic form). | `14-history.md` |
+| GET | `/v1/history/for/item/:id` | bearer+org | Item-specific activity feed (concrete instantiation of the generic form for `entity_type=item`). | `14-history.md` |
 | GET | `/v1/items/:id/history` | bearer+org | Convenience alias for `/v1/history/for/item/:id` (item History tab). | `14-history.md` |
 | GET | `/v1/trash` | bearer+org | Soft-deleted entities with TTL countdown. | `14-history.md` |
 
@@ -151,6 +152,7 @@
 | Method | Path | Auth | Purpose | Source |
 |---|---|---|---|---|
 | GET | `/v1/jobs/:job_id` | bearer+org | Generic poller for any background job (returns normalized status envelope). | `20-jobs.md` |
+| GET | `/v1/flags` | bearer+(org) | List all feature flags visible to the current `(account, org)` with their evaluated values (debug/admin variant of `POST /v1/flags/evaluate`). | `21-flags.md` |
 | GET | `/v1/mindmap-layouts` | bearer+org | List saved mindmap layouts for a scope. | `23-mindmap-layouts.md` |
 | GET | `/v1/mindmap-layouts/:id` | bearer+org | Get a single layout (full payload incl. node positions). | `23-mindmap-layouts.md` |
 
@@ -342,6 +344,7 @@
 | POST | `/v1/flags/evaluate` | bearer+(org) | — | Evaluate feature flags for the current `(account, org, context)`. | `21-flags.md` |
 | POST | `/v1/mindmap-layouts` | bearer+org | Y | Create a saved mindmap layout for a scope. | `23-mindmap-layouts.md` |
 | POST | `/v1/internal/feedback` | bearer | Y | Submit in-app feedback / bug report (creates support ticket). | `22-internal.md` |
+| POST | `/v1/internal/feedback/attachments` | bearer | Y | Upload screenshot / log attachment for a feedback ticket; returns signed URL stored on the ticket. | `22-internal.md` |
 
 ---
 
@@ -360,6 +363,7 @@
 | PATCH | `/v1/shares/:id` | bearer+org | Update share settings (mode, password, expiry, perms). | `10-shares.md` |
 | PATCH | `/v1/members/:id` | bearer+role(owner/admin) | Change a member's role. | `11-members-invites.md` |
 | PATCH | `/v1/account/preferences` | bearer | Update Account preferences (default view, theme, locale, layout). | `19-account.md` |
+| PATCH | `/v1/mindmap-layouts/:id` | bearer+org+(creator OR owner/admin) | Update a saved mindmap layout (name, node positions, default flag). | `23-mindmap-layouts.md` |
 
 ---
 
@@ -449,12 +453,12 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Count |
 |---|---|
-| GET | 39 |
-| POST | 86 |
-| PATCH | 8 |
+| GET | 41 |
+| POST | 87 |
+| PATCH | 9 |
 | PUT | 1 |
 | DELETE | 11 |
-| **Total** | **145** |
+| **Total** | **149** |
 
 > If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug.
 

@@ -50,3 +50,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** `mem://index.md` Core (already present: "Always list remaining tasks at end of each work session; if all done, suggest next actions from memory.").
+
+---
+
+## 2026-04-29 — `next` (SI-022 Group B fix)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** `03-api-endpoints/00-overview.md` (added 4 endpoints: `GET /v1/flags`, `POST /v1/internal/feedback/attachments`, `PATCH /v1/mindmap-layouts/:id`, `GET /v1/history/for/item/:id`; counts 145 → 149). `13-spec-issues/02-current-issues.md` (SI-022 reduced to 15 Group C remaining). `mem://features/spec-issue-tracker.md` updated.

@@ -18,15 +18,15 @@
 | SI-020b | S2 | ✅ closed Phase 13.6 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-020c | S1 | ✅ closed Phase 13.7g — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-021 | S1 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-toby-parity-delta.md` | (moved) | (moved) | (moved) |
-| SI-022 | S2 | 19 endpoints referenced in spec but missing from `00-overview.md` inventory (post-SI-020c residue) | Inverse-sweep audit `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Sources: 4 in `03-api-endpoints/` sub-files (`21-flags.md`, `22-internal.md`, `23-mindmap-layouts.md`, `14-history.md`) declare routes the central inventory never absorbed; 15 in feature/extension/billing/auth files reference routes that were never declared. Excludes 17 forbidden-alias examples in `01-conventions.md` §16 (intentional). | `03-api-endpoints/00-overview.md` (add 19 rows split across §1–§16) plus possible per-file canonical fixes if any reference is itself wrong | n/a (parity defect, not naming) |
+| SI-022 | S2 | 15 endpoints referenced in spec but missing from `00-overview.md` inventory (Group C residue, post Group B fix 2026-04-29) | Inverse-sweep audit `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. **Group B (4) RESOLVED 2026-04-29** by promoting `GET /v1/flags`, `POST /v1/internal/feedback/attachments`, `PATCH /v1/mindmap-layouts/:id`, `GET /v1/history/for/item/:id` into `00-overview.md` (counts: 145 → 149). Remaining: 15 in feature/extension/billing/auth files reference routes that were never declared and need per-route triage (declare / fold into existing / rename caller). | `03-api-endpoints/00-overview.md` (add ~15 rows) plus per-file canonical fixes where the reference itself is wrong | n/a (parity defect, not naming) |
 
 **SI-022 endpoint groups (for batched fix):**
 
-*Group B — endpoint files declaring own routes overview missed (4):*
-- `GET /v1/flags` → `21-flags.md`
-- `POST /v1/internal/feedback/attachments` → `22-internal.md`
-- `PATCH /v1/mindmap-layouts/:id` → `23-mindmap-layouts.md`
-- `GET /v1/history/for/item/:id` → `14-history.md`
+*Group B — endpoint files declaring own routes overview missed (4):* ✅ **DONE 2026-04-29**
+- ~~`GET /v1/flags`~~ → added to `00-overview.md` §1.14
+- ~~`POST /v1/internal/feedback/attachments`~~ → added to §2.16
+- ~~`PATCH /v1/mindmap-layouts/:id`~~ → added to §3
+- ~~`GET /v1/history/for/item/:id`~~ → added to §1.9
 
 *Group C — feature files referencing undeclared routes (15):*
 - Auth: `GET /v1/auth/magic/callback`, `POST /v1/auth/oauth/callback`

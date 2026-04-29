@@ -44,9 +44,13 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 4. `position` re-balanced periodically.
 5. `starred_pin_position` is non-null iff `is_starred = true`. Toggling `is_starred` to `false` MUST null the pin position; toggling to `true` MUST assign `max(starred siblings)+1024` unless an explicit value is provided. (SI-021.)
 6. Cascade soft/hard delete to Groups and Items.
-7. `kind` is immutable after creation. A `manual` collection cannot be promoted to `session` and vice-versa. (SI-023.)
+7. `kind` is immutable after creation. A `manual` collection cannot be promoted to `session` and vice-versa. (SI-023.) `next` is also immutable — it can only be created by the system on Account signup.
 8. `captured_at` is non-null iff `kind = session`. Re-capture updates only `captured_at` and `items` (not `created_at`).
 9. `source_window_id` may only be set when `kind = session`. Clearing it disables the `Re-capture from current window` action without affecting `Restore`.
+10. `kind = next` requires `account_id` non-null AND `space_id IS NULL` AND `organization_id IS NULL`. The Next queue lives outside the Org/Space hierarchy because it is per-Account and cross-Org by design (see `07-features/17-next-queue.md §2`).
+11. **Singleton invariant:** at most one Collection per Account where `kind = next`. Enforced by partial unique index `UNIQUE (account_id) WHERE kind = next`.
+12. `kind = next` Collections cannot be: shared, renamed by user (name is fixed at "Next"), color-edited, icon-edited, soft-deleted, hard-deleted, moved, or duplicated. They are system-managed.
+13. `kind = next` Collections do NOT contain Items directly. Their contents are `NextItem` rows (see `12-next-item.md`) which reference Items in other Collections.
 
 ## Indexes (recommended)
 

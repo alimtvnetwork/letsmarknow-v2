@@ -114,10 +114,10 @@ For unknown errors, include `error_id`:
 
 ## 11. Pricing copy
 
-- Always show full price + interval ("$9 / month").
-- Yearly: "$84 / year ($7/mo)".
+- Always show full price + interval ("{plan.price} / {interval}") — render from `10-licensing-billing/01-plans-matrix.md` §1, never restate inline.
+- Yearly: show both annual and effective monthly ("{plan.yearly_price} / year ({plan.effective_monthly}/mo)").
 - Tax disclaimer: "Plus tax where applicable."
-- Lifetime: "One-time $X — no subscription".
+- Lifetime: "One-time {plan.lifetime_price} — no subscription".
 
 ## 12. Notifications copy
 

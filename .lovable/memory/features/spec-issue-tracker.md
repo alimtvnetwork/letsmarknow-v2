@@ -11,15 +11,13 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29 Session 18, UTC+8 — after SI-025 close)
+## Counts (updated 2026-04-29 Session 28, UTC+8 — after SI-027 close)
 
 - Open: **0**
-- Closed: 29
-- ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity.
-- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep.
-- ✅ **SI-023 CLOSED** 2026-04-29. `Collection.kind` enum + `captured_at` + `source_window_id` added.
-- ✅ **SI-024 CLOSED** 2026-04-29. Toast placement locked.
-- ✅ **SI-025 CLOSED** 2026-04-29 Session 18. §7 rebased 183/182 → 171/171 via `--write`. Counter Discipline meta-rule earned its keep on day one. **Endpoint inventory now: 171 canonical declarations, 0 duplicates, linter green.**
+- Closed: 31
+- ✅ **SI-025 CLOSED** Session 18. §7 rebased 183/182 → 171/171 via `--write`. Counter Discipline meta-rule earned its keep on day one. Endpoint inventory: 171 canonical declarations, 0 duplicates, linter green.
+- ✅ **SI-026 CLOSED** Session 23. `money-units` linter caught surviving `discount_minor` after W-10 sweep claimed clean.
+- ✅ **SI-027 CLOSED** Session 28. `pricing-source` linter caught 2 W-3 drifts in `06-ui-ux/14-copy-voice.md` and `10-licensing-billing/10-coupons-and-promotions.md` — both restating plan prices inline. Rewritten to `{plan.price}` template tokens with link-back to `01-plans-matrix.md §1`. **Linter tally: 11 of 19 sub-checks ✅** (real-drift catch rate 4/11 = 36%).
 
 ## Counter discipline (lesson from 2026-04-29 re-audit)
 

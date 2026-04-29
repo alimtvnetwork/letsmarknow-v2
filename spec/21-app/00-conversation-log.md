@@ -579,3 +579,52 @@ Created `scripts/lint/link-check.allowlist.txt` with 8 occurrence-keyed entries 
 Updated `scripts/lint/readme.md`: **10 of 19 sub-checks now ✅ implemented**. Halfway mark crossed. The remaining 9 ⏳ are 5 spec-only (`role-enum`, `error-code-casing`, `env-var-naming`, `pricing-source`, `storage-path`) and 4 src-dependent (blocked by `no-implementation-mode`).
 
 **No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.
+
+---
+
+## Session 28 — 2026-04-29 (next: pricing-source linter — W-3 lock)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken:** picked #2 from prior queue — implement `pricing-source` linter enforcing the W-3 single-source-of-truth lock for plan prices.
+
+**Implementation:** `scripts/lint/pricing-source.ts` (~95 lines, zero deps). Walks `spec/21-app/**/*.md`, exempts the matrix itself + allowlist files, skips fenced code blocks (ASCII wireframes), skips lines mentioning `01-plans-matrix.md` (already linked-back).
+
+**Tuning iteration (the real story of this session):**
+
+1. **Initial pattern** matched 3 forms: recurring (`$N/mo|/yr|/seat/mo`), one-time (`$N one-time`), bare (`$N`). First run: **142 violations across 13 files**.
+2. **Fence-skipping** added (ASCII wireframe blocks legitimately illustrate UI with prices). Down to 68.
+3. **Audit-history allowlisting** (3 files: m-gaps, spec-wide, decisions-needed). Down to 45 — but inspection showed most remaining hits were *bare amounts unrelated to plan SoT*: `$10` coupon examples, `$50` fraud thresholds, `$500/mo` email vendor cost, `$79` lifetime references in roadmap context.
+4. **Pattern tightening** — dropped the bare-`$N` regex. W-3's true intent is the *plan price* SoT, not every dollar amount in the spec. Down to 3.
+5. **Final triage of 3:** 1 false positive in `audit-decisions-needed.md` ($500/mo email cost, not Toby plan) → allowlisted. 2 real W-3 drifts surfaced.
+
+**Real drifts caught (filed + closed as SI-027 same session):**
+
+- `06-ui-ux/14-copy-voice.md` lines 117-118: pricing copy section restated `$9 / month` and `$84 / year ($7/mo)` inline. Rewritten to template tokens `{plan.price}` / `{plan.yearly_price}` / `{plan.effective_monthly}` with explicit "render from `01-plans-matrix.md` §1" link-back.
+- `10-licensing-billing/10-coupons-and-promotions.md:83`: percent-off display rule restated `$5/mo` as base price example. Rewritten to `{plan.price}/mo` with same link-back.
+
+Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04-19 with claimed full coverage of licensing-billing folder). `06-ui-ux/14-copy-voice.md` was outside the original sweep scope entirely. Pattern matches the `money-units` SI-026 catch from Session 23 — manual sweeps + grep verification still leak edge cases; only programmatic enforcement holds the line.
+
+**Allowlist final state** (`pricing-source.allowlist.txt`, 5 entries):
+- `00-conversation-log.md` — verbatim user instructions
+- `13-spec-issues/04-closed-issues.md` — quotes prices when documenting W-3 closures
+- `23-audits/audit-2026-04-19-m-gaps.md` — audit history quoting prices
+- `23-audits/audit-2026-04-19-spec-wide.md` — audit history quoting prices
+- `23-audits/audit-2026-04-19-decisions-needed.md` — quotes 3rd-party SaaS costs ($500/mo email) in vendor decision rationale
+
+**Tuning lesson recorded** (added to memory): linter scope must match the lock's true intent. W-3 is about *plan* prices specifically, not every dollar amount. Over-broad regex created 98.6% noise rate (142 hits → 2 actionable). Same "narrow scope > big allowlist" pattern from Sessions 25 & 26.
+
+**Files changed:**
+- `scripts/lint/pricing-source.ts` (new, 95 lines)
+- `scripts/lint/pricing-source.allowlist.txt` (new, 5 entries)
+- `spec/21-app/06-ui-ux/14-copy-voice.md` §11 — template tokens
+- `spec/21-app/10-licensing-billing/10-coupons-and-promotions.md` §10 — template token
+- `spec/21-app/13-spec-issues/04-closed-issues.md` — SI-027 row added
+- `scripts/lint/readme.md` — `pricing-source` row marked ✅
+- `.lovable/memory/index.md` — issue tracker memory updated to 11/19, +1 closed
+
+**Linter tally: 11 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real-drift catch rate now 4/11 (36%).
+

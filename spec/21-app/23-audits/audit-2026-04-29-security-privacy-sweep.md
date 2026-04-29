@@ -5,6 +5,7 @@ audit-type: gap-sweep
 status: open
 opened-on: 2026-04-29
 scope: 19-security-privacy/ folder + sub-processor consistency across spec
+progress: 6 of 8 closed (F1, F2, F3, F6, F7, F8 done in S54+S55). Remaining: F4 (stub-file launch ownership, needs SI-029 + legal counsel), F5 (residency-region count, needs product decision).
 -->
 
 # Audit — Security & Privacy Sweep (Session 53)

@@ -316,3 +316,37 @@ next
 Updated `scripts/lint/readme.md` status table: 2 of 18 sub-checks now ✅ implemented (endpoint-counts + audit-cadence — both meta-rules). Remaining 16 are still ⏳.
 
 **No spec changes, no SI movement, no score change.** Pure spec→code bridge progress. Two linters now run clean against live ground truth — the meta-rule trilogy has working enforcement for two of its three rules. Allowlist Discipline still needs an allowlist file to validate against (chicken-and-egg; implement when first linter requires its first exception).
+
+---
+
+## 2026-04-29 — Session 20: Implement `naming-convention` linter
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote third real linter at `scripts/lint/naming-convention.ts` (~140 lines, zero deps). Implements all 3 invariants from §2.1.1 row 2: (a) every `.md` file under a numbered domain folder matches `^(\d{2})-[a-z0-9-]+\.md$`; (b) folder index is exactly lowercase `readme.md` (rejects `README.md`/`Readme.md`); (c) sequence numbers are contiguous within each folder (gaps + duplicates flagged for both files and subdirectories).
+
+**First run found 23 violations** — all legitimate documented exceptions, not real drift:
+- 19 audit corpus files using the `audit-YYYY-MM-DD-slug.md` scheme owned by the audit-cadence sub-check (§2.1.4(f) explicitly carves these out)
+- 1 root-level dir-gap at slot `21` (the `spec/21-app/` directory IS the 21 slot in its parent context — there is no nested `21-*` child by design)
+- 1 non-domain assets folder `06-ui-ux/wireframes/` (PNG/SVG design assets, not numbered spec)
+- 1 legacy root-level `flow-diagrams-index.md` pending migration into `00-overview/`
+- 1 supporting analysis doc `23-audits/gap-analysis.md`
+- 1 legacy `23-audits/audit.md` exempted by §2.1.4(f) by name
+
+Created `scripts/lint/naming-convention.allowlist.txt` (22 entries) following the Allowlist Discipline schema (§2.1.3): header block with `# linter:`, `# purpose:`, `# review-by: 2026-10-26` (~180d), and per-entry `# PR:#0 reason:...` comments. Used novel allowlist key forms `<dir>:dirgap:NN` and `<dir>:gap:NN` for sequence-gap exemptions (the `21-app` slot case).
+
+**Linter exit code:** `0` — `naming-convention: clean`.
+
+**Bug caught + fixed mid-session:** Initial walker emitted dir-name violations for `wireframes/` BEFORE consulting allowlist, then recursed into it (would have processed files inside as if it were a domain folder). Reordered: allowlist check now precedes both the regex check AND the recursion, so allowlisted dirs are skipped entirely.
+
+Updated `scripts/lint/readme.md` status table: **3 of 18 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention). First non-meta-rule linter shipped — proves the pattern works for content-class drift, not just meta-class.
+
+**Meaningful side-effect:** The allowlist is now the first real exception file in the corpus, which means the `allowlist-discipline` meta-rule sub-check has its first ground truth to validate against. That linter is now unblocked from its chicken-and-egg state — implementing it next would close the meta-rule trilogy enforcement (Counter, Audit Cadence, Allowlist Discipline all green).
+
+**No SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.

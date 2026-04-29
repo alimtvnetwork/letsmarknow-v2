@@ -11,7 +11,7 @@ This directory holds the implementations of the 18 sub-checks composing `spec-dr
 | `endpoint-counts` | ✅ `endpoint-counts.ts` | Counter Discipline meta-rule. Shipped Session 17; rebased §7 to 171/171 in Session 18 (closed SI-025). Run with `--write` to regenerate `00-overview.md §7`. |
 | `audit-cadence` | ✅ `audit-cadence.ts` | Audit Cadence meta-rule. Shipped Session 19. Validates all 18 audit files in `23-audits/`; checks required fields, enum values, ≤365d cadence, expired-open detection, status-specific requirements, one-open-per-type invariant. Currently green: 1 open (ai-readiness) / 12 closed / 5 superseded. |
 | `link-check` | ⏳ | Use `lychee --offline`, no custom script needed. |
-| `naming-convention` | ⏳ | |
+| `naming-convention` | ✅ `naming-convention.ts` | Shipped Session 20. Asserts `^\d{2}-[a-z0-9-]+\.md$`, lowercase `readme.md`, contiguous numbering. Allowlist: `naming-convention.allowlist.txt` (22 entries: 19 audit corpus files, 1 dir gap for `21-app` slot, 1 wireframes asset folder, 1 legacy root index). Currently green. |
 | `role-enum` | ⏳ | |
 | `error-code-casing` | ⏳ | |
 | `money-units` | ⏳ | |

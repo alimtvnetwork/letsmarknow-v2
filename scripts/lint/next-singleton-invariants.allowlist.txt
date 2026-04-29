@@ -1,0 +1,5 @@
+# linter: next-singleton-invariants
+# purpose: silence file-level matches that legitimately quote forbidden phrases (audit history, conversation log)
+# review-by: 2026-10-29
+spec/21-app/00-conversation-log.md
+spec/21-app/13-spec-issues/04-closed-issues.md

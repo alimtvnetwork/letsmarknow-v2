@@ -248,3 +248,13 @@ next
 ```
 
 **Refactored into:** Backfilled the §2.1.4 Audit Cadence metadata block into all 18 existing `23-audits/audit-*.md` files via `/tmp/backfill.py` (idempotent — skips files that already have the block). Classification: 1 retrospective, 1 glossary, 2 parity, 2 endpoint-sweep, 5 ai-readiness, 7 ad-hoc. Status distribution: 1 open (`audit-2026-04-29-ai-readiness-score-v2.md` — the live 100/100 baseline), 4 superseded (full ai-readiness chain v1 → delta → delta-v2 → delta-v3 → v2; orphan-endpoint-sweep → post-fix-reaudit), 13 closed. Verified the "at most one open per audit-type" invariant holds: only `ai-readiness` has an open row. Generated the cadence registry table and inserted it as a new "## Audit cadence registry" section in `23-audits/00-overview.md` before "## Cross-references". Cadence policy: ai-readiness 90 days, parity/endpoint-sweep 180 days, glossary/retrospective/ad-hoc 365 days. The `audit-cadence` sub-check (spec'd Session 14, 18th in `spec-drift-linter`) now has clean ground truth on day one — no expired open audits, no orphan opens, no missing metadata blocks. Score holds at 100/100.
+
+---
+
+## 2026-04-29 — Session 16: Phase queue reconciliation
+
+```
+next
+```
+
+**Refactored into:** Investigated last open phase-queue item (Phase 9 / SI-001 slot-21 decision) and discovered it had already been resolved on 2026-04-20 — locked in `13-spec-issues/01-naming-conventions.md §2` as "permanently reserved (empty), load-bearing buffer between domain folders 00-20 and meta folders 22+". The phase queue in `mem://features/spec-issue-tracker.md` was simply stale: it still showed Phase 9 as decision-required AND duplicated lines 16–18 (Phase 13.5/13.6/13.7) as "open" even though all three closed on 2026-04-20. Synced the queue: replaced the stale block (lines 43–56) with the actual closure history; added Phase 16 entry summarizing Sessions 11–15 governance work (3 SIs closed, linter grew 13→18 sub-checks, three meta-rules locked, 18 audits backfilled). Marked the queue **empty** with explicit "implementation-ready" note. No spec content changed — pure tracker hygiene. Spec score holds at 100/100.

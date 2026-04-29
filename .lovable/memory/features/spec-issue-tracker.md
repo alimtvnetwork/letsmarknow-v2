@@ -40,20 +40,21 @@ Recorded in `23-audits/audit-2026-04-29-post-fix-reaudit.md` §2:
 6. ✅ **Phase 6 — DONE 2026-04-20.** Role-scope documentation. Closed SI-011.
 7. ✅ **Phase 7 — DONE 2026-04-20.** Mermaid label safety across 13 diagrams. Closed SI-012, 013, 014.
 8. ✅ **Phase 8 — DONE 2026-04-20.** Spec-vs-Impl phase clarification. Closed SI-010.
-9. **Phase 9** — DECISION REQUIRED on SI-001 (slot 21 — keep Reserved permanently / fill / renumber).
+9. ✅ **Phase 9 — DONE 2026-04-20.** Slot-21 decision: keep Reserved permanently as load-bearing buffer between domain folders (`00-`–`20-`) and meta folders (`22-`+). Locked in `13-spec-issues/01-naming-conventions.md §2`. Closed SI-001 at S3 cosmetic. Future "find more" sweeps must NOT re-open.
 10. ✅ **Phase 10 — DONE 2026-04-20.** Deep re-audit: 16 cross-refs verified, wireframes exemption verified, endpoint inventory captured. Opened SI-015; closed SI-016/017 as false positives on discovery.
 11. ✅ **Phase 11 — DONE 2026-04-20.** Closed SI-015 by adding `15-sku-map.md` to allowed-TBD table in `01-naming-conventions.md §7`.
 12. ✅ **Phase 12 — DONE 2026-04-20.** Endpoint parity sweep: 145 declared vs 192 referenced. Opened SI-018/019/020.
 13. ✅ **Phase 13.1+13.2 — DONE 2026-04-20.** Locked path-param style + aliases policy. Closed SI-018/019.
-14. ✅ **Phase 13.3 (classification) — DONE 2026-04-20.** Reclassified SI-020 into SI-020a/b/c/d after per-endpoint origin trace. SI-020 closed as "split". No spec rows added yet.
-15. ✅ **Phase 13.4 — DONE 2026-04-20.** SI-020d phantoms verified as real alias defects in `17-admin-org/`. Folded into SI-020b (now 17 mappings instead of 14). SI-020d closed.
-16. ✅ **Phase 13.5 — DONE 2026-04-20.** Added §9 "Withdrawn endpoints" marker convention (`~~WITHDRAWN: METHOD /v1/path~~`) to `01-naming-conventions.md` and applied to `04-extension/10-sync-and-offline.md:78`. Closed SI-020a.
-17. ✅ **Phase 13.6 — DONE 2026-04-20.** Rewrote §16 with 17 verified canonical mappings, swept 11 referencing files, reconciled `items:batch` contradiction (canonical = `POST /v1/bulk/items`). §16.3 conformance grep clean. Closed SI-020b.
-16. **Phase 13.5** — Resolve SI-020a (withdrawn-endpoint marker convention in `01-conventions.md` or `01-naming-conventions.md`).
-17. **Phase 13.6** — Resolve SI-020b (extend §16 alias table with 14 mappings + sweep referencing files; reconcile `items:batch` contradiction).
-18. **Phase 13.7** — Resolve SI-020c (add 17-24 new declared rows across 7-12 files). Largest, do last.
-19. ✅ **Phase 14 — DONE 2026-04-29.** Glossary term coverage sweep. 6 real gaps closed in-pass (Lifecycle verbs, Trash, Supabase Realtime, Feature Flag, Kill Switch, GDPR DSR). Glossary 53 → 59. Audit: `23-audits/audit-2026-04-29-glossary-sweep.md`.
-20. ✅ **Phase 15 — DONE 2026-04-29.** Toby Collections parity (SI-021). 8 sub-tasks. Audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`.
+14. ✅ **Phase 13.3 — DONE 2026-04-20.** Reclassified SI-020 into SI-020a/b/c/d after per-endpoint origin trace. SI-020 closed as "split".
+15. ✅ **Phase 13.4 — DONE 2026-04-20.** SI-020d phantoms verified as real alias defects in `17-admin-org/`. Folded into SI-020b. SI-020d closed.
+16. ✅ **Phase 13.5 — DONE 2026-04-20.** Added §9 "Withdrawn endpoints" marker convention. Closed SI-020a.
+17. ✅ **Phase 13.6 — DONE 2026-04-20.** Rewrote §16 with 17 verified canonical mappings; swept 11 referencing files; reconciled `items:batch` contradiction. Closed SI-020b.
+18. ✅ **Phase 13.7a-g — DONE 2026-04-20.** Added 24 missing endpoint declarations across 7 sub-phases; +5 new endpoint files; rebased count to 145. Closed SI-020c.
+19. ✅ **Phase 14 — DONE 2026-04-29.** Glossary term coverage sweep. 6 real gaps closed. Glossary 53 → 59. Audit: `audit-2026-04-29-glossary-sweep.md`.
+20. ✅ **Phase 15 — DONE 2026-04-29.** Toby Collections parity (SI-021). 8 sub-tasks. Audit: `audit-2026-04-29-toby-parity-delta.md`.
+21. ✅ **Phase 16 — DONE 2026-04-29 (Sessions 11–15).** Linter/governance hardening. Closed SI-022/023/024. Endpoint inventory rebased to 183 rows / 182 distinct. `spec-drift-linter` grew from 13 → 18 sub-checks. Three meta-rules locked: Counter Discipline (§2.1.1 `endpoint-counts`), Allowlist Discipline (§2.1.3 + `allowlist-discipline`), Audit Cadence (§2.1.4 + `audit-cadence`). All 18 audit files backfilled with cadence metadata; 1 open (`audit-2026-04-29-ai-readiness-score-v2.md`), 4 superseded, 13 closed. Spec corpus is now self-governing across content, process, and time.
+
+**Phase queue is empty. No open phases. No open SIs. Spec is implementation-ready.**
 
 ## Rules
 

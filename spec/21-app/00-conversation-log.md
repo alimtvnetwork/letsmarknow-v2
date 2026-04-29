@@ -1239,3 +1239,34 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 5. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
 6. **Lift `no-implementation-mode`** — major phase transition.
 7. **Rest** — 45 sessions, 17/17 green linters, 1 open SI (SI-026, 10 entries).
+
+---
+
+## Session 46 — 2026-04-29 — Author 07-features/18-add-item-hover-button.md (SI-026 drain −2)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action.** Picked S45 suggestion #1. Authored `spec/21-app/07-features/18-add-item-hover-button.md` (10 sections: rationale, surfaces, visual spec referencing `--primary` token, interaction Given/When/Then, empty states, keyboard `N` binding, telemetry events, accessibility, permission matrix, refs). Renamed 2 citing refs to NN- prefixed path (`00-overview/04-competitive-analysis.md:89` and `readme.md:176` + `:329`). Removed both allowlist entries. Linter clean (1989 paths / 306 files).
+
+**Result.** SI-026 backlog 10 → 8. Open SI count unchanged (1).
+
+**Files touched.**
+- created `spec/21-app/07-features/18-add-item-hover-button.md`
+- edited `spec/21-app/00-overview/04-competitive-analysis.md`
+- edited `spec/21-app/readme.md`
+- edited `scripts/lint/backticked-path-resolution.allowlist.txt`
+- edited `spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.lovable/memory/index.md`
+- edited `spec/21-app/00-conversation-log.md`
+
+**Next.**
+1. **Author `10-licensing-billing/07-billing-emails.md`** — single-file SI-026 drop.
+2. **Author root-level `payments-integration.md`** — single-file SI-026 drop (or convert refs to prose).
+3. **Author `17-i18n-a11y/` folder + `00-overview.md` + `extension-strings.md`** — needs new folder (3 files).
+4. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
+5. **Lift `no-implementation-mode`** — major phase transition, unlocks 4 src-dependent linters.
+6. **Rest** — 46 sessions, 17/17 green linters, 1 open SI (SI-026, 8 entries).

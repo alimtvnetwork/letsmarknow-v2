@@ -33,7 +33,7 @@ STRIDE-based analysis of attack surfaces, adversaries, and mitigations.
 | Threat | Mitigation |
 |---|---|
 | Public link discovery | 22-char URL-safe token (132 bits entropy); no enumeration |
-| Password share brute force | Bcrypt-hashed; 5 attempts → 1 min lockout, then exponential |
+| Password share brute force | Argon2id-hashed (parameters in `19-security-privacy/05-share-link-security.md`); 5 attempts → 1 min lockout, then exponential |
 | Invite-only bypass | Token + email match; one-time-use; HTTPS-only; expiry |
 | Shared content escalation (read → write) | Permission re-validated on every mutation server-side |
 | Share leak via referrer | `Referrer-Policy: no-referrer` on share viewer |
@@ -106,8 +106,8 @@ Each boundary validates inputs and enforces auth independently. No "trusted inte
 6. **Cross-tenant data leak via cache** → Redis keys include `org_id`; cache busted on membership change.
 7. **Sensitive data in error reports** → breadcrumb redaction + PII linter in CI.
 8. **Insider data access** → JIT access, query audit, named-user access only.
-9. **DoS via expensive query** | per-Account query budget; circuit breaker; query timeout.
-10. **Public share enumeration** | rate-limited 404 responses; constant-time token compare.
+9. **DoS via expensive query** → per-Account query budget; circuit breaker; query timeout.
+10. **Public share enumeration** → rate-limited 404 responses; constant-time token compare.
 
 ## 5. Incident response
 

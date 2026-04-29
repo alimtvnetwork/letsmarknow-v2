@@ -80,7 +80,7 @@ Each coupon redemption logs:
 ## 10. Display rules
 
 - Always show total before and after discount on Checkout.
-- For percent-off, show duration explicitly: "20% off for 3 months, then $5/mo".
+- For percent-off, show duration explicitly: "20% off for 3 months, then {plan.price}/mo" — render `{plan.price}` from `01-plans-matrix.md` §1, never inline.
 - Credits never expire (vs limited-time discounts).
 
 ## 11. Edge cases

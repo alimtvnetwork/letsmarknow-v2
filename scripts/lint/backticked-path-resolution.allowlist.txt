@@ -1,0 +1,215 @@
+# linter: backticked-path-resolution
+# purpose: Exempt (a) frozen append-only files where retroactive edits are forbidden (conversation log, dated audits, closed-issues table, naming-convention examples, templates, wireframe drafts), and (b) per-occurrence forward-references to planned spec files that have not yet been created. Real drift in non-frozen files that is not yet allowlisted is tracked as SI-026 in `13-spec-issues/02-current-issues.md` and must be either fixed or ticketed before being silenced here.
+# review-by: 2026-10-26
+
+# === (a) Frozen files (file-level entries) ===
+
+# PR:#0 reason:append-only chat log; refs reflect spec at time of writing, not current truth
+spec/21-app/00-conversation-log.md
+# PR:#0 reason:wireframe draft
+spec/21-app/06-ui-ux/wireframes/02-popup.md
+# PR:#0 reason:wireframe draft
+spec/21-app/06-ui-ux/wireframes/03-share-viewer.md
+# PR:#0 reason:wireframe drafts; cross-refs intentionally aspirational
+spec/21-app/06-ui-ux/wireframes/readme.md
+# PR:#0 reason:file IS the naming-rules document; backticked paths are syntax examples (NN-name.md, README.md, etc.), not real refs
+spec/21-app/13-spec-issues/01-naming-conventions.md
+# PR:#0 reason:phase plan contains template placeholders like audit-YYYY-MM-DD-topic.md
+spec/21-app/13-spec-issues/03-phase-plan.md
+# PR:#0 reason:append-only closed-SI table; refs frozen at closure date
+spec/21-app/13-spec-issues/04-closed-issues.md
+# PR:#0 reason:visualization roadmap doc; refs to planned files
+spec/21-app/15-visualization/readme.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/00-overview.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-18.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-100-retrospective.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-ai-readiness-score.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-decisions-needed.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-impl-vs-spec.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-m-gaps.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-rescore-delta-v2.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-rescore-delta.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-sequencing.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-spec-internal.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-spec-wide.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-19-weakest-files-plan.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-20-rescore-delta-v3.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-29-ai-readiness-score-v2.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-29-full-green-milestone.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-29-glossary-sweep.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-29-orphan-endpoint-sweep.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-29-post-fix-reaudit.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit-2026-04-29-toby-parity-delta.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/audit.md
+# PR:#0 reason:audit corpus is append-only per audit-cadence §2.1.4; refs reflect state at audit date
+spec/21-app/23-audits/gap-analysis.md
+# PR:#0 reason:template file; backticked paths are placeholders (NN-folder/NN-file.md)
+spec/21-app/templates/folder-overview.md
+# PR:#0 reason:template file; backticked paths are placeholders
+spec/21-app/templates/readme.md
+
+# === (b) Per-occurrence: forward-refs to planned files (tracked under SI-026) ===
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/00-overview/04-competitive-analysis.md:`07-features/add-item-hover-button.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/00-overview/05-browser-scope.md:`02-phase-1-v1.md`
+spec/21-app/00-overview/05-browser-scope.md:`04-extension/README.md`
+spec/21-app/00-overview/05-browser-scope.md:`04-phase-3-mindmap-ai.md`
+spec/21-app/00-overview/05-browser-scope.md:`05-phase-4-cross-browser.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/02-data-model/01-organization.md:`README.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/02-data-model/02-space.md:`README.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/02-data-model/03-collection.md:`README.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/02-data-model/11-account.md:`01-identity-model.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/02-data-model/12-next-item.md:`README.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/03-api-endpoints/10-shares.md:`08-sharing-collab/share-model.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/03-api-endpoints/17-billing-webhooks.md:`07-billing-emails.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/03-api-endpoints/18-error-codes.md:`17-copy-strings.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/01-manifest.md:`19-security-privacy/extension-privacy.md`
+spec/21-app/04-extension/01-manifest.md:`20-release-ops/store-listing.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/02-surfaces.md:`06-ui-ux/options-page.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/07-context-menu.md:`17-i18n-a11y/extension-strings.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/08-keyboard-shortcuts.md:`06-ui-ux/keyboard-cheatsheet.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/09-save-session.md:`08-sharing-collab/url-normalization.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/13-update-and-rollout.md:`20-release-ops/firefox-port.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/14-analytics-telemetry.md:`19-security-privacy/privacy-policy.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/15-dev-loop.md:`20-release-ops/staging-seed.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/04-extension/16-open-tabs-panel.md:`02-error-reporting.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/05-web-app/08-billing-page.md:`01-plans-matrix.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/06-ui-ux/17-copy-strings.md:`18-error-codes.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/06-ui-ux/20-accessibility-wcag.md:`spec/21-app/06-ui-ux/08-keyboard-input.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/07-features/04-collections.md:`05-item.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/07-features/17-next-queue.md:`06-ui-ux/03-tooltips.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/08-sharing-collab/13-share-link.md:`02-entitlements-engine.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/08-sharing-collab/14-realtime-transport.md:`18-error-codes.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/09-auth-accounts/08-account-deletion.md:`README.md`
+spec/21-app/09-auth-accounts/08-account-deletion.md:`notes.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/09-auth-accounts/13-rate-limit-values.md:`01-conventions.md`
+spec/21-app/09-auth-accounts/13-rate-limit-values.md:`18-error-codes.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/11-import-export/09-gdpr-export.md:`README.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/13-spec-issues/02-current-issues.md:`14-realtime-transport.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/16-notifications-updates/02-app-updater.md:`15-feature-flags-and-rollouts.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/16-notifications-updates/03-release-channels.md:`15-feature-flags-and-rollouts.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/17-admin-org/01-organization-settings.md:`03-release-channels.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/17-admin-org/03-roles.md:`18-error-codes.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/17-admin-org/05-data-export-delete.md:`README.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/18-analytics-telemetry/03-events.md:`CHANGELOG.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/19-security-privacy/04-gdpr-ccpa.md:`01-opt-in-analytics.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/20-roadmap/03-phase-2-collab.md:`03-roles.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/20-roadmap/06-definition-of-done.md:`12-storage-layout.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/20-roadmap/07-build-readiness.md:`03-compact-view.md`
+spec/21-app/20-roadmap/07-build-readiness.md:`07-context-menu.md`
+spec/21-app/20-roadmap/07-build-readiness.md:`09-save-session.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/22-infrastructure/02-environments.md:`15-feature-flags-and-rollouts.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/22-infrastructure/09-ci-cd.md:`18-error-codes.md`
+spec/21-app/22-infrastructure/09-ci-cd.md:`NN-name.md`
+spec/21-app/22-infrastructure/09-ci-cd.md:`audit.md`
+spec/21-app/22-infrastructure/09-ci-cd.md:`spec/21-app/templates/folder-overview.md`
+
+# PR:#0 reason:SI-026 — forward-ref to planned spec file(s) not yet authored
+spec/21-app/readme.md:`07-features/add-item-hover-button.md`
+spec/21-app/readme.md:`README.md`
+spec/21-app/readme.md:`payments-integration.md`
+

@@ -1174,3 +1174,31 @@ Plus a clarifying row for "Set / change memorable `lmk/` slug" so readers see th
 3. **Re-paste remaining Toby spec** — closes 6 ergonomics defaults parked in `20-roadmap/`. Needs your re-paste.
 4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
 5. **Rest** — 43 sessions, 17/17 green linters, 1 open SI (SI-026, 13 entries).
+
+---
+
+## Session 44 — 2026-04-29 — Author url-normalization.md (SI-026 drain −1)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action.** Picked suggestion #2 from S43. Authored `08-sharing-collab/url-normalization.md` (8 sections: pipeline steps, tracking-param strip list, equivalence rules, `lmk/` slug normalization, display-vs-storage, error codes, versioning, refs). Removed the matching allowlist entry from `scripts/lint/backticked-path-resolution.allowlist.txt`. Linter `backticked-path-resolution` re-ran clean (1938 paths / 303 files).
+
+**Result.** SI-026 backlog 13 → 12. Open SI count unchanged (1).
+
+**Files touched.**
+- created `spec/21-app/08-sharing-collab/url-normalization.md`
+- edited `scripts/lint/backticked-path-resolution.allowlist.txt`
+- edited `spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.lovable/memory/index.md`
+- edited `spec/21-app/00-conversation-log.md`
+
+**Next.**
+1. **Drain SI-026 further** — author 2 `06-ui-ux/` stubs (`options-page.md`, `keyboard-cheatsheet.md`). Backlog 12 → 10.
+2. **Author `07-features/add-item-hover-button.md`** — closes 2 allowlist citations (Toby parity).
+3. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
+4. **Lift `no-implementation-mode`** — major phase transition.
+5. **Rest** — 44 sessions, 17/17 green linters, 1 open SI (SI-026, 12 entries).

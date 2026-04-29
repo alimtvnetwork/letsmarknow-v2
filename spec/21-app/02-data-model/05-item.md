@@ -22,6 +22,8 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 | `favicon_color` | color | yes | null | derived | Dominant color, used as fallback tile color. |
 | `position` | bigint | no | max(siblings)+1024 | — | Order within parent (Collection or Group). |
 | `is_starred` | bool | no | false | — | Per-Account. |
+| `starred_pin_position` | float8 | yes | null | non-null iff `is_starred=true` | Manual ordering within the parent Collection's "⭐ Starred" pinned section (Toby parity, SI-021). Independent of `position`. |
+| `color_label` | enum(`none`\|`red`\|`orange`\|`yellow`\|`green`\|`teal`\|`blue`\|`purple`\|`pink`) | no | `none` | — | Per-Item color tag (Toby parity, SI-021). Renders as 4px left border on cards and a colored dot in list view. Resolved hex values defined in `06-ui-ux/01-design-tokens.md` `--color-label-*` tokens. Independent of Collection `color` and Tag colors. |
 | `tag_ids` | array<uuid> | no | `[]` | ≤ 32 | — |
 | `last_opened_at` | timestamp | yes | null | — | Updated on Jump-to-Tab or open. |
 | `open_count` | int | no | 0 | ≥ 0 | Lifetime open count for sort-by-most-used. |

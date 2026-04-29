@@ -2,7 +2,7 @@
 
 > **Closes gap M4.** Concrete numeric rate limits for every public API route and authentication action.
 >
-> **F-M09 / F-M10 closure (2026-04-19):** This file is the canonical numeric companion to `11-rate-limits-and-abuse.md`. The 429 / 402 response envelope below is **identical** to the canonical envelope in `03-api-endpoints/18-error-codes.md` §1 — nested `{ error: { code, ... } }`, `retry_after_ms` (milliseconds, never `_seconds` at top level), `request_id`, and `details.{...}`. Error codes are drawn **only** from the master catalog in `18-error-codes.md` §3.8 (rate) / §3.6 (billing); no codes are invented here.
+> **F-M09 / F-M10 closure (2026-04-19):** This file is the canonical numeric companion to `11-rate-limits-and-abuse.md`. The 429 / 402 response envelope below is **identical** to the canonical envelope in `../03-api-endpoints/18-error-codes.md` §1 — nested `{ error: { code, ... } }`, `retry_after_ms` (milliseconds, never `_seconds` at top level), `request_id`, and `details.{...}`. Error codes are drawn **only** from the master catalog in `../03-api-endpoints/18-error-codes.md` §3.8 (rate) / §3.6 (billing); no codes are invented here.
 >
 > **Reconciliation map:**
 >
@@ -51,7 +51,7 @@ When both IP and account exist, the **stricter** of the two applies.
 
 | Endpoint group | Limit | Window | Notes |
 |---|---|---|---|
-| `GET /v1/items`, `/v1/collections`, `/v1/spaces` (reads) | 1000 | 1 min | Class `read` per `01-conventions.md` §8 |
+| `GET /v1/items`, `/v1/collections`, `/v1/spaces` (reads) | 1000 | 1 min | Class `read` per `../03-api-endpoints/01-conventions.md` §8 |
 | `POST /v1/items` (save tab) | 200 | 1 min | Class `write` |
 | `POST /v1/bulk/items` | 20 | 1 min | Class `bulk`; max 500 items per call |
 | `PATCH /v1/items/:id` | 200 | 1 min | Class `write` |
@@ -60,7 +60,7 @@ When both IP and account exist, the **stricter** of the two applies.
 | `POST /v1/shares` | 30 | 1 min | |
 | `GET /v1/search` | 120 | 1 min | Class `search`; per-query cached 60 s server-side |
 
-Per-Org caps mirror per-Account at 5× (per `01-conventions.md` §8).
+Per-Org caps mirror per-Account at 5× (per `../03-api-endpoints/01-conventions.md` §8).
 
 ## 4. Public share viewer (anonymous)
 
@@ -94,7 +94,7 @@ When quota exhausted → HTTP 402 with `error.code = BILLING_QUOTA_EXCEEDED` (pe
 
 ## 7. Response shape (all 429 / 402 quota responses)
 
-> Uses canonical envelope from `03-api-endpoints/01-conventions.md` §4 + `18-error-codes.md` §1. **Do not invent flat `error_code` fields.**
+> Uses canonical envelope from `../03-api-endpoints/01-conventions.md` §4 + `../03-api-endpoints/18-error-codes.md` §1. **Do not invent flat `error_code` fields.**
 
 429 rate-limit example:
 

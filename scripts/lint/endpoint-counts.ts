@@ -33,29 +33,32 @@ type Method = typeof METHODS[number];
 type Row = { method: Method; path: string; file: string; line: number };
 type Errors = string[];
 
-// --- 1. Discover per-domain endpoint files (01-*.md … 17-*.md). ---
+// --- 1. Discover per-domain endpoint files (02-*.md … 23-*.md). ---
+// Excludes 00-overview.md (the index), 01-conventions.md (pure prose),
+// 18-error-codes.md (no endpoints declared), and non-numbered files.
 function discoverFiles(): string[] {
   const all = readdirSync(ROOT).filter((f) => /^\d{2}-.*\.md$/.test(f) && !EXCLUDE.has(f));
-  const inRange = all.filter((f) => {
-    const n = parseInt(f.slice(0, 2), 10);
-    return n >= 1 && n <= 17;
-  });
+  // 01-conventions has no endpoints; skip explicitly to avoid noise.
+  const inRange = all.filter((f) => f !== '01-conventions.md');
   return inRange.sort().map((f) => join(ROOT, f));
 }
 
-// --- 2. Parse every endpoint table row. ---
-// Two row shapes are accepted (both appear in the corpus):
-//   `| GET /v1/items |`            → single-cell form
-//   `| GET | \`/v1/items\` | …`    → split-cell form
+// --- 2. Parse every endpoint declaration. ---
+// Three accepted shapes (all appear in the corpus, see SI-025 for the audit):
+//   1. Backtick-header line:        `` `POST /v1/auth/signup` ``  (most common, 161 of 171)
+//   2. Markdown header:             `### POST /v1/items`           (used in some sub-sections)
+//   3. Table-row inline:            `| GET /v1/items | … |`        (used sparingly)
+//   4. Table-row split-cell:        `| GET | \`/v1/items\` | …`    (used in 00-overview.md only — excluded)
+const ROW_BACKTICK = /^`(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s`]+)`\s*$/;
+const ROW_HEADER = /^#{2,4}\s+(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s]+)\s*$/;
 const ROW_INLINE = /^\|\s*(GET|POST|PATCH|PUT|DELETE)\s+(\/v1\/[^\s|`]+)\s*\|/;
-const ROW_SPLIT = /^\|\s*(GET|POST|PATCH|PUT|DELETE)\s*\|\s*`?(\/v1\/[^\s|`]+)`?\s*\|/;
 
 function parseRows(file: string): Row[] {
   const lines = readFileSync(file, 'utf8').split('\n');
   const rows: Row[] = [];
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const m = ROW_INLINE.exec(line) ?? ROW_SPLIT.exec(line);
+    const m = ROW_BACKTICK.exec(line) ?? ROW_HEADER.exec(line) ?? ROW_INLINE.exec(line);
     if (!m) continue;
     rows.push({ method: m[1] as Method, path: m[2], file, line: i + 1 });
   }

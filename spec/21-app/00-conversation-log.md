@@ -218,3 +218,13 @@ next
 ```
 
 **Refactored into:** Added 16th sub-check `endpoint-counts` to `spec-drift-linter` in `22-infrastructure/09-ci-cd.md §2.1.1`. The linter walks every row in `03-api-endpoints/0[1-9]-*.md`…`1[0-7]-*.md` (excludes `00-overview.md` and `18-error-codes.md`), computes total/distinct/per-method counts, and asserts they match the table in `00-overview.md §7` exactly. Off-by-one (the exact failure mode caught manually in Session 11: 181→182) now fails CI with a precise error listing duplicate rows. Updated header from "fifteen sub-checks" to "sixteen". Cross-linked from `00-overview.md §7` so future authors see the CI guarantee. Closes the audit gap that previously required manual Python sweeps. No new SIs, no spec invariants changed — pure tooling hardening per Counter Discipline rule. Score holds at 100/100.
+
+---
+
+## 2026-04-29 — Session 13: Allowlist Discipline meta-rule
+
+```
+next
+```
+
+**Refactored into:** Added 17th sub-check `allowlist-discipline` to `spec-drift-linter` and a new §2.1.3 "Allowlist Discipline (meta-rule)" in `22-infrastructure/09-ci-cd.md`. Schema: every `scripts/lint/*.allowlist.txt` MUST carry a header (`# linter:`, `# purpose:`, `# review-by:` ≤180d) and every non-comment entry MUST be preceded by `# PR:#<n>  reason:<≥10 chars>`. Hard cap 50 non-comment lines per file — past that, the underlying rule needs redesign rather than more exceptions. Expired `review-by` dates fail CI immediately. Tightened the loose §2.1.1 implementation-contract bullet to cite the new schema. Locked the meta-rule in `mem://index` Core (sibling to Counter Discipline). Updated header from "sixteen sub-checks" to "seventeen". Prevents the failure mode where allowlists silently grow until the linter becomes decorative. No spec content changed — pure tooling/process hardening. Score holds at 100/100.

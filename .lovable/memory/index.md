@@ -1,6 +1,3 @@
-# Memory: index.md
-Updated: just now
-
 # Project Memory
 
 ## Core
@@ -9,17 +6,17 @@ Conversation logging: append every user instruction verbatim to `spec/21-app/00-
 Instruction handling: write immediately. Only stop to ask when genuinely ambiguous (conflicting locked rules, missing data, multiple valid interpretations).
 Identifiers: UUIDv7 everywhere. Never ULID.
 Role enum is locked: owner, admin, editor, viewer, billing, guest, system. Do not introduce new roles without updating glossary + member.md together.
-Share model v1 = single-table (`02-data-model/07-share.md`). `08-sharing-collab/01-share-model.md` is a v2 design note only.
-File naming: `NN-name.md` numbered prefix convention. Locked rules in `spec/21-app/13-spec-issues/01-naming-conventions.md`.
-Spec issues: open list at `spec/21-app/13-spec-issues/02-current-issues.md`. Phase plan at `03-phase-plan.md`. Never fix in `13-`, fixes land in owning folder.
-The 100/100 readiness score in `23-audits/audit-2026-04-19-ai-readiness-score.md` is STALE while `13-spec-issues/02-current-issues.md` open count > 0.
+Share model v1 = single-table (`02-data-model/share.md`). `08-sharing-collab/share-model.md` is a v2 design note only.
+File naming: `NN-name.md` numbered prefix convention.
 Never touch `.release/` folder. Code changes must bump at least minor version.
 User timezone: Malaysia (UTC+8). Milestone markers in readme.txt use format: `let's start now {date} {time}`.
 Always list remaining tasks at end of each work session; if all done, suggest next actions from memory.
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
+Brand primary = Toby pink #EC4868 (HSL `343 79% 60%`). Defined in `06-ui-ux/01-design-tokens.md` §1.1. Never hard-code; always reference `--primary` / `bg-primary` etc.
+Toby "Workspace" maps SPLIT: container of Collections = our Space; admin/billing/members surface = our Organization. Never collapse Space into Org. See `00-overview/02-glossary.md` "External-product mappings" and SI-021.
+Item `color_label` enum is locked: none, red, orange, yellow, green, teal, blue, purple, pink. Hex values resolved by `--color-label-*` tokens in `06-ui-ux/01-design-tokens.md` §1.6.
+Counter Discipline: never increment a published count. Re-scan, then write. Enforced by `endpoint-counts` sub-check in `22-infrastructure/09-ci-cd.md §2.1.1`.
+Allowlist Discipline: every `scripts/lint/*.allowlist.txt` entry needs PR# + reason + ≤180-day review-by date; ≤50 lines per file. Schema in `22-infrastructure/09-ci-cd.md §2.1.3`. Enforced by `allowlist-discipline` sub-check.
 
 ## Memories
-- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Open=0, Closed=28. SI-024 closed 2026-04-29 (toast placement locked: bottom-right desktop / top-center mobile in `06-ui-ux/11-feedback.md §2.1`).
-- [Gap analysis state](mem://features/gap-analysis-state.md) — Older closure tracker for the original W-/F-/M- issue chain.
-- [Audit tracker protocol](mem://preference/audit-tracker-protocol.md) — Rules for updating the readiness-score audit file after each fix.
-- [No implementation mode](mem://constraints/no-implementation-mode.md) — Spec-only mode is permanent. Never write code.
+- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live open/closed counts. Currently 1 open / 25 closed. Last activity: SI-022 opened 2026-04-29 (19 undeclared endpoints, S2). Score 100 → 97.

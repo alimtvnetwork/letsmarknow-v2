@@ -236,10 +236,11 @@ Append to §11:
 - `collection.dragdrop` `{ source_type, target_type, cross_collection: bool }`
 - `collection.undo_delete.clicked` `{ entity, elapsed_ms }`
 
-### 13.9 Open questions
+### 13.9 Locked decisions (Session 52, formerly SI-021 parked)
 
-Tracked under SI-021 until source spec is re-pasted in full:
+The following defaults are now **locked** for v1. They are the defaults documented in `20-roadmap/07-build-readiness.md §4` and have been promoted to normative because the original Toby reference is unavailable for re-paste; if Toby's actual values differ, future change lands as a spec patch with rationale.
 
-- Toby's exact "Open all" cap (we assume 50 for warn, 200 hard cap pending entitlement decision).
-- Whether Toby supports nested Groups (assumed NO in v1; matches our locked model).
-- Toby's per-Item color label palette size (assumed 8 colors — see `02-data-model/05-item.md` `color_label` enum).
+- **Open All cap:** 50 tabs (browser perf safe). Above 50, the UI shows a confirm dialog "Open N tabs in new window?" with explicit confirm.
+- **Nested Groups:** depth = 1. A Group cannot contain another Group. Drag of a Group onto a Group is rejected with toast "Groups can't be nested".
+- **Color label palette:** 9 values, locked to the `color_label` enum in `02-data-model/05-item.md` and `--color-label-*` tokens in `06-ui-ux/01-design-tokens.md §1.6`. Not extensible in v1.
+

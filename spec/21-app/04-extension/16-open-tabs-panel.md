@@ -216,8 +216,11 @@ Returned from messaging layer or surfaced from `POST /v1/bulk/items`:
 - Messaging conventions: `04-extension/12-messaging.md`
 - Manifest permissions: `04-extension/01-manifest.md`
 
-## 15. Open questions (SI-021, pending full source re-paste)
+## 15. Locked decisions (Session 52, formerly SI-021 parked)
 
-- Toby's exact "Save all" cap before warning (we set 20 free / unlimited paid).
-- Whether Toby surfaces Chrome's native tab groups (`group_id`) as a visual nesting in the panel — assumed YES, rendered as colored chip on the row.
-- Behaviour for incognito windows — assumed hidden from the panel; revisit if Toby includes them.
+Promoted from defaults in `20-roadmap/07-build-readiness.md §4` to normative. Future Toby re-paste may amend; until then these are binding for v1.
+
+- **Save All cap:** 100 tabs (matches Save Session limit in `04-extension/09-save-session.md §6`). Above 100, popup shows "Save first 100 tabs?" with explicit confirm.
+- **Chrome native tab groups (`group_id`):** **NOT surfaced** in v1 panel — flat list only. Re-evaluate in v2 once Save Session also supports groups.
+- **Incognito windows:** **NOT shown** in panel. Manifest declares `incognito: split` per `04-extension/01-manifest.md`; the extension instance running in incognito has its own isolated state.
+

@@ -25,7 +25,7 @@ Every non-2xx response uses this envelope:
 ```
 
 - `code` — stable string from the table below. **Never change a code once shipped.**
-- `message` — human-readable, English only. Frontend may override with `17-copy-strings.md` key `error.<code>`.
+- `message` — human-readable, English only. Frontend may override with `../06-ui-ux/17-copy-strings.md` key `error.<code>`.
 - `http_status` — mirrors the HTTP status of the response.
 - `retryable` — if `true`, client may retry with backoff.
 - `retry_after_ms` — if `retryable` and known, client should wait this long.

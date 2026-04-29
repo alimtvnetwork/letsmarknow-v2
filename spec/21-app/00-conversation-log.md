@@ -1134,3 +1134,43 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 3. **Re-paste full Toby spec** for the remaining 6 ergonomics defaults (separate from this share-model work).
 4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
 5. **Rest** — 42 sessions, 17/17 green linters, 1 open SI (SI-026, 13 entries).
+
+---
+
+## Session 43 — 2026-04-29 — `next` (permissions matrix for lmk surface)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken.** Picked option #1 from S42's suggested actions: confirm `08-sharing-collab/05-permissions-matrix.md` covers the new memorable-slug actions introduced in S42.
+
+**Audit findings.** Generic "Create Share" / "Modify Share settings" already covered the memorable-slug case (it's the same Share row, just an additional optional column). But two genuinely new actions from S42 were missing:
+1. **Repoint orphaned Share** to a new target (S42 invariant §10 in `02-data-model/07-share.md` + §7 in `08-sharing-collab/13-share-link.md`).
+2. **Handle access requests** — Owner/Admin responding to `share.access_requested` events from the request-access page (S42 §8).
+
+Plus a clarifying row for "Set / change memorable `lmk/` slug" so readers see the Pro+ entitlement requirement surfaced explicitly (the action itself is permission-equivalent to `share.update_own`).
+
+**Files changed:**
+- `08-sharing-collab/05-permissions-matrix.md` §5 expanded from 5 rows to 8 rows; added 3 explanatory notes clarifying that the memorable surface does NOT require a new permission (it's the same Share row), defining repoint constraints (same Org + same target_type + Editor-own scope), and pointing access-request handling at S42 §8.
+- `08-sharing-collab/permissions-matrix.json` (the machine-readable mirror that RLS/middleware/client-guards generate from): added 2 new action records:
+  - `share.repoint_target` — same role matrix as `share.update_own` (owner/admin/editor-own).
+  - `share.handle_access_request` — Owner/Admin only.
+
+**Verification.**
+- JSON parse: valid.
+- `backticked-path-resolution`: clean — 1930 backticked paths resolved across 302 files.
+- `link-check`: clean — 36 relative links resolved across 302 files.
+- `role-enum`: clean — 302 files scanned (confirms no role-enum drift introduced; both new actions use only the locked 7-role set + share-pseudo-roles).
+
+**Decision locked:** No new permission for the memorable-slug surface itself. The `lmk/...` URL is **not** a new entity — it's an optional column on Share, so `share.create` and `share.update_own` cover all CRUD against it. The only NEW permissions introduced by S42's work are repoint + access-request handling.
+
+**Remaining tasks for this session:** none.
+
+**Suggested next actions:**
+1. **Continue draining SI-026** — author the 2 `06-ui-ux/` stubs (`options-page.md`, `keyboard-cheatsheet.md`). Drops backlog 13 → 11. Cohesive UI-surface group.
+2. **Author `08-sharing-collab/url-normalization.md`** — single-file SI-026 drop; URL canonicalization rules used by share creation.
+3. **Re-paste remaining Toby spec** — closes 6 ergonomics defaults parked in `20-roadmap/`. Needs your re-paste.
+4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
+5. **Rest** — 43 sessions, 17/17 green linters, 1 open SI (SI-026, 13 entries).

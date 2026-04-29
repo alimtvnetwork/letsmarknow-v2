@@ -10,19 +10,21 @@ All colors stored as `H S% L%` triplets (no `hsl()` wrapper) so Tailwind can com
 
 ### 1.1 Brand
 
+Toby pink. Anchor `--brand-500 = 343 79% 60%` ≈ `#EC4868`. Locked by SI-021 (2026-04-29). All ramp steps share hue `343` and saturation `~78–82%`; lightness varies. Mirrors Toby's primary CTA color so users porting from Toby see visual continuity.
+
 ```css
 :root {
-  --brand-50:  220 100% 97%;
-  --brand-100: 220 100% 93%;
-  --brand-200: 220 96%  86%;
-  --brand-300: 220 92%  76%;
-  --brand-400: 220 88%  64%;
-  --brand-500: 220 84%  54%;   /* primary anchor */
-  --brand-600: 220 78%  46%;
-  --brand-700: 220 72%  38%;
-  --brand-800: 220 66%  30%;
-  --brand-900: 220 60%  22%;
-  --brand-950: 220 60%  14%;
+  --brand-50:  343 100% 97%;
+  --brand-100: 343  96% 93%;
+  --brand-200: 343  92% 86%;
+  --brand-300: 343  86% 76%;
+  --brand-400: 343  82% 68%;
+  --brand-500: 343  79% 60%;   /* primary anchor — Toby pink #EC4868 */
+  --brand-600: 343  74% 52%;
+  --brand-700: 343  70% 44%;
+  --brand-800: 343  64% 34%;
+  --brand-900: 343  58% 24%;
+  --brand-950: 343  56% 14%;
 }
 ```
 

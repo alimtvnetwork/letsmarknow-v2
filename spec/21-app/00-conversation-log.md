@@ -1419,3 +1419,37 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 1. Re-paste remaining Toby spec — 6 ergonomics defaults parked in `20-roadmap/`.
 2. Lift `no-implementation-mode` — phase transition, unlocks 4 src-dependent linters.
 3. Rest.
+
+---
+
+## Session 52 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (suggestion #1):** Closed the 6 Toby ergonomics defaults parked in `20-roadmap/07-build-readiness.md §4`. The original Toby reference is unavailable for re-paste, so the documented defaults were **promoted to locked decisions** in their owning files. Future Toby re-paste can amend via normal spec patch.
+
+**Locked values:**
+1. Open All cap = **50 tabs** (confirm above)
+2. Nested Group depth = **1**
+3. Color label palette = **9** (locked enum, not extensible v1)
+4. Save All cap = **100 tabs** (matches Save Session)
+5. Chrome native tab groups in panel = **No** (flat v1)
+6. Incognito windows in panel = **No** (`incognito: split`)
+
+**Files changed:**
+- edited `spec/21-app/07-features/04-collections.md` §13.9 (Open questions → Locked decisions)
+- edited `spec/21-app/04-extension/16-open-tabs-panel.md` §15 (Open questions → Locked decisions)
+- edited `spec/21-app/20-roadmap/07-build-readiness.md` §4 (parking lot → resolved table)
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md` (Session 52 marker)
+
+**Linter status:** unchanged — 17/17 green. **Open SIs:** 0. **Score:** 100/100.
+
+**Remaining tasks (from memory):**
+1. Lift `no-implementation-mode` — phase transition, unlocks 4 src-dependent linters (requires explicit user opt-in per `mem://constraints/no-implementation-mode.md`).
+2. Rest.

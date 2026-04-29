@@ -9,12 +9,13 @@
 1. **Share model.** v1 is a **single-table** model (`02-data-model/07-share.md`). The richer multi-table v2 design lives here as a *design note only*, not a contradiction.
 2. **Audiences.** Public link, password-protected link, invite-only (named users).
 3. **Permissions matrix.** Role × action × target → allow/deny. Source of truth for RLS policies and API guards.
-4. **Real-time.** Presence, comments, reactions over Supabase Realtime (W-2 lock); channel naming `lmn:org:{org}:space:{space}` etc. (W-4 lock — `{id}` placeholders only).
+4. **Real-time.** Presence, comments, reactions over Supabase Realtime (W-2 lock); channel naming `org:{org_id}`, `space:{space_id}`, `collection:{collection_id}`, `item:{item_id}`, `share:{share_token}`, `account:{account_id}` (W-4 lock — see `14-realtime-transport.md §2`).
 5. **Notifications.** Email + in-app toasts for share invites, comments, role changes.
 6. **Audit log.** What gets logged, where it surfaces, retention.
 7. **Embed widget.** Iframe-able read-only viewer for shared Collections.
 8. **Share analytics.** Per-share view count, last viewed, country histogram (privacy-preserving).
 9. **Revocation & expiry.** Hard revoke, time-based expiry, password rotation effect.
+10. **Share URL surfaces.** Random `/t/{slug}` (always available, globally unique) + optional memorable `/lmk/{org_handle}/{memorable_slug}` (Org-scoped, Pro+, Toby-inspired). Slug rules, reservations, omnibox `lmk` resolver. See `13-share-link.md`.
 
 ---
 
@@ -22,7 +23,7 @@
 
 | File | Owns |
 |---|---|
-| `01-share-model.md` | v2 design note (multi-table). v1 is `02-data-model/07-share.md`. |
+| `01-share-model.md` | ⚠️ **v2-future design note (do NOT implement for v1).** v1 is the single-table model in `02-data-model/07-share.md`. |
 | `02-public-shares.md` | Anonymous read; cookie-less except for view-mode preference; rate limit. |
 | `03-password-shares.md` | Argon2id-hashed password; unlock cookie; rotation rules. |
 | `04-invite-only-shares.md` | Named-user invites via email; token hash; expiry. |

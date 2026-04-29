@@ -1718,3 +1718,21 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 
 **Audit status:** open. Drain plan: 3–4 sessions.
 **Linters:** untouched (audit file only).
+
+---
+
+## Session 62 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained 3 of 9 from `audit-2026-04-29-sharing-collab-sweep.md` — all in `08-sharing-collab/00-overview.md`.
+
+- **SH4 (S2):** Replaced `lmn:org:{org}:space:{space}` with the full W-4-locked channel inventory `org:{org_id}` / `space:{space_id}` / `collection:{collection_id}` / `item:{item_id}` / `share:{share_token}` / `account:{account_id}`. Cross-references `14-realtime-transport.md §2`.
+- **SH2 (S2):** §2 row for `01-share-model.md` now carries ⚠️ marker + explicit "do NOT implement for v1" warning, mirroring the file's own preamble.
+- **SH7 (S3):** Added §1 Responsibility bullet 10 for "Share URL surfaces" (random `/t/{slug}` + memorable `/lmk/...`, Toby-inspired Pro+ shortlinks).
+
+**Audit progress:** 3 of 9 closed. Remaining: SH1+SH8 (matrix `guest`/`system` roles — S1 launch-blocker), SH3+SH5 (v2 polish), SH6+SH9 (cleanup).
+**Linters:** untouched (overview file only).

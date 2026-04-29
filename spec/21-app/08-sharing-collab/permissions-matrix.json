@@ -390,6 +390,26 @@
       "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
     },
     {
+      "id": "share.repoint_target",
+      "entity": "share",
+      "verb": "update",
+      "description": "Repoint orphaned Share to a new target. New target must share organization_id and target_type with the original. See 13-share-link.md §7 and 02-data-model/07-share.md invariant §10.",
+      "permissions": {
+        "owner":  true,
+        "admin":  true,
+        "editor": { "allowed": true, "qualifiers": ["own"] },
+        "viewer": false,
+        "billing": false
+      }
+    },
+    {
+      "id": "share.handle_access_request",
+      "entity": "share",
+      "verb": "update",
+      "description": "Approve or decline a share.access_requested event submitted via the request-access page (13-share-link.md §8).",
+      "permissions": { "owner": true, "admin": true, "editor": false, "viewer": false, "billing": false }
+    },
+    {
       "id": "share.configure_custom_domain",
       "entity": "share",
       "verb": "update",

@@ -86,7 +86,7 @@ These are the flaws the user identified verbatim during requirements gathering. 
 | 7 | Tab Extend's calendar / reminders are broken | dropped from v1 |
 | 8 | Tab Extend's workspace search shows everything always | `15-visualization/` + `14-search/` |
 | 9 | Tab Extend has no jump-to-result from search | `14-search/05-jump-to-result.md` |
-| 10 | Toby has no hover-add "+" button on Collections | `07-features/add-item-hover-button.md` |
+| 10 | Toby has no hover-add "+" button on Collections | `07-features/18-add-item-hover-button.md` |
 | 11 | Toby's share URLs are not customizable | `08-sharing-collab/01-share-model.md` |
 | 12 | Toby has no password / expiry on shares | `08-sharing-collab/` |
 | 13 | Neither tool has a real Ctrl+K palette | `07-features/13-command-palette.md` |

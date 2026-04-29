@@ -173,7 +173,7 @@ spec/21-app/
 │   ├── README.md
 │   ├── add-collection.md
 │   ├── add-group.md
-│   ├── add-item-hover-button.md           (the colorful + button on hover)
+│   ├── 18-add-item-hover-button.md        (the colorful + button on hover)
 │   ├── drag-drop.md
 │   ├── save-session-to-collection.md
 │   ├── jump-to-tab.md
@@ -326,7 +326,7 @@ These problems from the references are **must-fix** and tracked across the spec:
 4. **Tab Extend caps at 8 categories / 12-15 groups** → no caps in any paid tier; Free tier limits documented in `10-licensing-billing/01-plans-matrix.md`.
 5. **Toby's free tier caps at 60 saved tabs** → we set 50 items Free tier cap per `10-licensing-billing/01-plans-matrix.md`.
 6. **Toby has no per-item edit-mode for tags inline** → inline tag editor on every item card.
-7. **Both lack a true "+" hover-add button** → spec'd in `07-features/add-item-hover-button.md`.
+7. **Both lack a true "+" hover-add button** → spec'd in `07-features/18-add-item-hover-button.md`.
 8. **Both lack mind-map / bubble visualization** → spec'd in `15-visualization/04-mindmap-view.md`.
 9. **Both lack proper licensing/support infra** → `10-licensing-billing/` covers it end-to-end.
 10. **Both lack a real app updater & release channel** → `16-notifications-updates/`.

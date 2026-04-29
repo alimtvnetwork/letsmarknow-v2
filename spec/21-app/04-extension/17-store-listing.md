@@ -73,6 +73,6 @@ One paragraph per permission declared in `01-manifest.md`. To be drafted; CWS re
 ## 8. Cross-references
 
 - Cited from: `04-extension/01-manifest.md` §"Store metadata" line 176.
-- Privacy policy: `19-security-privacy/privacy-policy.md` (planned, SI-026).
+- Privacy policy: `19-security-privacy/07-privacy-policy.md`.
 - Rollout pipeline: `04-extension/13-update-and-rollout.md`.
 - Brand assets: `06-ui-ux/01-design-tokens.md` §1.1 (primary pink anchor for promo imagery).

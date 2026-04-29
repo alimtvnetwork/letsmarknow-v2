@@ -1,5 +1,6 @@
 # linter: next-singleton-invariants
-# purpose: silence file-level matches that legitimately quote forbidden phrases (audit history, conversation log)
+# purpose: silence file-level matches that legitimately quote forbidden phrases (audit history, conversation log, glossary's own forbidden-list sentence)
 # review-by: 2026-10-29
-spec/21-app/00-conversation-log.md
-spec/21-app/13-spec-issues/04-closed-issues.md
+spec/21-app/00-conversation-log.md PR:#0 reason:append-only verbatim instruction log; quoting forbidden phrases is part of its job
+spec/21-app/13-spec-issues/04-closed-issues.md PR:#0 reason:closure notes legitimately quote bad patterns as before/after evidence
+spec/21-app/00-overview/02-glossary.md PR:#0 reason:Next glossary entry enumerates forbidden synonyms in the MUST-NOT sentence — quoting them is required for the rule to be teachable

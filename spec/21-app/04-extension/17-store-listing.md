@@ -24,7 +24,7 @@ Single source of truth for the Chrome Web Store (CWS) listing fields. Cited from
 | Promo tile (small) | This file §6 | 440×280. |
 | Marquee promo tile | This file §6 | 1400×560 (optional, used for featured slots). |
 | Icon | `01-manifest.md` `icons.128` | Same asset as installed-extension icon. |
-| Privacy policy URL | `19-security-privacy/privacy-policy.md` (planned, SI-026) | Required by CWS for any extension requesting `<all_urls>` host permission. |
+| Privacy policy URL | `19-security-privacy/07-privacy-policy.md` | Required by CWS for any extension requesting `<all_urls>` host permission. |
 | Permissions justification | This file §7 | One paragraph per declared permission. |
 | Single purpose | `01-manifest.md` §"Single purpose statement" | Verbatim copy. |
 

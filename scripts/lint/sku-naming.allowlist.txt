@@ -1,0 +1,16 @@
+# linter: sku-naming
+# purpose: Exempt files that legitimately quote the forbidden `_annual` suffix while documenting the W-6 lock — the linter rule definition itself, the W-6 closure note in the canonical SKU map, audit history files, the gap-analysis tracker, the m-gaps reconciliation note, and the folder-overview template's anti-pattern checklist.
+# review-by: 2026-10-26
+
+# PR:#0 reason:15-sku-map.md §W-6 closure quotes the withdrawn _annual alias to document what was rejected
+spec/21-app/10-licensing-billing/15-sku-map.md
+# PR:#0 reason:09-ci-cd.md §2.1.1 row defines the linter itself by listing the forbidden suffix
+spec/21-app/22-infrastructure/09-ci-cd.md
+# PR:#0 reason:audit history — m-gaps F-M11 reconciliation note quotes both _annual and _yearly when documenting the SKU rename rejection
+spec/21-app/23-audits/audit-2026-04-19-m-gaps.md
+# PR:#0 reason:audit history — ai-readiness scoreboard W-6 row + retrospective bullet quote _annual
+spec/21-app/23-audits/audit-2026-04-19-ai-readiness-score.md
+# PR:#0 reason:audit history — gap-analysis tracker row for W-6 quotes _annual
+spec/21-app/23-audits/gap-analysis.md
+# PR:#0 reason:folder-overview template includes anti-pattern checklist line listing _annual alongside other forbidden tokens
+spec/21-app/templates/folder-overview.md

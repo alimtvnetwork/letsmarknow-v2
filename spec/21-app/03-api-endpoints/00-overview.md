@@ -468,7 +468,7 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 ## 7. Endpoint counts (sanity check)
 
-> Counts are **rows in this file** (which means a deliberately-duplicated row like `GET /v1/me/entitlements` listed in both §1.11 and §1.13 counts twice). Distinct endpoints = 182. (Re-verified 2026-04-29 via fresh sweep — was off-by-one at 181 due to a missed dedup. Per `mem://features/spec-issue-tracker.md` Counter Discipline rule, always re-scan rather than increment.)
+> Counts are **canonical declarations** (backtick-header lines `` `METHOD /v1/path` ``, markdown headers `### METHOD /v1/path`, or table-row inline `| METHOD /v1/path | … |`) across `03-api-endpoints/0[2-9]-*.md` … `23-*.md` (excludes `00-overview.md`, `01-conventions.md`, `18-error-codes.md`). Cross-references (`- \`GET /v1/...\` → declared in ...`) and forbidden-alias rows in §16 are NOT counted. Distinct endpoints = total rows because cross-references are excluded; duplicate canonical declarations would fail the `endpoint-counts` linter.
 
 | Method | Rows | Distinct |
 |---|---|---|
@@ -479,11 +479,11 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 | DELETE | 11 | 11 |
 | **Total** | **171** | **171** |
 
-> The single duplicate is `GET /v1/me/entitlements` — listed under both §1.11 (Licenses & billing) and §1.13 (Account cross-Org) by design, with the §1.13 row marked `(also listed under §1.11)`. All other rows are unique by `(method, path)`.
+> No duplicate `(method, path)` declarations. `GET /v1/me/entitlements` is declared once in `16-licenses.md:10` and cross-referenced (not re-declared) from `19-account.md:106`. The linter explicitly excludes cross-reference syntax (`- \`METHOD /v1/...\` → declared in ...`) from the row count.
 
-> If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug. Last rebase: 2026-04-29 (post deep re-audit, after SI-022 closure).
+> If you add or remove a canonical endpoint declaration in any per-domain file, the `endpoint-counts` sub-check of `spec-drift-linter` (see `22-infrastructure/09-ci-cd.md §2.1.1`) will detect the drift on the next CI run. Maintainer can rebase this table via `npx tsx scripts/lint/endpoint-counts.ts --write`. Last rebase: 2026-04-29 Session 18 (SI-025 closure — Counter Discipline meta-rule applied; `--write` regenerated counts from 183/182 hand-claimed → 171/171 linter-computed).
 
-> **CI enforcement:** the `endpoint-counts` sub-check in `22-infrastructure/09-ci-cd.md §2.1.1` recomputes this table from the per-domain files on every PR and fails on any mismatch (added 2026-04-29, 16th sub-check of `spec-drift-linter`). Manual edits to the numbers above without a corresponding spec change will be caught automatically.
+> **CI enforcement:** the `endpoint-counts` sub-check in `22-infrastructure/09-ci-cd.md §2.1.1` recomputes this table from the per-domain files on every PR and fails on any mismatch (added 2026-04-29 Session 12, 16th sub-check of `spec-drift-linter`; first real implementation shipped Session 17 at `scripts/lint/endpoint-counts.ts`). Manual edits to the numbers above without a corresponding spec change will be caught automatically.
 
 ---
 

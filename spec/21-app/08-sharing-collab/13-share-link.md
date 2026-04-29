@@ -25,7 +25,7 @@ The Share entity exposes **two** parallel URL surfaces. Both resolve to the same
 
 Browser-native shorthand (when the Mark Now extension is installed): typing `lmk/{memorable_slug}` in the address bar resolves against the **active Organization**, so members rarely need to type the `{org_handle}` segment.
 
-- `{memorable_slug}`: `[a-z0-9-]{1,60}`, lowercase, hyphen-separated, no leading/trailing/double hyphen, no consecutive hyphens. Validation regex: `^[a-z0-9](?:[a-z0-9]|-(?!-))*[a-z0-9]$|^[a-z0-9]$`.
+- `{memorable_slug}`: `[a-z0-9-]{1,60}`, lowercase, hyphen-separated, no leading/trailing/double hyphen, no consecutive hyphens. Validation regex (anchored): `/^[a-z0-9]$|^[a-z0-9][a-z0-9-]*[a-z0-9]$/` plus a separate "no `--`" reject.
 - Uniqueness: `(organization_id, memorable_slug)` is unique (case-insensitive). Two Organizations may both have `lmk/hr`.
 - Optional: a Share may have a `memorable_slug` set, or only the random `/t/{slug}`, or both. The random surface is the universal fallback.
 - Reserved memorable slugs: same list as §2 plus `lmk`, `t`, `new`, `edit`.

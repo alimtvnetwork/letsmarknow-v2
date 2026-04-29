@@ -194,3 +194,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Backed yesterday's DoD §6 Locked Rule #5 ("Toby-parity invariants checked by CI lint, not by humans alone") with concrete linter specs in `22-infrastructure/09-ci-cd.md §2.1.1`. Added 4 new sub-checks to the `spec-drift-linter` registry: (1) `brand-pink-anchor` — verifies `--primary` resolves to `343 79% 60%`, blocks literal `#EC4868` outside the token site, blocks the rejected `347 81% 60%` value. (2) `color-label-tokens` — verifies all 9 locked enum tokens defined for light + dark, blocks `gray` (the Save Session v1 paste tried to add it), blocks hex literals in label rendering. (3) `collection-kind-discriminator` — verifies 2-value enum (`manual`, `session`) in spec + TS + SQL, gates UI conditionals on `kind===session` not `captured_at`, blocks post-create mutation. (4) `toast-placement` — verifies single `<Toaster />` at app root with bottom-right desktop / top-center mobile, blocks rejected `bottom-left`. Updated registry header from "twelve sub-checks" to "fifteen sub-checks" and broadened scope from `spec/21-app/**/*.md` only to also cover `src/**/*.{ts,tsx,css}` so the brand + token rules can fire on actual code. Each new linter cites its originating SI for traceability. Result: DoD Rule #5 is now executable, not aspirational.
+
+---
+
+## 2026-04-29 — `next` (endpoint-inventory cross-check)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Ran fresh inverse + forward endpoint sweep. **Live spec is clean: 0 undeclared endpoints.** Initial sweep flagged 14, narrowed to 6 after fixing my own regex (table rows use `| GET | \`/v1/...\`` not `\`GET /v1/...\``), all 6 confirmed false positives (mentions only inside `23-audits/`, `00-conversation-log.md`, and closed-issues archive — all historical references, not live spec). Method totals match §7 exactly: GET 59 / POST 102 / PATCH 10 / PUT 1 / DELETE 11 = 183 rows. **Found and fixed one off-by-one:** §7 said "Distinct endpoints = 181"; actual is 182 (one duplicate row, not two). Patched §7 with corrected count + re-verification note citing the Counter Discipline rule from `mem://features/spec-issue-tracker.md`. SI-023's 3 new collection events added no endpoints (events ≠ endpoints, as expected). No new SIs opened. Score holds at 100/100.

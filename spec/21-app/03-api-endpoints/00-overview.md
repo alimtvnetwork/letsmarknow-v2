@@ -472,12 +472,12 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Rows | Distinct |
 |---|---|---|
-| GET | 59 | 58 |
-| POST | 102 | 102 |
+| GET | 50 | 50 |
+| POST | 99 | 99 |
 | PATCH | 10 | 10 |
 | PUT | 1 | 1 |
 | DELETE | 11 | 11 |
-| **Total** | **183** | **182** |
+| **Total** | **171** | **171** |
 
 > The single duplicate is `GET /v1/me/entitlements` — listed under both §1.11 (Licenses & billing) and §1.13 (Account cross-Org) by design, with the §1.13 row marked `(also listed under §1.11)`. All other rows are unique by `(method, path)`.
 

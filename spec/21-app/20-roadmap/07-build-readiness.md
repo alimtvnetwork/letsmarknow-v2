@@ -43,8 +43,8 @@ Spec coverage for every Phase-0 deliverable in `01-phase-0-mvp.md` §1:
 | Account & Org signup/signin | `09-auth-accounts/02-signup-and-signin.md` | ✅ §2.1 |
 | Data model (Org→Space→Collection→Group→Item+Tag) | `02-data-model/01-…07-` | ✅ §1.4–§1.5, §2.4–§2.7 |
 | Web app shell | `05-web-app/02-shell.md` | n/a |
-| List + Compact view | `15-visualization/01-list-view.md`, `03-compact-view.md` | ✅ filter via `/v1/items?...` |
-| Quick-save (web form, popup, context menu) | `04-extension/04-popup.md`, `07-context-menu.md`, `09-save-session.md` | ✅ `POST /v1/items` |
+| List + Compact view | `../15-visualization/01-list-view.md`, `../15-visualization/03-compact-view.md` | ✅ filter via `/v1/items?...` |
+| Quick-save (web form, popup, context menu) | `../04-extension/04-popup.md`, `../04-extension/07-context-menu.md`, `../04-extension/09-save-session.md` | ✅ `POST /v1/items` |
 | Cmd+K global search | `14-search/01-global-search.md` | ✅ `/v1/search`, `/v1/search/quick` |
 | Basic CRUD all entities | `03-api-endpoints/04-…09-` | ✅ all sections |
 | Drag-and-drop within/between Collections | `07-features/04-collections.md` §13.3 | ✅ `POST /v1/items/:id/move`, `/reorder` |

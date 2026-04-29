@@ -172,7 +172,7 @@ Per `06-ui-ux/12-empty-error-loading.md`:
 - **Loading:** skeleton rows for ~150ms then real data (initial query is fast).
 - **Empty:** "No browser tabs open. Open a tab to save it here." — only realistic in detached extension test contexts.
 - **All saved:** small banner above the list — "All open tabs are saved 🎉" with "Close saved tabs" action.
-- **Error (`chrome.runtime.lastError`):** "Couldn't read tabs. Reload the extension." with Retry button. Logs to `02-error-reporting.md`.
+- **Error (`chrome.runtime.lastError`):** "Couldn't read tabs. Reload the extension." with Retry button. Logs to `../18-analytics-telemetry/02-error-reporting.md`.
 
 ## 11. Telemetry
 

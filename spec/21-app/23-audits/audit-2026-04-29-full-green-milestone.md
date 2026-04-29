@@ -1,3 +1,12 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2026-10-26
+audit-type: retrospective
+status: closed
+closed-on: 2026-04-29
+closed-because: Milestone snapshot — all 16 active CI linters clean, 0 open SIs, 31 closed SIs, 296 spec files, 171/171 endpoints, 100/100/100. Append-only history, not a tracking audit.
+-->
+
 # Audit — Full-Green Milestone Re-audit
 
 **Date:** 2026-04-29 (Session 37, Malaysia time UTC+8)

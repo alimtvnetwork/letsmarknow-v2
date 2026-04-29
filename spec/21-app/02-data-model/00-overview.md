@@ -31,6 +31,7 @@
 | `09-history-event.md` | `history_events` | Append-only event log feeding undo/redo and audit log. |
 | `10-license.md` | `licenses`, `subscriptions` | SKU references, `amount_cents`, provider tuple `(provider, event_id)` for idempotency. |
 | `11-account.md` | `accounts`, `auth_identities`, `sessions`, `mfa_factors` | User identity, OAuth identities, refresh sessions, TOTP/WebAuthn factors. |
+| `12-next-item.md` | `next_items` | Per-Account "Next" queue (read-it-later). Ordered via `position`; one row per (account, item). |
 
 ---
 

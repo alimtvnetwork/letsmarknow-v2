@@ -15,7 +15,7 @@ The append-only log of every mutation across the system. Powers Undo/Redo, audit
 | `batch_id` | uuid | yes | null | — | Multiple events with same `batch_id` are undone together (e.g. Save Session creates many Items in one batch). |
 | `at` | timestamp | no | — | — | When it happened. |
 | `event_type` | string(80) | no | — | dotted enum, e.g. `item.created` | The action. Full enum lives in each entity's "Events emitted" section. |
-| `target_type` | enum(`organization`\|`space`\|`collection`\|`group`\|`item`\|`tag`\|`share`\|`member`\|`license`) | no | — | — | — |
+| `target_type` | enum(`organization`\|`space`\|`collection`\|`group`\|`item`\|`tag`\|`share`\|`member`\|`license`\|`account`\|`next_item`\|`session`\|`mfa_factor`) | no | — | — | — |
 | `target_id` | uuid | no | — | — | The affected entity. |
 | `actor_role` | enum(`owner`\|`admin`\|`editor`\|`viewer`\|`billing`\|`guest`\|`system`) | no | — | — | Role at time of action. `system` = synthetic actor (cron, webhook, API token). `billing` = billing-only seat. `guest` = Share-link viewer. |
 | `before` | json | yes | null | per-event schema | State snapshot of changed fields BEFORE. |

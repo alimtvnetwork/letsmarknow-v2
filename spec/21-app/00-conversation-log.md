@@ -1032,3 +1032,44 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 3. **Re-paste full Toby spec** — closes 6 ergonomics defaults parked in `20-roadmap/`. Needs your re-paste.
 4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
 5. **Rest** — 40 sessions, 17/17 green linters, SI-026 trending down (21 → 15 in 2 sessions).
+
+---
+
+## Session 41 — 2026-04-29 — `next` (SI-026 drain: security-privacy stubs)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken.** Picked option #1 from S40's suggested actions: author the 2 `19-security-privacy/` stubs.
+
+**Files created (2 stubs):**
+- `19-security-privacy/06-extension-privacy.md` — Chrome Web Store "Privacy practices" disclosures: data-types-collected table (CWS taxonomy), usage commitments (no sale, no unrelated use, no creditworthiness), per-permission justification table, link to public privacy policy.
+- `19-security-privacy/07-privacy-policy.md` — Public, user-facing privacy policy: 14 required-section template (who/what/why/legal-basis/retention/sharing/storage/rights/cookies/children/changes/contact/effective-date), sub-processor table (Lovable Cloud, Stripe, Resend) as single source of truth, scope-fences against ToS / internal data-handling spec / CWS-form spec.
+
+**Files updated:**
+- `04-extension/01-manifest.md` line 177: ref → `19-security-privacy/06-extension-privacy.md`.
+- `04-extension/14-analytics-telemetry.md` line 103: ref → `19-security-privacy/07-privacy-policy.md`.
+- `04-extension/17-store-listing.md` lines 27 + 76: refs → `19-security-privacy/07-privacy-policy.md` (dropped "(planned, SI-026)" tag).
+- `19-security-privacy/00-overview.md` §2 file table: added rows 06 + 07.
+- `scripts/lint/backticked-path-resolution.allowlist.txt`: removed 3 entries (extension-privacy, privacy-policy ×2 from S38 + S39).
+- `13-spec-issues/02-current-issues.md` SI-026 row rewritten: planned filenames now plain-quoted strings instead of backticked, to avoid the linter flagging the SI tracker itself once those entries leave the allowlist. This is the **right** structural fix — the SI tracker should describe planned files without forcing them into the path-resolution net.
+
+**Verification.**
+- `backticked-path-resolution`: clean — 1915 backticked paths resolved across 302 files.
+- `link-check`: clean — 36 relative links resolved across 302 files.
+- `folder-overview`: clean.
+- `naming-convention`: clean.
+- `allowlist-discipline`: clean — 12 allowlist files validated against 21 known sub-checks.
+
+**SI-026 backlog: 13 entries remaining** spanning planned files in `06-ui-ux/` (2: options-page, keyboard-cheatsheet), `17-i18n-a11y/` (1: extension-strings), `08-sharing-collab/` (2: share-model v2, url-normalization), `07-features/` (1: add-item-hover-button), `10-licensing-billing/` (1: 07-billing-emails), root-level (1: payments-integration), plus duplicate citations.
+
+**Remaining tasks for this session:** none — verification clean.
+
+**Suggested next actions:**
+1. **Continue draining SI-026** — author the 2 `06-ui-ux/` stubs (`options-page.md`, `keyboard-cheatsheet.md`). Cohesive UI-surface group, drops backlog 13 → 11.
+2. **Author `08-sharing-collab/url-normalization.md`** — single-file drop; share-model v2 stays parked per memory rule (it's intentionally a v2 design note placeholder).
+3. **Re-paste full Toby spec** — closes 6 ergonomics defaults parked in `20-roadmap/`. Needs your re-paste.
+4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
+5. **Rest** — 41 sessions, 17/17 green linters, SI-026 down 21 → 13 in 3 sessions (38% drained).

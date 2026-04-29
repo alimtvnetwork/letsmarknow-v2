@@ -2,10 +2,6 @@
 # purpose: Exempt forward-references to planned spec files that have not yet been authored. Each entry is a real cross-reference whose target is intentionally aspirational (release-ops folder, v2 share-model, i18n-a11y folder, extension-package artifacts, etc.). Real drift in non-frozen files that is not a forward-ref must be FIXED, not silenced here. Tracked in aggregate as SI-026 in `13-spec-issues/02-current-issues.md`. Frozen files (conv-log, audits, naming-conventions, templates, wireframes, closed-issues) are skipped via built-in skip lists in the linter source, not allowlisted here.
 # review-by: 2026-10-26
 
-# PR:#0 reason:SI-026 — extension-privacy.md planned in 19-security-privacy
-spec/21-app/04-extension/01-manifest.md:`19-security-privacy/extension-privacy.md`
-# PR:#0 reason:SI-026 — privacy-policy.md planned in 19-security-privacy
-spec/21-app/04-extension/14-analytics-telemetry.md:`19-security-privacy/privacy-policy.md`
 # PR:#0 reason:SI-026 — options-page.md planned in 06-ui-ux
 spec/21-app/04-extension/02-surfaces.md:`06-ui-ux/options-page.md`
 # PR:#0 reason:SI-026 — keyboard-cheatsheet.md planned in 06-ui-ux
@@ -38,7 +34,5 @@ spec/21-app/13-spec-issues/02-current-issues.md:`share-model.md`
 spec/21-app/13-spec-issues/02-current-issues.md:`06-ui-ux/options-page.md`
 # PR:#0 reason:SI-026 self-reference — examples cited in SI-026's own row in current-issues
 spec/21-app/13-spec-issues/02-current-issues.md:`07-features/add-item-hover-button.md`
-# PR:#0 reason:SI-026 — privacy-policy.md cited from new store-listing stub (S39)
-spec/21-app/04-extension/17-store-listing.md:`19-security-privacy/privacy-policy.md`
 # PR:#0 reason:SI-026 — extension-strings.md cited from new store-listing stub (S39)
 spec/21-app/04-extension/17-store-listing.md:`17-i18n-a11y/extension-strings.md`

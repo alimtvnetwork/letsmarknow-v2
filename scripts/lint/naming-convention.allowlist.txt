@@ -1,0 +1,57 @@
+# linter: naming-convention
+# purpose: Exempt files/folders that follow a different but documented naming scheme: (1) the audit corpus uses date-prefix `audit-YYYY-MM-DD-slug.md` per the Audit Cadence meta-rule (§2.1.4); (2) the `21-app` slot at the spec root is intentional (the parent directory IS the 21 slot — there is no `spec/21-app/21-*` child); (3) `06-ui-ux/wireframes/` holds non-numbered design assets (PNGs/SVGs); (4) `flow-diagrams-index.md` is a legacy root-level index pending migration to `00-overview/`.
+# review-by: 2026-10-26
+
+# (1) Audit corpus — date-prefix scheme owned by audit-cadence linter
+# PR:#0 reason:audit-YYYY-MM-DD-slug.md is the canonical name validated by audit-cadence sub-check, not naming-convention
+spec/21-app/23-audits/audit-2026-04-18.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-100-retrospective.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-ai-readiness-score.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-decisions-needed.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-impl-vs-spec.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-m-gaps.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-rescore-delta-v2.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-rescore-delta.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-sequencing.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-spec-internal.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-spec-wide.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-19-weakest-files-plan.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-20-rescore-delta-v3.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-ai-readiness-score-v2.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-glossary-sweep.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-orphan-endpoint-sweep.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-post-fix-reaudit.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-toby-parity-delta.md
+# PR:#0 reason:legacy un-prefixed audit file explicitly exempted by audit-cadence §2.1.4(f); pending merge or deletion
+spec/21-app/23-audits/audit.md
+# PR:#0 reason:supporting analysis doc for audit corpus, not itself an audit
+spec/21-app/23-audits/gap-analysis.md
+
+# (2) Spec root sequence: 21-app IS the 21 slot
+# PR:#0 reason:spec/21-app/ is itself the 21 slot in its parent context; there is no nested 21-* child by design
+spec/21-app:dirgap:21
+
+# (3) Non-domain assets folder
+# PR:#0 reason:wireframes/ holds PNG/SVG design assets, not numbered domain spec
+spec/21-app/06-ui-ux/wireframes
+
+# (4) Legacy root-level index pending migration
+# PR:#0 reason:legacy root-level cross-folder diagram index; planned migration into 00-overview/ tracked by SI-026 (to be opened if not migrated by review-by date)
+spec/21-app/flow-diagrams-index.md

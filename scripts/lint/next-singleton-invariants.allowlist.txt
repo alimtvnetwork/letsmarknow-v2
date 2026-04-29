@@ -10,3 +10,6 @@ spec/21-app/13-spec-issues/04-closed-issues.md
 
 # PR:#0 reason:Next glossary entry enumerates forbidden synonyms in the MUST-NOT sentence — quoting them is required for the rule to be teachable
 spec/21-app/00-overview/02-glossary.md
+
+# PR:#0 reason:§2.1.1 row for next-singleton-invariants documents the rule by quoting the forbidden verbs and scope phrases — same pattern as the glossary entry
+spec/21-app/22-infrastructure/09-ci-cd.md

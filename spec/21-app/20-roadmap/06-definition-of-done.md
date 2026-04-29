@@ -21,7 +21,9 @@ A feature is **Done** when:
 
 ### UI
 - [ ] Matches the wireframe in `06-ui-ux/wireframes/` (or wireframe added if missing).
-- [ ] Uses design tokens only (no hex literals, no ad-hoc colors).
+- [ ] Uses design tokens only (no hex literals, no ad-hoc colors). Brand `--primary` MUST resolve to `343 79% 60%` (Toby pink #EC4868) — never re-anchored.
+- [ ] Color-label visuals (Item `color_label`) read from `--color-label-*` tokens defined in `06-ui-ux/01-design-tokens.md §1.6`; never hardcoded.
+- [ ] Toasts use the canonical placement from `06-ui-ux/11-feedback.md §2.1` (bottom-right desktop, top-center mobile, max 3 stacked, single `<Toaster />`); no per-surface overrides.
 - [ ] Uses copy strings from `06-ui-ux/17-copy-strings.md` (no inline English).
 - [ ] Responsive at xs / md / lg per `06-ui-ux/19-breakpoints.md`.
 - [ ] Accessibility checklist (`06-ui-ux/20-accessibility-wcag.md` §2) passes.
@@ -81,6 +83,15 @@ Everything else in §1 still applies in Phase 0.
 - [ ] Large-import path (> 1 000 items) batched and resumable.
 - [ ] Export download URL expires per `12-storage-layout.md`.
 
+### Collections / Sessions (SI-021, SI-023)
+- [ ] `Collection.kind` immutable after create (cannot promote `manual` ↔ `session`).
+- [ ] `captured_at` non-null iff `kind=session`; re-capture updates only `captured_at` + items.
+- [ ] `source_window_id` only set when `kind=session`; cleared when source window closed.
+- [ ] Session-only events fire: `collection.session_captured`, `collection.session_recaptured`, `collection.session_restored {scope, opened, skipped}`.
+- [ ] `Restore session` / `Restore in new window` / `Re-capture from current window` actions hidden when `kind != session`.
+- [ ] `starred_pin_position` non-null iff `is_starred=true` (per `02-data-model/03-collection.md` invariant 5).
+- [ ] Drag-drop matrix in `07-features/04-collections.md §13.3` honored for every drop target the feature exposes.
+
 ## 4. Definition of "Shipped"
 
 A feature is **Shipped** when:
@@ -126,3 +137,10 @@ PRs missing the checklist fail CI lint.
 2. Phase overlays (§2) are temporary; Phase-1 reinstates tests and fixtures.
 3. "Shipped" requires the 7-step rollout for any user-visible change.
 4. Spec drift discovered during DoD MUST update the spec before merge — code is never the source of truth.
+5. Toby-parity invariants (brand pink HSL `343 79% 60%`, locked `color_label` enum, locked `Collection.kind` enum, locked role enum) are checked by CI lint, not by humans alone.
+
+## 7. Walkthrough log
+
+| Date | Reviewer | Result | Notes |
+|---|---|---|---|
+| 2026-04-29 | AI sweep (post SI-024 close) | ✅ Pass | All 11 cross-refs resolve. Added Toby-pink line, color-label-token line, toast placement line, and a new "Collections / Sessions" §3 block enforcing SI-021 + SI-023 invariants. Added Locked rule #5 to require CI-level enforcement. No removals. |

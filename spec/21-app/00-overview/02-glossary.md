@@ -33,8 +33,10 @@
 | Term | Definition |
 |---|---|
 | **Share** | A configuration that exposes a Space, Collection, Group, or Item to people outside the Organization. |
-| **Share link** | The public URL of a Share, format `letsmarknow.com/t/{slug}`. |
-| **Slug** | The unique identifier in a Share link. Auto-generated random by default; custom in Pro+. |
+| **Share link** | The public URL of a Share. Two surfaces: random `letsmarknow.com/t/{slug}` (always available, globally unique) and memorable `letsmarknow.com/lmk/{org_handle}/{memorable_slug}` (opt-in, Pro+, Org-scoped uniqueness). Spec: `08-sharing-collab/13-share-link.md`. |
+| **Slug** | The random identifier in `/t/{slug}`. Auto-generated `[a-z0-9]{10}` by default; custom in Pro+. |
+| **Memorable slug** | The user-chosen identifier in `lmk/{org_handle}/{memorable_slug}`. Optional; Pro+; Org-scoped uniqueness (two Orgs may both have `lmk/hr`). |
+| **`lmk/` shortlink** | The memorable shortlink surface. Resolved either via the extension's address-bar interception (active-Org context, ≤300ms) or via the full URL server-side. Spec: `08-sharing-collab/13-share-link.md` §1.2 + §1.4. |
 | **Public Share** | Anyone with the link can view. No auth required. |
 | **Password Share** | Anyone with the link AND the password can view. |
 | **Expiring Share** | Stops working after a chosen date/time. |

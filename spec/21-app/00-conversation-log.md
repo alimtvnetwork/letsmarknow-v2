@@ -1073,3 +1073,64 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 3. **Re-paste full Toby spec** — closes 6 ergonomics defaults parked in `20-roadmap/`. Needs your re-paste.
 4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
 5. **Rest** — 41 sessions, 17/17 green linters, SI-026 down 21 → 13 in 3 sessions (38% drained).
+
+---
+
+## Session 42 — 2026-04-29 — Toby "To/Links" influence (fold into share model)
+
+**User instruction (verbatim):**
+> [Pasted the full Toby "To/Links" specification, sections 1–17, ~1500 lines.]
+>
+> This is something about how to use share link or something like this. So you can take idea from here and use this idea for your application also. I have added too many share options, so you can handle this — this idea can make to decide how it can be maintained or something. It will help you. But do not confuse your decision with this text decision — just take some idea and apply this for these applications. Here I have separate data model, but you can use your own data model. You can create your own data model. On the other hand, that I want to share with that, if these things are so much confusing to you, you can improve. Basically this is the feature just to be used. You should use this concept also in your system or applications. And if you have any questions and confusion, then feel free to ask me.
+
+**Clarifying questions asked + answered:**
+1. **Scope** → "Fold the ideas into existing share model" (no new feature entity, no new data model — refine the locked single-table v1 share model).
+2. **Naming** → User typed "lmk/" (Mark Now branded shortlink, not Toby's "to/", not generic "go/", not pure-slug).
+
+**Decisions locked:**
+- Share entity gains an optional second URL surface: `letsmarknow.com/lmk/{org_handle}/{memorable_slug}`, alongside the existing globally-unique `/t/{slug}`.
+- Memorable-slug uniqueness is **Org-scoped** (two Orgs may both have `lmk/hr`). Random-slug uniqueness stays **global**.
+- Reserved memorable-slugs include the existing reserved list plus `lmk`, `t`, `new`, `edit`.
+- Memorable surface is **Pro+** (covered by existing `custom_share_slug` entitlement; no new entitlement).
+- Address-bar resolver: extension intercepts `lmk/{slug}` URL pattern and resolves against active Org. Distinct from existing `lmn ` keyword (free-text search). Both keywords reserved.
+- Orphaned target → owner UI offers **repoint** (preserves slug — critical for memorized `lmk/hr`-style slugs) or **hard-delete** (releases slug to 90-day cooldown).
+- Visitor without access → "Request access" page that NEVER reveals target title/contents.
+
+**Toby ideas borrowed (with adaptations):**
+- Memorable shortlink concept ✅ (renamed `to/` → `lmk/`, scoped to Org not Workspace).
+- Slug validation rules ✅ (length 1–60, no leading/trailing/double hyphen).
+- Reserved-slug list ✅ (merged with our existing `08-sharing-collab/13-share-link.md` §2 list).
+- Address-bar resolver behavior ✅ (≤300 ms, Alt+Enter for new tab, miss → Create-prefilled).
+- Orphaned-destination state with repoint ✅ (new invariant §10 + event `share.target_repointed`).
+- Request-access page ✅ (new event `share.access_requested`).
+- "Most used" sort tracking (`lastUsedAt`, `useCount`) — **deferred** (out of scope per Toby §17 too; revisit when share-analytics §11 is built out).
+
+**Toby ideas rejected (with reasons):**
+- Toby's `ToLink` as a separate first-class entity — REJECTED. Our locked share model already has slug/uniqueness/access; layering a second entity duplicates fields. Memorable slug is just an optional column on Share.
+- Toby's role enum (Owner/Editor/Viewer/Guest) — REJECTED. Our role enum is locked (owner, admin, editor, viewer, billing, guest, system). Permissions matrix in `08-sharing-collab/05-permissions-matrix.md` already covers all cases.
+- Toby's "left sidebar To/Links panel" as a separate top-level section — REJECTED for v1. Memorable slugs are a property of existing Shares, not a new navigation surface. A future "Shares" panel may surface them, but it should list ALL shares, not memorable-slug-only.
+- Toby's `to.gettoby.com` separate subdomain — REJECTED. We use the same `letsmarknow.com` host for both surfaces. No DNS/cert sprawl.
+- Toby's "Workspace" terminology — already mapped per locked memory rule (split into Space + Organization).
+
+**Files changed:**
+- `02-data-model/07-share.md`: added `memorable_slug` column (regex moved to share-link.md §1.2 to avoid markdown-link parser collision in the table), invariants §8 / §9 / §10, partial unique index `(organization_id, memorable_slug)`, events `share.target_repointed` and `share.access_requested`.
+- `08-sharing-collab/13-share-link.md`: §1 split into §1.1 (random surface) / §1.2 (lmk memorable surface) / §1.3 (canonical & redirects) / §1.4 (extension resolver matrix); §6 edge cases extended; new §7 (orphaned target repointing); new §8 (request-access page).
+- `04-extension/06-omnibox.md`: appended §11 distinguishing `lmn ` keyword (search) from `lmk/{slug}` URL interception (shortlink).
+- `00-overview/02-glossary.md`: Sharing block expanded — Share link now describes both surfaces; added Memorable slug + `lmk/` shortlink terms.
+- `.lovable/memory/index.md`: new Core rule about the two URL surfaces.
+
+**Verification.**
+- `backticked-path-resolution`: clean — 1926 backticked paths resolved across 302 files.
+- `link-check`: clean — 36 relative links resolved across 302 files (caught 2 self-inflicted regex-as-markdown-link bugs; fixed by descoping inline regex to a §-reference).
+- `folder-overview`: clean.
+- `naming-convention`: clean.
+- `role-enum`: clean.
+
+**Remaining tasks for this session:** none.
+
+**Suggested next actions:**
+1. **Update `08-sharing-collab/05-permissions-matrix.md`** to confirm memorable-slug create/update permissions match existing share-create permissions (likely a 1-line clarification, not a real edit).
+2. **Continue draining SI-026** — author the 2 `06-ui-ux/` stubs (`options-page.md`, `keyboard-cheatsheet.md`). Drops backlog 13 → 11.
+3. **Re-paste full Toby spec** for the remaining 6 ergonomics defaults (separate from this share-model work).
+4. **Lift `no-implementation-mode`** — major phase transition; unlocks 4 src-dependent linters.
+5. **Rest** — 42 sessions, 17/17 green linters, 1 open SI (SI-026, 13 entries).

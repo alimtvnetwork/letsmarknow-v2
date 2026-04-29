@@ -14,6 +14,7 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 | `target_id` | uuid | no | — | must exist & belong to same Org | The target entity id. |
 | `slug` | slug | no | random `[a-z0-9]{10}` | unique globally, `[a-z0-9-]{3,64}` | URL component → `letsmarknow.com/t/{slug}`. Custom slug only on Pro+. |
 | `is_custom_slug` | bool | no | false | — | True if user picked the slug. |
+| `memorable_slug` | slug | yes | null | per `08-sharing-collab/13-share-link.md` §1.2 (1–60 chars, no leading/trailing/double hyphen) | Optional memorable shortlink → `letsmarknow.com/lmk/{org_handle}/{memorable_slug}`. Org-scoped uniqueness (two Orgs may share `lmk/hr`). Pro+ entitlement (`custom_share_slug`). Reserved-slug list per `08-sharing-collab/13-share-link.md` §2 plus extras: `lmk`, `t`, `new`, `edit`. |
 | `mode` | enum(`public`\|`password`\|`invite_only`) | no | `public` | — | Access mode. |
 | `password_hash` | string(255) | yes | null | argon2id | Required when `mode=password`. Never returned by API. |
 | `expires_at` | timestamp | yes | null | future or null | When the share stops working. Null = never. |
@@ -45,10 +46,14 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 5. `expires_at` MUST be in the future at create time.
 6. Custom slug only allowed when Org's License entitlement includes `custom_share_slug`.
 7. Soft-deleting the target entity revokes all its Shares atomically (sets `revoked_at`).
+8. `memorable_slug` is OPTIONAL. When set, `(organization_id, memorable_slug)` is unique case-insensitively. The random `slug` is the universal fallback and remains globally unique whether or not `memorable_slug` is set.
+9. `memorable_slug` follows reserved-slug rules in `08-sharing-collab/13-share-link.md` §2 plus extras: `lmk`, `t`, `new`, `edit`.
+10. Repointing a Share to a new target (orphaned-state recovery) is allowed only when the new target shares the same `target_type` and `organization_id`. Logs `share.target_repointed` and clears `revoked_at`.
 
 ## Indexes (recommended)
 
 - `(slug)` unique
+- `(organization_id, memorable_slug)` unique partial where `memorable_slug is not null`
 - `(organization_id, target_type, target_id)`
 - `(expires_at)` partial where not null
 - `(revoked_at)` partial where null
@@ -79,3 +84,5 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 - `share.item_clicked` (analytics-only)
 - `share.cloned_to_account` (when `allow_clone_to_my_account` is used)
 - `share.hard_deleted`
+- `share.target_repointed` (orphaned-state recovery, see invariant §10)
+- `share.access_requested` (visitor without access submits the request-access form, see `08-sharing-collab/13-share-link.md` §8)

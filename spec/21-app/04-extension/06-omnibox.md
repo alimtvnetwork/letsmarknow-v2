@@ -87,3 +87,16 @@ Used to tune cache hit rate and ranking.
 | Query is a URL the user has saved | First suggestion is the saved Item; second is "Open in dashboard". |
 | Multi-Org account, ambiguous tab | Search runs in **active Org**; suggestion footer shows "Search in other orgs ↗" → opens dashboard with org-switch hint. |
 | Offline | Local cache only; banner suggestion "Offline — showing cached results." |
+
+## 11. `lmk/{slug}` shortlink interception (separate surface)
+
+Distinct from the `lmn ` keyword: when the user types `lmk/{slug}` directly into the address bar (no space, looks like a URL path), the extension intercepts via `chrome.webNavigation.onBeforeNavigate` and resolves against the active Organization. This is the memorable-shortlink surface specified in `08-sharing-collab/13-share-link.md` §1.4.
+
+| Aspect | `lmn` keyword (this file's main subject) | `lmk/{slug}` shortlink (this section) |
+|---|---|---|
+| Trigger | `lmn ` + free-text query | URL pattern `lmk/{slug}` typed in address bar |
+| Backed by | Live search across user's tabs/items | Resolves a specific Share's `memorable_slug` |
+| Result | Suggestion list | Direct navigation (≤ 300 ms) |
+| Out-of-extension fallback | None — keyword needs the extension | Full URL `letsmarknow.com/lmk/{org_handle}/{slug}` works server-side |
+
+Both keywords (`lmn`, `lmk`) are reserved at registration time; users cannot rebind.

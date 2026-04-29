@@ -8,11 +8,49 @@ This file covers the **URL surface** of a Share — slug rules, reservations, cu
 
 ## 1. URL pattern
 
+The Share entity exposes **two** parallel URL surfaces. Both resolve to the same target; both honor the same access mode (`public` / `password` / `invite_only`).
+
+### 1.1 Random-slug surface (always available)
+
 `https://letsmarknow.com/t/{slug}`
 
 - `{slug}`: `[a-z0-9-]{3,64}`, lowercase, hyphen-separated, no leading/trailing/double hyphen.
-- Auto-generated default: `[a-z0-9]{10}` (collision-checked).
-- Custom slug: Pro+ entitlement (`custom_share_slug`).
+- Auto-generated default: `[a-z0-9]{10}` (collision-checked, globally unique).
+- Custom slug on this surface: Pro+ entitlement (`custom_share_slug`).
+- Globally unique across all Organizations.
+
+### 1.2 Memorable-shortlink surface (`lmk/...`, opt-in)
+
+`https://letsmarknow.com/lmk/{org_handle}/{memorable_slug}`
+
+Browser-native shorthand (when the Mark Now extension is installed): typing `lmk/{memorable_slug}` in the address bar resolves against the **active Organization**, so members rarely need to type the `{org_handle}` segment.
+
+- `{memorable_slug}`: `[a-z0-9-]{1,60}`, lowercase, hyphen-separated, no leading/trailing/double hyphen, no consecutive hyphens. Validation regex (anchored): `/^[a-z0-9]$|^[a-z0-9][a-z0-9-]*[a-z0-9]$/` plus a separate "no `--`" reject.
+- Uniqueness: `(organization_id, memorable_slug)` is unique (case-insensitive). Two Organizations may both have `lmk/hr`.
+- Optional: a Share may have a `memorable_slug` set, or only the random `/t/{slug}`, or both. The random surface is the universal fallback.
+- Reserved memorable slugs: same list as §2 plus `lmk`, `t`, `new`, `edit`.
+- Entitlement: memorable slugs are **Pro+** on personal Spaces, included in all paid Org plans (`custom_share_slug` covers both surfaces).
+- Resolver behavior is specified in §1.4.
+
+### 1.3 Canonical & redirects
+
+- The **canonical** for SEO/OG is whichever surface the user copies via the "Share" UI. The `<link rel="canonical">` is set per response to the requested surface.
+- A Share with both surfaces enabled: hitting either renders the same page; no cross-surface redirect (avoids confusing copy-paste flows).
+- Surface mismatch (e.g. memorable slug typed against wrong org handle) → 404 with "Did you mean `lmk/{guess}`?" suggestion if a near-match exists in another visible Org.
+
+### 1.4 Address-bar resolver (extension-mediated)
+
+When the Mark Now Chrome extension is installed and the user is signed in, typing `lmk/{slug}` in the omnibox is intercepted (per `04-extension/06-omnibox.md` — keyword `lmk`):
+
+| Case | Resolver behavior |
+|---|---|
+| `{slug}` exists in the active Organization | Navigate to that Share's `target` page within ≤ 300 ms. `Alt+Enter` opens in new tab. |
+| `{slug}` exists in another Org the user belongs to but not active | Switch to that Org, then navigate. Toast: "Switched to {org_name}". |
+| `{slug}` exists in multiple of the user's Orgs | Show disambiguation page listing matches with org name + target preview. |
+| `{slug}` does not exist anywhere | Redirect to `https://letsmarknow.com/lmk/new?slug={slug}` (Create-Share dialog pre-filled). |
+| Extension not installed (web-only) | The full `https://letsmarknow.com/lmk/{org_handle}/{slug}` URL is the only path; no omnibox shortcut. Server-side 302 still works for the full URL. |
+
+
 
 ## 2. Reserved slugs
 
@@ -46,10 +84,44 @@ Gated by License entitlement `custom_share_slug` (Pro+, see `../10-licensing-bil
 | Custom domain (Team v2) DNS broken | `letsmarknow.com/t/{slug}` always works as fallback. |
 | Slug case mismatch in URL | 301 redirect to lowercase canonical. |
 | Slug with trailing slash | 301 redirect to canonical (no trailing slash). |
+| URL with no scheme typed in resolver (e.g. `lmk/example.com`) | Treat as a slug, not a URL — never auto-prepend `https://`. URLs go in the Share's target via the normal Create-Share flow. |
+| Memorable slug very long (> 60 chars) | Reject at create time with `409 SLUG_INVALID`. |
+| Memorable slug collides at save (race) | Server returns `409 SLUG_TAKEN`; client surfaces inline error. |
 
-## 7. Cross-references
+## 7. Orphaned target state
+
+When a Share's underlying target (Space / Collection / Group / Item) is soft-deleted, invariant §47 of `02-data-model/07-share.md` already revokes the Share (`revoked_at = now()`). Public viewers therefore receive `410 Gone`.
+
+For the **owner-facing UI**, the Share is additionally surfaced with an "orphaned" badge so the owner can either:
+
+- **Repoint** the Share to a different target (preserves the slug, especially valuable for memorable `lmk/...` slugs the team has memorized).
+- **Hard-delete** the Share entirely (releases the slug into the 90-day cooldown).
+
+Repointing requirements:
+- New target must belong to the same Organization.
+- New target's `target_type` must match the original (you cannot repoint a `space`-share at a `collection`).
+- Repointing logs `share.target_repointed` and resets `revoked_at` to null.
+
+UI surface: `06-ui-ux/` shares panel (planned, SI-026).
+
+## 8. Request-access page (visitor lacks access)
+
+When an unauthenticated visitor hits a memorable `lmk/{org_handle}/{slug}` URL whose Share is in `invite_only` mode and their email is not in `allowed_emails`, OR whose target lives in a private Space they cannot see:
+
+- Show a "Request access to `{org_handle}` / `{slug}`" page.
+- Display: target type (Space / Collection / Group / Item) — never the target name or contents.
+- Show owner Org's avatar + name (only if `show_owner_branding=true`).
+- Form: visitor email + optional message.
+- On submit: emit `share.access_requested` event (per §13 of `02-data-model/07-share.md` events list — to be added). Org owners + admins receive a notification (per `16-notifications-updates/`).
+
+This page must NEVER reveal the target's title, URL, or contents.
+
+## 9. Cross-references
 
 - Data contract: `02-data-model/07-share.md`.
 - v2 multi-link future: `08-sharing-collab/01-share-model.md`.
 - Security (entropy, enumeration): `19-security-privacy/05-share-link-security.md`.
 - Public viewer: `05-web-app/14-share-viewer.md`.
+- Extension omnibox keyword `lmk`: `04-extension/06-omnibox.md`.
+- Reserved-slug list authority: §2 of this file.
+

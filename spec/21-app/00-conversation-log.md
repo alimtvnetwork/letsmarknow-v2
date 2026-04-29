@@ -1357,3 +1357,38 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 2. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
 3. **Lift `no-implementation-mode`** — major phase transition, unlocks 4 src-dependent linters.
 4. **Rest** — 49 sessions, 17/17 green linters, 1 open SI (SI-026, 5 entries — almost drained).
+
+---
+
+## Session 50 — 2026-04-29 — Author 17-i18n-a11y/ folder + CLOSE SI-026 (drain 21 → 0)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action.** Picked S49 suggestion #1. Created the `17-i18n-a11y/` folder per locked NN- naming with 2 stub files: `00-overview.md` (folder map + shared i18n principles) and `01-extension-strings.md` (10 sections: Chrome `_locales/messages.json` format, manifest `__MSG_*__` integration, runtime `t()` helper, store-listing localization, translation pipeline, ICU plural support, RTL handling, a11y notes, versioning, refs). Renamed 2 citing refs (`04-extension/07-context-menu.md:115`, `04-extension/17-store-listing.md:48`) to `17-i18n-a11y/01-extension-strings.md`. Removed 2 matching allowlist entries.
+
+Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48's row scrub (the row no longer cited those backticked paths) — deleted them. Also scrubbed the last latent backtick around `payments-integration.md` in the current-issues last-updated note (S49 leftover).
+
+**Result.** SI-026 backlog 5 → 0. **Closed SI-026** (recorded as SI-028 in `04-closed-issues.md` to preserve history given an earlier S23 SI-026 numbering collision). Final allowlist: 4 entries (all non-SI-026: extension README, export-bundle notes.md, release CHANGELOG, NN-name.md template example). Linter clean (2011 paths / 309 files).
+
+**Open SI count: 0.** All forward-ref work complete.
+
+**Files touched.**
+- created `spec/21-app/17-i18n-a11y/00-overview.md`
+- created `spec/21-app/17-i18n-a11y/01-extension-strings.md`
+- edited `spec/21-app/04-extension/07-context-menu.md`
+- edited `spec/21-app/04-extension/17-store-listing.md`
+- edited `scripts/lint/backticked-path-resolution.allowlist.txt`
+- edited `spec/21-app/13-spec-issues/02-current-issues.md` (closed SI-026 row, updated header)
+- edited `spec/21-app/13-spec-issues/04-closed-issues.md` (appended SI-028 closing row with full drain history)
+- edited `.lovable/memory/index.md`
+- edited `spec/21-app/00-conversation-log.md`
+
+**Next.**
+1. **Re-paste remaining Toby spec** — closes 6 ergonomics defaults currently parked in `20-roadmap/`.
+2. **Lift `no-implementation-mode`** — major phase transition, unlocks the 4 src-dependent linters (was blocked while spec was the focus).
+3. **Audit recap** — generate a `23-audits/audit-2026-04-29-si-026-closure.md` documenting the 12-session drain pattern + lessons (line_replace prefix bug, slot collisions, allowlist orphans).
+4. **Rest** — 50 sessions, **0 open SIs**, 17/17 green linters, score 100/100.

@@ -105,6 +105,8 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - `item.duplicated`
 - `item.opened` (analytics-only, NOT undoable)
 - `item.starred` / `item.unstarred`
+- `item.starred_pin_reordered` (within "⭐ Starred" section, SI-021)
+- `item.color_label_changed` `{ from, to }` (SI-021)
 - `item.tagged` / `item.untagged`
 - `item.note_updated`
 - `item.favicon_refreshed`

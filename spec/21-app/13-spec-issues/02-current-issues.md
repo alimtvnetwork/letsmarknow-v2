@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 49 (SI-026 partial drain: 16 entries closed cumulatively — S39:6, S41:2, S44:1, S45:2, S46:2, S47:1, S48:1, S49:1 by converting `payments-integration.md` ref to plain prose pointing at existing Stripe/Paddle files in 10-licensing-billing/. Also repaired the readme tree-diagram block (lines 214-222) which had 7 fictitious filenames replaced with the real NN- prefixed billing files. SI-026 remaining = 5 entries. Open count = 1).
+**Last updated:** 2026-04-29 Session 49 (SI-026 partial drain: 16 entries closed cumulatively — S39:6, S41:2, S44:1, S45:2, S46:2, S47:1, S48:1, S49:1 by converting payments-integration.md ref to plain prose pointing at existing Stripe/Paddle files in 10-licensing-billing/. Also repaired the readme tree-diagram block (lines 214-222) which had 7 fictitious filenames replaced with the real NN- prefixed billing files. SI-026 remaining = 5 entries. Open count = 1).
 
 ---
 

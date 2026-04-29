@@ -1,0 +1,9 @@
+# linter: storage-path
+# purpose: Enforce W-7 — bucket references in 22-infrastructure/** + 11-import-export/** must use canonical names from 12-storage-layout.md §1; reject legacy lmn- prefix
+# review-by: 2026-10-29
+#
+# Format:
+#   <file>            — silence the file entirely
+#   <file>:<TOKEN>    — silence one token in one file
+#
+spec/21-app/22-infrastructure/06-cdn-storage.md  PR:#0 reason:carries W-7 historical note quoting old bucket names with lmn- prefix; canonical layout deferred to 12-storage-layout.md per §6 of that file

@@ -45,7 +45,7 @@ To be authored. Must reuse the single-purpose statement verbatim as the opening 
 
 ## 5. Localization
 
-v1 ships English only. Locale-specific listings tracked in `17-i18n-a11y/extension-strings.md` (planned, SI-026).
+v1 ships English only. Locale-specific listings tracked in `17-i18n-a11y/01-extension-strings.md` (planned, SI-026).
 
 ---
 

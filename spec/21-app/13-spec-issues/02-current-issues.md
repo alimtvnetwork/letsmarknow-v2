@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 49 (SI-026 partial drain: 16 entries closed cumulatively — S39:6, S41:2, S44:1, S45:2, S46:2, S47:1, S48:1, S49:1 by converting `payments-integration.md` ref to plain prose pointing at existing Stripe/Paddle files in 10-licensing-billing/. Also repaired the readme tree-diagram block (lines 214-222) which had 7 fictitious filenames replaced with the real NN- prefixed billing files. SI-026 remaining = 5 entries. Open count = 1).
+**Last updated:** 2026-04-29 Session 50 — **SI-026 CLOSED** (drained 21 → 0 over 12 sessions, S38–S50). Open count = 0. All open issues resolved. Score: 100/100.
 
 ---
 
@@ -22,7 +22,7 @@
 | SI-023 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. `Collection.kind` enum + `captured_at` + `source_window_id` added to `02-data-model/03-collection.md` with 3 invariants and 3 events. | (moved) | (moved) | (moved) |
 | SI-024 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. Toast placement locked: bottom-right desktop / top-center mobile, max 3 stacked, no per-surface overrides. Save Session v1's bottom-left request rejected; refs in `07-features/02-save-session.md §14.4` and `04-extension/09-save-session.md §11` updated to point at `06-ui-ux/11-feedback.md §2.1`. | (moved) | (moved) | (moved) |
 | SI-025 | S2 | ✅ closed Session 18 — see `04-closed-issues.md`. §7 rebased from 183/182 → 171/171 via `npx tsx scripts/lint/endpoint-counts.ts --write`. 5 real undeclared endpoints found and added; remaining 12-row gap was §7 over-count from prior hand-rebases. Linter now exits 0. | (moved) | (moved) | (moved) |
-| SI-026 | S3 | 🟡 open 2026-04-29 Session 38 — Forward-ref backlog: **6 backticked-path refs remaining** (was 21 at S38; cumulative drain by session: S39:−6, S41:−2, S44:−1, S45:−2, S46:−2, S47:−1, S48:−1 by converting the v2 share-model ref in 03-api-endpoints/10-shares.md:213 to plain prose per the locked memory rule that v2 share-model.md must not be authored). Remaining planned targets (paths shown plainly to avoid linter recursion): 17-i18n-a11y/extension-strings.md, payments-integration.md, plus duplicate citations from different source files. All current allowlist entries live in scripts/lint/backticked-path-resolution.allowlist.txt with PR:#0 reason:SI-026 — ... per entry. Closure = author each planned file (or convert refs to plain prose). | scripts/lint/backticked-path-resolution.allowlist.txt | scripts/lint/backticked-path-resolution.ts registered in 22-infrastructure/09-ci-cd.md §2.1.1 | n/a (forward-ref pattern) |
+| SI-026 (renamed SI-028) | S3 | ✅ closed 2026-04-29 Session 50 — see `04-closed-issues.md`. Forward-ref backlog drained 21 → 0 over S38–S50. Final allowlist: 4 non-SI-026 entries. | (moved) | (moved) | (moved) |
 
 ---
 

@@ -35,6 +35,7 @@
 | GET | `/v1/auth/oauth/:provider/callback` | none | Provider redirect target; exchanges code → issues tokens & sets refresh cookie. | `03-auth.md` |
 | GET | `/v1/auth/sessions` | bearer | List my active devices/sessions (current device flagged). | `03-auth.md` |
 | GET | `/v1/auth/verify` | verify-token | Consume an email-verification token (sets `email_verified_at`). | `03-auth.md` |
+| GET | `/v1/auth/magic/callback` | magic-token (`?t=`) | Magic-link landing target — consumes single-use token, sets refresh cookie, 302 → app shell. (HTML/redirect counterpart of `POST /v1/auth/magic-link/consume`.) | `03-auth.md` |
 
 ### 1.2 Public share viewer (`/t/{slug}`)
 
@@ -96,6 +97,7 @@
 | GET | `/v1/search/quick` | bearer+org | Latency-optimized for the omnibox / popup quick-find. | `13-search.md` |
 | GET | `/v1/search/suggest` | bearer+org | Type-ahead suggestions (entity + tag + saved-search). | `13-search.md` |
 | GET | `/v1/search/recent` | bearer | List the Account's recent search queries. | `13-search.md` |
+| GET | `/v1/items/search` | bearer+org | Item-scoped search (subset of `/v1/search`, returns only item results with snippets/highlights). Used by in-Collection filter bars. | `../14-search/02-item-search.md` |
 
 ### 1.9 History, undo & trash
 
@@ -127,6 +129,7 @@
 | GET | `/v1/me/entitlements` | bearer | Aggregate entitlements for the Account across all Orgs. | `16-licenses.md` |
 | GET | `/v1/organizations/:id/billing` | bearer+role(owner/admin/billing) | Plan, seats, next renewal, invoices summary. | `16-licenses.md` |
 | GET | `/v1/organizations/:id/data-export/:export_id` | bearer+role(owner/admin) | Poll an Org GDPR data-export job (status + signed download URL). | `04-organizations.md` |
+| GET | `/v1/organizations/:id/billing/invoices` | bearer+role(owner/admin/billing) | Paginated list of invoices for the Org (id, period, total, status, PDF link). | `16-licenses.md` |
 | GET | `/v1/billing/invoices/:id/pdf` | bearer+role(owner/admin/billing) | 302 to processor's signed invoice PDF; JSON form available via `Accept: application/json`. | `16-licenses.md` |
 
 ### 1.12 Webhooks (admin diagnostics)
@@ -155,6 +158,18 @@
 | GET | `/v1/flags` | bearer+(org) | List all feature flags visible to the current `(account, org)` with their evaluated values (debug/admin variant of `POST /v1/flags/evaluate`). | `21-flags.md` |
 | GET | `/v1/mindmap-layouts` | bearer+org | List saved mindmap layouts for a scope. | `23-mindmap-layouts.md` |
 | GET | `/v1/mindmap-layouts/:id` | bearer+org | Get a single layout (full payload incl. node positions). | `23-mindmap-layouts.md` |
+
+---
+
+### 1.15 Extension health, sync & updates feed
+
+> Extension service-worker probes, delta-sync poll, and product updates feed.
+
+| Method | Path | Auth | Purpose | Source |
+|---|---|---|---|---|
+| GET | `/v1/health/extension` | bearer (optional) | Lightweight liveness/version probe used by the extension service worker before each session burst. Returns `{ ok, server_time, min_extension_version }`. | `../04-extension/03-service-worker.md` |
+| GET | `/v1/sync/since` | bearer+org | Delta-sync poll: returns entities (items, collections, groups, tags) changed since `?cursor=<opaque>` for offline reconciliation. | `../04-extension/10-sync-and-offline.md` |
+| GET | `/v1/whats-new` | bearer | In-app updates feed (release notes, product announcements, maintenance banners). Filtered by user locale + last-seen cursor. | `../16-notifications-updates/01-in-app-updates-feed.md` |
 
 ---
 
@@ -290,6 +305,7 @@
 | POST | `/v1/sessions/save` | bearer+org | Y | Persist a window's tabs as a Collection or Group. | `12-sessions-save.md` |
 | POST | `/v1/sessions/save/preview` | bearer+org | — | Dry-run save (dedup count, plan-limit check). | `12-sessions-save.md` |
 | POST | `/v1/sessions/restore` | bearer+org | — | Reverse op: open a Collection/Group as a tab session. | `12-sessions-save.md` |
+| POST | `/v1/sessions/:id/undo` | bearer+org | — | Undo a single session-save operation (rolls back the items/groups it created within the grace window). Distinct from generic `/v1/history/:id/undo` — operates on the synthetic session-save event without needing the underlying history event id. | `12-sessions-save.md` |
 
 ### 2.12 History & trash
 
@@ -308,6 +324,7 @@
 | POST | `/v1/imports` | bearer+org | Y | Start an import job (two-phase: presigned PUT then process). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/imports/upload` | bearer+org | Y | One-shot multipart import for files ≤ 25 MB. Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/imports/:id/commit` | bearer+org | Y | Commit a previewed import (writes rows). Class **bulk**. | `15-import-export.md` |
+| POST | `/v1/imports/:id/parse` | bearer+org | Y | Trigger the parse phase on a previously-uploaded import source (`?source=<id>`). Spawns background job; status via `GET /v1/imports/:id/status`. Class **bulk**. | `../11-import-export/03-import-pipeline.md` |
 | POST | `/v1/imports/:import_id/cancel` | bearer+org | — | Cancel a running/queued import. | `15-import-export.md` |
 | POST | `/v1/exports` | bearer+org | Y | Start an export job (selectors + format). Class **bulk**. | `15-import-export.md` |
 | POST | `/v1/exports/:export_id/refresh-url` | bearer+org | Y | Mint a fresh signed download URL for a completed export. | `15-import-export.md` |
@@ -453,12 +470,12 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Count |
 |---|---|
-| GET | 41 |
-| POST | 87 |
+| GET | 46 |
+| POST | 90 |
 | PATCH | 9 |
 | PUT | 1 |
 | DELETE | 11 |
-| **Total** | **149** |
+| **Total** | **157** |
 
 > If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug.
 

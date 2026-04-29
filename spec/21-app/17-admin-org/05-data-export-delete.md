@@ -63,7 +63,7 @@ Schema versioned (`schema_version: 1`). Future versions add fields backward-comp
 
 ### Re-import
 
-- Same archive can be uploaded to a NEW Org via `POST /v1/organizations/{id}/imports?from=lmn-export`.
+- Same archive can be uploaded to a NEW Org via `POST /v1/imports?from=lmn-export` (with `X-Organization-Id` header set to the destination Org).
 - Per-entity ID remapping; original IDs preserved as `legacy_id`.
 - Members invited (not auto-joined) — they must accept.
 - Import pipeline detailed in `11-import-export/03-import-pipeline.md`.

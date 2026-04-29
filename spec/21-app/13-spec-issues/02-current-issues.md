@@ -18,25 +18,7 @@
 | SI-020b | S2 | ✅ closed Phase 13.6 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-020c | S1 | ✅ closed Phase 13.7g — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-021 | S1 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-toby-parity-delta.md` | (moved) | (moved) | (moved) |
-| SI-022 | S2 | 15 endpoints referenced in spec but missing from `00-overview.md` inventory (Group C residue, post Group B fix 2026-04-29) | Inverse-sweep audit `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. **Group B (4) RESOLVED 2026-04-29** by promoting `GET /v1/flags`, `POST /v1/internal/feedback/attachments`, `PATCH /v1/mindmap-layouts/:id`, `GET /v1/history/for/item/:id` into `00-overview.md` (counts: 145 → 149). Remaining: 15 in feature/extension/billing/auth files reference routes that were never declared and need per-route triage (declare / fold into existing / rename caller). | `03-api-endpoints/00-overview.md` (add ~15 rows) plus per-file canonical fixes where the reference itself is wrong | n/a (parity defect, not naming) |
-
-**SI-022 endpoint groups (for batched fix):**
-
-*Group B — endpoint files declaring own routes overview missed (4):* ✅ **DONE 2026-04-29**
-- ~~`GET /v1/flags`~~ → added to `00-overview.md` §1.14
-- ~~`POST /v1/internal/feedback/attachments`~~ → added to §2.16
-- ~~`PATCH /v1/mindmap-layouts/:id`~~ → added to §3
-- ~~`GET /v1/history/for/item/:id`~~ → added to §1.9
-
-*Group C — feature files referencing undeclared routes (15):*
-- Auth: `GET /v1/auth/magic/callback`, `POST /v1/auth/oauth/callback`
-- Items/Collections: `GET /v1/collections/:collection_id/items`, `PATCH /v1/collections/:collection_id`, `GET /v1/items/search`
-- Billing: `GET /v1/organizations/:id/billing/invoices`, `POST /v1/billing/webhooks/stripe`, `POST /v1/billing/webhooks/paddle`
-- Extension/sync: `GET /v1/health/extension`, `GET /v1/sync/since`, `POST /v1/realtime/ticket`
-- Org admin: `POST /v1/organizations/:id/imports`
-- Other: `GET /v1/whats-new`, `POST /v1/imports/:id/parse`, `POST /v1/sessions/:id/undo`
-
----
+| SI-022 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Final inventory: 157 declared, 0 undeclared (verified). | (moved) | (moved) | (moved) |
 
 ---
 

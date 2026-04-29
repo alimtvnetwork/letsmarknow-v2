@@ -70,7 +70,7 @@ Listened events (handled in `12-billing-webhooks.md`):
 - `charge.refunded`
 - `payment_method.attached` / `_detached`
 
-Endpoint: `POST /v1/billing/webhooks/stripe`.
+Endpoint: `POST /v1/webhooks/stripe` (canonical; see `03-api-endpoints/00-overview.md` §2.15).
 Signature verified with `STRIPE_WEBHOOK_SECRET`.
 
 ## 7. Seat management (Team)

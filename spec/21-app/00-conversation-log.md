@@ -64,3 +64,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** `03-api-endpoints/00-overview.md` (added 4 endpoints: `GET /v1/flags`, `POST /v1/internal/feedback/attachments`, `PATCH /v1/mindmap-layouts/:id`, `GET /v1/history/for/item/:id`; counts 145 → 149). `13-spec-issues/02-current-issues.md` (SI-022 reduced to 15 Group C remaining). `mem://features/spec-issue-tracker.md` updated.
+
+---
+
+## 2026-04-29 — `next` (SI-022 Group C — full closure)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Closed SI-022 fully. `03-api-endpoints/00-overview.md` extended with 7 new endpoints (new §1.15 + 4 single rows); 7 caller files fixed (`09-auth-accounts/13`, `10-licensing-billing/{03,04,12}`, `15-visualization/readme`, `17-admin-org/05`); 1 false-positive (`POST /v1/realtime/ticket` is WITHDRAWN). Inventory 149 → 157. Re-sweep: 0 undeclared. SI-022 row moved from `13-spec-issues/02-current-issues.md` → `04-closed-issues.md`. Audit `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md` §8 closure note appended. Memory + index updated. Score restored to 100/100.

@@ -55,13 +55,13 @@ The active view per Collection is stored on the **Collection** row, not on the A
 
 ### C3 — API surface for view changes
 
-- `PATCH /v1/collections/{collection_id}` body: `{ "view_settings": { ... } }`. See `03-api-endpoints/06-collections.md`.
+- `PATCH /v1/collections/:id` body: `{ "view_settings": { ... } }`. See `03-api-endpoints/06-collections.md`.
 - `PATCH /v1/account/preferences` body: `{ "default_view": "..." }`. See `03-api-endpoints/19-account.md`.
 - Both return `200` with the updated record. Client applies optimistically per `12-history-undo/02-undo-redo.md` §5 and reconciles on response.
 
 ### C4 — Items payload for any view
 
-`GET /v1/collections/{collection_id}/items?view={mode}&limit=50&cursor={...}`
+`GET /v1/items?collection_id={id}&view={mode}&limit=50&cursor={...}` (filter form; canonical per `03-api-endpoints/01-conventions.md` §16 — never use a nested `/collections/:id/items` path)
 
 - See `03-api-endpoints/08-items.md` for full schema.
 - The `view` query param is **advisory only**: it lets the server tune which fields to hydrate (e.g. `grid` triggers OG-image lookup; `compact` skips description). The shape returned is always a strict subset of `Item`.

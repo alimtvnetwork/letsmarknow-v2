@@ -10,3 +10,4 @@ spec/21-app/00-conversation-log.md
 spec/21-app/13-spec-issues/04-closed-issues.md
 spec/21-app/23-audits/audit-2026-04-19-m-gaps.md
 spec/21-app/23-audits/audit-2026-04-19-spec-wide.md
+spec/21-app/23-audits/audit-2026-04-19-decisions-needed.md

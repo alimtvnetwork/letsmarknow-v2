@@ -19,7 +19,7 @@ Always list remaining tasks at end of each work session; if all done, suggest ne
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
 
 ## Memories
-- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live counts + phase queue mirror of `spec/21-app/13-spec-issues/`. Open=10, Closed=0. Source of truth for the post-100/100 backlog.
+- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live counts + phase queue mirror of `spec/21-app/13-spec-issues/`. Open=0, Closed=26. SI-022 closed 2026-04-29 (inventory 145 → 157, 0 undeclared, score 100/100).
 - [Gap analysis state](mem://features/gap-analysis-state.md) — Older closure tracker for the original W-/F-/M- issue chain.
 - [Audit tracker protocol](mem://preference/audit-tracker-protocol.md) — Rules for updating the readiness-score audit file after each fix.
 - [No implementation mode](mem://constraints/no-implementation-mode.md) — Spec-only mode is permanent. Never write code.

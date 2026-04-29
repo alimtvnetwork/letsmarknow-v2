@@ -1,3 +1,13 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2026-07-18
+audit-type: ai-readiness
+status: superseded
+supersedes: (none — this file IS superseded BY audit-2026-04-20-rescore-delta-v3.md)
+superseded-by: audit-2026-04-20-rescore-delta-v3.md
+closed-on: 2026-04-29
+closed-because: Replaced by audit-2026-04-20-rescore-delta-v3.md.
+-->
 # Re-Score Delta Report — v2 (Cumulative, Baseline → 100/100/100)
 
 > **Generated:** 2026-04-19 (UTC+8) by AI auditor.

@@ -1,3 +1,13 @@
+<!--
+audit-date: 2026-04-20
+next-audit-by: 2026-07-19
+audit-type: ai-readiness
+status: superseded
+supersedes: (none — this file IS superseded BY audit-2026-04-29-ai-readiness-score-v2.md)
+superseded-by: audit-2026-04-29-ai-readiness-score-v2.md
+closed-on: 2026-04-29
+closed-because: Replaced by audit-2026-04-29-ai-readiness-score-v2.md.
+-->
 # Audit — 2026-04-20 — Post-100 backlog full closure (rescore delta v3)
 
 > **Purpose.** Companion to `audit-2026-04-19-ai-readiness-score.md`. Documents the closure of the post-100 backlog opened on 2026-04-19 evening, which had invalidated the 100/100/100 score for ≈ 24 hours.

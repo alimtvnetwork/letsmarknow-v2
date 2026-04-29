@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2027-04-19
+audit-type: retrospective
+status: closed
+closed-on: 2026-04-29
+closed-because: F-FOLDER-OVERVIEW closure retrospective; locked via folder-overview sub-check.
+-->
 # 100/100/100 Retrospective — How We Closed the Last 1% on Raw-LLM
 
 > **Generated:** 2026-04-19 (UTC+8) by AI auditor.

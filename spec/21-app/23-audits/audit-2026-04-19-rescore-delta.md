@@ -1,3 +1,13 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2026-07-18
+audit-type: ai-readiness
+status: superseded
+supersedes: (none — this file IS superseded BY audit-2026-04-19-rescore-delta-v2.md)
+superseded-by: audit-2026-04-19-rescore-delta-v2.md
+closed-on: 2026-04-29
+closed-because: Replaced by audit-2026-04-19-rescore-delta-v2.md.
+-->
 # Re-Score Delta Report — Post W-1/W-2/W-3 Fixes
 
 > **Generated:** 2026-04-19 07:59 (UTC+8) by AI auditor (Gemini 2.5 Pro).

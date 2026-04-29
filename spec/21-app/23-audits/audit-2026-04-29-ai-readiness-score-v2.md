@@ -1,3 +1,9 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2026-07-28
+audit-type: ai-readiness
+status: open
+-->
 # AI-Development-Readiness Audit — v2 (Consolidated)
 
 > **Generated:** 2026-04-29 (UTC+8) by Lovable agent.

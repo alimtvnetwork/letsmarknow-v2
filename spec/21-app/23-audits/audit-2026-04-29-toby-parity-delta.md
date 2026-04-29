@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2026-10-26
+audit-type: parity
+status: closed
+closed-on: 2026-04-29
+closed-because: SI-021 closed; Toby parity invariants now CI-enforced via brand-pink-anchor + color-label-tokens + collection-kind-discriminator.
+-->
 # Audit — 2026-04-29 — Toby Parity Delta (SI-021)
 
 > **Scope.** Quantify the spec-readiness change introduced by the Toby Collections parity work tracked under SI-021. Closes the issue.

@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2026-10-26
+audit-type: endpoint-sweep
+status: closed
+closed-on: 2026-04-29
+closed-because: Inverse+forward sweep clean: 0 undeclared endpoints. Inventory: 183 rows / 182 distinct.
+-->
 # Audit — 2026-04-29 — Post-Fix Deep Re-Audit
 
 > **Scope.** Re-audit after 4 same-day fix sessions (SI-021 Toby parity, SI-022 Group B, SI-022 Group C, roadmap kickoff). Goal: catch any inconsistencies the rapid-fire edits introduced.

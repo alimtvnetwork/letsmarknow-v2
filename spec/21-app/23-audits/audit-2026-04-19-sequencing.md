@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2027-04-19
+audit-type: ad-hoc
+status: closed
+closed-on: 2026-04-29
+closed-because: Sequencing decisions folded into 20-roadmap/.
+-->
 # Sequencing Audit — `spec/21-app/`
 
 > **Date:** 2026-04-19 (UTC+8)

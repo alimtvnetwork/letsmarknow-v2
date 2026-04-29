@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2027-04-19
+audit-type: ad-hoc
+status: closed
+closed-on: 2026-04-29
+closed-because: Findings folded into SI tracker; all SIs since closed.
+-->
 # Spec-Wide Cross-File Inconsistency Audit — 2026-04-19
 
 > **Scope:** all 200+ files under `spec/21-app/` (NOT only the 12 m-gap files audited in `audit-2026-04-19-m-gaps.md`).

@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2027-04-19
+audit-type: ad-hoc
+status: closed
+closed-on: 2026-04-29
+closed-because: M-gap items closed; tracked via SI-008/009/010.
+-->
 # Audit — 12 New M-Gap Spec Files vs. Existing Spec
 
 > **Date:** 2026-04-19 (UTC+8)

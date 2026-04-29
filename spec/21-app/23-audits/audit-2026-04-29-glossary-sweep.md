@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2027-04-29
+audit-type: glossary
+status: closed
+closed-on: 2026-04-29
+closed-because: Glossary expanded 53→59 terms; closed in same PR.
+-->
 # Audit — 2026-04-29 — Glossary Coverage Sweep (Phase 14)
 
 > **Scope.** Phase 14 of the spec-issue plan: verify every term used as `**Bold**` in feature files appears in `00-overview/02-glossary.md`.

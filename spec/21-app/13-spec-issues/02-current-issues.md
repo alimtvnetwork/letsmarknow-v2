@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 38 (SI-026 opened — 21 forward-ref backticked-path entries allowlisted under `backticked-path-resolution` linter; tracks planned spec docs not yet authored. Open count = 1).
+**Last updated:** 2026-04-29 Session 39 (SI-026 partial drain: 3 phase-roadmap forward-refs closed by qualifying paths to `20-roadmap/0X-...md` in `00-overview/05-browser-scope.md` §2.7. SI-026 remaining = 18 entries. Open count = 1; SI-026 stays open until backlog hits 0).
 
 ---
 

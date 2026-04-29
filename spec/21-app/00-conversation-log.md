@@ -1453,3 +1453,41 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Remaining tasks (from memory):**
 1. Lift `no-implementation-mode` — phase transition, unlocks 4 src-dependent linters (requires explicit user opt-in per `mem://constraints/no-implementation-mode.md`).
 2. Rest.
+
+---
+
+## Session 53 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+>
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken (allowed-action #1: audit security-privacy):** Authored `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` — first dedicated audit of `19-security-privacy/` since `audit-2026-04-19-spec-internal.md`. Surfaced **8 findings** (F1–F8): 2× S1, 3× S2, 3× S3.
+
+**Headline findings:**
+- **F1 (S1)** — Three contradictory sub-processor lists: `02-data-handling.md §7` (AWS/Cloudflare/Postmark/Plain), `04-gdpr-ccpa.md` (AWS/Cloudflare/Postmark), `07-privacy-policy.md §3` (Lovable Cloud/Stripe/Resend). Public-facing legal & CWS-submission risk.
+- **F2 (S1)** — Email provider drift: `22-infrastructure/11-email-provider.md` locks **Resend primary, Postmark failover**, but 4 other files still name Postmark only.
+- **F3 (S2)** — Hosting drift: privacy spec names AWS/Cloudflare; locked answer is Lovable Cloud (managed Supabase).
+- **F4 (S2)** — Stub files `06-extension-privacy.md` + `07-privacy-policy.md` flagged "expand before launch" with no tracked owner/SI.
+- **F5 (S3)** — Residency mismatch: data-handling lists 4 regions, privacy policy lists 2.
+- **F6 (S3)** — Argon2id (locked) vs Bcrypt (in `01-threat-model.md` line 36) for share passwords.
+- **F7 (S3)** — `01-threat-model.md §4` rows 9–10 use `|` instead of `→`, breaking table render.
+- **F8 (S3)** — Orphan "Plain / front" sub-processor row, folded into F1.
+
+**Files changed:**
+- created `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md`
+- edited `spec/21-app/00-conversation-log.md`
+- edited `.lovable/memory/index.md`
+
+**Linter status:** unchanged — 17/17 green (audit file declares all 4 audit-cadence headers + status `open`).
+
+**Open SIs:** still 0 in tracker — F1–F8 should be promoted to **SI-029** in a follow-up session (need user nod since F4 also names legal counsel as owner).
+
+**Remaining tasks:**
+1. **Drain SI-029** — fix F1+F2+F3 in `02-data-handling.md §7` + `04-gdpr-ccpa.md` + `10-licensing-billing/16-billing-emails.md` (single-session batch).
+2. **Fix F6, F7** — small edits to `01-threat-model.md` (Argon2id, table arrows).
+3. **Decide F5** — expand policy regions OR shrink data-handling regions; user/legal call.
+4. **Open SI-029 formally** in `13-spec-issues/02-current-issues.md` with checklist.

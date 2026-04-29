@@ -152,3 +152,17 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Closed SI-023. Added 3 fields to `02-data-model/03-collection.md`: `kind enum(manual|session)` default `manual`, `captured_at timestamptz` non-null iff `kind=session`, `source_window_id string(64)` only valid when `kind=session`. Added invariants 7-9 enforcing immutability of `kind`, `captured_at` parity, and `source_window_id` scope. Added 3 events: `collection.session_captured`, `collection.session_recaptured`, `collection.session_restored {scope, opened, skipped}`. Documented default name format `Window {n} — {Mon D, h:mm A}` with collision suffix on the `name` field. Moved SI-023 row to `04-closed-issues.md`. Updated counts: Open 2 → 1, Closed 26 → 27. Score 96 → 99 (only SI-024 remaining, S2). No data-model overview enum table needed an update (none exists for Collection.kind).
+
+---
+
+## 2026-04-29 — `next` (close SI-024)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Closed SI-024. Locked global toast placement in `06-ui-ux/11-feedback.md §2.1`: bottom-right desktop, top-center mobile (`< md`, 768px), 16px edge inset, max 3 stacked FIFO, `--z-toast = 90`, single `<Toaster />` at app root, no per-surface overrides. Added §2.2 duration table with hover/focus pause, §2.5 a11y rules (`role=status` vs `role=alert`, `aria-keyshortcuts=Mod+Z` for Undo, `prefers-reduced-motion` instant). Save Session v1's bottom-left request **rejected** to maintain one global convention; rewrote refs in `07-features/02-save-session.md §14.4` and `04-extension/09-save-session.md §11` to point at canonical placement. Moved SI-024 to `04-closed-issues.md`. Open 1 → 0, Closed 27 → 28. Score back to 100/100.

@@ -1736,3 +1736,20 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 
 **Audit progress:** 3 of 9 closed. Remaining: SH1+SH8 (matrix `guest`/`system` roles — S1 launch-blocker), SH3+SH5 (v2 polish), SH6+SH9 (cleanup).
 **Linters:** untouched (overview file only).
+
+---
+
+## Session 63 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Closed S1 launch-blocker SH1 + spot-check SH8 from `audit-2026-04-29-sharing-collab-sweep.md` (5 of 9 closed).
+
+- **SH1 (S1):** Rewrote `05-permissions-matrix.md §1` Roles table to list all 7 locked roles + the `share_viewer` runtime pseudo-role. Added `Guest` column to all 4 action tables (§2 Org, §3 Space, §4 CGI, §5 Sharing). `System` deliberately omitted from per-action tables; new §10.5 enforcement layer documents the SECURITY DEFINER bypass model (no per-action grants needed; system actions remain attributable via audit log `actor=system` + calling-context id).
+- **SH8 (S3):** `permissions-matrix.json` already had `guest`+`system`+`share_viewer` defined in `roles{}` (per SI-011 closure). Added two `notes[]` entries: (a) SYSTEM ACTOR BYPASS — codegen MUST treat as allow-always, no per-table policy; (b) GUEST ROLE COVERAGE — codegen SHOULD assume default-deny when no explicit grant. JSON validates (`json.load` OK).
+
+**Audit progress:** 5 of 9 closed. **S1 launch-blocker resolved.** Remaining: SH3 (v2 scope_*/target_* naming), SH5 (v2 memorable_slug), SH6 + SH9 (cleanup).
+**Linters:** no schema/lint touch; JSON revalidated.

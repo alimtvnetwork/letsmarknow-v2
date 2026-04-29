@@ -64,7 +64,7 @@ Exact item content is fixture data, version-controlled in the staging-seed scrip
 ## 6. Cross-references
 
 - Cited from: `04-extension/15-dev-loop.md` §"Staging seed" line 83.
-- Role enum (locked): `09-auth-accounts/04-member.md` and `00-overview/02-glossary.md`.
-- Tier definitions: `10-licensing-billing/02-plans.md`.
+- Role enum (locked): `09-auth-accounts/07-org-membership.md` and `00-overview/02-glossary.md`.
+- Tier definitions: `10-licensing-billing/01-plans-matrix.md`.
 - Collection kinds: `02-data-model/03-collection.md`.
 - Next queue singleton: `07-features/17-next-queue.md`.

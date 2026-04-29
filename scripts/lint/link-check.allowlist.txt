@@ -1,0 +1,20 @@
+# linter: link-check
+# purpose: Exempt link occurrences whose target is intentionally a template placeholder ({tos_url}, {url}, {signup_url}, etc.) resolved at render time, OR a literal example of markdown link syntax in documentation, OR a UI mockup using "?" as a clickable href stub. These are not navigational links and should never be required to resolve to a file.
+# review-by: 2026-10-26
+
+# PR:#0 reason:UI mockup uses (?) as a stub href to render a clickable example of an empty-state CTA
+spec/21-app/04-extension/05-new-tab.md:?
+# PR:#0 reason:onboarding doc uses (?) as a stub href in two illustrative empty-state copy strings
+spec/21-app/05-web-app/04-onboarding.md:?
+# PR:#0 reason:auth signup terms copy uses {tos_url} template variable resolved at render time
+spec/21-app/06-ui-ux/17-copy-strings.md:{tos_url}
+# PR:#0 reason:auth signup terms copy uses {privacy_url} template variable resolved at render time
+spec/21-app/06-ui-ux/17-copy-strings.md:{privacy_url}
+# PR:#0 reason:auth no-account copy uses {signup_url} template variable
+spec/21-app/06-ui-ux/17-copy-strings.md:{signup_url}
+# PR:#0 reason:auth has-account copy uses {signin_url} template variable
+spec/21-app/06-ui-ux/17-copy-strings.md:{signin_url}
+# PR:#0 reason:billing past-due banner + email footer unsubscribe use {url} template variable resolved at render time
+spec/21-app/06-ui-ux/17-copy-strings.md:{url}
+# PR:#0 reason:notes-and-descriptions doc shows literal markdown link syntax `[text](url)` as documentation example, not a navigational link
+spec/21-app/07-features/07-notes-and-descriptions.md:url

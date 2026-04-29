@@ -540,3 +540,42 @@ Updated `scripts/lint/readme.md` status table: **9 of 19 sub-checks now ✅ impl
 10 sub-checks still ⏳: 5 spec-only (`link-check`, `role-enum`, `error-code-casing`, `env-var-naming`, `pricing-source`, `storage-path`) and 4 src-dependent (blocked by `no-implementation-mode`). The remaining spec-only batch are all moderate complexity (cross-file lookups against canonical sources).
 
 **No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.
+
+---
+
+## 2026-04-29 — Session 27: Implement `link-check` linter — surfaced unexpected corpus-style finding
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote tenth real linter at `scripts/lint/link-check.ts` (~120 lines, zero deps). Implements the W-5 lock from §2.1.1 row 1 — every relative markdown link in the spec resolves to an existing file. Pure-Node implementation rather than the suggested `lychee --offline` to honor the no-deps convention; if lychee is later adopted in CI, this script becomes its wrapper.
+
+**What's checked:**
+- Standard markdown link/image regex `(?<!\\)!?\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)` (handles titles, escapes).
+- Skipped: URL schemes (`https:`, `mailto:`, `tel:`, `chrome-extension:`, etc.), `mem://` (memory-tool ref), in-page anchors (`#section`), fenced code blocks (illustrative not navigational).
+- Relative paths resolved via `path.resolve(fileDir, target)`, anchor-stripped, checked against `existsSync`.
+- Allowlist syntax: `<file>:<rawTarget>` per OCCURRENCE, not per file — silencing one bad placeholder shouldn't silence real future drift in the same file.
+
+**Bug caught + fixed mid-session:** Initial header docstring contained `**/*.md` which esbuild interpreted as `*/` closing the JSDoc block. Rewrote to "spec/21-app (recursive `.md` files)". Took 1 retry to spot.
+
+**First-run result: 11 violations across 4 files, 0 actual broken links.** All 11 hits triaged as legitimate non-paths:
+- 3× `(?)` — UI mockup empty-state CTA stubs (`04-extension/05-new-tab.md`, `05-web-app/04-onboarding.md`).
+- 6× `{template_var}` — render-time placeholders in `06-ui-ux/17-copy-strings.md` (`{tos_url}`, `{privacy_url}`, `{signup_url}`, `{signin_url}`, `{url}` ×2).
+- 2× `url` — literal markdown-syntax documentation examples in `07-features/07-notes-and-descriptions.md` (`[text](url)` shown as illustrative syntax, not a link).
+
+Created `scripts/lint/link-check.allowlist.txt` with 8 occurrence-keyed entries (some entries cover multiple hits for the same target+file pair) + per-entry justification. Allowlist-discipline auto-validated: `clean — 5 allowlist file(s) validated against 19 known sub-checks`.
+
+**Unexpected finding (worth recording):** Only 34 relative markdown links exist across 294 spec files. The corpus convention is to write cross-references as backticked path strings (e.g. `` `06-ui-ux/01-design-tokens.md §1.1` ``) rather than markdown link syntax `[design tokens](../06-ui-ux/01-design-tokens.md)`. This is why no real broken-link drift surfaced — the surface area is naturally tiny. Two consequences:
+1. The link-check linter, while green, has lower ongoing value than expected.
+2. The backticked-path style is itself an implicit convention worth documenting in `spec/21-app/templates/` and potentially worth a future linter to lock (`backticked-path-validity` — every backticked spec path must resolve, same machinery as link-check but different scanner). Parking this as a future consideration; not opening an SI yet.
+
+**Catch-rate update:** 3 of 10 linters caught real drift on first run (30%). Two of the seven that didn't catch drift (link-check, sku-naming) revealed the spec corpus is structurally cleaner than expected on those axes.
+
+Updated `scripts/lint/readme.md`: **10 of 19 sub-checks now ✅ implemented**. Halfway mark crossed. The remaining 9 ⏳ are 5 spec-only (`role-enum`, `error-code-casing`, `env-var-naming`, `pricing-source`, `storage-path`) and 4 src-dependent (blocked by `no-implementation-mode`).
+
+**No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.

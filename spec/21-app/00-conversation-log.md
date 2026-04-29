@@ -738,3 +738,42 @@ Both per-occurrence allowlisted with `<file>:<TOKEN>` schema. The rule remains a
 - `toast-placement` — needs `src/`, blocked
 
 So `storage-path` is the only remaining shippable linter without lifting implementation mode.
+
+---
+
+### 2026-04-29 · Session 33 — `next` (storage-path linter, W-7)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Picked:** sub-check #16 of 19 — `storage-path` (W-7). Storage bucket references in `22-infrastructure/**` + `11-import-export/**` must use canonical names from `12-storage-layout.md §1`; reject legacy `lmn-<bucket>` form.
+
+**Files changed (4):**
+- NEW `scripts/lint/storage-path.ts` — two-rule scoped linter. Rule A `unknown-bucket` (wide-net), Rule B `legacy-prefix` (unconditional). Catalog auto-extracted from §1 table column-1 (10 buckets).
+- NEW `scripts/lint/storage-path.allowlist.txt` — Allowlist Discipline schema; 9 entries (1 file-level + 8 per-occurrence), all triaged.
+- `scripts/lint/readme.md` — row updated ⏳ → ✅.
+- `.lovable/memory/index.md` — linter tally bumped 15/19 → 16/19; noted **all shippable spec-only linters complete**.
+
+**Linter result:** clean — 28 files in scope, 10 cataloged buckets, 0 violations after triage.
+
+**First-run findings (no SI opened):** 11 hits, ALL triaged as legitimate non-bucket paths:
+- `migrations/` (in `09-ci-cd.md` SI-023 rule prose) — repo path
+- `infra/grafana/`, `infra/runbooks/`, `infra/postmortems/` (in `10-observability.md`) — monorepo `/infra/` subpaths
+- `infra/`, `modules/cloud-project/variables.tf`, `letsmarknow/<env>` (in `13-iac.md`) — IaC repo paths + Pulumi stack name
+- `schemas/lmn-export-v1.json` (in `01-formats.md`) — JSON Schema repo path
+- `importers/` (in `02-importers.md`) — source module path
+- `organizations/<org_slug>/` (in `09-gdpr-export.md`) — internal zip-archive folder structure inside the export bundle, not a storage bucket name
+
+All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-prefix) negative-tested with synthetic `lmn-imports/` + `lmn-og-images/` — both fired with correct canonical-name suggestions.
+
+**Tuning lesson (Session 33):** for path-pattern linters, a wide regex + per-occurrence allowlist beats context-gating. Initial attempt added a STORAGE_ANCHOR_RE (looking for "bucket"/"S3"/"signed URL"/"CDN" within ±1 line) but it leaked badly — those anchor words appear elsewhere on the same documentation pages even when the specific path being flagged is unrelated to storage. Per-occurrence allowlist is honest documentation of what's NOT a bucket and stays armed for future drift. Pattern reinforced 5th session in a row (S28→S29→S30→S31→S33): **the cure for false positives is a tighter allowlist or a tighter context anchor, never a weaker pattern**.
+
+**Linter tally: 16 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real drift catch rate: 4/16 (25%) — Sessions 31/32/33 all greenfield (preventive).
+
+**MILESTONE:** All shippable spec-only linters now complete. Remaining 3 (`brand-pink-anchor`, `color-label-tokens`, `collection-kind-discriminator`, `toast-placement` — actually 4) all require `src/` and/or `migrations/` to exist, blocked by `no-implementation-mode` Core memory rule.
+
+**Remaining work in this project family:**
+- 4 src-dependent linters (blocked until implementation mode lifted)
+- Add Next analytics events to `18-analytics-telemetry/03-events.md` (referenced by `17-next-queue.md §13`)
+- Add Next keyboard shortcuts to `06-ui-ux/02-keyboard-shortcuts.md` (referenced by `17-next-queue.md §8`)
+- Re-paste full Toby spec (closes 6 inline ergonomics defaults parked in roadmap)
+- Lift `no-implementation-mode` and start Phase 0 build

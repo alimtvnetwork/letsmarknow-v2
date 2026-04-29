@@ -11,14 +11,15 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29, UTC+8 — after SI-024 close)
+## Counts (updated 2026-04-29 Session 17, UTC+8 — after SI-025 opened)
 
-- Open: **0**
+- Open: **1** (SI-025)
 - Closed: 28
 - ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity.
 - ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep. Inventory: 183 rows / 182 distinct.
 - ✅ **SI-023 CLOSED** 2026-04-29. `Collection.kind` enum + `captured_at` + `source_window_id` added.
-- ✅ **SI-024 CLOSED** 2026-04-29. Toast placement locked in `06-ui-ux/11-feedback.md §2.1`: bottom-right desktop, top-center mobile, max 3 stacked, no per-surface overrides.
+- ✅ **SI-024 CLOSED** 2026-04-29. Toast placement locked.
+- 🔴 **SI-025 OPEN** 2026-04-29. `endpoint-counts` linter POC found 17-row drift between computed (166) and §7 published (183). PATCH/PUT match exactly; GET/POST/DELETE drift. Either §7 is over-counted or some endpoints are declared in forms the linter doesn't catch. The Counter Discipline meta-rule just proved its own value by catching what the manual sweep missed.
 
 ## Counter discipline (lesson from 2026-04-29 re-audit)
 

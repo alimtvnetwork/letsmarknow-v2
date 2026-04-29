@@ -91,6 +91,34 @@ Allowlists are escape hatches. Every escape hatch is a future regression unless 
 
 **Locked in `mem://index` Core (2026-04-29).** Sibling rule to Counter Discipline — both meta-rules govern the linter system itself, not the spec content.
 
+### 2.1.4 Audit Cadence (meta-rule)
+
+Audits are dated artifacts. Without an explicit expiry, every audit silently becomes a permanent claim — a 100/100 score from April 19 keeps being cited a year later even after the spec has drifted. Audit Cadence forces every audit to declare when it stops being authoritative.
+
+**Schema** — every file matching `spec/21-app/23-audits/audit-*.md` MUST start with this metadata block (HTML comment block, so it doesn't render in the audit body):
+
+```html
+<!--
+audit-date: YYYY-MM-DD
+next-audit-by: YYYY-MM-DD       # ≤ 365 days after audit-date
+audit-type: ai-readiness | endpoint-sweep | glossary | parity | retrospective | post-fix | ad-hoc
+status: open | closed | superseded
+supersedes: audit-YYYY-MM-DD-<slug>.md   # only if status=superseded
+-->
+```
+
+**Hard rules:**
+- `next-audit-by` ≤ 365 days after `audit-date`. Longer windows fail — pick a shorter cadence and re-audit on schedule.
+- At most ONE audit of each `audit-type` may carry `status: open` at any time. Newer audits MUST set the older one's status to `closed` or `superseded` in the same PR.
+- `status: open` audits whose `next-audit-by` is in the past fail CI immediately. Either re-audit (new file, new dates), close the audit, or mark it superseded.
+- `status: superseded` MUST cite `supersedes:` pointing to the file it replaces. Bare supersede claims fail.
+- Closing an audit (`open` → `closed`) requires a one-line `closed-on: YYYY-MM-DD` and `closed-because: <≥10 chars>` comment appended to the metadata block.
+- `23-audits/00-overview.md` MUST contain a generated table (one row per audit file) with columns `file | type | audit-date | next-audit-by | status`. Out-of-sync rows fail. Maintainer-run script regenerates this table on `--write`; CI runs read-only.
+
+**Why this is a meta-rule:** Counter Discipline locks numbers. Allowlist Discipline locks exceptions. Audit Cadence locks **time** — the third axis along which the linter system itself can rot. Without it, audits accumulate as historical sediment rather than working artifacts. Together the three meta-rules make the spec corpus self-governing across content, process, and time.
+
+**Locked in `mem://index` Core (2026-04-29).** Third sibling in the meta-rule trilogy.
+
 ### 2.1.2 Pre-commit hook (developer-side)
 
 A `.husky/pre-commit` (or equivalent) runs the same `spec-drift-linter` on staged `.md` files only (fast subset). This is advisory — CI is authoritative.

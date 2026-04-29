@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: open
+status: in_progress (3 of 9 closed: D1, D2, D4 — session 58)
 opened-on: 2026-04-29
 scope: 02-data-model/ folder — entity-coverage and enum-coverage drift
 -->
@@ -53,16 +53,11 @@ Add a corresponding invariant: "When a new entity table is added to `02-data-mod
 
 ---
 
-## 3. Detail — D2 (overview table missing 3 of 13 rows)
+## 3. Detail — D2 (overview table missing rows) — **CLOSED session 58**
 
-`00-overview.md §2` (lines 21–33) lists 11 files. Folder has 13. Missing:
-- `09-history-event.md` (`history_events` table) — partial mention exists in §5 cross-refs but no §2 row.
-- `11-account.md` (`accounts`, `auth_identities`, `sessions`, `mfa_factors`)
-- `12-next-item.md` (`next_items`)
+Re-verification during fix found audit was over-stated: `09-history-event.md` (line 31) and `11-account.md` (line 33) rows already existed. Only `12-next-item.md` was genuinely missing. Added in session 58.
 
-**Impact.** A reader using §2 as a folder index will think the data model has 11 entities, will skip the 3 omitted files, and will produce migrations missing `next_items` entirely. **S2** because the entity files are still readable independently.
-
-**Fix.** Add three rows to the §2 table with locked-decision summaries.
+**Fix applied.** `00-overview.md §2` now lists all 13 entity files.
 
 ---
 

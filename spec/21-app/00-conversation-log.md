@@ -447,3 +447,31 @@ The pattern is consistent: human-led "swept and verified" closures leak ~5-10% o
 Updated `scripts/lint/readme.md` status table: **6 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline, folder-overview, money-units). Three of the six (folder-overview, money-units, endpoint-counts) caught real drift on first run — 50% hit rate. The linter program is paying for itself.
 
 **Spec changes:** 1 line edit in `10-coupons-and-promotions.md` (drift fix), 1 row added to `13-spec-issues/04-closed-issues.md` (SI-026 inline close). SI count: 0 open / 30 closed. Score stays 100/100.
+
+---
+
+## 2026-04-29 — Session 24: Implement `sku-naming` linter — W-6 lock enforced, no drift found
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote seventh real linter at `scripts/lint/sku-naming.ts` (~70 lines, zero deps). Implements W-6 lock from §2.1.1 row 6: forbids the `_annual` SKU suffix anywhere in `spec/21-app/**/*.md`. Word-boundary on the right (`/_annual\b/`) catches `pro_annual`, `team_annual`, `lifetime_pro_annual`, etc.
+
+**First-run result: 9 hits across 6 files, all legitimate documentation references.** Unlike the W-10 sweep (Session 23) which left `discount_minor` in coupon telemetry, the W-6 sweep on 2026-04-19 was actually thorough — every survival of `_annual` in the corpus is a documented quote of the rejected alias (closure notes, audit history, template anti-pattern checklist, the linter rule definition itself). All 6 files allowlisted with PR:#0 + per-file reasons + 2026-10-26 review-by.
+
+**Comparison of the two sweep results:**
+- **W-10** (Session 23): `discount_minor` survived in `10-coupons-and-promotions.md:64` despite explicit "6 files swept" claim → SI-026 opened + closed.
+- **W-6** (Session 24): zero shippable survivors. The closure claim ("`grep -r "_annual" spec/21-app/10-licensing-billing/` returning only this withdrawal note") was accurate.
+
+**Pattern observation:** grep-verified closures track 5-10% miss rates when the verification grep was scoped to a single folder; they track 0% miss rates when they happened to cover the entire corpus. The W-6 grep happened to be correct because `_annual` is a niche SKU suffix that doesn't appear elsewhere; the W-10 grep was only scoped to billing files and missed `discount_minor` which lives in a telemetry payload. **Implication:** future closure protocols should mandate corpus-wide grep, not folder-scoped — but with a linter in place that's now moot (programmatic enforcement is the sweep).
+
+**Cascade benefit:** `allowlist-discipline` auto-validated the new file on first save: `clean — 4 allowlist file(s) validated against 19 known sub-checks`. Four allowlists in corpus now: naming-convention, folder-overview, money-units, sku-naming.
+
+Updated `scripts/lint/readme.md` status table: **7 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline, folder-overview, money-units, sku-naming). Hit-rate for real-drift catches now 3/7 (43%). The W-issue trio is 2/3 enforced (W-6 ✅, W-10 ✅, W-13 ⏳ pagination-param).
+
+**No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.

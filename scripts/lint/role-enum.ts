@@ -109,14 +109,20 @@ for (const path of walk(ROOT)) {
       });
     }
 
-    // (B) forbidden synonyms (whole-word, case-insensitive)
+    // (B) forbidden synonyms — only fire when the synonym sits in a role-system
+    // context. Generic English uses ("human contributor", "open-source
+    // maintainer", "collaborator slots") are not role-system drift. Anchor:
+    // the same line must contain a role-context word ("role", "Role", "RLS",
+    // "permission", "permissions", "auth.role", "has_role", "role enum").
+    const ROLE_CONTEXT_RE = /\b(role|Role|RLS|permission|permissions|auth\.role|has_role|role enum|org_role)\b/;
+    if (!ROLE_CONTEXT_RE.test(line)) continue;
     for (const syn of FORBIDDEN_SYNONYMS) {
       const re = new RegExp(`\\b${syn.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\b`, 'gi');
       let mm: RegExpExecArray | null;
       while ((mm = re.exec(line))) {
         violations.push({
           file: rel, line: i + 1, col: mm.index + 1, rule: 'foreign-role',
-          message: `foreign role name "${mm[0]}" — locked role enum is owner|admin|editor|viewer|billing|guest|system. Adding a new role requires updating glossary + 02-data-model/08-member.md + 17-admin-org/03-roles.md together.`,
+          message: `foreign role name "${mm[0]}" appears in a role-system context — locked role enum is owner|admin|editor|viewer|billing|guest|system. Adding a new role requires updating glossary + 02-data-model/08-member.md + 17-admin-org/03-roles.md together.`,
         });
       }
     }

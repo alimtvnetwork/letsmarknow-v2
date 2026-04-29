@@ -11,15 +11,15 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29, UTC+8 — after SI-022 Group B fix)
+## Counts (updated 2026-04-29, UTC+8 — after SI-022 fully closed)
 
-- Open: **1** (SI-022, S2 — 15 undeclared endpoints remaining; Group B done)
-- Closed: 25
-- By severity (open): S0 = 0 · S1 = 0 · S2 = 1 · S3 = 0
+- Open: **0**
+- Closed: 26
+- By severity (open): all zero
 - ✅ **SI-001 CLOSED** at S3. Slot `21-` is a **permanent intentional buffer**. Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
 - ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity. Audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`.
-- 🟡 **SI-022 PARTIAL** 2026-04-29. Group B done (4 endpoints promoted to `00-overview.md`, counts 145 → 149). Group C open: 15 feature-only endpoint references need per-route triage (declare / fold / rename). Audit: `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Score still 97/100 until Group C closes.
-- ✅ **SI-020c CLOSED** at Phase 13.7g — 24/24 endpoints declared; `00-overview.md` total: 136 → 145 → **149**.
+- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep: all 19 routes resolved (Group B 4 promoted, Group C 7 declared + 7 callers fixed + 1 false-positive WITHDRAWN marker). Inventory 145 → 157. Re-sweep verified 0 undeclared. Score restored 97 → 100.
+- ✅ **SI-020c CLOSED** at Phase 13.7g — 24/24 endpoints declared; `00-overview.md` total: 136 → 145 → **157**.
 
 ## Phase queue
 

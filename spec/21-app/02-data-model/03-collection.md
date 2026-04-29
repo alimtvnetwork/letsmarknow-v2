@@ -11,7 +11,10 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 | Audit Block | — | — | — | — | see `README.md` |
 | `space_id` | uuid (Space.id) | no | — | must exist | Parent space. |
 | `organization_id` | uuid (Organization.id) | no | derived from space | denormalized for query speed | — |
-| `name` | string(120) | no | "New Collection" | trim, non-empty | Display name. |
+| `kind` | enum(`manual`\|`session`) | no | `manual` | locked enum | Discriminator. `manual` = user-built collection (default). `session` = snapshot created by Save Session — requires `captured_at` non-null and unlocks `Restore session` / `Restore in new window` / `Re-capture from current window` actions. (SI-023, Save Session v1.) |
+| `captured_at` | timestamptz | yes | null | non-null iff `kind=session` | Moment the browser-window snapshot was taken. Independent of `created_at` (re-capture updates only `captured_at`). |
+| `source_window_id` | string(64) | yes | null | non-null only when `kind=session` AND captured locally; nullable after device change | Browser-supplied window identifier from the capturing client. Used to gate the `Re-capture from current window` action; cleared when the source window is no longer alive. |
+| `name` | string(120) | no | "New Collection" | trim, non-empty | Display name. For `kind=session` default = `Window {n} — {Mon D, h:mm A}` (user locale + timezone), with ` (2)`, ` (3)`… on collision. |
 | `description` | text | yes | null | ≤ 4000 chars | — |
 | `notes` | text | yes | null | ≤ 8000 chars | Markdown-lite notes (Toby's "Add note" feature). |
 | `color` | color | no | from palette | — | Card accent color (Toby's color picker). |
@@ -40,6 +43,9 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 4. `position` re-balanced periodically.
 5. `starred_pin_position` is non-null iff `is_starred = true`. Toggling `is_starred` to `false` MUST null the pin position; toggling to `true` MUST assign `max(starred siblings)+1024` unless an explicit value is provided. (SI-021.)
 6. Cascade soft/hard delete to Groups and Items.
+7. `kind` is immutable after creation. A `manual` collection cannot be promoted to `session` and vice-versa. (SI-023.)
+8. `captured_at` is non-null iff `kind = session`. Re-capture updates only `captured_at` and `items` (not `created_at`).
+9. `source_window_id` may only be set when `kind = session`. Clearing it disables the `Re-capture from current window` action without affecting `Restore`.
 
 ## Indexes (recommended)
 
@@ -73,3 +79,6 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `collection.soft_deleted`
 - `collection.restored`
 - `collection.hard_deleted`
+- `collection.session_captured` (SI-023, emitted at create when `kind=session`)
+- `collection.session_recaptured` (SI-023, `captured_at` and items replaced)
+- `collection.session_restored` `{ scope: current_window | new_window, opened: int, skipped: int }`

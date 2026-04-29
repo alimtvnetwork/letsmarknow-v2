@@ -84,10 +84,44 @@ Gated by License entitlement `custom_share_slug` (Pro+, see `../10-licensing-bil
 | Custom domain (Team v2) DNS broken | `letsmarknow.com/t/{slug}` always works as fallback. |
 | Slug case mismatch in URL | 301 redirect to lowercase canonical. |
 | Slug with trailing slash | 301 redirect to canonical (no trailing slash). |
+| URL with no scheme typed in resolver (e.g. `lmk/example.com`) | Treat as a slug, not a URL — never auto-prepend `https://`. URLs go in the Share's target via the normal Create-Share flow. |
+| Memorable slug very long (> 60 chars) | Reject at create time with `409 SLUG_INVALID`. |
+| Memorable slug collides at save (race) | Server returns `409 SLUG_TAKEN`; client surfaces inline error. |
 
-## 7. Cross-references
+## 7. Orphaned target state
+
+When a Share's underlying target (Space / Collection / Group / Item) is soft-deleted, invariant §47 of `02-data-model/07-share.md` already revokes the Share (`revoked_at = now()`). Public viewers therefore receive `410 Gone`.
+
+For the **owner-facing UI**, the Share is additionally surfaced with an "orphaned" badge so the owner can either:
+
+- **Repoint** the Share to a different target (preserves the slug, especially valuable for memorable `lmk/...` slugs the team has memorized).
+- **Hard-delete** the Share entirely (releases the slug into the 90-day cooldown).
+
+Repointing requirements:
+- New target must belong to the same Organization.
+- New target's `target_type` must match the original (you cannot repoint a `space`-share at a `collection`).
+- Repointing logs `share.target_repointed` and resets `revoked_at` to null.
+
+UI surface: `06-ui-ux/` shares panel (planned, SI-026).
+
+## 8. Request-access page (visitor lacks access)
+
+When an unauthenticated visitor hits a memorable `lmk/{org_handle}/{slug}` URL whose Share is in `invite_only` mode and their email is not in `allowed_emails`, OR whose target lives in a private Space they cannot see:
+
+- Show a "Request access to `{org_handle}` / `{slug}`" page.
+- Display: target type (Space / Collection / Group / Item) — never the target name or contents.
+- Show owner Org's avatar + name (only if `show_owner_branding=true`).
+- Form: visitor email + optional message.
+- On submit: emit `share.access_requested` event (per §13 of `02-data-model/07-share.md` events list — to be added). Org owners + admins receive a notification (per `16-notifications-updates/`).
+
+This page must NEVER reveal the target's title, URL, or contents.
+
+## 9. Cross-references
 
 - Data contract: `02-data-model/07-share.md`.
 - v2 multi-link future: `08-sharing-collab/01-share-model.md`.
 - Security (entropy, enumeration): `19-security-privacy/05-share-link-security.md`.
 - Public viewer: `05-web-app/14-share-viewer.md`.
+- Extension omnibox keyword `lmk`: `04-extension/06-omnibox.md`.
+- Reserved-slug list authority: §2 of this file.
+

@@ -883,3 +883,29 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 - Comprehensive re-audit (35+ sessions of compounding work; create `audit-2026-04-29-*.md`)
 - 4 src-dependent linters (blocked on lifting no-implementation-mode)
 - Lift `no-implementation-mode` and start Phase 0 build
+
+---
+
+## Session 37 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Picked suggested next-action #3 — **Comprehensive re-audit**. Wrote dated audit file `23-audits/audit-2026-04-29-full-green-milestone.md` documenting the milestone (16/16 active linters clean, 0 open SIs, 31 closed, 296 spec files, 171/171 endpoints, 100/100/100). Updated `23-audits/readme.md` reading-order to list the new audit + the four 2026-04-29 surge artifacts that had been missing from the index.
+
+**Files changed (2):**
+- created `spec/21-app/23-audits/audit-2026-04-29-full-green-milestone.md` — Session 37 milestone audit. Six sections: headline numbers, full linter sweep results table, spec-issue tracker state, what-changed-since-last-audit (Sessions 30→37), posture statement for next phase, reproducibility commands. Notes the 4 src-dependent linters parked under `no-implementation-mode` (`brand-pink-anchor`, `color-label-tokens`, `collection-kind-discriminator`, `toast-placement`). Reconciles the SI-022 "157 declared / 0 undeclared" vs linter "171 / 171" delta as fully accounted for by SI-025's §7 rebase.
+- edited `spec/21-app/23-audits/readme.md` — extended reading order from item 15 to items 16–18, listing the missing 2026-04-29 audits and the new milestone audit.
+
+**Linter sweep result: 16 of 16 still clean.** No regressions; this session only added an audit file and one readme entry.
+
+**Score: 100/100.** Open SI count: 0.
+
+**Remaining work in this project family:**
+- Re-paste full Toby spec (6 inline ergonomics defaults parked in roadmap) — content-heavy, needs user re-paste
+- Lift `no-implementation-mode` and start Phase 0 build — unlocks the 4 src-dependent linters in one sweep
+- Backticked-path-resolution linter (Session 36 newly identified gap; not in §2.1.1 plan) — small, defer-or-ship decision
+- Rest — 37 sessions, full-green + audited milestone is a clean stopping cut-point

@@ -23,6 +23,9 @@ Audit files are dated, not numbered. Read in chronological order:
 13. `audit-2026-04-19-ai-readiness-score.md` — **canonical scoreboard.** Live Issue Tracker + per-domain scores.
 14. `audit-2026-04-19-100-retrospective.md` — closing narrative once the corpus hit 100/100/100.
 15. `audit-2026-04-20-rescore-delta-v3.md` — v3 rescore (post-100 backlog fully closed; 24 SI-NNN issues resolved across Phases 1–9 + 13.1–13.7g; 100/100/100 restored).
+16. `audit-2026-04-29-ai-readiness-score-v2.md` — live scoreboard refresh (canonical).
+17. `audit-2026-04-29-glossary-sweep.md`, `audit-2026-04-29-orphan-endpoint-sweep.md`, `audit-2026-04-29-toby-parity-delta.md`, `audit-2026-04-29-post-fix-reaudit.md` — 2026-04-29 surge artifacts (closed SI-021/022/023/024 and verified rescore).
+18. `audit-2026-04-29-full-green-milestone.md` — Session 37 milestone audit: all 16 active CI linters clean, 0 open SIs, 31 closed SIs, 296 spec files. Stopping cut-point before Phase 0 build / `no-implementation-mode` lift.
 
 ## Files
 

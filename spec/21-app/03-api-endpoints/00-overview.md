@@ -103,7 +103,8 @@
 |---|---|---|---|---|
 | GET | `/v1/history` | bearer+org | Paginated event log for the active Org. | `14-history.md` |
 | GET | `/v1/history/:id` | bearer+org | One event's full diff. | `14-history.md` |
-| GET | `/v1/history/for/:entity_type/:entity_id` | bearer+org | Sidebar activity feed for one entity. | `14-history.md` |
+| GET | `/v1/history/for/:entity_type/:entity_id` | bearer+org | Sidebar activity feed for one entity (generic form). | `14-history.md` |
+| GET | `/v1/history/for/item/:id` | bearer+org | Item-specific activity feed (concrete instantiation of the generic form for `entity_type=item`). | `14-history.md` |
 | GET | `/v1/items/:id/history` | bearer+org | Convenience alias for `/v1/history/for/item/:id` (item History tab). | `14-history.md` |
 | GET | `/v1/trash` | bearer+org | Soft-deleted entities with TTL countdown. | `14-history.md` |
 

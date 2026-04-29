@@ -468,7 +468,7 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 ## 7. Endpoint counts (sanity check)
 
-> Counts are **rows in this file** (which means a deliberately-duplicated row like `GET /v1/me/entitlements` listed in both §1.11 and §1.13 counts twice). Distinct endpoints = 181.
+> Counts are **rows in this file** (which means a deliberately-duplicated row like `GET /v1/me/entitlements` listed in both §1.11 and §1.13 counts twice). Distinct endpoints = 182. (Re-verified 2026-04-29 via fresh sweep — was off-by-one at 181 due to a missed dedup. Per `mem://features/spec-issue-tracker.md` Counter Discipline rule, always re-scan rather than increment.)
 
 | Method | Rows | Distinct |
 |---|---|---|

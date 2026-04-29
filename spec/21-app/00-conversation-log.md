@@ -300,3 +300,19 @@ next
 Closed SI-025. Open SI count: 0. Score restored 97 → 100. Tracker memory + index updated.
 
 **Meta-lesson:** The spec corpus carried 12 phantom endpoint-count rows for 18+ days that 11 manual sweeps never caught. The Counter Discipline meta-rule (spec'd Session 12) + first real linter implementation (Session 17) earned their existence by catching real drift on day one. **The trilogy works.**
+
+---
+
+## 2026-04-29 — Session 19: Implement `audit-cadence` linter
+
+```
+next
+```
+
+**Refactored into:** Wrote second real linter at `scripts/lint/audit-cadence.ts` (~150 lines, zero deps beyond Node stdlib + tsx). Implements all 6 invariants from §2.1.4 Audit Cadence meta-rule: required fields, YYYY-MM-DD format, ≤365d cadence window, expired-open detection (`status: open` + `next-audit-by` past today fails), status-specific requirements (`closed` needs `closed-on` + `closed-because` ≥10 chars; `superseded` needs `superseded-by` or legacy `supersedes:`), 7-value `audit-type` enum, and the cross-file "one open per type" invariant.
+
+**Validation result:** Linter green on first run against the Session-15 backfilled ground truth. All 18 audit files pass. Per-type breakdown: `ad-hoc=0o/7c/0s retrospective=0o/1c/0s ai-readiness=1o/0c/4s parity=0o/2c/0s glossary=0o/1c/0s endpoint-sweep=0o/1c/1s`. Single open audit is `audit-2026-04-29-ai-readiness-score-v2.md` (next-audit-by 2026-07-28, well in the future). Backfill data is internally consistent.
+
+Updated `scripts/lint/readme.md` status table: 2 of 18 sub-checks now ✅ implemented (endpoint-counts + audit-cadence — both meta-rules). Remaining 16 are still ⏳.
+
+**No spec changes, no SI movement, no score change.** Pure spec→code bridge progress. Two linters now run clean against live ground truth — the meta-rule trilogy has working enforcement for two of its three rules. Allowlist Discipline still needs an allowlist file to validate against (chicken-and-egg; implement when first linter requires its first exception).

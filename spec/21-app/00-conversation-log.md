@@ -228,3 +228,13 @@ next
 ```
 
 **Refactored into:** Added 17th sub-check `allowlist-discipline` to `spec-drift-linter` and a new §2.1.3 "Allowlist Discipline (meta-rule)" in `22-infrastructure/09-ci-cd.md`. Schema: every `scripts/lint/*.allowlist.txt` MUST carry a header (`# linter:`, `# purpose:`, `# review-by:` ≤180d) and every non-comment entry MUST be preceded by `# PR:#<n>  reason:<≥10 chars>`. Hard cap 50 non-comment lines per file — past that, the underlying rule needs redesign rather than more exceptions. Expired `review-by` dates fail CI immediately. Tightened the loose §2.1.1 implementation-contract bullet to cite the new schema. Locked the meta-rule in `mem://index` Core (sibling to Counter Discipline). Updated header from "sixteen sub-checks" to "seventeen". Prevents the failure mode where allowlists silently grow until the linter becomes decorative. No spec content changed — pure tooling/process hardening. Score holds at 100/100.
+
+---
+
+## 2026-04-29 — Session 14: Audit Cadence meta-rule
+
+```
+next
+```
+
+**Refactored into:** Added 18th sub-check `audit-cadence` to `spec-drift-linter` and a new §2.1.4 "Audit Cadence (meta-rule)" in `22-infrastructure/09-ci-cd.md`. Schema: every `23-audits/audit-*.md` MUST carry an HTML-comment metadata block declaring `audit-date`, `next-audit-by` (≤365d), `audit-type` (one of 7 enum values), `status` (open/closed/superseded), and `supersedes:` when applicable. At most one `status: open` per `audit-type`; expired open audits fail CI immediately. `23-audits/00-overview.md` MUST carry a generated table mirroring all metadata blocks. Closes the failure mode where a 100/100 score from April 19 could still be cited a year later despite spec drift. Completes the meta-rule trilogy: Counter Discipline (numbers) + Allowlist Discipline (exceptions) + Audit Cadence (time). Updated header from "seventeen" to "eighteen sub-checks". Locked in `mem://index` Core. Also reconciled stale `mem://index` Memories pointer (was "1 open / 25 closed", now "0 open / 28 closed, score 100/100"). No spec content changed — pure self-governance hardening. Score holds at 100/100.

@@ -44,7 +44,7 @@
 
 ## What this list does NOT yet cover (will be added in next audit pass)
 
-- Per-file content drift (does `04-extension/10-sync-and-offline.md` actually reference `14-realtime-transport.md` after the W-2 closure?).
+- Per-file content drift (does `../04-extension/10-sync-and-offline.md` actually reference `../08-sharing-collab/14-realtime-transport.md` after the W-2 closure?).
 - Full endpoint parity: 150 declared routes vs 195 referenced — 45-route gap suggests either (a) routes referenced but not declared, or (b) variant URLs (`/v1/foo` vs `/v1/foo/:id`). Needs targeted comparison sweep.
 - Glossary term coverage: does every term used in a feature file appear in `00-overview/02-glossary.md`?
 - `04-extension/14-analytics-telemetry.md §3` exists per ref check, but parity with `18-analytics-telemetry/03-events.md` event catalog not verified.

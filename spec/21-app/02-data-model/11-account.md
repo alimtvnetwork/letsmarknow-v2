@@ -4,7 +4,7 @@
 
 The human user (or service principal). One per real person. Owns or is a Member of one or more Organizations. Carries authentication credentials, profile, locale, and security settings.
 
-> 📌 **Canonical contract.** When this file disagrees with `09-auth-accounts/01-identity-model.md`, **this file wins**. `01-identity-model.md` is the narrative description; this file is the schema.
+> 📌 **Canonical contract.** When this file disagrees with `../09-auth-accounts/01-identity-model.md`, **this file wins**. `../09-auth-accounts/01-identity-model.md` is the narrative description; this file is the schema.
 
 ## Fields
 

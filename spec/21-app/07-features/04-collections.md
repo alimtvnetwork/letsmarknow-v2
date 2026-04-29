@@ -148,7 +148,7 @@ Toolbars collapse into the overflow menu below `768px`.
 Items and Groups can be **starred** (per `02-data-model/05-item.md` `is_starred`). Starred entities pin to the top of the Collection in a dedicated "⭐ Starred" sub-section that:
 
 - Renders above the main list regardless of `default_sort`.
-- Has its own manual ordering controlled by `starred_pin_position` (float, see `02-data-model/03-collection.md` and `05-item.md`).
+- Has its own manual ordering controlled by `starred_pin_position` (float, see `../02-data-model/03-collection.md` and `../02-data-model/05-item.md`).
 - Collapses with a chevron (state persisted per Account in `view_state`).
 - Is hidden entirely when no starred items exist.
 

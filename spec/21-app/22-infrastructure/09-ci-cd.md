@@ -31,7 +31,7 @@ Gate: **all green** required to merge to `main`.
 
 ### 2.1.1 `spec-drift-linter` — anti-regression guard for the spec corpus
 
-Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness-score.md`, the F-FOLDER-OVERVIEW closure from `23-audits/audit-2026-04-19-100-retrospective.md`, AND the Toby-parity invariants from SI-021 / SI-023 / SI-024 (per DoD §6 Locked rule #5) so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` and `src/**/*.{ts,tsx,css}` on every PR. Composite of sixteen sub-checks, each of which fails the job independently with a precise error.
+Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness-score.md`, the F-FOLDER-OVERVIEW closure from `23-audits/audit-2026-04-19-100-retrospective.md`, AND the Toby-parity invariants from SI-021 / SI-023 / SI-024 (per DoD §6 Locked rule #5) so the same drift cannot return via a future PR. Runs against `spec/21-app/**/*.md` and `src/**/*.{ts,tsx,css}` on every PR. Composite of seventeen sub-checks, each of which fails the job independently with a precise error.
 
 | Sub-check | Tool | What it asserts | Fix-source it locks |
 |---|---|---|---|
@@ -52,13 +52,43 @@ Purpose: lock in every W-class fix from `23-audits/audit-2026-04-19-ai-readiness
 | `collection-kind-discriminator` | `scripts/lint/collection-kind.ts` | (a) Any spec file that declares a Collection field MUST reference `kind` as a locked 2-value enum (`manual`, `session`); no third value permitted. (b) Any TS/SQL file under `src/` or `migrations/` that defines a `collection_kind` enum MUST list exactly those two values. (c) Conditional UI logic that gates `Restore session` / `Restore in new window` / `Re-capture from current window` MUST check `kind === 'session'`, not `captured_at != null`. (d) `Collection.kind` must never be mutated post-create (grep for assignment patterns). | SI-023. |
 | `toast-placement` | `scripts/lint/toast-placement.ts` | (a) Exactly one `<Toaster />` (sonner) instance in the whole `src/` tree, mounted at app root. (b) Its `position` prop MUST resolve to `bottom-right` on desktop and `top-center` on mobile (responsive prop or two instances tied to a media-query helper, both acceptable). (c) No file passes `position="bottom-left"` or `position="top-right"` — both rejected by SI-024. (d) Any spec file under `06-ui-ux/` or `07-features/` mentioning toast placement MUST cite `06-ui-ux/11-feedback.md §2.1` rather than restating coordinates. | SI-024. |
 | `endpoint-counts` | `scripts/lint/endpoint-counts.ts` | (a) Walks every table row across `03-api-endpoints/0[1-9]-*.md` … `03-api-endpoints/1[0-7]-*.md` (excludes `00-overview.md` and `18-error-codes.md`), parses the leading `METHOD /path` cell, and computes: total rows, distinct `(METHOD, path)` pairs, and per-method counts (`GET, POST, PATCH, PUT, DELETE`). (b) Re-reads `03-api-endpoints/00-overview.md §7` and asserts the printed numbers match the computed ones exactly. Off-by-one fails. (c) Asserts `distinct ≤ total` and that the difference equals the number of duplicate rows the script enumerates in its error message (so authors see *which* paths are duplicated). (d) Asserts every method bucket sum equals `total`. (e) On `--write` flag (used only by a maintainer-run script, never CI), regenerates §7 in place — CI itself runs read-only. | Counter Discipline rule (added 2026-04-29 after the 181→182 off-by-one in `00-overview.md §7`). Closes the audit gap that required manual Python sweeps. |
+| `allowlist-discipline` | `scripts/lint/allowlist-discipline.ts` | Enforces the **Allowlist Discipline** meta-rule (see §2.1.3). For every file matching `scripts/lint/*.allowlist.txt`: (a) MUST start with a header block of comment lines (`#`-prefixed) declaring `# linter:` (matching one of the 16 sibling sub-check names), `# purpose:` (one-line reason this allowlist exists at all), and `# review-by:` (ISO date ≤ 180 days from today). (b) Every non-comment, non-blank line MUST be immediately preceded by a `#` comment line carrying `PR:#<number>` and `reason:<≥10 chars>`. Bare entries fail. (c) The whole file MUST be ≤ 50 non-comment lines — past that, the underlying rule is too loose and needs redesign, not more exceptions. (d) `# review-by:` dates that are in the past fail (forces quarterly re-justification). (e) Asserts every linter referenced in the §2.1.1 table either has zero allowlist file OR a compliant one — no orphan allowlists, no allowlists for sub-checks not in the table. | Allowlist Discipline meta-rule (added 2026-04-29). Prevents quiet exception-creep — the failure mode where a linter slowly becomes useless because every violation gets allowlisted instead of fixed. |
 
 Implementation contract:
 - Each linter is a standalone `ts-node` script under `scripts/lint/`.
 - All scripts share a common output format: `{file}:{line}:{col} [{rule}] {message}` so editor jump-to-error works.
 - Composite job runs every linter even if one fails (collect-then-report), so PR authors see all violations in one CI run.
-- Allowlists live next to each linter as `*.allowlist.txt`. Adding a value requires a PR comment justifying the exception.
+- Allowlists live next to each linter as `*.allowlist.txt` and MUST conform to the Allowlist Discipline schema (§2.1.3). The `allowlist-discipline` sub-check enforces it.
 - All scripts are pure read-only on `spec/21-app/**`; never modify files.
+
+### 2.1.3 Allowlist Discipline (meta-rule)
+
+Allowlists are escape hatches. Every escape hatch is a future regression unless it carries justification, an owner-of-record, and an expiry date. Without these three, "exception" silently becomes "policy" and the linter becomes decorative.
+
+**Schema** — every file matching `scripts/lint/*.allowlist.txt` MUST follow this layout exactly:
+
+```
+# linter: <sub-check-name>            # e.g. "role-enum"; must match a row in §2.1.1
+# purpose: <one-line reason this allowlist exists at all>
+# review-by: <YYYY-MM-DD>             # ≤ 180 days from creation; past dates fail CI
+
+# PR:#<number>  reason:<≥10 chars>
+<allowed-value>
+
+# PR:#<number>  reason:<≥10 chars>
+<allowed-value>
+```
+
+**Hard limits:**
+- ≤ 50 non-comment lines per file. Past that, the underlying rule needs redesign — not more exceptions.
+- Every entry MUST cite a PR number and a reason. Bare entries (no preceding justification comment) fail.
+- `# review-by:` MUST be refreshed every PR that touches the file, and re-justified at least every 180 days. Expired dates fail CI immediately (forces a deliberate re-review rather than indefinite drift).
+- Removing an entry never requires justification. Adding one always does.
+- An allowlist file with zero non-comment lines is fine (and preferred) — it documents intent without granting any exception.
+
+**Why this is a meta-rule, not a regular linter rule:** the regular sub-checks lock specific invariants (role enum, brand pink, toast placement). Allowlist Discipline locks the *process* by which exceptions to those invariants get admitted. Without it, a single careless PR can permanently weaken any linter by appending one line to its allowlist. With it, every exception is auditable, time-bound, and visible in `git blame`.
+
+**Locked in `mem://index` Core (2026-04-29).** Sibling rule to Counter Discipline — both meta-rules govern the linter system itself, not the spec content.
 
 ### 2.1.2 Pre-commit hook (developer-side)
 

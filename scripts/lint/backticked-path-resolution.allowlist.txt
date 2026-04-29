@@ -10,9 +10,3 @@ spec/21-app/09-auth-accounts/08-account-deletion.md:`notes.md`
 spec/21-app/18-analytics-telemetry/03-events.md:`CHANGELOG.md`
 # PR:#0 reason:NN-name.md is a syntax-template example in CI/CD §2.1.1 row, not a real ref
 spec/21-app/22-infrastructure/09-ci-cd.md:`NN-name.md`
-# PR:#0 reason:SI-026 self-reference — examples cited in SI-026's own row in current-issues
-spec/21-app/13-spec-issues/02-current-issues.md:`share-model.md`
-# PR:#0 reason:SI-026 self-reference — examples cited in SI-026's own row in current-issues
-spec/21-app/13-spec-issues/02-current-issues.md:`06-ui-ux/options-page.md`
-# PR:#0 reason:SI-026 self-reference — examples cited in SI-026's own row in current-issues
-spec/21-app/13-spec-issues/02-current-issues.md:`07-features/add-item-hover-button.md`

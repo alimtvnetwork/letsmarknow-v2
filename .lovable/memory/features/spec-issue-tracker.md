@@ -11,13 +11,13 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29, UTC+8 — after SI-021 opened)
+## Counts (updated 2026-04-29, UTC+8 — after SI-021 closed)
 
-- Open: **1** (SI-021, S1 — Toby Collections parity, 8 sub-tasks)
-- Closed: 24
-- By severity (open): S0 = 0 · S1 = 1 · S2 = 0 · S3 = 0
-- ✅ **SI-001 CLOSED** at S3 (downgraded from S1). Slot `21-` is now a **permanent intentional buffer** between per-domain folders (`00-`–`20-`) and meta folders (`22-`, `23-`). Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
-- 🆕 **SI-021 OPEN** — Toby Collections feature parity. Container mapping resolved as **split**: Space owns Collection hierarchy; Org owns admin/billing/members. 8 sub-tasks listed in `02-current-issues.md`.
+- Open: **0** 🎉
+- Closed: 25
+- By severity (open): S0 = 0 · S1 = 0 · S2 = 0 · S3 = 0
+- ✅ **SI-001 CLOSED** at S3. Slot `21-` is a **permanent intentional buffer**. Locked in `13-spec-issues/01-naming-conventions.md §2`. Future audits must NOT re-open this — read §2 first.
+- ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity completed in 8 sub-tasks. Container mapping = SPLIT (Space + Org). Brand re-anchored to Toby pink #EC4868. New file: `04-extension/16-open-tabs-panel.md`. Delta audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`. Open questions parked inline pending full source re-paste.
 - ✅ **SI-020c CLOSED** at Phase 13.7g — 24/24 endpoints declared; `00-overview.md` total: 136 → 145.
 
 ## Phase queue

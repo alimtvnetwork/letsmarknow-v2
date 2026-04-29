@@ -27,10 +27,13 @@ const ROOT = 'spec/21-app';
 const SOURCE_OF_TRUTH = 'spec/21-app/10-licensing-billing/01-plans-matrix.md';
 const ALLOWLIST_PATH = 'scripts/lint/pricing-source.allowlist.txt';
 
+// Detection limited to *plan-shaped* prices: must carry a billing-cadence suffix
+// (`/mo`, `/yr`, `/month`, `/year`, optional `seat/`) OR the `one-time` qualifier.
+// Bare amounts (`$10`, `$50`) are out-of-scope — they may be coupon examples,
+// fraud thresholds, or illustrative scenarios unrelated to plan SoT.
 const PATTERNS: Array<{ name: string; re: RegExp }> = [
   { name: 'recurring price', re: /\$\d+(?:\.\d+)?\/(?:seat\/)?(?:mo|yr|month|year)\b/g },
   { name: 'one-time price', re: /\$\d+(?:\.\d+)?\s+one-time\b/g },
-  { name: 'bare dollar amount', re: /\$\d+(?:\.\d+)?\b/g },
 ];
 
 type Violation = { file: string; line: number; col: number; message: string };

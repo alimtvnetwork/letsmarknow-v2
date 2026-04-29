@@ -17,17 +17,7 @@
 | SI-020a | S2 | ✅ closed Phase 13.5 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-020b | S2 | ✅ closed Phase 13.6 — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
 | SI-020c | S1 | ✅ closed Phase 13.7g — see `04-closed-issues.md` | (moved) | (moved) | (moved) |
-| SI-021 | S1 | Toby Collections parity — container mapping = split (Space owns hierarchy; Org owns admin/billing/members) | `00-conversation-log.md` 2026-04-29 entry; user override "Workspace = Organization" conflicts with locked hierarchy `Organization → Space → Collection`. Resolved as split mapping per Option 1. | `00-overview/02-glossary.md`, `07-features/04-collections.md`, `02-data-model/03-collection.md`, `02-data-model/05-item.md`, `04-extension/16-open-tabs-panel.md` (new), `06-ui-ux/01-design-tokens.md` | n/a (feature parity, not naming) |
-
-**SI-021 sub-tasks (tracked here, executed one per `next`):**
-1. Glossary entry for `Workspace (Toby)` → split mapping note.
-2. Refactor `07-features/04-collections.md` — Toby parity (toolbar, star-pin, undo-delete toast, drag-drop rules, keyboard shortcuts).
-3. Add `starred_pin_position` to `02-data-model/03-collection.md`.
-4. Add `color_label` enum to `02-data-model/05-item.md`.
-5. Create `04-extension/16-open-tabs-panel.md`.
-6. Set `--primary` to Toby pink #EC4868 in `06-ui-ux/01-design-tokens.md`.
-7. Update `mem://index.md` Core with brand color + Workspace mapping.
-8. Re-run readiness delta in `23-audits/`.
+| SI-021 | S1 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-toby-parity-delta.md` | (moved) | (moved) | (moved) |
 
 ---
 

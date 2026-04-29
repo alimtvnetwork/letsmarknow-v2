@@ -20,7 +20,11 @@
   - Context-menu "Save link / Save page".
 - **Cmd+K global search** (local index + Postgres tsvector; no operators).
 - **Basic CRUD** for everything (Spaces, Collections, Groups, Items, Tags).
-- **Drag-and-drop** within and between Collections.
+- **Drag-and-drop** within and between Collections (matrix per `07-features/04-collections.md` §13.3).
+- **Toby parity essentials** (per SI-021):
+  - **Star-pin** Collections to top of sidebar (`starred_pin_position` per `02-data-model/03-collection.md`).
+  - **Item color labels** (9-value enum per `mem://index.md` Core: none/red/orange/yellow/green/teal/blue/purple/pink; tokens in `06-ui-ux/01-design-tokens.md` §1.6).
+  - **Open Tabs panel** in extension popup (per `04-extension/16-open-tabs-panel.md`) — list current window's tabs with one-click "Save all to Collection".
 - **Trash + 30-day soft delete**.
 - **History event log** (read-only viewer; no Undo UI yet).
 - **Single sign-in session** (no multi-device sync yet beyond DB).

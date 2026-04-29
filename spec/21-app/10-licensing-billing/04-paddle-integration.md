@@ -54,7 +54,7 @@ Listened events:
 - `customer.updated`
 - `adjustment.created` (refunds)
 
-Endpoint: `POST /v1/billing/webhooks/paddle`.
+Endpoint: `POST /v1/webhooks/paddle` (canonical; see `03-api-endpoints/00-overview.md` §2.15).
 Signature verified with `PADDLE_WEBHOOK_SECRET` (HMAC-SHA256).
 
 ## 8. Tax (MoR advantage)

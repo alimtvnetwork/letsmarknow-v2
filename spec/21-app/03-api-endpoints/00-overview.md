@@ -35,6 +35,7 @@
 | GET | `/v1/auth/oauth/:provider/callback` | none | Provider redirect target; exchanges code → issues tokens & sets refresh cookie. | `03-auth.md` |
 | GET | `/v1/auth/sessions` | bearer | List my active devices/sessions (current device flagged). | `03-auth.md` |
 | GET | `/v1/auth/verify` | verify-token | Consume an email-verification token (sets `email_verified_at`). | `03-auth.md` |
+| GET | `/v1/auth/magic/callback` | magic-token (`?t=`) | Magic-link landing target — consumes single-use token, sets refresh cookie, 302 → app shell. (HTML/redirect counterpart of `POST /v1/auth/magic-link/consume`.) | `03-auth.md` |
 
 ### 1.2 Public share viewer (`/t/{slug}`)
 

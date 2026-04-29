@@ -151,6 +151,7 @@
 | Method | Path | Auth | Purpose | Source |
 |---|---|---|---|---|
 | GET | `/v1/jobs/:job_id` | bearer+org | Generic poller for any background job (returns normalized status envelope). | `20-jobs.md` |
+| GET | `/v1/flags` | bearer+(org) | List all feature flags visible to the current `(account, org)` with their evaluated values (debug/admin variant of `POST /v1/flags/evaluate`). | `21-flags.md` |
 | GET | `/v1/mindmap-layouts` | bearer+org | List saved mindmap layouts for a scope. | `23-mindmap-layouts.md` |
 | GET | `/v1/mindmap-layouts/:id` | bearer+org | Get a single layout (full payload incl. node positions). | `23-mindmap-layouts.md` |
 

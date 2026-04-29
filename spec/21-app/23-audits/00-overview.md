@@ -4,14 +4,14 @@
 
 ---
 
-## Responsibilities
+## 1. Responsibilities
 
 - Hold every **point-in-time audit** of the spec (dated `audit-YYYY-MM-DD-*.md`).
 - Hold the **living gap-analysis tracker** (`gap-analysis.md`) and the **historical seed audit** (`audit.md`).
 - Provide a stable, predictable location so CI linters, hand-off prompts, and future auditors all know where to look.
 - Preserve traceability: every W-/M-/F-/B-class issue cited in domain folders resolves to a file under this folder.
 
-## File-by-file behaviour
+## 2. File-by-file behaviour
 
 | File | Role |
 |---|---|
@@ -29,14 +29,14 @@
 | `audit-2026-04-19-sequencing.md` | Recommended fix-order across W-/M-/F- items based on dependency graph. |
 | `audit-2026-04-19-weakest-files-plan.md` | Per-file remediation plan for files scoring below threshold. |
 
-## Tasks performed
+## 3. Tasks performed by this folder
 
 - **Tracking** — every audit issue (W-*, M-*, F-M*, B-*) has a row in `gap-analysis.md` and a status in `audit-2026-04-19-ai-readiness-score.md`.
 - **Locking** — closed issues are pinned by `spec-drift-linter` sub-checks defined in `22-infrastructure/09-ci-cd.md` §2.1.1, which sources its rules from this folder.
 - **Re-scoring** — when a domain folder is materially changed, append a new `rescore-delta-vN.md` rather than mutating prior deltas.
 - **Decision capture** — open product questions land in `audit-2026-04-19-decisions-needed.md` until resolved into the relevant domain spec.
 
-## What this folder is NOT
+## 4. What this folder is NOT
 
 - **Not roadmap.** Sequencing here is fix-order, not feature-order. Roadmap lives in `20-roadmap/`.
 - **Not a changelog.** Per-PR change history lives in git; this folder is audit-grade snapshots.
@@ -71,7 +71,7 @@ Auto-generated from the metadata block at the top of each `audit-*.md` file (see
 | `audit-2026-04-29-post-fix-reaudit.md` | endpoint-sweep | 2026-04-29 | 2026-10-26 | closed |
 | `audit-2026-04-29-toby-parity-delta.md` | parity | 2026-04-29 | 2026-10-26 | closed |
 
-## Cross-references
+## 5. Cross-references
 
 - Linter that locks audit closures: `22-infrastructure/09-ci-cd.md` §2.1.1 (`spec-drift-linter`).
 - Folder-overview rule (sub-check 12) sourced from: `23-audits/audit-2026-04-19-100-retrospective.md`.

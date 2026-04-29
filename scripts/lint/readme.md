@@ -21,7 +21,7 @@ This directory holds the implementations of the 18 sub-checks composing `spec-dr
 | `storage-path` | ⏳ | |
 | `env-var-naming` | ⏳ | |
 | `pricing-source` | ⏳ | |
-| `folder-overview` | ⏳ | |
+| `folder-overview` | ✅ `folder-overview.ts` | Shipped Session 22. Asserts every dir under `spec/21-app/` (excluding `templates/`, hidden, root, allowlisted) has `00-overview.md` ≥40 lines with the 5 canonical headings. First run found 3 real drift items: fixed `00-overview/00-overview.md` (heading 1 had stray suffix) and `23-audits/00-overview.md` (6 unnumbered headings → renumbered); allowlisted `03-api-endpoints/00-overview.md` (legitimate alt schema — HTTP-method index, validated by `endpoint-counts` instead). Currently green. |
 | `brand-pink-anchor` | ⏳ | Requires lifting `no-implementation-mode` first to have `src/` files to scan. |
 | `color-label-tokens` | ⏳ | Same — needs `src/` to exist. |
 | `collection-kind-discriminator` | ⏳ | Same — needs `src/` + `migrations/`. |

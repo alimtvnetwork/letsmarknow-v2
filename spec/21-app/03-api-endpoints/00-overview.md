@@ -304,6 +304,7 @@
 | POST | `/v1/sessions/save` | bearer+org | Y | Persist a window's tabs as a Collection or Group. | `12-sessions-save.md` |
 | POST | `/v1/sessions/save/preview` | bearer+org | — | Dry-run save (dedup count, plan-limit check). | `12-sessions-save.md` |
 | POST | `/v1/sessions/restore` | bearer+org | — | Reverse op: open a Collection/Group as a tab session. | `12-sessions-save.md` |
+| POST | `/v1/sessions/:id/undo` | bearer+org | — | Undo a single session-save operation (rolls back the items/groups it created within the grace window). Distinct from generic `/v1/history/:id/undo` — operates on the synthetic session-save event without needing the underlying history event id. | `12-sessions-save.md` |
 
 ### 2.12 History & trash
 

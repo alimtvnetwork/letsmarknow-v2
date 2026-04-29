@@ -86,7 +86,7 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - **Move:** between Collections / Groups within same Org. Updates `collection_id`, `group_id`, `space_id`, `organization_id` accordingly.
 - **Duplicate:** new row, name = `"<title> copy"`, position = end of same parent.
 - **Open / Jump-to:** non-mutating except `last_opened_at` and `open_count`. Emits `item.opened` (not in Undo).
-- **Soft-delete:** standard.
+- **Soft-delete:** standard. Deleting all Items in a Group does NOT delete the Group — empty Groups are valid (see `01-information-architecture/01-hierarchy.md`). Cascade is one-way only (Group→Item, never Item→Group).
 
 ## Favicon handling
 

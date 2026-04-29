@@ -1,13 +1,17 @@
-# pricing-source allowlist — files exempt from the W-3 single-source-of-truth rule.
-# Each line is a repo-relative path. Comments start with #.
-#
-# Add entries only when the file legitimately must quote a literal price string
-# (e.g. audit history documenting the closure of W-3, or the conversation log
-# which captures verbatim user instructions). Prefer linking to
-# `spec/21-app/10-licensing-billing/01-plans-matrix.md` instead.
+# linter: pricing-source
+# purpose: exempt files that legitimately quote literal plan prices for archival
+#          or audit reasons, where the W-3 single-source-of-truth rule should not
+#          apply. Prefer linking to 10-licensing-billing/01-plans-matrix.md §1
+#          instead of adding entries here.
+# review-by: 2026-10-26
 
+# PR:#28 reason: conversation log captures verbatim user instructions including price quotes
 spec/21-app/00-conversation-log.md
+# PR:#28 reason: closed-issues archive quotes prices when documenting W-3 / SI-027 closure history
 spec/21-app/13-spec-issues/04-closed-issues.md
+# PR:#28 reason: audit history file from 2026-04-19 m-gaps sweep — historical quote, not live spec
 spec/21-app/23-audits/audit-2026-04-19-m-gaps.md
+# PR:#28 reason: audit history file from 2026-04-19 spec-wide sweep — historical quote, not live spec
 spec/21-app/23-audits/audit-2026-04-19-spec-wide.md
+# PR:#28 reason: quotes 3rd-party SaaS thresholds ($500/mo email vendor cost) in vendor decision rationale, not Toby plan prices
 spec/21-app/23-audits/audit-2026-04-19-decisions-needed.md

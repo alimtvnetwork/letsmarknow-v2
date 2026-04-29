@@ -160,6 +160,18 @@
 
 ---
 
+### 1.15 Extension health, sync & updates feed
+
+> Extension service-worker probes, delta-sync poll, and product updates feed.
+
+| Method | Path | Auth | Purpose | Source |
+|---|---|---|---|---|
+| GET | `/v1/health/extension` | bearer (optional) | Lightweight liveness/version probe used by the extension service worker before each session burst. Returns `{ ok, server_time, min_extension_version }`. | `../04-extension/03-service-worker.md` |
+| GET | `/v1/sync/since` | bearer+org | Delta-sync poll: returns entities (items, collections, groups, tags) changed since `?cursor=<opaque>` for offline reconciliation. | `../04-extension/10-sync-and-offline.md` |
+| GET | `/v1/whats-new` | bearer | In-app updates feed (release notes, product announcements, maintenance banners). Filtered by user locale + last-seen cursor. | `../16-notifications-updates/01-in-app-updates-feed.md` |
+
+---
+
 ## 2. POST — create, action, and command endpoints
 
 > Two flavors:

@@ -945,3 +945,42 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 - Lift `no-implementation-mode` and start Phase 0 build
 - 4 src-dependent linters (blocked on the lift)
 - SI-026 closure (author the 21 forward-ref planned files OR convert refs to `(planned)` prose)
+
+---
+
+## Session 39 — 2026-04-29 — `next` (SI-026 partial drain: phase-roadmap refs)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action taken.** Picked option #3 from S38's suggested actions: chip away at SI-026. Identified that 3 of the 21 forward-ref entries in `scripts/lint/backticked-path-resolution.allowlist.txt` were not actually missing files — they were bare basenames inside `00-overview/05-browser-scope.md` §2.7 (a section already prefixed with the `20-roadmap/` folder context). The target files (`02-phase-1-v1.md`, `04-phase-3-mindmap-ai.md`, `05-phase-4-cross-browser.md`) all exist under `spec/21-app/20-roadmap/`. Fix: qualified the bare basenames to their full relative paths (matching the style already used at lines 106–108 of the same file).
+
+**Files changed.**
+- `spec/21-app/00-overview/05-browser-scope.md` §2.7: 3 bullets requalified.
+- `scripts/lint/backticked-path-resolution.allowlist.txt`: removed 3 phase-roadmap entries (was 21, now 18).
+- `spec/21-app/13-spec-issues/02-current-issues.md`: SI-026 row updated (21 → 18); last-updated note refreshed.
+
+**Verification.**
+- `backticked-path-resolution`: clean — 1852 backticked paths resolved across 297 files.
+- `link-check`: clean — 36 relative links resolved across 297 files.
+
+**Remaining SI-026 backlog: 18 entries** spanning planned files in:
+- `20-release-ops/` (3 files: `store-listing.md`, `firefox-port.md`, `staging-seed.md`)
+- `19-security-privacy/` (2 files: `extension-privacy.md`, `privacy-policy.md`)
+- `06-ui-ux/` (2 files: `options-page.md`, `keyboard-cheatsheet.md`)
+- `17-i18n-a11y/` (1 file: `extension-strings.md`)
+- `08-sharing-collab/` (2 files: `share-model.md` v2, `url-normalization.md`)
+- `07-features/` (1 file: `add-item-hover-button.md`)
+- `10-licensing-billing/` (1 file: `07-billing-emails.md`)
+- root-level (1 file: `payments-integration.md`)
+- plus a few duplicate refs from different source files
+
+**Remaining tasks for this session:** none — verification clean.
+
+**Suggested next actions (from memory + S38 carry-over):**
+1. **Continue draining SI-026** — author the 3 `20-release-ops/` stub files (next smallest cohesive group). Would close 3 more entries. Small, well-scoped.
+2. **Re-paste full Toby spec** — closes 6 inline ergonomics defaults parked in `20-roadmap/`. Content-heavy, needs your re-paste.
+3. **Lift `no-implementation-mode`** — start Phase 0 build; unlocks the 4 src-dependent linters in one sweep. Major phase transition.
+4. **Rest** — 39 sessions, 17/17 green linters, 1 open SI (now 18 entries, was 21).

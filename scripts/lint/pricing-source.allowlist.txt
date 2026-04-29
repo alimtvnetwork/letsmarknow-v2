@@ -1,0 +1,10 @@
+# pricing-source allowlist — files exempt from the W-3 single-source-of-truth rule.
+# Each line is a repo-relative path. Comments start with #.
+#
+# Add entries only when the file legitimately must quote a literal price string
+# (e.g. audit history documenting the closure of W-3, or the conversation log
+# which captures verbatim user instructions). Prefer linking to
+# `spec/21-app/10-licensing-billing/01-plans-matrix.md` instead.
+
+spec/21-app/00-conversation-log.md
+spec/21-app/13-spec-issues/04-closed-issues.md

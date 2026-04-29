@@ -66,6 +66,7 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `collection.color_changed`
 - `collection.icon_changed`
 - `collection.starred` / `collection.unstarred`
+- `collection.starred_pin_reordered` (within Space's "⭐ Starred" section, SI-021)
 - `collection.tagged` / `collection.untagged`
 - `collection.note_updated`
 - `collection.shared` / `collection.unshared`

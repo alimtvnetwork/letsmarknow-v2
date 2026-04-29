@@ -1,5 +1,7 @@
 # linter: error-code-casing
-# purpose: silence file-level matches for legitimate non-catalog uses (audit history, conversation log)
+# purpose: silence file-level matches for legitimate non-catalog uses (audit history, conversation log, governance docs that name the forbidden code as part of the rule itself)
 # review-by: 2026-10-29
 spec/21-app/00-conversation-log.md PR:#0 reason:append-only verbatim instruction log
 spec/21-app/13-spec-issues/04-closed-issues.md PR:#0 reason:closure notes legitimately quote pre-canonical/withdrawn codes as before/after evidence
+spec/21-app/09-auth-accounts/13-rate-limit-values.md:QUOTA_EXCEEDED PR:#0 reason:row §0 documents the rule itself ("no invented QUOTA_EXCEEDED") — quoting the forbidden form is required for the spec to teach the lock; canonical use is BILLING_QUOTA_EXCEEDED on the same line
+spec/21-app/23-audits/audit-2026-04-19-m-gaps.md:QUOTA_EXCEEDED PR:#0 reason:audit history documents the original M-1 conflict where this code was invented; closure evidence requires quoting the bad form (canonical fix was BILLING_QUOTA_EXCEEDED in §3.6)

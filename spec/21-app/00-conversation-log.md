@@ -208,3 +208,13 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:** Ran fresh inverse + forward endpoint sweep. **Live spec is clean: 0 undeclared endpoints.** Initial sweep flagged 14, narrowed to 6 after fixing my own regex (table rows use `| GET | \`/v1/...\`` not `\`GET /v1/...\``), all 6 confirmed false positives (mentions only inside `23-audits/`, `00-conversation-log.md`, and closed-issues archive — all historical references, not live spec). Method totals match §7 exactly: GET 59 / POST 102 / PATCH 10 / PUT 1 / DELETE 11 = 183 rows. **Found and fixed one off-by-one:** §7 said "Distinct endpoints = 181"; actual is 182 (one duplicate row, not two). Patched §7 with corrected count + re-verification note citing the Counter Discipline rule from `mem://features/spec-issue-tracker.md`. SI-023's 3 new collection events added no endpoints (events ≠ endpoints, as expected). No new SIs opened. Score holds at 100/100.
+
+---
+
+## 2026-04-29 — Session 12: Bake Counter Discipline into CI
+
+```
+next
+```
+
+**Refactored into:** Added 16th sub-check `endpoint-counts` to `spec-drift-linter` in `22-infrastructure/09-ci-cd.md §2.1.1`. The linter walks every row in `03-api-endpoints/0[1-9]-*.md`…`1[0-7]-*.md` (excludes `00-overview.md` and `18-error-codes.md`), computes total/distinct/per-method counts, and asserts they match the table in `00-overview.md §7` exactly. Off-by-one (the exact failure mode caught manually in Session 11: 181→182) now fails CI with a precise error listing duplicate rows. Updated header from "fifteen sub-checks" to "sixteen". Cross-linked from `00-overview.md §7` so future authors see the CI guarantee. Closes the audit gap that previously required manual Python sweeps. No new SIs, no spec invariants changed — pure tooling hardening per Counter Discipline rule. Score holds at 100/100.

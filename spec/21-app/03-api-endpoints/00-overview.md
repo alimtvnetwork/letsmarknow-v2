@@ -483,6 +483,8 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 > If you add or remove an endpoint in any per-domain file, also update the matching row here. This file is the canonical index — out-of-sync rows are a spec bug. Last rebase: 2026-04-29 (post deep re-audit, after SI-022 closure).
 
+> **CI enforcement:** the `endpoint-counts` sub-check in `22-infrastructure/09-ci-cd.md §2.1.1` recomputes this table from the per-domain files on every PR and fails on any mismatch (added 2026-04-29, 16th sub-check of `spec-drift-linter`). Manual edits to the numbers above without a corresponding spec change will be caught automatically.
+
 ---
 
 ## 8. Cross-references

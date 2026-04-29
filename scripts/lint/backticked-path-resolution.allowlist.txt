@@ -2,12 +2,6 @@
 # purpose: Exempt forward-references to planned spec files that have not yet been authored. Each entry is a real cross-reference whose target is intentionally aspirational (release-ops folder, v2 share-model, i18n-a11y folder, extension-package artifacts, etc.). Real drift in non-frozen files that is not a forward-ref must be FIXED, not silenced here. Tracked in aggregate as SI-026 in `13-spec-issues/02-current-issues.md`. Frozen files (conv-log, audits, naming-conventions, templates, wireframes, closed-issues) are skipped via built-in skip lists in the linter source, not allowlisted here.
 # review-by: 2026-10-26
 
-# PR:#0 reason:SI-026 — `20-release-ops/` folder planned for v1 store-listing
-spec/21-app/04-extension/01-manifest.md:`20-release-ops/store-listing.md`
-# PR:#0 reason:SI-026 — `20-release-ops/` folder planned for v1 firefox-port
-spec/21-app/04-extension/13-update-and-rollout.md:`20-release-ops/firefox-port.md`
-# PR:#0 reason:SI-026 — `20-release-ops/` folder planned for v1 staging-seed
-spec/21-app/04-extension/15-dev-loop.md:`20-release-ops/staging-seed.md`
 # PR:#0 reason:SI-026 — extension-privacy.md planned in 19-security-privacy
 spec/21-app/04-extension/01-manifest.md:`19-security-privacy/extension-privacy.md`
 # PR:#0 reason:SI-026 — privacy-policy.md planned in 19-security-privacy

@@ -363,6 +363,7 @@
 | PATCH | `/v1/shares/:id` | bearer+org | Update share settings (mode, password, expiry, perms). | `10-shares.md` |
 | PATCH | `/v1/members/:id` | bearer+role(owner/admin) | Change a member's role. | `11-members-invites.md` |
 | PATCH | `/v1/account/preferences` | bearer | Update Account preferences (default view, theme, locale, layout). | `19-account.md` |
+| PATCH | `/v1/mindmap-layouts/:id` | bearer+org+(creator OR owner/admin) | Update a saved mindmap layout (name, node positions, default flag). | `23-mindmap-layouts.md` |
 
 ---
 

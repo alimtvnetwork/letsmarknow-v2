@@ -18,3 +18,9 @@ spec/21-app/06-ui-ux/17-copy-strings.md:{signin_url}
 spec/21-app/06-ui-ux/17-copy-strings.md:{url}
 # PR:#0 reason:notes-and-descriptions doc shows literal markdown link syntax `[text](url)` as documentation example, not a navigational link
 spec/21-app/07-features/07-notes-and-descriptions.md:url
+
+# PR:#0 reason:append-only verbatim instruction log — Session 26 user message contained a literal markdown link `(url)` quoting documentation example
+spec/21-app/00-conversation-log.md:url
+
+# PR:#0 reason:append-only verbatim instruction log — Session 26 internal session note used a relative path `../06-ui-ux/01-design-tokens.md` from a hypothetical sibling-folder file location
+spec/21-app/00-conversation-log.md:../06-ui-ux/01-design-tokens.md

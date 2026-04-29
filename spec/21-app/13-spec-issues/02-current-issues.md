@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 47 (SI-026 partial drain: 14 entries closed cumulatively — S39:6, S41:2, S44:1, S45:2, S46:2, S47:1 by authoring `10-licensing-billing/16-billing-emails.md` and updating the citing ref in `03-api-endpoints/17-billing-webhooks.md` to NN- prefixed path. SI-026 remaining = 7 entries. Open count = 1).
+**Last updated:** 2026-04-29 Session 48 (SI-026 partial drain: 15 entries closed cumulatively — S39:6, S41:2, S44:1, S45:2, S46:2, S47:1, S48:1 by converting v2 share-model ref in `03-api-endpoints/10-shares.md` to plain prose. Also rewrote bloated SI-026 row to remove 5 stitched-together prior versions accumulated by failed line_replace operations. SI-026 remaining = 6 entries. Open count = 1).
 
 ---
 

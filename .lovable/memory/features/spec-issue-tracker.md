@@ -11,16 +11,15 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29, UTC+8 — after Save Session v1 reconciliation)
+## Counts (updated 2026-04-29, UTC+8 — after SI-023 close)
 
-- Open: **2** (SI-023 S2, SI-024 S2)
-- Closed: 26
+- Open: **1** (SI-024 S2 — toast placement)
+- Closed: 27
 - ✅ **SI-001 CLOSED** at S3. Slot `21-` is a **permanent intentional buffer**. Locked in `13-spec-issues/01-naming-conventions.md §2`.
-- ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity. Audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`.
-- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep. Inventory: 183 rows / 182 distinct. Score 100/100.
-- ✅ **SI-020c CLOSED** at Phase 13.7g — endpoints declared.
-- 🆕 **SI-023 OPEN** 2026-04-29. `Collection.kind` discriminator (`manual`|`session`) needed in `02-data-model/03-collection.md` per Save Session v1 spec. S2.
-- 🆕 **SI-024 OPEN** 2026-04-29. Toast placement convention undefined globally; Save Session v1 wants bottom-left. Decide in `06-ui-ux/`. S2.
+- ✅ **SI-021 CLOSED** 2026-04-29. Toby Collections parity.
+- ✅ **SI-022 CLOSED** 2026-04-29. Inverse endpoint sweep. Inventory: 183 rows / 182 distinct.
+- ✅ **SI-023 CLOSED** 2026-04-29. `Collection.kind` enum (`manual`|`session`) + `captured_at` + `source_window_id` added to `02-data-model/03-collection.md` with 3 invariants and 3 events.
+- 🟡 **SI-024 OPEN** 2026-04-29. Global toast placement convention; Save Session v1 wants bottom-left. Decide in `06-ui-ux/`. S2.
 
 ## Counter discipline (lesson from 2026-04-29 re-audit)
 

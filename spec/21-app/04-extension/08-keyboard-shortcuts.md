@@ -45,7 +45,7 @@ chrome.commands.onCommand.addListener(async (command, tab) => {
 
 ## 4. In-product cheat sheet
 
-`?` (no modifier) inside any LMN surface (popup, new-tab, side panel) opens a modal showing all bindings, both extension shortcuts AND in-app shortcuts (e.g. `J` to jump-to-tab). See `06-ui-ux/keyboard-cheatsheet.md`.
+`?` (no modifier) inside any LMN surface (popup, new-tab, side panel) opens a modal showing all bindings, both extension shortcuts AND in-app shortcuts (e.g. `J` to jump-to-tab). See `06-ui-ux/22-keyboard-cheatsheet.md`.
 
 ## 5. Mac specifics
 

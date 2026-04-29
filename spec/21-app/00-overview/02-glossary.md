@@ -105,3 +105,19 @@ Do **not** use these in code or UI:
 - ❌ "Project" → use **Space**.
 - ❌ "Team" (as a content container) → use **Organization**.
 - ❌ "Tab group" (Chrome's native feature) → use **Collection** or **Group**.
+
+## External-product mappings
+
+When porting concepts from other bookmark/tab managers, translate their container term using this table. The target term is the canonical one used in our spec.
+
+| External term | Source product | Maps to (ours) | Notes |
+|---|---|---|---|
+| **Workspace** | Toby | **split** — see below | Toby's "Workspace" plays two roles in their model. We split them: |
+| ↳ Workspace (as Collection container) | Toby | **Space** | The grouping that holds Collections. URL paths, hierarchy, and `space_id` foreign keys all use Space. |
+| ↳ Workspace (as members/billing/admin scope) | Toby | **Organization** | Member invites, role assignment, billing, audit log, SSO. Surfaced in `17-admin-org/`. |
+| **Collection** | Toby | **Collection** | 1:1 mapping. Toby's pinned/starred Collections → our `is_starred` + `starred_pin_position` (see `02-data-model/03-collection.md`). |
+| **Tab** (saved) | Toby | **Item** | 1:1. Toby's per-tab color label → our `color_label` enum on Item. |
+| **Tab group** (within a Collection) | Toby | **Group** | 1:1 mapping. |
+| **Open Tabs panel** | Toby | extension surface | See `04-extension/16-open-tabs-panel.md`. Not a data-model entity. |
+
+**Rationale for the Toby Workspace split:** Toby conflates "container of Collections" and "billing/members boundary" into a single Workspace concept. Our locked hierarchy `Organization → Space → Collection → (Group\|Item)` separates those concerns. Mapping Workspace → Organization alone would invalidate ~200 spec files and the 145-endpoint inventory; mapping to Space alone would lose the admin/billing surface. Split mapping preserves both. Tracked in SI-021 (`13-spec-issues/02-current-issues.md`).

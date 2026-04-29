@@ -2,7 +2,7 @@
 
 ## Purpose
 
-A short, color-coded label that can be attached to Collections, Groups, and Items within an Organization. Powers filtering and search.
+A short, color-coded label that can be attached to **three entity types — Collection, Group, and Item** — within an Organization. Powers filtering and search. Tag attachment is stored as `tag_ids[]` on each attachable entity (see `03-collection.md`, `04-group.md`, `05-item.md`); there is no separate join table.
 
 ## Fields
 
@@ -16,7 +16,9 @@ A short, color-coded label that can be attached to Collections, Groups, and Item
 | `created_by` | uuid (Account.id) | no | — | — | — |
 | `usage_count_cache` | int | no | 0 | — | Number of entities currently using this tag. Maintained by service layer. |
 
-> Tags do NOT have soft-delete. Deleting a Tag removes it from all `tag_ids[]` arrays atomically.
+> Tags do NOT have soft-delete (no `deleted_at`) and do NOT track `updated_at`. Renames mutate `name` in place; the rename is observable via the `tag.renamed` event in the audit log. This is an intentional design decision — Tags are lightweight labels, not first-class soft-deletable entities.
+>
+> Deleting a Tag removes it from all `tag_ids[]` arrays atomically.
 
 ## Invariants
 

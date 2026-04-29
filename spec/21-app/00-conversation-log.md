@@ -1677,3 +1677,22 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Audit progress:** 4 of 9 closed. Remaining: D3 (tag attachable-entities sentence), D6, D7, D8, D9 (S3 polish).
 
 **Linters:** 17/17 green.
+
+---
+
+## Session 60 — 2026-04-29 (Malaysia, UTC+8)
+
+**User instruction (verbatim):**
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Closed remaining 5 findings (D3, D6, D7, D8, D9) of `audit-2026-04-29-data-model-sweep.md`. Audit fully drained 9/9.
+
+- **D3 + D6 + D7 (S2/S3):** `06-tag.md §Purpose` now names the three attachable entity types (Collection, Group, Item) and notes `tag_ids[]` storage with no join table. The soft-delete callout expanded to document the no-`updated_at`/no-`deleted_at` design decision.
+- **D8 (S3):** `05-item.md §Lifecycle Soft-delete` now documents that empty Groups remain valid; cascade is one-way Group→Item only.
+- **D9 (S3):** `05-item.md` line 74 trimmed — removed legacy-supersede note, kept only the cross-entity reference.
+
+**Audit status:** `closed` (closed-on: 2026-04-29). 9 of 9 findings closed.
+**Open SIs:** SI-029 only (blocked on legal counsel).
+**Linters:** 17/17 green (no schema/lint touch).

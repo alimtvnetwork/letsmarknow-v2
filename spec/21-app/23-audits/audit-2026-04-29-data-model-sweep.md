@@ -2,7 +2,8 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (4 of 9 closed: D1, D2, D4, D5 — sessions 58–59)
+status: closed (9 of 9 closed: D1, D2, D4, D5 — sessions 58–59; D3, D6, D7, D8, D9 — session 60)
+closed-on: 2026-04-29
 opened-on: 2026-04-29
 scope: 02-data-model/ folder — entity-coverage and enum-coverage drift
 -->

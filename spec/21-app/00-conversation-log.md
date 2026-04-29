@@ -819,3 +819,37 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 - Re-paste full Toby spec (closes 6 inline ergonomics defaults parked in roadmap)
 - 4 src-dependent linters (blocked until implementation mode lifted)
 - Lift `no-implementation-mode` and start Phase 0 build
+
+---
+
+### 2026-04-29 · Session 35 — `next` (conv-log drift cleanup)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Picked:** Suggested action #1 — clean up pre-existing conv-log drift in `link-check`, `money-units`, `sku-naming` allowlists.
+
+**Files changed (3):**
+- `scripts/lint/link-check.allowlist.txt` — added 2 per-occurrence entries: `00-conversation-log.md:url` + `00-conversation-log.md:../06-ui-ux/01-design-tokens.md`. Per-occurrence (not file-level) because link-check's allowlist syntax requires `<file>:<rawTarget>`, intentionally narrower than other linters.
+- `scripts/lint/money-units.allowlist.txt` — added 2 file-level entries: `00-conversation-log.md` + `13-spec-issues/04-closed-issues.md` (the latter quotes `discount_minor` in SI-026 closure as before/after evidence; surfaced on second pass).
+- `scripts/lint/sku-naming.allowlist.txt` — added 1 file-level entry: `00-conversation-log.md`.
+
+**Linter sweep result: 16 of 16 active linters fully green.** Full list: folder-overview, naming-convention, link-check, error-code-casing, env-var-naming, storage-path, next-singleton-invariants, role-enum, money-units, sku-naming, pagination-param, realtime-channel-syntax, pricing-source, allowlist-discipline, endpoint-counts, audit-cadence.
+
+**Score: 100/100.** Open SI count: 0. Real drift catch rate stable at 4/16 (25%; preventive).
+
+**Discovery:** running `money-units` after the conv-log fix surfaced a SECOND file (`13-spec-issues/04-closed-issues.md:42`) that was masked by the conv-log noise. This is the value of file-level allowlisting + re-running: each cleanup pass reveals the next layer. Same pattern as Session 28 (pricing-source narrowing → 142 hits → triage → 2 real drifts).
+
+**Pattern reinforced (Session 35):** the conversation log is a perpetual offender across forbidden-token linters because its job is to verbatim-quote user instructions, which include rule-quoting and rule-violating examples. The clean fix is **file-level allowlist for `00-conversation-log.md` on every forbidden-token linter** — it's the per-file equivalent of saying "this file documents rules; quoting forbidden forms is in-scope." All 8 forbidden-token linters now have it: error-code-casing, env-var-naming, role-enum, next-singleton-invariants, storage-path, money-units, sku-naming, pricing-source (was already present from Session 28). Only `link-check` uses per-occurrence (different schema by design).
+
+**MILESTONE:** **All shippable spec-only linters complete AND fully green.** No remaining linter work is unblocked. Next major moves require either:
+1. Lifting `no-implementation-mode` to unlock 4 src-dependent linters
+2. Closing remaining cross-ref dangling refs (Next keyboard shortcuts in `06-ui-ux/02-keyboard-shortcuts.md §8`)
+3. Re-pasting full Toby spec to close 6 inline ergonomics defaults
+4. Running a comprehensive re-audit before phase transition
+
+**Remaining work in this project family:**
+- Add Next keyboard shortcuts to `06-ui-ux/02-keyboard-shortcuts.md`
+- Re-paste full Toby spec
+- 4 src-dependent linters (blocked)
+- Lift `no-implementation-mode` and start Phase 0 build
+- Comprehensive re-audit

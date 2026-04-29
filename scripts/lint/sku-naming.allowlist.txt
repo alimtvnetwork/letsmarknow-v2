@@ -14,3 +14,6 @@ spec/21-app/23-audits/audit-2026-04-19-ai-readiness-score.md
 spec/21-app/23-audits/gap-analysis.md
 # PR:#0 reason:folder-overview template includes anti-pattern checklist line listing _annual alongside other forbidden tokens
 spec/21-app/templates/folder-overview.md
+
+# PR:#0 reason:append-only verbatim instruction log — Sessions 24/26 quote the forbidden _annual suffix when documenting the W-6 lock and SI-027 narrative
+spec/21-app/00-conversation-log.md

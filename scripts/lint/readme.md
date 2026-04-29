@@ -8,7 +8,8 @@ This directory holds the implementations of the 18 sub-checks composing `spec-dr
 
 | Sub-check | Implemented | Notes |
 |---|---|---|
-| `endpoint-counts` | ✅ `endpoint-counts.ts` | Counter Discipline meta-rule. POC reference implementation — first script written, validates the spec is implementable. Run with `--write` to regenerate `00-overview.md §7`. |
+| `endpoint-counts` | ✅ `endpoint-counts.ts` | Counter Discipline meta-rule. Shipped Session 17; rebased §7 to 171/171 in Session 18 (closed SI-025). Run with `--write` to regenerate `00-overview.md §7`. |
+| `audit-cadence` | ✅ `audit-cadence.ts` | Audit Cadence meta-rule. Shipped Session 19. Validates all 18 audit files in `23-audits/`; checks required fields, enum values, ≤365d cadence, expired-open detection, status-specific requirements, one-open-per-type invariant. Currently green: 1 open (ai-readiness) / 12 closed / 5 superseded. |
 | `link-check` | ⏳ | Use `lychee --offline`, no custom script needed. |
 | `naming-convention` | ⏳ | |
 | `role-enum` | ⏳ | |
@@ -26,7 +27,6 @@ This directory holds the implementations of the 18 sub-checks composing `spec-dr
 | `collection-kind-discriminator` | ⏳ | Same — needs `src/` + `migrations/`. |
 | `toast-placement` | ⏳ | Same — needs `src/`. |
 | `allowlist-discipline` | ⏳ | Allowlist Discipline meta-rule. Implement after first non-meta linter ships its first allowlist file. |
-| `audit-cadence` | ⏳ | Audit Cadence meta-rule. Ground truth already backfilled (Session 15) — script can ship anytime. |
 
 ## Conventions
 

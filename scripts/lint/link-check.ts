@@ -3,7 +3,7 @@
  * link-check — spec-drift sub-check
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1` row): every relative
- * markdown link in `spec/21-app/**/*.md` resolves to an existing file. Locks W-5.
+ * markdown link in spec/21-app (recursive `.md` files) resolves to an existing file. Locks W-5.
  *
  * Implementation note: the §2.1.1 row suggests `lychee --offline`. This
  * implementation is a pure-Node equivalent — same offline guarantee, no Rust

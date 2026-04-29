@@ -4,7 +4,7 @@
 
 ---
 
-## 1. Responsibilities of this folder
+## 1. Responsibilities
 
 This folder owns five things and nothing else:
 

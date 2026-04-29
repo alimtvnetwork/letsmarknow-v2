@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 (SI-024 closed — toast placement locked in `06-ui-ux/11-feedback.md §2.1`; open count = 0).
+**Last updated:** 2026-04-29 (SI-025 opened — `endpoint-counts` linter POC found 17-row §7 drift; open count = 1).
 
 ---
 
@@ -21,6 +21,7 @@
 | SI-022 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md` and `23-audits/audit-2026-04-29-orphan-endpoint-sweep.md`. Final inventory: 157 declared, 0 undeclared (verified). | (moved) | (moved) | (moved) |
 | SI-023 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. `Collection.kind` enum + `captured_at` + `source_window_id` added to `02-data-model/03-collection.md` with 3 invariants and 3 events. | (moved) | (moved) | (moved) |
 | SI-024 | S2 | ✅ closed 2026-04-29 — see `04-closed-issues.md`. Toast placement locked: bottom-right desktop / top-center mobile, max 3 stacked, no per-surface overrides. Save Session v1's bottom-left request rejected; refs in `07-features/02-save-session.md §14.4` and `04-extension/09-save-session.md §11` updated to point at `06-ui-ux/11-feedback.md §2.1`. | (moved) | (moved) | (moved) |
+| SI-025 | S2 | `endpoint-counts` linter POC computes 166 declarations vs §7's 183 (gap: 17 rows; GET -9, POST -6, DELETE -2; PATCH/PUT match exactly). Either §7 is over-counting OR 17 endpoints are declared in a form the linter doesn't catch (table rows in nested sub-sections, paths inside prose paragraphs, etc.). Discovered by `scripts/lint/endpoint-counts.ts` against the live spec on 2026-04-29 (Session 17). | `scripts/lint/endpoint-counts.ts` (POC), `spec/21-app/03-api-endpoints/00-overview.md §7`, possibly per-domain files if real declarations are missing | `22-infrastructure/09-ci-cd.md §2.1.1` Counter Discipline meta-rule (the rule itself just demonstrated its own value by catching 17-row drift the manual sweep missed). |
 
 ---
 

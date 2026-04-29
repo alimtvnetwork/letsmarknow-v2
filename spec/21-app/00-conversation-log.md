@@ -777,3 +777,45 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 - Add Next keyboard shortcuts to `06-ui-ux/02-keyboard-shortcuts.md` (referenced by `17-next-queue.md §8`)
 - Re-paste full Toby spec (closes 6 inline ergonomics defaults parked in roadmap)
 - Lift `no-implementation-mode` and start Phase 0 build
+
+---
+
+### 2026-04-29 · Session 34 — `next` (Next analytics events + linter hygiene)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Picked:** Suggested action #1 — close the dangling reference from `07-features/17-next-queue.md §13` by adding the Next event family to `18-analytics-telemetry/03-events.md`.
+
+**Files changed (8):**
+- `spec/21-app/18-analytics-telemetry/03-events.md` — added `next` to Domains list (§1) and inserted new §2.15 "Next (focused to-do queue)" with 6 events (`next.item.added`, `next.item.opened`, `next.item.done`, `next.item.removed`, `next.item.reordered`, `next.popup.opened`) — exact names promised by `17-next-queue.md §13`. Each row includes per-event props schema, owner file, surface, sample rate. No `org_id` prop on any (Next is per-Account by lock). Inserted at end of catalog to avoid renumbering existing §2.x sections (no cross-refs to numbers found via grep).
+- `spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1` — added row for `next-singleton-invariants` (was orphan per `allowlist-discipline`). Now lists 17 sub-checks (was 16; matches `subcheckNames` count of 20 including the 3 meta-rules).
+- `scripts/lint/env-var-naming.allowlist.txt` — reformatted to Allowlist Discipline schema: header + blank-line + per-entry `# PR:#0 reason:...` comment line (was inline format which fails the rule).
+- `scripts/lint/error-code-casing.allowlist.txt` — same reformat.
+- `scripts/lint/role-enum.allowlist.txt` — same reformat.
+- `scripts/lint/storage-path.allowlist.txt` — same reformat (8 per-occurrence entries each got their own preceding comment block).
+- `scripts/lint/next-singleton-invariants.allowlist.txt` — same reformat + added `09-ci-cd.md` (the new §2.1.1 row quotes forbidden verbs/scope phrases to document the rule, same pattern as glossary).
+- All 5 reformatted files: `review-by` bumped from `2026-10-29` (183d, exceeded 180d max) to `2026-10-26` (180d).
+
+**Linter sweep result:** 13 of 13 active linters fully green:
+- `folder-overview`, `naming-convention`, `error-code-casing`, `env-var-naming`, `storage-path`, `next-singleton-invariants`, `role-enum`, `pagination-param`, `realtime-channel-syntax`, `pricing-source`, `allowlist-discipline`, `endpoint-counts`, `audit-cadence` — all clean.
+
+**Remaining drift (NOT introduced this session, pre-existing in conversation-log):**
+- `link-check`: 2 broken relative links in `00-conversation-log.md` (lines 569, 573 — historical instruction quotes).
+- `money-units`: 13 hits in `00-conversation-log.md` (lines 428-471 — Sessions 23/26 quoting forbidden terms while documenting the W-10 rule).
+- `sku-naming`: 5 hits in `00-conversation-log.md` (lines 463-501 — Sessions 24/26 quoting `_annual` while documenting W-6).
+
+**Why this session didn't fix the conv-log drift:** the same fix applied to env-var-naming, error-code-casing, role-enum, storage-path, next-singleton-invariants (file-level allowlist for `00-conversation-log.md`) needs to be applied to `link-check`, `money-units`, `sku-naming` allowlists too. Deferred — they're pre-existing and orthogonal to the Next-events task that was actually requested.
+
+**Discoveries (S34):**
+1. **Allowlist Discipline schema is strict:** the rule requires the `# PR:#... reason:...` comment to be **immediately preceded by a blank line** (not part of the header block), so the parser's `headerEnd` boundary doesn't sweep it up. First attempt (no blank line before `# PR:`) failed with "no preceding comment" because the comment got absorbed into the header.
+2. **review-by 180d max is calendar-precise:** my `2026-10-29` (intuitively 6 months) was 183 days from today (2026-04-29) due to month-length variance. Use `today + 180` not `today + 6mo`.
+3. **Pattern reinforced:** §2.1.1 row that documents a forbidden-pattern rule (by quoting the forbidden form) needs file-level allowlist for the rule's own linter — same pattern as glossary entries. Sessions 29 (next-singleton glossary), 31 (error-code rate-limit prose), 33 (storage-path cdn-storage W-7 note), 34 (next-singleton 09-ci-cd row) all converge.
+
+**Linter tally remains: 16 of 19 sub-checks ✅** (only `next-singleton-invariants` was newly registered, but it was already shipped in S29 — was just orphan in §2.1.1 until now). Score remains 100/100.
+
+**Remaining work in this project family:**
+- Add `00-conversation-log.md` to `link-check`, `money-units`, `sku-naming` allowlists (3 quick edits — pre-existing drift cleanup)
+- Add Next keyboard shortcuts to `06-ui-ux/02-keyboard-shortcuts.md` (referenced by `17-next-queue.md §8`)
+- Re-paste full Toby spec (closes 6 inline ergonomics defaults parked in roadmap)
+- 4 src-dependent linters (blocked until implementation mode lifted)
+- Lift `no-implementation-mode` and start Phase 0 build

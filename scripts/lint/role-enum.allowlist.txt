@@ -1,4 +1,9 @@
 # linter: role-enum
-# purpose: silence file-level matches that legitimately quote forbidden role names (audit history, conversation log, governance docs that document the ban itself)
-# review-by: 2026-10-29
-spec/21-app/00-conversation-log.md PR:#0 reason:append-only verbatim instruction log; quoting forbidden role names is part of its job
+# purpose: Lock the 7-value role enum (owner|admin|editor|viewer|billing|guest|system); reject foreign synonyms in role-context lines
+# review-by: 2026-10-26
+#
+# Format:
+#   <file>            — silence file entirely
+
+# PR:#0 reason:append-only verbatim instruction log; quoting forbidden role names is part of its job
+spec/21-app/00-conversation-log.md

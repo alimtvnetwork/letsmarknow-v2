@@ -1,21 +1,34 @@
 # linter: storage-path
 # purpose: Enforce W-7 — bucket references in 22-infrastructure/** + 11-import-export/** must use canonical names from 12-storage-layout.md §1; reject legacy lmn- prefix
-# review-by: 2026-10-29
+# review-by: 2026-10-26
 #
 # Format:
-#   <file>            — silence the file entirely
+#   <file>            — silence file entirely
 #   <file>:<TOKEN>    — silence one token in one file
-#
-# File-level allowlist:
-spec/21-app/22-infrastructure/06-cdn-storage.md  PR:#0 reason:carries W-7 historical note quoting old bucket names; canonical layout deferred to 12-storage-layout.md §6
-#
-# Per-occurrence allowlist — all triaged 2026-04-29 Session 33 as non-bucket paths
-# (repo paths, IaC modules, JSON schemas, archive-internal structure):
-spec/21-app/22-infrastructure/09-ci-cd.md:migrations  PR:#0 reason:repo path inside SI-023 rule prose, not a storage bucket
-spec/21-app/22-infrastructure/10-observability.md:infra  PR:#0 reason:Grafana dashboards / runbooks / postmortems repo path under monorepo /infra/
-spec/21-app/22-infrastructure/13-iac.md:infra  PR:#0 reason:IaC monorepo path /infra/ (not a storage bucket)
-spec/21-app/22-infrastructure/13-iac.md:modules  PR:#0 reason:Terraform module path modules/cloud-project/variables.tf
-spec/21-app/22-infrastructure/13-iac.md:letsmarknow  PR:#0 reason:Pulumi stack name letsmarknow/<env>, not a storage bucket
-spec/21-app/11-import-export/01-formats.md:schemas  PR:#0 reason:JSON Schema repo path schemas/lmn-export-v1.json
-spec/21-app/11-import-export/02-importers.md:importers  PR:#0 reason:source code module path /importers/
-spec/21-app/11-import-export/09-gdpr-export.md:organizations  PR:#0 reason:internal zip-archive folder structure inside GDPR export bundle, not a storage bucket name
+
+# PR:#0 reason:carries W-7 historical note quoting old bucket names; canonical layout deferred to 12-storage-layout.md §6
+spec/21-app/22-infrastructure/06-cdn-storage.md
+
+# PR:#0 reason:repo path inside SI-023 rule prose, not a storage bucket
+spec/21-app/22-infrastructure/09-ci-cd.md:migrations
+
+# PR:#0 reason:Grafana dashboards / runbooks / postmortems repo path under monorepo /infra/
+spec/21-app/22-infrastructure/10-observability.md:infra
+
+# PR:#0 reason:IaC monorepo path /infra/, not a storage bucket
+spec/21-app/22-infrastructure/13-iac.md:infra
+
+# PR:#0 reason:Terraform module path modules/cloud-project/variables.tf
+spec/21-app/22-infrastructure/13-iac.md:modules
+
+# PR:#0 reason:Pulumi stack name letsmarknow/<env>, not a storage bucket
+spec/21-app/22-infrastructure/13-iac.md:letsmarknow
+
+# PR:#0 reason:JSON Schema repo path schemas/lmn-export-v1.json
+spec/21-app/11-import-export/01-formats.md:schemas
+
+# PR:#0 reason:source code module path /importers/
+spec/21-app/11-import-export/02-importers.md:importers
+
+# PR:#0 reason:internal zip-archive folder structure inside GDPR export bundle, not a storage bucket name
+spec/21-app/11-import-export/09-gdpr-export.md:organizations

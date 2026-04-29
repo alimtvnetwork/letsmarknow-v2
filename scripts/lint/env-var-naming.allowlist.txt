@@ -1,9 +1,6 @@
 # linter: env-var-naming
 # purpose: Enforce W-12 — every env var referenced in spec must be SCREAMING_SNAKE and declared in 22-infrastructure/03-env-vars.md
-# review-by: 2026-10-29
-#
-# Format:
-#   <file>            — silence the file entirely
-#   <file>:<TOKEN>    — silence one env var in one file
-#
-spec/21-app/00-conversation-log.md  PR:#0 reason:historical instructions quote legacy/hypothetical env names that pre-date the canonical catalog freeze
+# review-by: 2026-10-26
+
+# PR:#0 reason:append-only verbatim instruction log; quotes legacy/hypothetical env names that pre-date the canonical catalog freeze and self-quotes the linter rule itself
+spec/21-app/00-conversation-log.md

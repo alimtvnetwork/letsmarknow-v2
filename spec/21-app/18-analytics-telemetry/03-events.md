@@ -9,7 +9,7 @@
 ### Naming
 - **Format:** `domain.subject.verb` or `domain.verb` — dot-namespaced, lowercase, snake_case segments.
 - **Stability:** event names are PUBLIC API. Renames require a deprecation cycle (emit both for ≥ 1 release).
-- **Domains:** `extension`, `web`, `save`, `quickfind`, `search`, `item`, `collection`, `group`, `space`, `tag`, `share`, `member`, `org`, `auth`, `entitlements`, `upsell`, `sync`, `offline`, `import`, `export`, `billing`, `share_analytics`, `history`, `error`, `perf`, `system`.
+- **Domains:** `extension`, `web`, `save`, `quickfind`, `search`, `item`, `collection`, `group`, `space`, `tag`, `share`, `member`, `org`, `auth`, `entitlements`, `upsell`, `sync`, `offline`, `import`, `export`, `billing`, `share_analytics`, `history`, `next`, `error`, `perf`, `system`.
 
 ### Envelope (every event)
 ```json
@@ -209,6 +209,21 @@ Legend — **Owner** = feature spec file that defines the trigger. **Surface** =
 | `system.cron_run` | cron job execution | `{ job_name: string, duration_ms: number, success: bool }` | `22-infrastructure/08-cron.md` | server | 100% |
 | `system.queue_drain_lag` | queue lag monitor | `{ queue: string, lag_ms_p95: number }` | `22-infrastructure/07-queues.md` | server | 100% |
 | `system.webhook_received` | inbound webhook | `{ provider: string, event_type: string, signature_valid: bool }` | `10-licensing-billing/12-billing-webhooks.md` | server | 100% |
+
+### 2.15 Next (focused to-do queue)
+
+> Per `07-features/17-next-queue.md §13`. All `next.*` events are scoped to the
+> per-Account Next singleton; no `org_id` prop is emitted (Next is per-Account
+> by lock, not per-Org).
+
+| Event | When fires | Props schema | Owner | Surface | Sample |
+|---|---|---|---|---|---|
+| `next.item.added` | "Add to Next" succeeds (any of the 8 entry points) | `{ source_kind: "hover_toolbar"\|"popup_save"\|"item_menu"\|"keyboard"\|"command_palette"\|"drag"\|"api"\|"import", source_collection_id?: string, position_index: number, queue_size_after: number, was_already_done: bool }` | `07-features/17-next-queue.md` | ext, web | 100% |
+| `next.item.opened` | user activates a Next row (click / Enter / middle-click) | `{ open_target: "current_tab"\|"new_tab"\|"new_window", is_tombstone: bool, age_seconds: number, position_index: number }` | `07-features/17-next-queue.md` | ext, web | 100% |
+| `next.item.done` | done flag toggled true OR false | `{ to_done: bool, age_seconds: number, position_index: number, queue_size_after: number }` | `07-features/17-next-queue.md` | ext, web | 100% |
+| `next.item.removed` | row removed from Next (post-undo-window) | `{ was_done: bool, age_seconds: number, queue_size_after: number, removal_reason: "user"\|"source_purged"\|"clear_completed" }` | `07-features/17-next-queue.md` | ext, web | 100% |
+| `next.item.reordered` | drag or `Alt+↑`/`Alt+↓` commits new position | `{ from_index: number, to_index: number, queue_size: number, method: "drag"\|"keyboard" }` | `07-features/17-next-queue.md` | ext, web | 100% |
+| `next.popup.opened` | extension popup's Next tab becomes visible | `{ queue_size: number, done_count: number, surface: "popup"\|"newtab", trigger: "tab_switch"\|"deep_link"\|"keyboard" }` | `04-extension/04-popup.md §14` | ext | 100% |
 
 ---
 

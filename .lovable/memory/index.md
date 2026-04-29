@@ -20,4 +20,4 @@ Allowlist Discipline: every `scripts/lint/*.allowlist.txt` entry needs PR# + rea
 Audit Cadence: every `23-audits/audit-*.md` declares `audit-date`, `next-audit-by` (≤365d), `audit-type`, `status`. One open audit per type max. Schema in `22-infrastructure/09-ci-cd.md §2.1.4`. Enforced by `audit-cadence` sub-check.
 
 ## Memories
-- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live open/closed counts. Currently 1 open (SI-025) / 28 closed. Score 100 → 97. Last activity: SI-025 opened 2026-04-29 Session 17 — `endpoint-counts` linter POC found 17-row §7 drift.
+- [Spec issue tracker](mem://features/spec-issue-tracker.md) — Live open/closed counts. Currently 0 open / 29 closed. Score 100/100. Endpoint inventory: 171 canonical declarations (rebased Session 18 via `endpoint-counts --write`). Last activity: SI-025 closed 2026-04-29 Session 18.

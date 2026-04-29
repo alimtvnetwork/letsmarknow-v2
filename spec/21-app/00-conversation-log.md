@@ -475,3 +475,35 @@ List out the remaining tasks always, if you finish then in future `next` command
 Updated `scripts/lint/readme.md` status table: **7 of 19 sub-checks now ✅ implemented** (endpoint-counts, audit-cadence, naming-convention, allowlist-discipline, folder-overview, money-units, sku-naming). Hit-rate for real-drift catches now 3/7 (43%). The W-issue trio is 2/3 enforced (W-6 ✅, W-10 ✅, W-13 ⏳ pagination-param).
 
 **No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.
+
+---
+
+## 2026-04-29 — Session 25: Implement `pagination-param` linter — W-issue trio COMPLETE
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:** Wrote eighth real linter at `scripts/lint/pagination-param.ts` (~80 lines, zero deps). Implements W-13 lock from §2.1.1 row 7: forbids `page_size` and `pageSize` in any file under `spec/21-app/03-api-endpoints/**` or `spec/21-app/05-web-app/**`. Scope is honored exactly as specified — narrower than the W-6/W-10 linters which scanned the whole spec.
+
+**First-run result: 43 files scanned, 0 violations.** W-13 sweep on 2026-04-19 was thorough — `05-web-app/10-activity-feed.md:9` was the only offender at the time and it was correctly fixed. The forbidden tokens still exist in the corpus (12 hits across audit history, gap-analysis, template, ci-cd rule definition, data-model anti-pattern note) but all live OUTSIDE the scoped directories — so no allowlist is needed.
+
+**Architectural takeaway: scope-narrowing > allowlists.** Compare:
+- `money-units` (Session 23): scope = entire `spec/21-app/`, needed 8 allowlist entries to silence legitimate documentation references.
+- `pagination-param` (Session 25): scope = 2 specific subdirs, needed 0 allowlist entries because documentation lives outside.
+- **Lesson:** when the §2.1.1 row specifies a scope, honor it exactly. A narrower scope removes the chicken-and-egg problem where the linter's own rule definition would be flagged. Future linter implementers should prefer scope-narrowing over allowlist accumulation when both options exist.
+
+**W-issue trio is now COMPLETE:**
+- ✅ W-6 (`sku-naming`, Session 24) — `_annual` → `_yearly`
+- ✅ W-10 (`money-units`, Session 23) — `amount_minor` family → `amount_cents` (caught SI-026 regression)
+- ✅ W-13 (`pagination-param`, Session 25) — `page_size`/`pageSize` → `limit`
+
+Combined with the meta-rule trilogy (Counter Discipline + Audit Cadence + Allowlist Discipline, all done Session 21) and the corpus-structure pair (naming-convention Session 20 + folder-overview Session 22), **8 of 19 sub-checks now ✅ implemented**. The W-issue family that originally drove the entire linter program is fully enforced.
+
+**Real-drift catch rate stays 3/8 (37.5%):** SI-025 (12 phantom endpoint rows), S22 heading drift (3 files), SI-026 (`discount_minor` W-10 survivor). The two clean-on-first-run W-issue linters (W-6, W-13) are still high-value because they prevent FUTURE drift — the failure mode is not detection of past bugs but locking against new ones.
+
+**No spec changes, no SI movement, no score change.** Score stays 100/100. Open SI count: 0. Pure spec→code bridge progress.

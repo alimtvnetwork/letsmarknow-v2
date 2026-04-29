@@ -19,11 +19,32 @@ Toasts, banners, modals, confirms — when to use which.
 
 ## 2. Toasts (sonner)
 
-- Bottom-right (top on mobile to avoid thumb area).
-- Max 3 stacked; older auto-dismiss.
-- Default 4 s; with action 8 s; success 3 s.
-- Variants: `default | success | warning | destructive | loading`.
-- Loading toast can be promoted to success/error via `sonner.promise()`.
+### 2.1 Placement (locked, SI-024)
+
+- **Desktop:** bottom-right, 16px from edges.
+- **Mobile (`< md` breakpoint, 768px):** top-center, 16px below safe-area inset, to avoid the thumb action zone.
+- **Stacking:** max 3 visible; older toasts slide out as new ones arrive (FIFO).
+- **Z-index:** `--z-toast = 90` (above modals' backdrop `60`, below tooltips `100`). Defined in `01-design-tokens.md` §3.
+- **No surface-specific overrides.** Save Session, import results, error toasts, etc. all use this placement. Earlier Save Session v1 spec proposed bottom-left; that override is **rejected** in favor of one global convention. (SI-024 close, 2026-04-29.)
+- Single `<Toaster />` instance mounted once at app root (`src/main.tsx`); never remount per route.
+
+### 2.2 Durations
+
+| Variant | Without action | With action |
+|---|---|---|
+| `default` / `success` | 3 s | 5 s |
+| `info` | 4 s | 6 s |
+| `warning` | 5 s | 8 s |
+| `destructive` | 5 s | 8 s |
+| `loading` | until resolved (≤ 30 s safety cap) | n/a |
+
+Hover or keyboard focus on a toast pauses the auto-dismiss timer; resumes on blur.
+
+### 2.3 Variants
+
+`default | success | info | warning | destructive | loading`. Loading toast can be promoted via `sonner.promise()`.
+
+### 2.4 Anatomy & rules
 
 Anatomy:
 ```
@@ -40,6 +61,14 @@ Don'ts:
 - Never stack > 3 (older slide out).
 - Never use for confirmations.
 - Never reduce font below `text-sm`.
+- Never override placement per surface — all toasts use the §2.1 convention.
+
+### 2.5 Accessibility
+
+- `role="status"` for `default|success|info`; `role="alert"` for `warning|destructive`.
+- Action button reachable via `Tab`; `Undo` actions expose `aria-keyshortcuts="Mod+Z"` for the duration the toast is visible.
+- `prefers-reduced-motion`: replace slide-in/out with instant appear/dismiss; no progress-bar animation.
+- Focus is **not** stolen by toasts; they remain a non-interrupting surface.
 
 ## 3. Banners (in-app)
 

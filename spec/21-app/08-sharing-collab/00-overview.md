@@ -15,6 +15,7 @@
 7. **Embed widget.** Iframe-able read-only viewer for shared Collections.
 8. **Share analytics.** Per-share view count, last viewed, country histogram (privacy-preserving).
 9. **Revocation & expiry.** Hard revoke, time-based expiry, password rotation effect.
+10. **Share URL surfaces.** Random `/t/{slug}` (always available, globally unique) + optional memorable `/lmk/{org_handle}/{memorable_slug}` (Org-scoped, Pro+, Toby-inspired). Slug rules, reservations, omnibox `lmk` resolver. See `13-share-link.md`.
 
 ---
 

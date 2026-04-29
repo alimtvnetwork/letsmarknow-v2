@@ -42,7 +42,8 @@ type: feature
 16. **Phase 13.5** — Resolve SI-020a (withdrawn-endpoint marker convention in `01-conventions.md` or `01-naming-conventions.md`).
 17. **Phase 13.6** — Resolve SI-020b (extend §16 alias table with 14 mappings + sweep referencing files; reconcile `items:batch` contradiction).
 18. **Phase 13.7** — Resolve SI-020c (add 17-24 new declared rows across 7-12 files). Largest, do last.
-19. **Phase 14** — Optional: glossary term coverage sweep across feature files.
+19. ✅ **Phase 14 — DONE 2026-04-29.** Glossary term coverage sweep. 6 real gaps closed in-pass (Lifecycle verbs, Trash, Supabase Realtime, Feature Flag, Kill Switch, GDPR DSR). Glossary 53 → 59. Audit: `23-audits/audit-2026-04-29-glossary-sweep.md`.
+20. ✅ **Phase 15 — DONE 2026-04-29.** Toby Collections parity (SI-021). 8 sub-tasks. Audit: `23-audits/audit-2026-04-29-toby-parity-delta.md`.
 
 ## Rules
 

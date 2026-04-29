@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2027-04-19
+audit-type: ad-hoc
+status: closed
+closed-on: 2026-04-29
+closed-because: Weak-file remediation complete; all targeted files now ≥40 lines per folder-overview lint.
+-->
 # Hand-off Readiness — Rewrite Plan for Top-5 Weakest Folders
 
 > **Date:** 2026-04-19 (UTC+8)

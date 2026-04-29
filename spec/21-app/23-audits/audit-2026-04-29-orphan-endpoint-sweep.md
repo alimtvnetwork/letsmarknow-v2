@@ -1,3 +1,13 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2026-10-26
+audit-type: endpoint-sweep
+status: superseded
+supersedes: (none — this file IS superseded BY audit-2026-04-29-post-fix-reaudit.md)
+superseded-by: audit-2026-04-29-post-fix-reaudit.md
+closed-on: 2026-04-29
+closed-because: Replaced by audit-2026-04-29-post-fix-reaudit.md.
+-->
 # Audit — 2026-04-29 — Orphan & Undeclared Endpoint Sweep
 
 > **Scope.** Inverse of SI-020c. SI-020c added 24 missing rows to `03-api-endpoints/00-overview.md` after sweeping outward references. This pass re-runs the sweep with stricter normalization (canonicalize `{x}` → `:x`, strip query strings, normalize trailing `/`) and excludes intentional forbidden-alias examples in `01-conventions.md` §16.

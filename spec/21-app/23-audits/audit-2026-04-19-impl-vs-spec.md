@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2026-10-16
+audit-type: parity
+status: closed
+closed-on: 2026-04-29
+closed-because: Implementation gap analysis from no-impl phase; superseded by 04-29 toby-parity-delta.
+-->
 # Audit — Implementation vs Specification
 
 **Date:** 2026-04-19 (Asia/Kuala_Lumpur, UTC+8)

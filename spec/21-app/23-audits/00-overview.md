@@ -43,6 +43,34 @@
 - **Not domain spec.** No feature definitions, data models, or API shapes — those live in numbered domain folders. Audit files only cite them.
 - **Not editable history.** Dated audit files are immutable after publication; corrections go into a new dated file.
 
+
+## Audit cadence registry
+
+Auto-generated from the metadata block at the top of each `audit-*.md` file (see `22-infrastructure/09-ci-cd.md §2.1.4` Audit Cadence meta-rule). The `audit-cadence` sub-check of `spec-drift-linter` regenerates this table on every PR and fails on drift.
+
+**Invariant:** at most ONE row may carry `status: open` per `audit-type`. Currently 1 open (`ai-readiness` — `audit-2026-04-29-ai-readiness-score-v2.md`).
+
+| File | Type | Audit date | Next audit by | Status |
+|---|---|---|---|---|
+| `audit-2026-04-18.md` | ad-hoc | 2026-04-18 | 2027-04-18 | closed |
+| `audit-2026-04-19-100-retrospective.md` | retrospective | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-19-ai-readiness-score.md` | ai-readiness | 2026-04-19 | 2026-07-18 | superseded |
+| `audit-2026-04-19-decisions-needed.md` | ad-hoc | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-19-impl-vs-spec.md` | parity | 2026-04-19 | 2026-10-16 | closed |
+| `audit-2026-04-19-m-gaps.md` | ad-hoc | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-19-rescore-delta-v2.md` | ai-readiness | 2026-04-19 | 2026-07-18 | superseded |
+| `audit-2026-04-19-rescore-delta.md` | ai-readiness | 2026-04-19 | 2026-07-18 | superseded |
+| `audit-2026-04-19-sequencing.md` | ad-hoc | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-19-spec-internal.md` | ad-hoc | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-19-spec-wide.md` | ad-hoc | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-19-weakest-files-plan.md` | ad-hoc | 2026-04-19 | 2027-04-19 | closed |
+| `audit-2026-04-20-rescore-delta-v3.md` | ai-readiness | 2026-04-20 | 2026-07-19 | superseded |
+| `audit-2026-04-29-ai-readiness-score-v2.md` | ai-readiness | 2026-04-29 | 2026-07-28 | open |
+| `audit-2026-04-29-glossary-sweep.md` | glossary | 2026-04-29 | 2027-04-29 | closed |
+| `audit-2026-04-29-orphan-endpoint-sweep.md` | endpoint-sweep | 2026-04-29 | 2026-10-26 | superseded |
+| `audit-2026-04-29-post-fix-reaudit.md` | endpoint-sweep | 2026-04-29 | 2026-10-26 | closed |
+| `audit-2026-04-29-toby-parity-delta.md` | parity | 2026-04-29 | 2026-10-26 | closed |
+
 ## Cross-references
 
 - Linter that locks audit closures: `22-infrastructure/09-ci-cd.md` §2.1.1 (`spec-drift-linter`).

@@ -1,3 +1,11 @@
+<!--
+audit-date: 2026-04-19
+next-audit-by: 2027-04-19
+audit-type: ad-hoc
+status: closed
+closed-on: 2026-04-29
+closed-because: All decisions resolved and locked into spec/memory.
+-->
 # Audit 2026-04-19 — Decisions Needed (Owner vs. AI Judgment)
 
 > **Status (2026-04-19 p.m.):** all 23 findings in `audit-2026-04-19-m-gaps.md` are already reconciled. This file is a **retrospective classification** so the same triage can be reused on the next audit cycle. It answers one question only: *which findings genuinely need a human owner, and which can an AI close on its own without inventing strategy?*

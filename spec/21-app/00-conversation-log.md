@@ -258,3 +258,23 @@ next
 ```
 
 **Refactored into:** Investigated last open phase-queue item (Phase 9 / SI-001 slot-21 decision) and discovered it had already been resolved on 2026-04-20 — locked in `13-spec-issues/01-naming-conventions.md §2` as "permanently reserved (empty), load-bearing buffer between domain folders 00-20 and meta folders 22+". The phase queue in `mem://features/spec-issue-tracker.md` was simply stale: it still showed Phase 9 as decision-required AND duplicated lines 16–18 (Phase 13.5/13.6/13.7) as "open" even though all three closed on 2026-04-20. Synced the queue: replaced the stale block (lines 43–56) with the actual closure history; added Phase 16 entry summarizing Sessions 11–15 governance work (3 SIs closed, linter grew 13→18 sub-checks, three meta-rules locked, 18 audits backfilled). Marked the queue **empty** with explicit "implementation-ready" note. No spec content changed — pure tracker hygiene. Spec score holds at 100/100.
+
+---
+
+## 2026-04-29 — Session 17: `endpoint-counts` linter POC + SI-025 opened
+
+```
+next
+```
+
+**Refactored into:** Wrote real TS implementation of the `endpoint-counts` sub-check at `scripts/lint/endpoint-counts.ts` (~200 lines, zero deps beyond Node stdlib + `tsx`). Standard output format `{file}:{line}:{col} [{rule}] {message}`. Supports `--write` to regenerate §7 in place; CI runs read-only. Created `scripts/lint/readme.md` with implementation status table for all 18 sub-checks.
+
+**Iteration:** First pass used the table-row regex from the spec — matched 0 rows because the actual corpus uses backtick-header form (`` `POST /v1/auth/signup` ``), not pipe-tables. Updated the parser to accept three forms (backtick-header, `### METHOD /path` markdown header, table-row inline) and updated the spec implementation note in §2.1.1 will need a follow-up to match.
+
+**Real finding:** Linter computes **166 endpoint declarations** vs §7's published **183 rows** — a **17-row gap**. Per-method: GET 50 vs 59 (-9), POST 96 vs 102 (-6), PATCH 10 vs 10 ✓, PUT 1 vs 1 ✓, DELETE 9 vs 11 (-2). PATCH/PUT exact match validates the parser; GET/POST/DELETE drift is real. **Counter Discipline meta-rule just proved its own value** by catching 17 rows of drift that 11 sessions of manual sweeps missed.
+
+Opened **SI-025** (S2) in `13-spec-issues/02-current-issues.md`. Either §7 is over-counted (need re-rebase via `--write`) or 17 endpoints are declared in a form the linter doesn't catch (likely: nested sub-section table rows, paths embedded in prose). Decision deferred to next session — needs human call on which side of the discrepancy is authoritative.
+
+Updated tracker memory (Open: 0 → 1) and `mem://index` Memories pointer. Score adjusted 100 → 97 per the locked rule "100 score is stale while open count > 0".
+
+**This is the most important finding of the day:** the spec said "100/100, implementation-ready" but the very first linter to actually execute against the spec found drift. Lesson: a self-governing system is only as good as the day its first enforcer runs. The trilogy of meta-rules works.

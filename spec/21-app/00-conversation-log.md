@@ -1330,3 +1330,30 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 3. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
 4. **Lift `no-implementation-mode`** — major phase transition, unlocks 4 src-dependent linters.
 5. **Rest** — 48 sessions, 17/17 green linters, 1 open SI (SI-026, 6 entries).
+
+---
+
+## Session 49 — 2026-04-29 — Convert payments-integration.md ref to prose + repair readme tree (SI-026 drain −1)
+
+**User instruction (verbatim):**
+
+> Next,
+>
+> List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action.** Picked S48 suggestion #1. The forward-ref to root-level `payments-integration.md` in `readme.md:344` was converted to plain prose pointing at the existing Stripe/Paddle adapter pair (`10-licensing-billing/03-stripe-integration.md`, `04-paddle-integration.md`, `12-billing-webhooks.md`). Also discovered the surrounding readme tree diagram (lines 214-222) listed 7 fictitious filenames (`pricing.md`, `license-manager.md`, `discounts-coupons.md`, `trials.md`, `invoices-receipts.md`, `seat-management.md`, plus the payments-integration.md entry itself); replaced them with the actual 16 NN- prefixed files in the `10-licensing-billing/` folder. Removed the matching allowlist entry. Linter clean (1998 paths / 307 files).
+
+**Result.** SI-026 backlog 6 → 5. Open SI count unchanged (1). Tree-diagram drift fixed as a bonus.
+
+**Files touched.**
+- edited `spec/21-app/readme.md` (tree block + line 344 prose)
+- edited `scripts/lint/backticked-path-resolution.allowlist.txt`
+- edited `spec/21-app/13-spec-issues/02-current-issues.md` (full row rewrite via python to avoid prefix-search pitfall noted in S48)
+- edited `.lovable/memory/index.md`
+- edited `spec/21-app/00-conversation-log.md`
+
+**Next.**
+1. **Author `17-i18n-a11y/` folder + `00-overview.md` + `extension-strings.md`** — closes ~4 of the remaining 5 entries (most cite the same target file). New folder, ~3 files.
+2. **Re-paste remaining Toby spec** — 6 ergonomics defaults parked.
+3. **Lift `no-implementation-mode`** — major phase transition, unlocks 4 src-dependent linters.
+4. **Rest** — 49 sessions, 17/17 green linters, 1 open SI (SI-026, 5 entries — almost drained).

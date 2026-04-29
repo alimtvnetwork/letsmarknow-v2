@@ -22,6 +22,8 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 | `favicon_color` | color | yes | null | derived | Dominant color, used as fallback tile color. |
 | `position` | bigint | no | max(siblings)+1024 | — | Order within parent (Collection or Group). |
 | `is_starred` | bool | no | false | — | Per-Account. |
+| `starred_pin_position` | float8 | yes | null | non-null iff `is_starred=true` | Manual ordering within the parent Collection's "⭐ Starred" pinned section (Toby parity, SI-021). Independent of `position`. |
+| `color_label` | enum(`none`\|`red`\|`orange`\|`yellow`\|`green`\|`teal`\|`blue`\|`purple`\|`pink`) | no | `none` | — | Per-Item color tag (Toby parity, SI-021). Renders as 4px left border on cards and a colored dot in list view. Resolved hex values defined in `06-ui-ux/01-design-tokens.md` `--color-label-*` tokens. Independent of Collection `color` and Tag colors. |
 | `tag_ids` | array<uuid> | no | `[]` | ≤ 32 | — |
 | `last_opened_at` | timestamp | yes | null | — | Updated on Jump-to-Tab or open. |
 | `open_count` | int | no | 0 | ≥ 0 | Lifetime open count for sort-by-most-used. |
@@ -57,6 +59,8 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 4. `tag_ids` all from same Org.
 5. Position scoped to `(collection_id, group_id)` so reordering inside a Group does not affect siblings outside it.
 6. `open_count` and `last_opened_at` updated atomically.
+7. `starred_pin_position` is non-null iff `is_starred = true`. Toggling `is_starred=false` MUST null the pin position; toggling to `true` MUST assign `max(starred siblings in same collection_id+group_id scope)+1024` if no explicit value provided. (SI-021.)
+8. `color_label` is purely visual; it does NOT affect search, sort, or entitlement gating.
 
 ## Indexes (recommended)
 
@@ -101,6 +105,8 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - `item.duplicated`
 - `item.opened` (analytics-only, NOT undoable)
 - `item.starred` / `item.unstarred`
+- `item.starred_pin_reordered` (within "⭐ Starred" section, SI-021)
+- `item.color_label_changed` `{ from, to }` (SI-021)
 - `item.tagged` / `item.untagged`
 - `item.note_updated`
 - `item.favicon_refreshed`

@@ -19,6 +19,7 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 | `icon_emoji` | string(8) | yes | null | single emoji | Alternative to `icon`. |
 | `position` | bigint | no | max(siblings)+1024 | — | Order within Space. |
 | `is_starred` | bool | no | false | — | Per-Account, see Space.md note. |
+| `starred_pin_position` | float8 | yes | null | non-null iff `is_starred=true` | Manual ordering within the parent Space's "⭐ Starred" pinned section (Toby parity, SI-021). Independent of `position`. Re-balanced like `position`. When unstarred, set to null. |
 | `is_collapsed_by_default` | bool | no | false | — | Whether to render collapsed initially (Toby's collapse arrow). |
 | `tag_ids` | array<uuid> | no | `[]` | ≤ 32, all in same Org | Tags attached. |
 | `default_view_mode` | enum(`list`\|`grid`\|`compact`) | yes | inherits | — | Per-collection view override. |
@@ -37,7 +38,8 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 2. Moving across Organizations is forbidden (export/import only).
 3. `tag_ids` must all belong to same `organization_id`.
 4. `position` re-balanced periodically.
-5. Cascade soft/hard delete to Groups and Items.
+5. `starred_pin_position` is non-null iff `is_starred = true`. Toggling `is_starred` to `false` MUST null the pin position; toggling to `true` MUST assign `max(starred siblings)+1024` unless an explicit value is provided. (SI-021.)
+6. Cascade soft/hard delete to Groups and Items.
 
 ## Indexes (recommended)
 
@@ -64,6 +66,7 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `collection.color_changed`
 - `collection.icon_changed`
 - `collection.starred` / `collection.unstarred`
+- `collection.starred_pin_reordered` (within Space's "⭐ Starred" section, SI-021)
 - `collection.tagged` / `collection.untagged`
 - `collection.note_updated`
 - `collection.shared` / `collection.unshared`

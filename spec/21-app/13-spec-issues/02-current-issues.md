@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 39 (SI-026 partial drain: 6 entries closed — 3 phase-roadmap forward-refs requalified to `20-roadmap/`-prefixed paths in `00-overview/05-browser-scope.md` §2.7, plus 3 release-ops stubs authored in `04-extension/` slots 17/18/19. SI-026 remaining = 15 entries. Open count = 1; SI-026 stays open until backlog hits 0).
+**Last updated:** 2026-04-29 Session 41 (SI-026 partial drain: 8 entries closed cumulatively — S39 closed 6, S41 closed 2 more by authoring `19-security-privacy/06-extension-privacy.md` and `19-security-privacy/07-privacy-policy.md`. SI-026 remaining = 13 entries. Open count = 1; SI-026 stays open until backlog hits 0).
 
 ---
 

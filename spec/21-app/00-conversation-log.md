@@ -2014,3 +2014,15 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - Created `audit-2026-04-29-sharing-collab-sweep-83.md` with 7 findings: SC1+SC2 (S1, rate-limit SoT split: password-unlock 10/15min vs 50/15min, public-share blanket 60/min vs two-tier SoT), SC3 (S2, reserved-slug `org`/`new` clarification), SC4 (S2, `/purge` endpoint missing audit + idempotency cross-refs), SC5 (S2, Core memory rule cites wrong share-model path), SC6+SC7 (S3, undeclared `Reaction.emoji` set + undefined `Comment.body` Markdown-lite subset).
 - Drain plan: 3 sessions.
 - Sub-finding flagged in SC5: Core memory rule says `02-data-model/share.md`, actual path is `02-data-model/07-share.md`. Trivial path fix.
+
+---
+
+## Session 84 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained SC1+SC2 (S1 batch) of sharing-collab audit.
+- SC1: Replaced password-unlock rate-limit prose in `03-password-shares.md §4` with cross-reference to `13-rate-limit-values.md §4` SoT. Removed conflicting `50/15min` line.
+- SC2: Replaced blanket `60 req/min` in `02-public-shares.md §7` with explicit two-tier SoT cross-reference.
+- SC5 retroactively closed (memory path correction was applied in Session 83).
+- Audit log: 3/7 closed.

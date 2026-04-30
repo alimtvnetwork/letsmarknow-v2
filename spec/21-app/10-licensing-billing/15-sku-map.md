@@ -75,14 +75,14 @@
 // src/lib/billing/sku-map.ts (generated; do not edit by hand)
 export const skuMap = {
   stripe: {
-    free:                   { live: null,                                test: null,                                amount_cents: 0,     currency: "USD" },
-    pro_monthly:            { live: "<price_pro_monthly_usd_live>",      test: "<price_pro_monthly_usd_test>",      amount_cents: 500,   currency: "USD" },
-    pro_yearly:             { live: "<price_pro_yearly_usd_live>",       test: "<price_pro_yearly_usd_test>",       amount_cents: 4800,  currency: "USD" },
-    team_monthly:           { live: "<price_team_monthly_usd_live>",     test: "<price_team_monthly_usd_test>",     amount_cents: 900,   currency: "USD" },
-    team_yearly:            { live: "<price_team_yearly_usd_live>",      test: "<price_team_yearly_usd_test>",      amount_cents: 8400,  currency: "USD" },
-    team_enterprise_yearly: { live: null,                                test: null,                                amount_cents: null,  currency: "USD" /* custom-quoted */ },
-    lifetime_pro:           { live: "<price_lifetime_pro_usd_live>",     test: "<price_lifetime_pro_usd_test>",     amount_cents: 7900,  currency: "USD" },
-    lifetime_team:          { live: "<price_lifetime_team_usd_live>",    test: "<price_lifetime_team_usd_test>",    amount_cents: 24900, currency: "USD" },
+    free:                   { live: null,                                test: null,                                amount_cents: 0,     currency: "USD", included_seats: null },
+    pro_monthly:            { live: "<price_pro_monthly_usd_live>",      test: "<price_pro_monthly_usd_test>",      amount_cents: 500,   currency: "USD", included_seats: null },
+    pro_yearly:             { live: "<price_pro_yearly_usd_live>",       test: "<price_pro_yearly_usd_test>",       amount_cents: 4800,  currency: "USD", included_seats: null },
+    team_monthly:           { live: "<price_team_monthly_usd_live>",     test: "<price_team_monthly_usd_test>",     amount_cents: 900,   currency: "USD", included_seats: null },
+    team_yearly:            { live: "<price_team_yearly_usd_live>",      test: "<price_team_yearly_usd_test>",      amount_cents: 8400,  currency: "USD", included_seats: null },
+    team_enterprise_yearly: { live: null,                                test: null,                                amount_cents: null,  currency: "USD", included_seats: null /* custom-quoted */ },
+    lifetime_pro:           { live: "<price_lifetime_pro_usd_live>",     test: "<price_lifetime_pro_usd_test>",     amount_cents: 7900,  currency: "USD", included_seats: null },
+    lifetime_team:          { live: "<price_lifetime_team_usd_live>",    test: "<price_lifetime_team_usd_test>",    amount_cents: 24900, currency: "USD", included_seats: 5 },
   },
   paddle: { /* mirror, same shape */ },
 } as const;

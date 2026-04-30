@@ -69,3 +69,11 @@ The membership record linking an Account to an Organization with a Role. One Acc
 - `member.reactivated`
 - `member.removed`
 - `member.space_access_changed`
+
+## Role-enforcement contract
+
+This table is the **sole** source of `(account_id, organization_id) → role`. Never store `role` on `accounts`, `profiles`, or any other table — doing so reintroduces the privilege-escalation class that the `<user-roles>` directive explicitly forbids.
+
+All server-side authorization checks MUST go through the SECURITY DEFINER `has_role(_user_id uuid, _role app_role)` function defined as the canonical pattern in [`19-security-privacy/01-threat-model.md`](../19-security-privacy/01-threat-model.md) → "Elevation of privilege" row (pinned Session 90). RLS policies on every other entity (`01-organization` … `11-account`, plus `12-next-item`) call this function rather than joining `members` directly, which both prevents recursive RLS evaluation and centralizes the role-resolution logic.
+
+The `system` role is server-issued only (background workers, migrations) and MUST NOT be assignable through any user-facing endpoint; enforcement lives in `17-admin-org/03-roles.md §2` (SQL `CHECK` + endpoint guard).

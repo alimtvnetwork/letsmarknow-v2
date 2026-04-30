@@ -7,8 +7,8 @@ Specific threats and mitigations for shared content (public / password / invite-
 ## 1. Token generation
 
 - 132-bit entropy: `crypto.randomBytes(17)` → base64url 22 chars.
-- Format: `letsmarknow.com/t/{token}` for public; `letsmarknow.com/s/{token}` for invite/password.
-- Custom slugs (Pro+) reserved separately; do NOT replace token (token still required for collision-resistance + revocation).
+- **URL surface (locked v1):** ALL share modes (public, password, invite-only) use `letsmarknow.com/t/{slug}`. Mode is determined by the `share` row, not the URL. See `08-sharing-collab/13-share-link.md` (source of truth).
+- **Memorable shortlinks (Pro+, optional):** `letsmarknow.com/lmk/{org_handle}/{memorable_slug}` — Org-scoped uniqueness, replaces the random `/t/{slug}` in user-facing URLs but the random slug remains the canonical revocation key. Reserved memorable-slugs: `lmk`, `t`, `new`, `edit`. See `08-sharing-collab/13-share-link.md §1.2 + §1.4`.
 - DB stores HMAC-SHA256 of token (not the raw token).
 - Constant-time comparison on lookup.
 

@@ -24,28 +24,32 @@
 
 ## 2. Stripe SKU table
 
-| SKU key | Tier | Period | Stripe Product ID | Stripe Price ID (live) | Stripe Price ID (test) | Amount (USD) |
-|---|---|---|---|---|---|---|
-| `free` | Free | — | `prod_free` | — (no charge) | — | 0.00 |
-| `pro_monthly` | Pro | monthly | `prod_pro` | `price_pro_monthly_usd_LIVE` | `price_pro_monthly_usd_TEST` | 5.00 |
-| `pro_yearly` | Pro | yearly | `prod_pro` | `price_pro_yearly_usd_LIVE` | `price_pro_yearly_usd_TEST` | 48.00 |
-| `team_monthly` | Team | monthly (per seat) | `prod_team` | `price_team_monthly_usd_LIVE` | `price_team_monthly_usd_TEST` | 9.00 |
-| `team_yearly` | Team | yearly (per seat) | `prod_team` | `price_team_yearly_usd_LIVE` | `price_team_yearly_usd_TEST` | 84.00 |
-| `team_enterprise_yearly` | Team Enterprise | yearly (per seat) | `prod_team_enterprise` | _custom-quoted; created per-deal_ | _custom-quoted; created per-deal_ | custom |
-| `lifetime_pro` | Lifetime (Pro) | one-time | `prod_lifetime_pro` | `price_lifetime_pro_usd_LIVE` | `price_lifetime_pro_usd_TEST` | 79.00 |
-| `lifetime_team` | Lifetime (Team, 5 seats) | one-time | `prod_lifetime_team` | `price_lifetime_team_usd_LIVE` | `price_lifetime_team_usd_TEST` | 249.00 |
+> `included_seats` is the number of seats bundled into the SKU at purchase (currently only meaningful for Lifetime Team). `null` means "per-seat billing" (Team monthly/yearly) or "not applicable" (Free, Pro, Lifetime Pro). Per LB10 (audit-2026-04-29-licensing-billing-sweep-74).
+
+| SKU key | Tier | Period | Stripe Product ID | Stripe Price ID (live) | Stripe Price ID (test) | Amount (USD) | included_seats |
+|---|---|---|---|---|---|---|---|
+| `free` | Free | — | `prod_free` | — (no charge) | — | 0.00 | null |
+| `pro_monthly` | Pro | monthly | `prod_pro` | `price_pro_monthly_usd_LIVE` | `price_pro_monthly_usd_TEST` | 5.00 | null |
+| `pro_yearly` | Pro | yearly | `prod_pro` | `price_pro_yearly_usd_LIVE` | `price_pro_yearly_usd_TEST` | 48.00 | null |
+| `team_monthly` | Team | monthly (per seat) | `prod_team` | `price_team_monthly_usd_LIVE` | `price_team_monthly_usd_TEST` | 9.00 | null |
+| `team_yearly` | Team | yearly (per seat) | `prod_team` | `price_team_yearly_usd_LIVE` | `price_team_yearly_usd_TEST` | 84.00 | null |
+| `team_enterprise_yearly` | Team Enterprise | yearly (per seat) | `prod_team_enterprise` | _custom-quoted; created per-deal_ | _custom-quoted; created per-deal_ | custom | null |
+| `lifetime_pro` | Lifetime (Pro) | one-time | `prod_lifetime_pro` | `price_lifetime_pro_usd_LIVE` | `price_lifetime_pro_usd_TEST` | 79.00 | null |
+| `lifetime_team` | Lifetime (Team) | one-time | `prod_lifetime_team` | `price_lifetime_team_usd_LIVE` | `price_lifetime_team_usd_TEST` | 249.00 | 5 |
 
 ## 3. Paddle SKU table (alternative billing region — EU/UK)
 
-| SKU key | Tier | Period | Paddle Product ID | Paddle Price ID (live) | Paddle Price ID (sandbox) | Amount (USD) |
-|---|---|---|---|---|---|---|
-| `pro_monthly` | Pro | monthly | `pro_paddle_TBD` | `pri_pro_monthly_LIVE` | `pri_pro_monthly_SBX` | 5.00 |
-| `pro_yearly` | Pro | yearly | `pro_paddle_TBD` | `pri_pro_yearly_LIVE` | `pri_pro_yearly_SBX` | 48.00 |
-| `team_monthly` | Team | monthly (per seat) | `team_paddle_TBD` | `pri_team_monthly_LIVE` | `pri_team_monthly_SBX` | 9.00 |
-| `team_yearly` | Team | yearly (per seat) | `team_paddle_TBD` | `pri_team_yearly_LIVE` | `pri_team_yearly_SBX` | 84.00 |
-| `team_enterprise_yearly` | Team Enterprise | yearly (per seat) | `team_ent_paddle_TBD` | _custom-quoted_ | _custom-quoted_ | custom |
-| `lifetime_pro` | Lifetime (Pro) | one-time | `lt_pro_paddle_TBD` | `pri_lt_pro_LIVE` | `pri_lt_pro_SBX` | 79.00 |
-| `lifetime_team` | Lifetime (Team, 5 seats) | one-time | `lt_team_paddle_TBD` | `pri_lt_team_LIVE` | `pri_lt_team_SBX` | 249.00 |
+> Paddle Product IDs below use illustrative placeholder strings (`<pro_paddle_live>`, etc.). Real opaque `pro_xxx` IDs are owner-fillable from the Paddle dashboard at provisioning time — same convention as the Stripe `_LIVE`/`_TEST` placeholders (§2). Per LB9 (audit-2026-04-29-licensing-billing-sweep-74).
+
+| SKU key | Tier | Period | Paddle Product ID | Paddle Price ID (live) | Paddle Price ID (sandbox) | Amount (USD) | included_seats |
+|---|---|---|---|---|---|---|---|
+| `pro_monthly` | Pro | monthly | `<pro_paddle_live>` | `pri_pro_monthly_LIVE` | `pri_pro_monthly_SBX` | 5.00 | null |
+| `pro_yearly` | Pro | yearly | `<pro_paddle_live>` | `pri_pro_yearly_LIVE` | `pri_pro_yearly_SBX` | 48.00 | null |
+| `team_monthly` | Team | monthly (per seat) | `<team_paddle_live>` | `pri_team_monthly_LIVE` | `pri_team_monthly_SBX` | 9.00 | null |
+| `team_yearly` | Team | yearly (per seat) | `<team_paddle_live>` | `pri_team_yearly_LIVE` | `pri_team_yearly_SBX` | 84.00 | null |
+| `team_enterprise_yearly` | Team Enterprise | yearly (per seat) | `<team_ent_paddle_live>` | _custom-quoted_ | _custom-quoted_ | custom | null |
+| `lifetime_pro` | Lifetime (Pro) | one-time | `<lt_pro_paddle_live>` | `pri_lt_pro_LIVE` | `pri_lt_pro_SBX` | 79.00 | null |
+| `lifetime_team` | Lifetime (Team) | one-time | `<lt_team_paddle_live>` | `pri_lt_team_LIVE` | `pri_lt_team_SBX` | 249.00 | 5 |
 
 ## 4. Coupons & promotions (canonical IDs)
 

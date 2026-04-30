@@ -122,7 +122,7 @@ Some "deletes" are heavy:
 
 - Imports, plan downgrades, share-revoke cascades all produce events with their own correlation.
 - Most are NOT user-undoable from the stack (out of session; potentially destructive).
-- Pro+ "Time travel" can revert system actions case-by-case with explicit confirmation.
+- "Time travel" (entitlement `features.history.time_travel`; default Pro+ — SoT `10-licensing-billing/01-plans-matrix.md §8`) can revert system actions case-by-case with explicit confirmation.
 
 ## 14. Edge cases
 

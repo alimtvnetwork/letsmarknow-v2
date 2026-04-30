@@ -23,7 +23,7 @@ This folder defines the event log, undo/redo semantics, and conflict resolution.
 ## Locked rules
 
 - **Every mutation produces a HistoryEvent.** Reads do not.
-- **Ctrl+Z always works** within the user's last 200 actions in the current session, AND last 30 days server-side.
+- **Ctrl+Z always works** within the user's last 200 actions in the current session, AND server-side within the per-plan history retention window (Free 7 d / Pro 90 d / Team 1 y / Enterprise 7 y — SoT `01-event-log.md §7`, entitlement key `features.history.retention_days` per `10-licensing-billing/01-plans-matrix.md §8`).
 - **Undo is per-user, per-Org.** Person A's undo never affects Person B's pending changes directly; conflict rules govern overlap.
 - **Soft delete first, hard delete after grace.** Default grace 30 days; lifetime undo possible within grace.
 - **Optimistic UI is mandatory.** Mutations apply locally instantly; server confirms; rollback on reject.

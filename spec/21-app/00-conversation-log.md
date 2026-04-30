@@ -2258,3 +2258,9 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 **User instruction (verbatim):** "Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest"
 
 **Action:** Drained **DM3 (S3)** of `audit-2026-04-29-data-model-sweep-99.md`. Added **§4a Master foreign-key on-delete table** to `02-data-model/00-overview.md` enumerating every cross-entity FK with action (cascade / set null / restrict / application-managed) and rationale, including: Org-tree cascades; `Item.group_id` `set null` (Item survives Group deletion); License → Org / Account `restrict`; Organization.owner_account_id `restrict`; polymorphic FKs (`Share.target_id`, `HistoryEvent.target_id`) application-managed via trigger; universal `created_by`/`updated_by` `set null` Audit-Block rule declared once. Appended `## Foreign keys` pointer block to all 12 entity files (`01-organization` … `11-account` + `12-next-item`) referencing §4a with per-entity carve-outs. Audit-99 now **3 of 4 closed** — only DM4 remains.
+
+## Session 103 — 2026-04-30 16:35 (UTC+8)
+
+**User instruction (verbatim):** "Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest"
+
+**Action:** Drained **DM4 (S3)** of `audit-2026-04-29-data-model-sweep-99.md`. Appended one-line `## Permissions` cross-ref block to the 10 entity files (Organization, Space, Collection, Group, Item, Tag, Share, HistoryEvent, License, Account) pointing at `08-sharing-collab/05-permissions-matrix.md` with per-entity search anchors. `08-member.md` already carried the matrix excerpt + cross-ref so was skipped. **Audit-99 now fully closed (4 of 4).** Carries closure of older S19 from `audit-2026-04-19-spec-internal.md`. Only SI-029 remains across the entire spec, blocked on legal counsel.

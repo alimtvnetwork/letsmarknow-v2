@@ -72,6 +72,10 @@ Optional sub-container inside a Collection (Tab Extend's "group inside group"). 
 - `group.restored`
 - `group.hard_deleted`
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `group`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Standard: all FKs `cascade` (`collection_id`, `space_id`, `organization_id`, `parent_group_id`).

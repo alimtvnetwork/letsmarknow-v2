@@ -2459,3 +2459,14 @@ Role enum lock verified intact across glossary + member.md + 03-roles.md (7 valu
 - AT7 (S3): YAML excerpt invented `extension.popup.save_clicked` → removed.
 
 Master catalog now: 27 domains, §2.16 added with 8 events (4 analytics meta, 4 error pipeline). All 17 linters green. Scorecard 100/100/100.
+
+---
+## 2026-04-30 — Session 116: Gap-sweep `07-features/`
+
+**User instruction (verbatim):** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Outcome.** Audit-116 closed 2 endpoint-canonicality findings in `07-features/` (19 files, ~2.4k lines):
+- FT1 (S2): `02-save-session.md:33` bare `/v1/sessions` → canonical `POST /v1/sessions/save` (matches §3 step 4).
+- FT2 (S3): `13-command-palette.md:46` generic `/v1/search` for omnibox → latency-optimized `GET /v1/search/quick`.
+
+No ULID, role, color-label, brand, or share-model drift. All 60+ cross-folder file refs resolved. All 17 linters green. Scorecard 100/100/100.

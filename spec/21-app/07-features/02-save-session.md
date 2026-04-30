@@ -30,7 +30,7 @@ Save all (or filtered) tabs from a browser window as a Collection or Group.
    - Keep tabs open (default)
    - Close all tabs (after confirmation)
    - Suspend tabs (only on Chrome with Tab Discard API)
-6. Submit to `/v1/sessions` with array of items + destination + `client_request_id`.
+6. Submit to `POST /v1/sessions/save` with array of items + destination + `client_request_id` (see `03-api-endpoints/12-sessions-save.md`).
 7. Server returns `undo_token` (60 s) for batch undo.
 8. Toast: "Saved 17 tabs to 'Window — Apr 18' — Undo · Open Collection".
 

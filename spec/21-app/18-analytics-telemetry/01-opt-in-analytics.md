@@ -34,27 +34,9 @@ Default for opt-out regions: all off.
 
 ## 4. Event taxonomy
 
-All events follow `<surface>.<object>.<verb>` naming:
-- `extension.popup.opened`
-- `web.collection.created`
-- `mindmap.node.clicked`
+> **Source of truth.** All event names, props schemas, owners, and sampling rates are defined in `03-events.md` (the master catalog). This file does not enumerate or rename events. Naming format, envelope schema, props rules, and forbidden keys are declared in `03-events.md §1 (Conventions)`.
 
-Event payload schema:
-```json
-{
-  "event": "string",
-  "ts": "ISO 8601",
-  "anon_id": "uuid (rotated yearly per device)",
-  "session_id": "uuid (rotated per app session)",
-  "account_id": "uuidv7 (only if consent granted)",
-  "org_id": "uuidv7 (current org context)",
-  "surface": "web|extension|api",
-  "channel": "stable|beta",
-  "platform": "macos|windows|linux|ios|android",
-  "client_version": "semver",
-  "properties": { ... event-specific ... }
-}
-```
+This file owns the **consent gate** that decides whether any event in the master catalog is permitted to leave the client. Once the gate is open, every event MUST already exist in the master catalog (CI rejects unknown event names).
 
 ## 5. PII rules
 

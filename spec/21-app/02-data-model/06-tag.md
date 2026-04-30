@@ -47,6 +47,10 @@ A short, color-coded label that can be attached to **three entity types — Coll
 - `tag.deleted`
 - `tag.merged` (from → into)
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-out: `created_by` → Account `set null` (author tombstone). `organization_id` `cascade`.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Tags are Org-scoped lightweight labels with no soft-delete (see file header).

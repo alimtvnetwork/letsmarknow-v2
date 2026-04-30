@@ -78,6 +78,10 @@ All server-side authorization checks MUST go through the SECURITY DEFINER `has_r
 
 The `system` role is server-issued only (background workers, migrations) and MUST NOT be assignable through any user-facing endpoint; enforcement lives in `17-admin-org/03-roles.md §2` (SQL `CHECK` + endpoint guard).
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `account_id` → Account `set null` (preserves Member tombstone with `status = 'removed'`); `invited_by` → Account `set null`. Owner-removal blocked by Invariant 4 + RLS, not by FK.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Note: this is the `user_roles` table per the `<user-roles>` directive — RLS policies on OTHER entities call `has_role()` rather than joining this table directly, to prevent recursive RLS evaluation.

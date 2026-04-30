@@ -87,6 +87,10 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 - `share.target_repointed` (orphaned-state recovery, see invariant §10)
 - `share.access_requested` (visitor without access submits the request-access form, see `08-sharing-collab/13-share-link.md` §8)
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-out: `target_id` is polymorphic (Space/Collection/Group/Item/mindmap_layout) — application-managed via trigger, not a Postgres FK. Soft-delete of target sets `revoked_at` (Invariant 7); hard-delete cascades.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). This entity OWNS the SECURITY DEFINER helper `share_grants_access(_target_type, _target_id, _account_id)` that other entity policies call.

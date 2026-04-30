@@ -102,6 +102,10 @@ The DB team should store these denormalized for fast permission checks. Source o
 - `license.coupon_applied`
 - `license.seat_added` / `license.seat_removed`
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `organization_id` → Organization `restrict` AND `account_id` → Account `restrict` — License rows block parent hard-delete (cancel / refund / transfer required first).
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). The `billing` role exists primarily to scope visibility on this table.

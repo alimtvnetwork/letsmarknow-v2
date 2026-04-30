@@ -88,6 +88,10 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `collection.session_recaptured` (SI-023, `captured_at` and items replaced)
 - `collection.session_restored` `{ scope: current_window | new_window, opened: int, skipped: int }`
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `space_id` is nullable when `kind = next` (Invariant 10) — partial FK enforces non-null + `cascade` for `manual`/`session`; `account_id` set + `cascade` only when `kind = next`.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Special-cases `kind = next` (per-Account singleton, see `12-next-item.md §RLS`).

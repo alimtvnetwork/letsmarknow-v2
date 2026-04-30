@@ -64,6 +64,10 @@ The `is_starred` flag and `collapsed_collections` are per-Account, not per-Space
 - `space.shared` (when first Share created)
 - `space.unshared` (when last Share revoked)
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Standard: all FKs `cascade` from Organization. No carve-outs.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md).

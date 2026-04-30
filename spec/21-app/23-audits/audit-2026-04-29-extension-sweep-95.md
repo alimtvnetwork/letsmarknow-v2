@@ -2,7 +2,9 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (2 of 4 closed)
+status: closed
+closed-on: 2026-04-29
+closed-because: All 4 findings drained across Sessions 96-98.
 opened-on: 2026-04-29
 scope: 04-extension/ folder — manifest permission gap, omnibox-vs-webNavigation surface confusion, share-link cross-ref drift, role-pattern cross-ref polish
 -->

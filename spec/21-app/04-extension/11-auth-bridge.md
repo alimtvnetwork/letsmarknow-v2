@@ -43,6 +43,8 @@ For users who never visit the web app:
 
 ## 4. SW request decorator
 
+> **`Idempotency-Key` injection** below follows the canonical contract in `03-api-endpoints/01-conventions.md §6` (every non-GET mutation gets a UUIDv7 key; server dedupes for 24 h).
+
 ```ts
 async function api(path, init = {}) {
   await ensureFreshToken();

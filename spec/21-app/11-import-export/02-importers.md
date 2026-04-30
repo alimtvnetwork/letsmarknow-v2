@@ -8,21 +8,27 @@ Per-source adapters that take a foreign format and produce LMN-shaped data.
 
 ## 1. Supported sources (v1)
 
-| Source | Method | Auth | v1 status |
-|---|---|---|---|
-| Chrome | HTML upload OR extension auto-pull | none / extension | ✅ full |
-| Edge / Brave | HTML upload only (extension auto-pull postponed → Phase 4) | none | ✅ HTML only |
-| Firefox | HTML upload only | none | ✅ HTML only |
-| Safari | HTML upload only | none | ✅ HTML only |
-| Arc | HTML upload only | none | ✅ HTML only |
-| Raindrop.io | CSV/JSON upload OR OAuth | none / OAuth | ✅ |
-| Pocket | HTML/JSON upload OR OAuth | none / OAuth | ✅ |
-| Pinboard | JSON upload OR API token | none / token | ✅ |
-| Instapaper | CSV upload | none | ✅ |
-| Diigo | CSV upload | none | ✅ |
-| Notion | Markdown zip upload | none | ✅ |
-| LMN JSON | JSON upload | none | ✅ |
-| Generic CSV | CSV upload (with mapping UI) | none | ✅ |
+> **Two vocabularies.** This table lists **brand-level adapters** (what the user picks in the UI). The wire-level `source` field on `POST /v1/imports` is a **format enum** — see `03-api-endpoints/15-import-export.md` line 197 for canonical values (`lmn_native | bookmarks_html | pocket_csv | toby_json | tab_extend_json | raindrop_csv | instapaper_csv`). The mapping `brand → wire source` is in column 4.
+
+| Brand (UI label) | Method | Auth | Wire `source` (API enum) | v1 status |
+|---|---|---|---|---|
+| Chrome | HTML upload OR extension auto-pull | none / extension | `bookmarks_html` | ✅ full |
+| Edge / Brave | HTML upload only (extension auto-pull → Phase 4) | none | `bookmarks_html` | ✅ HTML only |
+| Firefox | HTML upload only | none | `bookmarks_html` | ✅ HTML only |
+| Safari | HTML upload only | none | `bookmarks_html` | ✅ HTML only |
+| Arc | HTML upload only | none | `bookmarks_html` | ✅ HTML only |
+| Raindrop.io | CSV/JSON upload OR OAuth | none / OAuth | `raindrop_csv` | ✅ |
+| Pocket | HTML/JSON upload OR OAuth | none / OAuth | `pocket_csv` (CSV/HTML) | ✅ |
+| Toby | JSON upload | none | `toby_json` | ✅ |
+| Tab Extend | JSON upload | none | `tab_extend_json` | ✅ |
+| Pinboard | JSON upload OR API token | none / token | `bookmarks_html` (post-conversion) | ✅ |
+| Instapaper | CSV upload | none | `instapaper_csv` | ✅ |
+| Diigo | CSV upload | none | `instapaper_csv` (CSV adapter) | ✅ |
+| Notion | Markdown zip upload | none | `bookmarks_html` (post-extraction) | ✅ best-effort |
+| LMN JSON | JSON upload | none | `lmn_native` | ✅ |
+| Generic CSV | CSV upload (with mapping UI) | none | `instapaper_csv` (CSV adapter) | ✅ |
+
+Adapters that have no native API enum (Pinboard, Notion, Diigo, Generic CSV) run a brand-specific pre-converter that emits one of the canonical wire sources before submitting `POST /v1/imports`. The brand label is preserved in `metadata.imported_from` on each created Item.
 
 ## 2. Adapter interface
 

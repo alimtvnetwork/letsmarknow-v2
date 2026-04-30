@@ -56,7 +56,7 @@ Per-mode events are enumerated in each view file's §12.
 ## 7. Cross-references
 
 - Canon (storage / API / entitlements / keyboard / cache invalidation): `15-visualization/readme.md §C1–C13`.
-- Per-mode render contracts: `15-visualization/01-list-view.md` … `06-resizable-sections.md`.
+- Per-mode render contracts: `15-visualization/01-list-view.md` … `15-visualization/06-resizable-sections.md`.
 - Switcher UI affordance + dashboard placement: `05-web-app/03-dashboard.md`.
 - Command palette: `07-features/13-command-palette.md`.
 - Plan gating engine: `10-licensing-billing/02-entitlements-engine.md`.

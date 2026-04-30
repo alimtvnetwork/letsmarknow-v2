@@ -55,6 +55,57 @@
 
 ---
 
+## 4a. Master foreign-key on-delete table
+
+> Single source of truth for every cross-entity FK declared in this folder. Closes audit finding **DM3** (`23-audits/audit-2026-04-29-data-model-sweep-99.md`) and the older Locked rule "FKs `on delete <action>` per file" from `audit-2026-04-19-spec-internal.md`. Per-entity files MUST point at this table rather than restating actions inline.
+>
+> **Action vocabulary** (Postgres): `cascade` / `set null` / `restrict` / `no action`.
+>
+> **Soft-delete vs hard-delete:** `cascade` here describes the SQL-level FK action that fires on **hard delete**. Soft-delete cascades (sets `deleted_at` on children) are application-layer behaviour described in each entity's `## Lifecycle` and are NOT expressible as FK actions.
+
+| Child entity | Child column | → Parent entity (column) | on delete | Rationale |
+|---|---|---|---|---|
+| Space | `organization_id` | Organization (`id`) | `cascade` | Org-tree containment. |
+| Collection | `space_id` | Space (`id`) | `cascade` | Org-tree. Nullable for `kind = next` (Invariant 10) — partial FK / trigger enforces non-null + cascade for `manual`/`session`. |
+| Collection | `organization_id` | Organization (`id`) | `cascade` | Denormalised; same lifetime as Space. |
+| Collection | `account_id` | Account (`id`) | `cascade` | Only set when `kind = next`; deleting Account removes the singleton Next-Collection. |
+| Group | `collection_id` | Collection (`id`) | `cascade` | Org-tree. |
+| Group | `space_id` | Space (`id`) | `cascade` | Denormalised. |
+| Group | `organization_id` | Organization (`id`) | `cascade` | Denormalised. |
+| Group | `parent_group_id` | Group (`id`) | `cascade` | Reserved for v2; v1 service rejects non-null. |
+| Item | `collection_id` | Collection (`id`) | `cascade` | Org-tree. |
+| Item | `group_id` | Group (`id`) | `set null` | Item survives Group deletion (lives directly in Collection). |
+| Item | `space_id` | Space (`id`) | `cascade` | Denormalised. |
+| Item | `organization_id` | Organization (`id`) | `cascade` | Denormalised. |
+| Tag | `organization_id` | Organization (`id`) | `cascade` | Org-scoped lookup. |
+| Tag | `created_by` | Account (`id`) | `set null` | Tombstone author when Account hard-deletes. |
+| Share | `organization_id` | Organization (`id`) | `cascade` | Org-scoped. |
+| Share | `target_id` | (polymorphic — see Notes) | application-managed | Polymorphic FK validated by trigger; soft-delete of target sets `revoked_at` (per `07-share.md` invariant 7), hard-delete cascades via the same trigger. |
+| Member | `organization_id` | Organization (`id`) | `cascade` | Org-scoped. |
+| Member | `account_id` | Account (`id`) | `set null` | Account hard-delete leaves Member tombstone (`status = 'removed'`); Owner-removal blocked by Invariant 4 + RLS. |
+| Member | `invited_by` | Account (`id`) | `set null` | Inviter tombstone. |
+| HistoryEvent | `organization_id` | Organization (`id`) | `cascade` | Audit retained only while Org exists. |
+| HistoryEvent | `account_id` | Account (`id`) | `set null` | Account hard-delete preserves audit row, nulls actor. |
+| HistoryEvent | `target_id` | (polymorphic) | application-managed | Polymorphic; never enforced by FK. May become a dangling pointer after target hard-delete — readers tolerate. |
+| HistoryEvent | `undone_by_event_id` | HistoryEvent (`id`) | `set null` | Self-ref; preserved across pruning. |
+| License | `organization_id` | Organization (`id`) | `restrict` | Org-delete blocked while active License exists (per `01-organization.md` Lifecycle: "License subscription must be canceled first"). |
+| License | `account_id` | Account (`id`) | `restrict` | Lifetime License blocks Account hard-delete; user must transfer or refund first. |
+| Organization | `subscription_id` | License (`id`) | `set null` | Pointer cleared when License hard-deletes (rare; `restrict` from the License side normally prevents this). |
+| Organization | `default_space_id` | Space (`id`) | `set null` | Pointer cleared if the default Space is removed; UI re-resolves to first Space. |
+| Organization | `owner_account_id` | Account (`id`) | `restrict` | Org cannot lose Owner — must transfer ownership first (`01-organization.md` Invariants 1–3). |
+| **All entities w/ Audit Block** | `created_by` / `updated_by` | Account (`id`) | `set null` | Universal author-tombstone rule. Declared once here; per-entity files do NOT restate. |
+| NextItem | `next_collection_id` | Collection (`id`) | `cascade` | Per `12-next-item.md`. |
+| NextItem | `account_id` | Account (`id`) | `cascade` | Per `12-next-item.md`. |
+| NextItem | `item_id` | Item (`id`) | `set null` | Item hard-purge converts NextItem to tombstone (per `12-next-item.md` Lifecycle); FK action is `set null`, application then sets `tombstone = true` and copies snapshot fields. |
+| NextItem | `source_collection_id` | Collection (`id`) | `set null` | Dangling pointer tolerated — see `12-next-item.md` field doc. |
+
+**Notes:**
+- Polymorphic FKs (`Share.target_id`, `HistoryEvent.target_id`) cannot use Postgres FK constraints; validated by triggers at write time and tolerated as dangling at read time.
+- The universal `created_by` / `updated_by` Audit-Block rule (`set null`) applies to ALL entities and is declared once here, not in each file.
+- Entity files reference this table from a one-line `## Foreign keys` block pointing at `00-overview.md §4a` plus any per-entity carve-outs.
+
+---
+
 ## 5. Cross-references
 
 - Hierarchy that constrains containment: `01-information-architecture/01-hierarchy.md`.

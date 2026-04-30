@@ -2026,3 +2026,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - SC2: Replaced blanket `60 req/min` in `02-public-shares.md §7` with explicit two-tier SoT cross-reference.
 - SC5 retroactively closed (memory path correction was applied in Session 83).
 - Audit log: 3/7 closed.
+
+---
+
+## Session 85 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained SC3+SC4 (S2 batch) of sharing-collab audit.
+- SC3: `13-share-link.md §2` — added scope note (reserved list applies to `/t/{slug}` and memorable-slug namespaces; not to `{org_handle}` namespace which is governed by `09-auth-accounts/`). Added explicit "why `new` is reserved" note pointing to the §1.4 create-redirect resolver.
+- SC4: `12-revocation-and-expiry.md §12` — full `/v1/shares/:id/purge` contract written: `Idempotency-Key` required (`01-conventions.md §6`), `share.purged` audit event emitted before row hard-delete commits, terminates 90-d analytics retention early. `09-audit-log.md §3` — added `share.purged` event row with payload schema.
+- Audit log: 5/7 closed. Remaining: SC6+SC7 (S3 polish — `Reaction.emoji` enum + `Comment.body` Markdown-lite subset).

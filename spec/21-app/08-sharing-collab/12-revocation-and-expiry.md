@@ -92,8 +92,12 @@ Lifecycle controls for shares — TTLs, manual revoke, slug rotation, kill switc
 
 ## 12. Privacy
 
-- Revoked shares preserve enough data for analytics (until 90-d hard delete) unless Owner explicitly purges (`POST /v1/shares/:id/purge`).
-- Purge is irreversible; double-confirmation; audited.
+- Revoked shares preserve enough data for analytics (until 90-d hard delete) unless Owner explicitly purges (`POST /v1/shares/:id/purge` — declared in `03-api-endpoints/10-shares.md §171`).
+- Purge contract:
+  - **Idempotency:** `Idempotency-Key` header **required** per `03-api-endpoints/01-conventions.md §6` (mutating + irreversible). Replay within the 24 h window returns the original `204` (or `404` if already purged via a different request).
+  - **Audit event:** emits `share.purged` `{ scope_type, mode, retained_analytics_until: null }` to the audit log (see `09-audit-log.md §3`). The event is written **before** the row hard-delete commits so it survives the purge.
+  - **Analytics interaction:** purge **terminates** the 90-d analytics retention window early; aggregated counters in `11-share-analytics.md` are frozen at the purge instant and the per-event rows are deleted with the share.
+- Purge is irreversible; double-confirmation in UI.
 
 ## 13. Edge cases
 

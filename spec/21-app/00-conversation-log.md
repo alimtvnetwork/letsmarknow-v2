@@ -8,6 +8,28 @@
 
 ---
 
+## 2026-04-30 — Session 108 — `04-extension/` gap-sweep (audit-108)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-30-extension-sweep-108.md (NEW; 4 findings — EX1+EX2 S2, EX3 S2, EX4 S3 — ALL CLOSED same session)
+- spec/21-app/04-extension/04-popup.md (added §1.1 Tab bar segmented-control table; updated Saved tab in §1 anatomy ASCII; fixed §14 cross-ref §2 → §1.1)
+- spec/21-app/04-extension/02-surfaces.md (updated §1 popup description for 3-tab body; added §11 Open Tabs Panel + §12 Next Queue Panel)
+- spec/21-app/04-extension/12-messaging.md (added 4 surface→SW NEXT_* messages + 4 SW→surface broadcast NEXT_ITEM_* events)
+- spec/21-app/04-extension/03-service-worker.md (added NEXT_* to §4 Msg union; added §5.1 Realtime subscriptions block)
+- spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md (metadata format fix: ---frontmatter--- → HTML comment + closed-on + closed-because per audit-cadence)
+- scripts/lint/naming-convention.allowlist.txt (added audits 107 + 108)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-30 — Session 107 — `03-api-endpoints/` gap-sweep (audit-107)
 
 ```

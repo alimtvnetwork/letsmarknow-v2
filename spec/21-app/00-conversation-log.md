@@ -2238,3 +2238,11 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - **Sweep bonus:** `rg ulid` across entire spec found `18-analytics-telemetry/01-opt-in-analytics.md` lines 49-50 declaring `account_id: "ulid"` + `org_id: "ulid"` in event payload schema — both corrected to `uuidv7` in same session.
 - Verification: `rg -i ulid spec/21-app/ | grep -v audits/` returns zero hits (excluding the 23-audits/ trail and explicit "never ULID" Core-rule citations).
 - Audit log: 1/5 closed. Scorecard restored.
+
+---
+
+## Session 100 — 2026-04-30 15:49 (UTC+8)
+
+**User instruction (verbatim):** "Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest"
+
+**Action:** Drained **DM2 (S2)** of `audit-2026-04-29-data-model-sweep-99.md`. Appended `## Role-enforcement contract` section to `02-data-model/08-member.md` declaring it the sole `(account_id, organization_id) → role` source, citing the SECURITY DEFINER `has_role()` SoT in `19-security-privacy/01-threat-model.md` "Elevation of privilege" row, and reaffirming `system` role is server-issued-only (cross-ref `17-admin-org/03-roles.md §2`). Audit-99 now **1 of 4 closed**.

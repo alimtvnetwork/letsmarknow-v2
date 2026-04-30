@@ -88,11 +88,11 @@ Specific threats and mitigations for shared content (public / password / invite-
 
 ## 11. Embed widgets
 
-- iframe with `sandbox="allow-scripts allow-same-origin"` minimum.
+- iframe sandbox: **`sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"`** (locked in `08-sharing-collab/10-embed-widget.md §3`). `allow-same-origin` is intentionally OMITTED so the embed cannot read parent cookies/localStorage; `allow-top-navigation` is OMITTED to prevent clickjacking redirects of the host page.
 - Embedding origin allowlist per Org (Team+).
-- `X-Frame-Options: ALLOWALL` (or omit) only on dedicated `/embed/{token}` route.
-- All other routes: `X-Frame-Options: DENY`.
-- Postmessage protocol versioned; origin checked.
+- Embed route `/e/{slug}` enforces allowlist via **`Content-Security-Policy: frame-ancestors <allowlist>`** (CSP supersedes `X-Frame-Options` per spec, and supports multi-origin allowlists which XFO does not). `X-Frame-Options` is NOT set on `/e/{slug}` — relying on the deprecated/non-standard `XFO: ALLOWALL` is forbidden.
+- All non-embed routes: `Content-Security-Policy: frame-ancestors 'none'` AND `X-Frame-Options: DENY` (defense in depth).
+- Postmessage protocol versioned; origin checked against the same allowlist.
 
 ## 12. Share viewer hardening
 

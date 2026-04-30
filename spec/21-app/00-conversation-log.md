@@ -8,6 +8,24 @@
 
 ---
 
+## 2026-04-29 — Session 94 — Drain HU4+HU5 (S3 polish; close audit-91)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/12-history-undo/03-conflict-resolution.md (§15 — Idempotency-Key SoT cross-ref)
+- spec/21-app/12-history-undo/01-event-log.md (§8 — history endpoints SoT cross-ref)
+- spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md (HU4+HU5 closed; audit fully CLOSED 5/5)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 93 — Drain HU2+HU3 (history retention + entitlement SoT pin)
 
 ```

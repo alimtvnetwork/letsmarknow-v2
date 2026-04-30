@@ -139,7 +139,7 @@ If we change a merge rule:
 
 | Case | Behavior |
 |---|---|
-| Same user, two devices, same edit | Idempotency-Key dedupes; applied once |
+| Same user, two devices, same edit | `Idempotency-Key` dedupes; applied once (SoT: `03-api-endpoints/01-conventions.md §6`) |
 | Network partition for hours | On reconnect, large queue drained; user sees progress |
 | Y.Doc divergence (corruption) | Server snapshot wins; client refetches; user warned of any text loss |
 | Tag rename collision (two users rename to same new name at same time) | Single tag remains; no duplicate created |

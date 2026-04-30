@@ -2,7 +2,9 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (3 of 5 closed)
+status: closed
+closed-on: 2026-04-29
+closed-because: All 5 findings drained across Sessions 92-94.
 opened-on: 2026-04-29
 scope: 12-history-undo/ folder — locked-rule violation (ULID), retention drift, entitlement pointer, idempotency cross-ref, endpoint cross-ref
 -->
@@ -25,8 +27,8 @@ scope: 12-history-undo/ folder — locked-rule violation (ULID), retention drift
 | HU1 | **F (locked-rule violation)** | ✅ **CLOSED Session 92.** `02-undo-redo.md §48` rewritten: "Generate `correlation_id` + per-event optimistic IDs (UUIDv7 per Core rule; k-sortable by embedded timestamp, drop-in compatible with the `event_log.id` UUIDv7 column declared in `01-event-log.md §2`)." **Bonus drift swept:** A repo-wide `rg ulid` surfaced TWO previously-missed F-class violations in `18-analytics-telemetry/01-opt-in-analytics.md` lines 49-50 (event payload `account_id: "ulid"` + `org_id: "ulid"`); both corrected to `uuidv7` in same session. Repo-wide `ulid` references now zero (excluding audit-trail prose and explicit "never ULID" Core-rule citations). | `02-undo-redo.md §5`, `18-analytics-telemetry/01-opt-in-analytics.md §3` |
 | HU2 | **S2** | ✅ **CLOSED Session 93.** Reconciled retention vs time-travel window. `02-undo-redo.md §2` rewritten: cross-session window now references `01-event-log.md §7` retention table (Free 7 d / Pro 90 d / Team 1 y / Enterprise 7 y) instead of the prior fixed "30 days … (Pro+)" claim. `readme.md §26` rewritten the same way. `01-event-log.md §7` extended with explicit entitlement-key cross-ref. Window is now uniformly the per-plan retention; the gate "is the user allowed to operate the time-travel UI?" is a separate entitlement (HU3). | `02-undo-redo.md §2`, `readme.md §26`, `01-event-log.md §7` |
 | HU3 | **S2** | ✅ **CLOSED Session 93.** Pinned `Pro+` references to entitlement SoT. Two new entitlement keys added to `10-licensing-billing/01-plans-matrix.md §8`: `features.history.retention_days` (numeric per plan) and `features.history.time_travel` (boolean, default Pro+). `02-undo-redo.md §2 + §4 + §13` and `01-event-log.md §7` and `readme.md §26` now name the keys with SoT cross-refs to `01-plans-matrix.md §8` + `02-entitlements-engine.md`, mirroring the share-link pattern. | `02-undo-redo.md §2 + §4 + §13`, `01-event-log.md §7`, `10-licensing-billing/01-plans-matrix.md §8` |
-| HU4 | **S3** | **`Idempotency-Key` referenced without SoT cross-ref.** `03-conflict-resolution.md §142` edge-case row says "Idempotency-Key dedupes; applied once" but does not cite `03-api-endpoints/01-conventions.md §6`. Same root cause as IE6 + SC4. One-line fix. | `03-conflict-resolution.md §14` (edge cases) |
-| HU5 | **S3** | **`01-event-log.md §149` declares `GET /v1/history?org=...&target_type=...` inline without SoT cross-ref to canonical contract.** The SoT (`03-api-endpoints/14-history.md`) actually canonicalizes the per-entity form as `GET /v1/history/for/:entity_type/:entity_id`; the `?target_type=&target_id=` query form is a SECONDARY filter on the bare `GET /v1/history`. The folder file's declaration is consistent (the bare endpoint accepts those query params per `14-history.md §10`), but should explicitly point at the SoT to prevent drift. The `GET /v1/items/:id/history` line already does this correctly — apply the same pattern to the other two. | `01-event-log.md §10` (Read API section) |
+| HU4 | **S3** | ✅ **CLOSED Session 94.** `03-conflict-resolution.md §15` edge-case row updated: "`Idempotency-Key` dedupes; applied once (SoT: `03-api-endpoints/01-conventions.md §6`)." Mirrors IE6 + SC4 fix pattern. | `03-conflict-resolution.md §15` |
+| HU5 | **S3** | ✅ **CLOSED Session 94.** `01-event-log.md §8` updated: bare `GET /v1/history` now cites `03-api-endpoints/14-history.md §10` (query-filter form), and `GET /v1/history/:id` cites the event-detail section of the same SoT. Pattern now matches the already-correct `GET /v1/items/:id/history` line. | `01-event-log.md §8` |
 
 ---
 

@@ -6,16 +6,21 @@ Supported import/export file formats and their schemas.
 
 ## 1. Format matrix
 
-| Format | Import | Export | Notes |
-|---|:---:|:---:|---|
-| Netscape HTML bookmarks | ✅ | ✅ | Universal — Chrome, Firefox, Safari, Edge |
-| LMN JSON | ✅ | ✅ | Native; full fidelity round-trip |
-| CSV | ✅ | ✅ | Flat; lossy for groups/notes |
-| OPML | ✅ | ✅ | RSS reader heritage; collections only |
-| Markdown | ❌ | ✅ | Human-readable backup |
-| Pocket JSON | ✅ | ❌ | Pocket's export format |
-| Raindrop CSV/JSON | ✅ | ❌ | Raindrop's export formats |
-| Pinboard JSON/XML | ✅ | ❌ | Pinboard's API format |
+> **Wire vs human names.** Column "Wire enum" gives the canonical value used by `POST /v1/imports.source` and `POST /v1/exports.format` per `03-api-endpoints/15-import-export.md` (lines 197 and 284). The "Format" column is the human label shown in UI. Where Import / Export columns differ, the wire enum belongs to that direction only.
+
+| Format | Wire enum (import / export) | Import | Export | Notes |
+|---|---|:---:|:---:|---|
+| Netscape HTML bookmarks | `bookmarks_html` / `bookmarks_html` | ✅ | ✅ | Universal — Chrome, Firefox, Safari, Edge |
+| LMN JSON | `lmn_native` / `lmn_native_json` | ✅ | ✅ | Native; full fidelity round-trip |
+| CSV | `instapaper_csv` (import adapter) / `csv_flat` | ✅ | ✅ | Flat; lossy for groups/notes |
+| OPML | — / — | ✅ | ✅ | RSS reader heritage; collections only. **No wire enum yet** — runs through brand-specific pre-converter that emits `bookmarks_html` for import; export is wrapped via `csv_flat`-style streaming with custom OPML writer (see `04-export-pipeline.md §4`). |
+| Markdown bundle | — / (custom) | ❌ | ✅ | Human-readable backup; rendered as a ZIP via `04-export-pipeline.md §4` Markdown renderer; not exposed as a wire `format` enum value (admin-only flag). |
+| Pocket JSON | `pocket_csv` (HTML / JSON adapter) | ✅ | ❌ | Pocket's export format |
+| Toby JSON | `toby_json` | ✅ | ❌ | Toby's export format (per F-M5) |
+| Tab Extend JSON | `tab_extend_json` | ✅ | ❌ | Tab Extend's export format |
+| Raindrop CSV/JSON | `raindrop_csv` | ✅ | ❌ | Raindrop's export formats |
+| Pinboard JSON/XML | `bookmarks_html` (post-conversion) | ✅ | ❌ | Pre-converted to Netscape HTML before submit; brand preserved in `metadata.imported_from=pinboard` |
+| Instapaper CSV | `instapaper_csv` | ✅ | ❌ | Instapaper's export format |
 
 ---
 

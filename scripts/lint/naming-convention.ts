@@ -7,7 +7,9 @@
  *   (b) Folder index is exactly `readme.md` (lowercase).
  *   (c) Sequence numbers are contiguous within each folder (no gaps, no duplicates).
  *
- * Scope: `spec/21-app/` recursively. Excludes `templates/` and `.lovable/`-style hidden dirs.
+ * Scope: `spec/21-app/` recursively. Excludes `templates/`, hidden dirs, and
+ *        `23-audits/` (governed by `audit-cadence` linter — `audit-YYYY-MM-DD-...md`
+ *        filenames are not the NN-prefix convention by design).
  *
  * Output: `{file}:{line}:{col} [naming-convention] {message}` — one violation per line.
  * Exit 0 = clean; exit 1 = violations.

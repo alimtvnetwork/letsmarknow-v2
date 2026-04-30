@@ -51,6 +51,18 @@ Future planned files (not yet authored, intentionally unlisted to avoid forward-
 
 ---
 
+## 5. Cross-references
+
+- `06-ui-ux/20-accessibility-wcag.md` — WCAG 2.2 AA baseline.
+- `06-ui-ux/22-keyboard-cheatsheet.md` — i18n-aware key-binding labels.
+- `06-ui-ux/17-copy-strings.md` — canonical English source for shared UI copy.
+- `10-licensing-billing/16-billing-emails.md §5` — currency/date localization.
+- `04-extension/07-context-menu.md` — `chrome.i18n.getMessage` consumer.
+- `04-extension/17-store-listing.md` — Chrome Web Store locale-specific listings.
+- `19-security-privacy/` — legal/compliance copy SoT (ToS, Privacy, DPA).
+
+---
+
 ## 6. Shared principles
 
 1. **Single source of truth per surface.** Extension strings live in extension `_locales/`; web app strings live in a server-served catalog. No string is duplicated across surfaces — shared phrases reference a `core` namespace.
@@ -71,15 +83,3 @@ Future planned files (not yet authored, intentionally unlisted to avoid forward-
 | Others | Roadmap | Tracked in `20-roadmap/`. v1 ships English only. |
 
 The catalog format and pipeline are designed for N-locale day-one expansion; absence of translated locales is a content decision, not an architectural one.
-
----
-
-## 5. Cross-references
-
-- `06-ui-ux/20-accessibility-wcag.md` — WCAG 2.2 AA baseline.
-- `06-ui-ux/22-keyboard-cheatsheet.md` — i18n-aware key-binding labels.
-- `06-ui-ux/17-copy-strings.md` — canonical English source for shared UI copy.
-- `10-licensing-billing/16-billing-emails.md §5` — currency/date localization.
-- `04-extension/07-context-menu.md` — `chrome.i18n.getMessage` consumer.
-- `04-extension/17-store-listing.md` — Chrome Web Store locale-specific listings.
-- `19-security-privacy/` — legal/compliance copy SoT (ToS, Privacy, DPA).

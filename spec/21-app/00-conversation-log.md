@@ -2081,3 +2081,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - SP4: New §2.1 "CAPTCHA escalation" in `13-rate-limit-values.md` — thresholds for signin/forgot/mfa/magic-link, 30-min CAPTCHA-required window, `403 CAPTCHA_REQUIRED` + `X-Captcha-Solution` retry contract. `01-threat-model.md §28` cross-references SoT.
 - SP5: Created canonical cookie inventory at `06-sessions.md §1.3` (8 cookies w/ attributes + TTL). Cross-referenced from `04-gdpr-ccpa.md §11` and `01-threat-model.md §27`. **Drift correction:** `04-gdpr-ccpa.md §11` previously named cookies `__Host-session` / `__Host-csrf` but `06-sessions.md §1.2` had always declared `__Host-lmn_refresh`. Reconciled to actual names (`__Host-lmn_refresh`, `__Host-lmn_csrf`).
 - Audit log: 5/7 closed. Remaining: SP6+SP7 (S3 polish — session TTL pointer + `has_role` role-enum cross-ref).
+
+---
+
+## Session 90 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained SP6+SP7 (S3 polish batch). **Security-privacy audit fully closed (7/7).**
+- SP6: `02-data-handling.md §3` Sessions retention row pinned to `06-sessions.md §1.2` (refresh cookie 30 d) + §1.1 (access JWT 15 min) SoTs.
+- SP7: `01-threat-model.md §29` and §103 — `has_role(_user_id, _role)` signature spelled out, `<user-roles>` directive cited as pattern SoT, role enum cross-referenced to `00-overview/02-glossary.md` with full 7-value enum inline.
+- Audit `audit-2026-04-29-security-privacy-sweep-87.md` status: closed.

@@ -88,7 +88,7 @@ Migration flow: dual-write Postgres + Meilisearch for 7 days → cutover → dro
 
 - Vector / semantic search (Phase 3 with pgvector)
 - Personal ranking ("results you tend to click")
-- Cross-Org search (impossible by design — RLS isolated)
+- **Single-query cross-Org FTS.** RLS isolates each Org's index; cross-Org search (per `03-workspace-search.md` and `01-global-search.md §13`) is implemented as a server-side fan-out — one FTS query per Org the Account is a Member of, then merged + re-ranked. This is a query-orchestration concern, not an engine capability.
 - Fuzzy URL matching beyond host (use trigram on host only, not full URL)
 
 ## 6. Locked rules

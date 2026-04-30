@@ -472,8 +472,8 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 
 | Method | Rows | Distinct |
 |---|---|---|
-| GET | 50 | 50 |
-| POST | 99 | 99 |
+| GET | 51 | 51 |
+| POST | 98 | 98 |
 | PATCH | 10 | 10 |
 | PUT | 1 | 1 |
 | DELETE | 11 | 11 |

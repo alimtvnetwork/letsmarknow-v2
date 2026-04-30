@@ -10,3 +10,10 @@ spec/21-app/09-auth-accounts/08-account-deletion.md:`notes.md`
 spec/21-app/18-analytics-telemetry/03-events.md:`CHANGELOG.md`
 # PR:#0 reason:NN-name.md is a syntax-template example in CI/CD §2.1.1 row, not a real ref
 spec/21-app/22-infrastructure/09-ci-cd.md:`NN-name.md`
+
+# PR:#0 reason:audit `00-overview.md §5` historical pointer to spec-internal audit (file exists at sibling dir; resolution helper does not climb out of 02-data-model/)
+spec/21-app/02-data-model/00-overview.md:`audit-2026-04-19-spec-internal.md`
+# PR:#0 reason:RLS template intentionally uses bare entity filenames (`11-account.md`, `12-next-item.md`) referring to siblings of the consumer file, not relative to the template itself
+spec/21-app/02-data-model/templates/entity-rls.md:`11-account.md`
+# PR:#0 reason:RLS template intentionally uses bare entity filenames (`11-account.md`, `12-next-item.md`) referring to siblings of the consumer file, not relative to the template itself
+spec/21-app/02-data-model/templates/entity-rls.md:`12-next-item.md`

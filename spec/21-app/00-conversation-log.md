@@ -8,6 +8,25 @@
 
 ---
 
+## 2026-04-30 — Session 104 — Next-queue build-readiness review (audit-104)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md (NEW; 3 findings — NQ1+NQ2 S2, NQ3 S3 — ALL CLOSED same session)
+- spec/21-app/02-data-model/11-account.md (added `account_setting` sub-entity with 8 keys + RLS)
+- spec/21-app/08-sharing-collab/14-realtime-transport.md (added `account:{account_id}:next` channel row)
+- spec/21-app/20-roadmap/02-phase-1-v1.md (listed Next under Phase-1 Save flows)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 99 — Open data-model gap-sweep (audit-99)
 
 ```

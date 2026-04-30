@@ -70,6 +70,24 @@ The human user (or service principal). One per real person. Owns or is a Member 
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. No outgoing FKs beyond the universal Audit-Block `created_by` / `updated_by` (`set null`). Inbound: many entities reference Account; deletion paths governed by per-child rows in §4a.
 
+## Sub-entity: `account_setting` (1:1 with Account)
+
+> Per-Account preferences. One row per Account; created lazily on first write. Composite under Account (cascades on Account delete). Surfaced via the Settings UI; written via `update_account_setting()` RPC, never via direct PATCH on Account.
+
+| Name | Type | Null | Default | Description |
+|---|---|---|---|---|
+| `account_id` | uuid (Account.id) PK FK | no | — | Owner. `on delete cascade`. |
+| `next_insert_position` | enum(`top`\|`bottom`) | no | `bottom` | Where new Next items land. (`07-features/17-next-queue.md §7`.) |
+| `next_close_tab_after_adding` | bool | no | `false` | Auto-close source browser tab after "Add to Next". |
+| `next_hide_completed` | bool | no | `false` | Hide done rows from default Next view. |
+| `next_auto_archive_days` | int | yes | null | Auto-archive done items after N days. Allowed: 1, 7, 30, null. |
+| `next_show_in_extension_popup` | bool | no | `true` | Show "Next" tab in the extension popup tab-bar. |
+| `next_prompt_done_on_close` | bool | no | `false` | Confirm marking-done when closing source tab. |
+| `next_tip_dismissed` | bool | no | `false` | Permanently dismiss the "view Next from extension" tip. |
+| `popup_default_tab` | enum(`save_tab`\|`create_link`\|`next`\|`group_tabs`) | no | `next` | Default tab on first popup open per Account. |
+
+RLS: SELECT/UPDATE where `account_id = auth.account_id()`. INSERT/DELETE forbidden to clients (service role only — INSERT happens lazily via RPC).
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Strictly per-Account; Org membership does NOT grant cross-Account read access here.

@@ -28,6 +28,7 @@
 | `item:{item_id}` | One per opened Item editor | Members editing notes/description | `presence.editing`, `item.updated`, `comment.created` |
 | `share:{share_token}` | One per opened public share | Anonymous + named viewers | `presence.sync`, `comment.created`, `reaction.created` |
 | `account:{account_id}` | Personal | Only the account across devices | `notification.new`, `quota.warning`, `session.revoked`, `auth.signed_out` |
+| `account:{account_id}:next` | Per-Account Next queue | Only the account across devices | `next.item.added`, `next.item.updated` (done / position), `next.item.removed`, `next.item.tombstoned` (source purged). LWW on `updated_at`; reorder via fractional `position`. See `07-features/17-next-queue.md §10`. |
 
 **Channel join policy:** Server-side `realtime.authorization` policies mirror the same RLS policies generated from `permissions-matrix.json`. An account joining `space:xyz` MUST satisfy `space.read` on entity `xyz`. Anonymous joins are only allowed on `share:{token}` after the share's access requirements (password / invite) are satisfied.
 

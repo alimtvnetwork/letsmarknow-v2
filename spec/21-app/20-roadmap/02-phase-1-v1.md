@@ -18,6 +18,7 @@
 - **Bulk save** via paste of multiple URLs.
 - **Side panel** (Chrome MV3) for drag-and-drop while browsing.
 - **Omnibox** keyword (`lmn `) for quick-find from URL bar.
+- **Next** — per-Account focused to-do queue (singleton Collection of `kind = next`); all 8 entry points E1–E8, popup "Next" tab, web-app left-rail entry, multi-Org grouping. See `07-features/17-next-queue.md`.
 
 ### Find
 - **Cmd+K operators**: `tag:`, `in:`, `domain:`, `is:starred`, `is:archived`, dates.

@@ -8,6 +8,22 @@
 
 ---
 
+## 2026-04-30 — Session 107 — `03-api-endpoints/` gap-sweep (audit-107)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md (NEW; 0 findings; full idem-coverage matrix + 17 linter results)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-30 — Session 106 — Auth & Accounts second-pass sweep (audit-106)
 
 ```

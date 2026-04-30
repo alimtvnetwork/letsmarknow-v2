@@ -46,3 +46,14 @@ A short, color-coded label that can be attached to **three entity types — Coll
 - `tag.color_changed`
 - `tag.deleted`
 - `tag.merged` (from → into)
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Tags are Org-scoped lightweight labels with no soft-delete (see file header).
+
+- enable row level security
+- SELECT: `has_role(auth.account_id(), 'viewer')` for `organization_id`.
+- INSERT: `has_role(auth.account_id(), 'editor')` for `organization_id`. (Implicit-create from inline tag editor uses the same predicate.) WITH CHECK uniqueness on `(organization_id, lower(name))` enforced via unique index, not RLS.
+- UPDATE (rename, color change): `editor`+ on Org.
+- DELETE: `admin`+ on Org (because deletion mutates `tag_ids[]` arrays across many entities atomically and is destructive).
+- Notes: no `deleted_at` column → no soft-delete predicate. The 1000-tags-per-Org cap (invariant 4) is enforced by trigger, not RLS.

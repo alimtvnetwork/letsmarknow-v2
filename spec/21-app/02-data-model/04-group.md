@@ -71,3 +71,14 @@ Optional sub-container inside a Collection (Tab Extend's "group inside group"). 
 - `group.soft_deleted`
 - `group.restored`
 - `group.hard_deleted`
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md).
+
+- enable row level security
+- SELECT: parent-Collection access (see `03-collection.md §RLS`) OR `share_grants_access('group', id, auth.account_id())`. AND `deleted_at IS NULL`.
+- INSERT: `has_role(auth.account_id(), 'editor')` for `organization_id` AND parent-Collection access. WITH CHECK `parent_group_id IS NULL` (v1 single-level nesting per invariant 2).
+- UPDATE: `editor`+ on Org. `collection_id` change allowed only when target Collection is in same Org (invariant 1).
+- DELETE: soft = `editor`+; hard = `admin`+.
+- Notes: `is_hidden` (eye-off) is a presentation flag — never used to gate RLS reads.

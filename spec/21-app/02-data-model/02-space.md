@@ -63,3 +63,14 @@ The `is_starred` flag and `collapsed_collections` are per-Account, not per-Space
 - `space.hard_deleted`
 - `space.shared` (when first Share created)
 - `space.unshared` (when last Share revoked)
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md).
+
+- enable row level security
+- SELECT: (`has_role(auth.account_id(), 'viewer')` for `organization_id` AND (`Member.space_access = 'all'` OR `id = ANY(Member.space_ids)`)) OR `share_grants_access('space', id, auth.account_id())`. AND `deleted_at IS NULL`.
+- INSERT: `has_role(auth.account_id(), 'editor')` for `organization_id`. WITH CHECK `organization_id` membership confirmed.
+- UPDATE: `has_role(auth.account_id(), 'editor')` for `organization_id`. `organization_id` immutable (invariant 1).
+- DELETE (soft): `editor`+. Hard-delete: `admin`+.
+- Notes: per-Account state (`is_starred`, `collapsed_collections`) lives in `account_space_state` side table — that table is gated by `account_id = auth.account_id()` only.

@@ -87,3 +87,20 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `collection.session_captured` (SI-023, emitted at create when `kind=session`)
 - `collection.session_recaptured` (SI-023, `captured_at` and items replaced)
 - `collection.session_restored` `{ scope: current_window | new_window, opened: int, skipped: int }`
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Special-cases `kind = next` (per-Account singleton, see `12-next-item.md §RLS`).
+
+- enable row level security
+- SELECT:
+  - For `kind in ('manual', 'session')`: parent-Space access (see `02-space.md §RLS`) OR `share_grants_access('collection', id, auth.account_id())`. AND `deleted_at IS NULL`.
+  - For `kind = 'next'`: `account_id = auth.account_id()` ONLY. Never share-mediated. Never visible to Org members.
+- INSERT:
+  - `kind in ('manual', 'session')`: `has_role(auth.account_id(), 'editor')` for `organization_id` AND parent-Space access.
+  - `kind = 'next'`: rejected from user-facing endpoints — only the Account-create RPC may insert (service-role bypass).
+- UPDATE:
+  - `kind in ('manual', 'session')`: `editor`+ on the Org. `kind`, `account_id`, `organization_id`, `space_id` (cross-org) immutable per invariants 1, 2, 7.
+  - `kind = 'next'`: only `position`/cache fields mutable; name/color/icon/share fields rejected per invariant 12.
+- DELETE: `editor`+ for soft (manual/session); `admin`+ for hard. `kind = 'next'` rows non-deletable (invariant 12).
+- Notes: `starred_pin_position` writes do not require any extra role beyond `editor`. The singleton invariant on `kind = next` is enforced by partial unique index, not RLS.

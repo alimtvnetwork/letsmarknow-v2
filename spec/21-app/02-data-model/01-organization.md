@@ -73,3 +73,14 @@ The top-level container — the colored "workspace bubble" (PE / AU / XL …) sh
 - `organization.ownership_transferred`
 - `organization.theme_changed`
 - `organization.avatar_changed`
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Calls `has_role()` per the role-enforcement SoT in `08-member.md §Role-enforcement contract`.
+
+- enable row level security
+- SELECT: `EXISTS (members where account_id = auth.account_id() and organization_id = id and status = 'active')` AND `deleted_at IS NULL`.
+- INSERT: any authenticated Account may create an Org (becomes Owner via the Org-create RPC, which inserts the matching Member row in the same transaction). WITH CHECK `owner_account_id = auth.account_id()`.
+- UPDATE: `has_role(auth.account_id(), 'admin')` OR `has_role(auth.account_id(), 'owner')` for this `id`. `owner_account_id`, `slug`, `subscription_id` editable by `owner` only.
+- DELETE (soft): `owner` only. Hard-delete: `owner` only AND `subscription_id IS NULL` (license must be canceled first — invariant 3).
+- Notes: `billing` role sees the Org row (needed to render billing page) but UPDATE is gated to billing-only fields (`subscription_id` proxied via license RPC). `guest` role MUST NOT appear on Members of an Org root row.

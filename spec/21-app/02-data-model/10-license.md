@@ -101,3 +101,16 @@ The DB team should store these denormalized for fast permission checks. Source o
 - `license.device_deactivated`
 - `license.coupon_applied`
 - `license.seat_added` / `license.seat_removed`
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). The `billing` role exists primarily to scope visibility on this table.
+
+- enable row level security
+- SELECT:
+  - Org-scoped row (`organization_id IS NOT NULL`): `has_role(auth.account_id(), 'billing')` OR `has_role(auth.account_id(), 'admin')` OR `has_role(auth.account_id(), 'owner')` for that `organization_id`. `viewer`/`editor` MUST NOT see License rows.
+  - Account-scoped row (`account_id IS NOT NULL`, Lifetime): `account_id = auth.account_id()` only.
+- INSERT: forbidden for non-service-role callers — License rows are written exclusively by the billing webhook handlers (Stripe/Paddle) and the Lifetime-key issuance job, both of which run as service role.
+- UPDATE: forbidden for non-service-role callers (same reason). User-initiated changes (cancel, downgrade, device deactivate) flow through RPCs that bypass RLS via SECURITY DEFINER and authorize the caller via `has_role('billing')` or `has_role('owner')`.
+- DELETE: forbidden — License rows are retained for audit and refund handling.
+- Notes: `entitlements` JSON is denormalized for fast permission checks elsewhere — readers MUST treat it as authoritative and NOT join License at every check. `provider_*` IDs are sensitive (PII-adjacent) and should be excluded from any `viewer`-visible projection.

@@ -61,3 +61,14 @@ The human user (or service principal). One per real person. Owns or is a Member 
 - `account.mfa_enabled` / `account.mfa_disabled`
 - `account.signed_in` / `account.signed_out`
 - `account.soft_deleted` / `account.restored` / `account.hard_deleted`
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Strictly per-Account; Org membership does NOT grant cross-Account read access here.
+
+- enable row level security
+- SELECT: `id = auth.account_id()` for the full row. Other Org members see only the public-profile projection (`id`, `display_name`, `avatar_url`) via a separate `accounts_public` view governed by `EXISTS (members where ...co-membership...)`.
+- INSERT: forbidden for non-service-role callers — Accounts are created exclusively by the signup / OAuth-link RPCs running as service role.
+- UPDATE: `id = auth.account_id()`. Sensitive columns (`password_hash`, `mfa_totp_secret_enc`, `mfa_recovery_codes_enc`, `email`, `email_verified_at`) writable only via dedicated SECURITY DEFINER RPCs that perform re-authentication / verification flows — NEVER by direct table UPDATE.
+- DELETE: forbidden for non-service-role callers. Account deletion goes through the `request_account_deletion()` RPC which enforces invariant 4 (sole-Owner check) and the 30-day grace from `19-security-privacy/04-gdpr-ccpa.md`.
+- Notes: Service-principal Accounts (`kind = 'api_token'`) MUST NOT be returned by any user-facing list endpoint; filter `kind = 'human'` in views. `last_signin_ip` is truncated /24 (IPv4) or /48 (IPv6) BEFORE storage per `19-security-privacy/02-data-handling.md` — RLS cannot retroactively truncate.

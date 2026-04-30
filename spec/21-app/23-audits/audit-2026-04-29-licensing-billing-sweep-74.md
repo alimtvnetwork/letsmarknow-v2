@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: open (0 of 10 closed)
+status: in_progress (2 of 10 closed: LB1 + LB2 — session 75)
 opened-on: 2026-04-29
 scope: 10-licensing-billing/ folder — provider parity (Stripe/Paddle), money-units, status-enum, SKU map integrity, telemetry naming
 -->
@@ -22,8 +22,8 @@ scope: 10-licensing-billing/ folder — provider parity (Stripe/Paddle), money-u
 
 | # | Severity | Title | Owning file(s) for fix |
 |---|---|---|---|
-| LB1 | **S1** | **`canceled` vs `cancelled` spelling drift across status enum, webhooks, telemetry, and emails.** Stripe enum uses **`canceled`** (US, matches Stripe API); Paddle webhook handlers use `subscription.canceled`. But `01-plans-matrix.md §10` telemetry emits `plan.cancelled` (UK), `BILL_CANCELLATION_CONFIRMED` email is keyed off Stripe trigger `subscription.cancelled` (UK — wrong, Stripe never emits `cancelled`). A handler subscribed to `subscription.cancelled` will never fire on real Stripe events. Pick one spelling — **`canceled` (US)** to match both processor APIs — and fix the telemetry + email rows. | `01-plans-matrix.md §10`; `16-billing-emails.md §...` (BILL_CANCELLATION_CONFIRMED row); spot-check all 19 files |
-| LB2 | **S1** | **`amount_*_minor` field names violate the locked `amount_cents` rule.** `15-sku-map.md` line 6 explicitly closes W-10: "All money fields use `amount_cents`. The `amount_minor` alias is **withdrawn**." But `08-invoices-and-tax.md §...` invoice schema still uses `amount_subtotal_minor`, `amount_tax_minor`, `amount_total_minor`. Direct violation of locked rule — invoice payloads will not match the rest of the API. | `08-invoices-and-tax.md` (Invoice table) |
+| LB1 | **S1** | ✅ **Closed (Session 75).** Spelling unified to **`canceled`** (US, matches both Stripe and Paddle webhook payloads). `01-plans-matrix.md §10` telemetry `plan.cancelled` → `plan.canceled`. `16-billing-emails.md` `BILL_CANCELLATION_CONFIRMED` row trigger `subscription.cancelled` → `subscription.canceled` + email subject de-Britishized. `rg cancelled` over `10-licensing-billing/` now zero. | `01-plans-matrix.md §10`; `16-billing-emails.md` |
+| LB2 | **S1** | ✅ **Closed (Session 75).** `08-invoices-and-tax.md` Invoice schema fields renamed `amount_{subtotal,tax,total}_minor` → `amount_{subtotal,tax,total}_cents` per locked W-10 rule and `02-data-model/00-overview.md §1.3`. `rg _minor` over `10-licensing-billing/` now zero. | `08-invoices-and-tax.md` (Invoice table) |
 | LB3 | **S2** | **`team_enterprise` plan tier exists in entitlements but not in `License.plan` enum.** `02-entitlements-engine.md §50` defines `max_tier` ranking `free < pro < team < team_enterprise`. But `02-data-model/10-license.md §1` `License.plan` enum is `free \| pro \| team \| lifetime` — no `team_enterprise`. Either (a) team_enterprise is materialized as `plan=team` with a flag, in which case the entitlements rank is misleading, or (b) the enum is incomplete. AU8 just locked License.plan as the SoT; resolve. | `02-data-model/10-license.md §1`; `02-entitlements-engine.md §50` |
 | LB4 | **S2** | **Paddle SKU table missing `team_enterprise_yearly` row without explanation.** Stripe table (`15-sku-map.md §2`) includes `team_enterprise_yearly` (custom-quoted). Paddle table (§3) skips straight from `team_yearly` to `lifetime_pro`. Either Team Enterprise is **Stripe-only** (likely — enterprise deals usually go through Stripe Invoicing) and this MUST be stated, or it's an omission. | `15-sku-map.md §3` |
 | LB5 | **S2** | **Paddle webhook lacks `trial_will_end` parity.** `12-billing-webhooks.md §...` Stripe table includes `customer.subscription.trial_will_end` → fires `BILL_TRIAL_ENDING` (T-3 days, per `16-billing-emails.md §32`). Paddle table has no equivalent event handler. Paddle subscribers will silently miss the T-3 trial-ending email — material UX/conversion bug. | `12-billing-webhooks.md` (Paddle table); `04-paddle-integration.md` |

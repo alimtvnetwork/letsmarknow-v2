@@ -29,7 +29,7 @@ Per-class retention:
 | Analytics raw | 90 d | n/a | n/a | 90 d |
 | Analytics aggregated | 2 y | n/a | n/a | 2 y |
 | Error reports | 30 d | n/a | n/a | 30 d |
-| Sessions | Per session TTL | n/a | n/a | on logout / TTL |
+| Sessions | 30 d rolling refresh-cookie TTL (SoT: `09-auth-accounts/06-sessions.md §1.2`); 15 min access-JWT (SoT: `06-sessions.md §1.1`) | n/a | n/a | on logout / TTL expiry / explicit revoke |
 | Payment tokens | While subscription active | 30 d post-cancel | 90 d | 90 d |
 
 ## 3. Residency

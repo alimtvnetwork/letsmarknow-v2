@@ -21,7 +21,8 @@ Device tracking, suspicious-login alerts, IP heuristics.
 
 Stored separately (not in Session table) via long-lived cookie:
 - `Name`: `__Host-lmn_trust`
-- HttpOnly, Secure, SameSite=Strict, 30-day TTL.
+- HttpOnly, Secure, **SameSite=Strict** (intentional difference from refresh cookie — trust cookie is only consulted on same-site sign-in form submit; no magic-link / cross-site nav use case).
+- 30-day TTL.
 - Value: opaque random; hashed on server.
 - One row per `(account_id, device_fingerprint)` in `trusted_devices`.
 - Revoke from `/me/security/devices`.

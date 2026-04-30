@@ -84,3 +84,9 @@ spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md
 spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md
 # PR:#0 reason:audit-cadence-owned filename
 spec/21-app/23-audits/audit-2026-04-30-ui-ux-sweep-103.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-auth-accounts-sweep-70.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md
+# PR:#0 reason:reference doc colocated with sharing-collab spec; pre-dates the NN- prefix convention and is referenced by URL across folder
+spec/21-app/08-sharing-collab/url-normalization.md

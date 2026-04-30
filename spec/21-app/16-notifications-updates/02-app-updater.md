@@ -84,7 +84,8 @@ Defer reload until safe; show "Reload pending" indicator in shell.
 ## 8. Forced upgrade (rare)
 
 - Reserved for security-critical fixes or breaking API changes.
-- Server returns `426 UPGRADE_REQUIRED` with `min_client_version` header.
+- Server returns HTTP `426` with error envelope `{ code: "SYS_UPGRADE_REQUIRED", details: { min_client_version, current_version, surface } }` per `03-api-endpoints/18-error-codes.md §3.9`.
+- The same floor is also surfaced proactively (no error) by `GET /v1/health/extension` in its `min_client_version` response field — see `03-api-endpoints/00-overview.md §1.15` and `04-extension/03-service-worker.md`. Both surfaces use the same field name `min_client_version` (canonical; harmonised 2026-04-30 audit-110).
 - App shows blocking modal: "Update required to continue. [Reload now]".
 - Used at most a few times per year.
 

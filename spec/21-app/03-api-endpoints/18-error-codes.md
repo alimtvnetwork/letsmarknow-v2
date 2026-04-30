@@ -170,6 +170,7 @@ Every non-2xx response uses this envelope:
 | `SYS_MAINTENANCE` | 503 | yes | `toast.sys.maintenance` | `eta` |
 | `SYS_DEPENDENCY_DOWN` | 502 | yes | `toast.sys.dependency_down` | `dependency` |
 | `SYS_FEATURE_DISABLED` | 403 | no | `toast.sys.feature_disabled` | `feature_flag` |
+| `SYS_UPGRADE_REQUIRED` | 426 | no | `toast.sys.upgrade_required` | `min_client_version`, `current_version`, `surface` |
 
 ### 3.10 Realtime (`RT_*`)
 

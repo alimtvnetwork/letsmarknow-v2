@@ -45,7 +45,7 @@ When both IP and account exist, the **stricter** of the two applies.
 | `POST /v1/auth/token` (refresh) | 60 / min | 60 / min per session | — |
 | `POST /v1/auth/signout` | 30 / min | n/a | — |
 | `POST /v1/auth/mfa/verify` | n/a | 5/min per account | 15-min lockout after 10 failures |
-| `GET /v1/auth/oauth/:provider/callback` | 30 / hour | n/a | — |
+| `GET /auth/callback/:provider` (OAuth provider redirect target) | 30 / hour | n/a | Web route, not under `/v1/`. Canonical path per `02-signup-and-signin.md §1` and `04-oauth-providers.md §...`. |
 
 ## 3. Content endpoints (per authenticated account)
 

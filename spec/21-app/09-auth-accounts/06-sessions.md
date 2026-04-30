@@ -12,7 +12,7 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 - Claims:
   - `sub` — `account_id` (UUIDv7)
   - `org` — active `org_id` (UUIDv7)
-  - `roles` — `{ "<org_id>": "owner" \| "admin" \| "editor" \| "viewer" \| "billing" \| "guest" }` cached for active Org only (canonical `org_role` enum minus `system`, which is never JWT-issuable; per `17-admin-org/03-roles.md` §1)
+  - `roles` — JSON object keyed by active `org_id`, value ∈ `{ "owner", "admin", "editor", "viewer", "billing", "guest" }` — cached for active Org only. Canonical `org_role` enum **minus `system`** (per `17-admin-org/03-roles.md` §1). **Verifiers MUST reject any JWT whose `roles` value contains `"system"`** (treat as forged token; log `security.jwt_system_role_rejected`; force re-auth). The `system` role is reserved for internal service principals and is never JWT-issuable.
   - `tv` — token_version (incremented on global revoke)
   - `ent_h` — entitlements hash (for change detection)
   - `mfa` — bool (MFA satisfied this session)
@@ -97,7 +97,7 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 
 ## 11. Security
 
-- JWT signing key rotated quarterly; old keys remain valid for 24 h overlap.
+- JWT signing key rotation cadence and overlap: see `19-security-privacy/03-encryption.md §3` (canonical numeric SoT — currently **90 d** rotation, **1 d** "next-key" pre-roll overlap). This file MUST NOT restate the numbers.
 - JWKS published at `/.well-known/jwks.json`.
 - Refresh cookie cannot be read by JS (HttpOnly).
 - All auth endpoints require HTTPS (HSTS preload).

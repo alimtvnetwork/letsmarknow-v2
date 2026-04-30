@@ -43,7 +43,7 @@ Modules register entries in their own files; aggregated at app boot.
 
 Score = static rank by section + recency boost (recently used surfaces bubble up) + label match weight.
 
-Find section pulls live results from `/v1/search?limit=8` for plain queries (debounced 120 ms).
+Find section pulls live results from `GET /v1/search/quick?limit=8` (latency-optimized variant per `03-api-endpoints/13-search.md §quick`) for plain queries (debounced 120 ms).
 
 ## 5. Extensibility
 

@@ -79,6 +79,8 @@ Per-Org caps mirror per-Account at 5× (per `../03-api-endpoints/01-conventions.
 | `POST /v1/webhooks/paddle` | 300 / min | HMAC-SHA256 |
 | `POST /v1/webhooks/email-in` (per-org address) | 60 / min | Postmark/SES signature |
 
+> **Email-in plan-tier daily quotas** (Pro: 100/24h @ 5 MB; Team: 1,000/24h @ 10 MB) are SoT'd in `11-import-export/08-email-in.md §7`. Both limits apply independently.
+
 ## 6. Org-wide quotas (Free / Pro / Team / Lifetime)
 
 | Action | Free | Pro | Team | Lifetime |

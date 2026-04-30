@@ -18,7 +18,7 @@ The human (or service principal). One per real person.
 | `avatar_url` | text? | |
 | `locale` | text | BCP-47 |
 | `timezone` | text | IANA |
-| `password_hash` | text? | argon2id; null if OAuth-only |
+| `password_hash` | text? | argon2id (params `m=64MB, t=3, p=4` per `03-passwords-and-mfa.md §2`); null if OAuth-only |
 | `mfa_totp_secret_enc` | bytea? | encrypted at rest |
 | `mfa_recovery_codes_enc` | bytea? | |
 | `created_at`, `updated_at`, `deleted_at?` | | |
@@ -31,8 +31,8 @@ A workspace. Either Personal (auto-created) or Team.
 | `id` | UUIDv7 | |
 | `name` | text | |
 | `slug` | text | unique; URL component |
-| `kind` | `personal \| team` | |
-| `plan_id` | enum | free / pro / team / lifetime |
+| `kind` | `personal \| team` | Org category. Determines collaborator caps (see §2 + `10-licensing-billing/`). Independent of billing tier. |
+| `plan_id` | enum | **Denormalization** of `License.plan` per `02-data-model/10-license.md §1` — canonical SoT for the enum is there: `free \| pro \| team \| lifetime`. Lifecycle states (`trialing`, `past_due`, etc.) live on `License.status`, NOT here. Allowed combinations: `kind=personal` → `plan_id ∈ {free, pro, lifetime}`; `kind=team` → `plan_id = team`. Updated by webhook handler on subscription events; never written by API. |
 | `owner_account_id` | UUIDv7 | exactly one |
 | `brand` | jsonb? | colors, logo (Pro+) |
 | `domain` | text? | claimed domain (Team) |

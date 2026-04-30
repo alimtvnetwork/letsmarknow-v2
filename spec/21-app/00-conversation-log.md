@@ -1789,3 +1789,15 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **S2 SP7:** `03-encryption.md §4` lists RS256 as JWT fallback — weakens EdDSA lock.
 - **S3 SP8-SP10:** sub-processor table triplication, EU residency drift, TLS 1.2 sunset date.
 - Plan: 3 sessions to drain. SI-029 still blocked on legal.
+
+---
+
+## Session 67 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Closed S1 launch-blockers SP1 + SP2 from security-privacy audit.
+- `03-encryption.md §2`: `users.password_hash` and `share_passwords.hash` annotations changed from "bcrypt" → "Argon2id" (+ cite of `09-auth-accounts/03-passwords-and-mfa.md §1`).
+- `03-encryption.md §5`: rewrote password-hashing section. Argon2id now the locked algorithm (m=64MB,t=3,p=4); explicit "verifiers MUST reject bcrypt-prefixed hashes" rule added.
+- `05-share-link-security.md §6.1`: share-password hashing changed from "bcrypt cost 12" → "Argon2id with m=64MB,t=3,p=4 (same as user passwords)".
+- Audit status → in_progress (2 of 10 closed). Remaining: SP3-SP10 + SI-029 (blocked).

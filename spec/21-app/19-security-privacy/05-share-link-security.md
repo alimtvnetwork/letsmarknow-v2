@@ -45,7 +45,7 @@ Specific threats and mitigations for shared content (public / password / invite-
 ## 6. Password shares
 
 ### Hashing
-- bcrypt cost 12 (same as user passwords).
+- **Argon2id** with `m=64MB, t=3, p=4` (same parameters as user passwords; locked in `09-auth-accounts/03-passwords-and-mfa.md §1` and mirrored in `03-encryption.md §5`).
 - Per-share salt.
 
 ### Brute force

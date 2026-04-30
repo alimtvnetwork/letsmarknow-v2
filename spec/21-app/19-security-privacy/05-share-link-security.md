@@ -17,7 +17,7 @@ Specific threats and mitigations for shared content (public / password / invite-
 | Mitigation | Detail |
 |---|---|
 | High entropy | 132 bits → 5×10³⁹ tokens |
-| Rate limit | 60 /min /IP on `/t/{token}` and `/s/{token}` |
+| Rate limit | 60 /min /IP on `/t/{slug}` and `/lmk/{org_handle}/{memorable_slug}` |
 | Constant 404 timing | Always 200ms+ even on miss to prevent timing oracle |
 | WAF | Cloudflare bot challenge after threshold |
 | Logging | Failed attempts logged but not surfaced (avoid amplification) |

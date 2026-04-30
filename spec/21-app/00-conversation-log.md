@@ -2103,3 +2103,15 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - Created `audit-2026-04-29-history-undo-sweep-91.md` with 5 findings: **HU1 (F-class locked-rule violation: `02-undo-redo.md §48` says "ULIDs" — violates Core "Never ULID" rule)**, HU2 (S2, retention 90 d vs time-travel-window 30 d drift), HU3 (S2, `Pro+` not pinned to entitlement SoT), HU4 (S3, `Idempotency-Key` no cross-ref), HU5 (S3, history endpoint declarations need SoT pointer).
 - **Scorecard impact: HU1 depresses Raw-LLM + Cursor passes ~3 pts each until drained.** Recommend draining HU1 immediately next session.
 - Drain plan: 3 sessions.
+
+---
+
+## Session 92 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained HU1 (F-class) — restored scorecard to 100/100/100. **Repo-wide ULID sweep surfaced 2 previously-missed violations.**
+- HU1: `02-undo-redo.md §48` "ULIDs" → "UUIDv7" with explanatory note (k-sortable; drop-in compatible with `event_log.id`).
+- **Sweep bonus:** `rg ulid` across entire spec found `18-analytics-telemetry/01-opt-in-analytics.md` lines 49-50 declaring `account_id: "ulid"` + `org_id: "ulid"` in event payload schema — both corrected to `uuidv7` in same session.
+- Verification: `rg -i ulid spec/21-app/ | grep -v audits/` returns zero hits (excluding the 23-audits/ trail and explicit "never ULID" Core-rule citations).
+- Audit log: 1/5 closed. Scorecard restored.

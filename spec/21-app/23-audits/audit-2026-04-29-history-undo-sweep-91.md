@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (0 of 5 closed)
+status: in_progress (1 of 5 closed)
 opened-on: 2026-04-29
 scope: 12-history-undo/ folder — locked-rule violation (ULID), retention drift, entitlement pointer, idempotency cross-ref, endpoint cross-ref
 -->
@@ -22,7 +22,7 @@ scope: 12-history-undo/ folder — locked-rule violation (ULID), retention drift
 
 | # | Severity | Title | Owning file(s) for fix |
 |---|---|---|---|
-| HU1 | **F (locked-rule violation)** | **`02-undo-redo.md §48` violates Core memory "Never ULID" rule.** Verbatim: "Generate `correlation_id` + per-event optimistic IDs (ULIDs)." This is a **failing** issue per the scorecard invalidation triggers (locked identifier rule violation). Replace with UUIDv7. Verify no consumer of these IDs depends on ULID's k-sortable timestamp prefix (UUIDv7 also has it, so should be drop-in). | `02-undo-redo.md §48` |
+| HU1 | **F (locked-rule violation)** | ✅ **CLOSED Session 92.** `02-undo-redo.md §48` rewritten: "Generate `correlation_id` + per-event optimistic IDs (UUIDv7 per Core rule; k-sortable by embedded timestamp, drop-in compatible with the `event_log.id` UUIDv7 column declared in `01-event-log.md §2`)." **Bonus drift swept:** A repo-wide `rg ulid` surfaced TWO previously-missed F-class violations in `18-analytics-telemetry/01-opt-in-analytics.md` lines 49-50 (event payload `account_id: "ulid"` + `org_id: "ulid"`); both corrected to `uuidv7` in same session. Repo-wide `ulid` references now zero (excluding audit-trail prose and explicit "never ULID" Core-rule citations). | `02-undo-redo.md §5`, `18-analytics-telemetry/01-opt-in-analytics.md §3` |
 | HU2 | **S2** | **Server-side history retention contradicts time-travel claim.** `01-event-log.md §138-139` declares retention: Free 7 d, Pro 90 d. `02-undo-redo.md §23` claims "the last 30 days of history are queryable; a 'Time travel' UI lets the user pick any past event and inverse it (Pro+)." For Pro the window should be 90 d (matching retention), not 30 d. For Free the time-travel UI is silent. Reconcile: either lift the Pro window to 90 d, or pin retention as the SoT and expose a separate "time-travel-window" entitlement. `readme.md §26` says "last 30 days server-side" without plan qualifier — also drifts. | `02-undo-redo.md §3.2`, `readme.md §26`, `01-event-log.md §6` (cross-reference) |
 | HU3 | **S2** | **`Pro+` references not pinned to entitlement SoT.** `02-undo-redo.md §23` ("Pro+"), §125 ("Pro+ Time travel"), and the §138-139 retention table all gate behavior on plan tier without cross-referencing `10-licensing-billing/02-entitlements-engine.md` or naming the entitlement key (e.g. `history_time_travel`, `extended_history_retention`). Mirrors the share-link `custom_share_slug` pattern (correctly cross-referenced in `08-sharing-collab/13-share-link.md §4`). | `02-undo-redo.md §3.2 + §10`, `01-event-log.md §6` |
 | HU4 | **S3** | **`Idempotency-Key` referenced without SoT cross-ref.** `03-conflict-resolution.md §142` edge-case row says "Idempotency-Key dedupes; applied once" but does not cite `03-api-endpoints/01-conventions.md §6`. Same root cause as IE6 + SC4. One-line fix. | `03-conflict-resolution.md §14` (edge cases) |

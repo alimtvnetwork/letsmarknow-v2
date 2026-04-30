@@ -2,7 +2,8 @@
 audit-date: 2026-04-30
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (0 of 2 closed)
+status: closed (2 of 2)
+closed-on: 2026-04-30
 opened-on: 2026-04-30
 scope: 06-ui-ux/ folder — readme/overview drift after SI-026 drain (sessions 45 + later)
 -->
@@ -30,8 +31,8 @@ scope: 06-ui-ux/ folder — readme/overview drift after SI-026 drain (sessions 4
 
 | # | Severity | Title | Owning file(s) for fix |
 |---|---|---|---|
-| UI1 | **S3** | **`06-ui-ux/readme.md` drift after SI-026 drain.** The "Reading order" list (lines 9–24) and the "Files" table (lines 28–45) both stop at `16-print-stylesheet.md`. Files **17-copy-strings.md, 18-favicon-pipeline.md, 19-breakpoints.md, 20-accessibility-wcag.md, 21-options-page.md, 22-keyboard-cheatsheet.md** all exist on disk (verified `wc -l`) but are not listed in either table. The `00-overview.md` file table covers 17–20 but still misses 21–22 (added in SI-026 drain Session 45 per `13-spec-issues/04-closed-issues.md` SI-028 row). Folder-overview discipline (`templates/folder-overview.md` + `scripts/lint/folder-overview.ts`) requires the file table to enumerate every numbered file. Fix: rewrite readme.md "Reading order" to span 01-22 and "Files" table to enumerate all 22 numbered files; add rows for `21-options-page.md` and `22-keyboard-cheatsheet.md` to `00-overview.md §2`. | `06-ui-ux/readme.md`, `06-ui-ux/00-overview.md` |
-| UI2 | **S3** | **`flow-diagram.mmd` does not include the late-added surface nodes (`Options page`, `Keyboard cheatsheet`).** Spot-check shows the diagram terminates at the original 16-file vocabulary (Tokens → Theming → Iconography → Illustration → Motion → …). Files 21 + 22 represent user-visible surfaces that compose the same tokens; flow diagram should at minimum carry a node for each. Lower priority than UI1 because the file-table drift is the lint-checkable surface. Fix: append two leaf nodes `OPT[Options page]` and `KBD[Keyboard cheatsheet]` reading from `DT` (tokens) + `KEY[Keyboard input]` respectively. | `06-ui-ux/flow-diagram.mmd` |
+| UI1 | ✅ **CLOSED** (Session 103) | **`06-ui-ux/readme.md` drift after SI-026 drain.** Closed by rewriting `readme.md` "Reading order" + "Files" tables to span 01–22 (added 17–22 to both); appended `21-options-page.md` and `22-keyboard-cheatsheet.md` rows to `00-overview.md §2` File-by-file behaviour table. | `06-ui-ux/readme.md`, `06-ui-ux/00-overview.md` |
+| UI2 | ✅ **CLOSED** (Session 103) | **`flow-diagram.mmd` missing late-added surface nodes.** Closed by appending `KBD[Keyboard cheatsheet overlay]` (downstream of `KEY[Keyboard input]` which is downstream of `A11Y`) and `OPT[Options page surface]` (downstream of `COMP`) to `06-ui-ux/flow-diagram.mmd`. | `06-ui-ux/flow-diagram.mmd` |
 
 ---
 

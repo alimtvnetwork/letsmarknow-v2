@@ -1,14 +1,14 @@
 <!--
-name: 07-features broad sweep (Audit 115)
+name: 07-features broad sweep (Audit 116)
 date: 2026-04-30
-session: 115
+session: 116
 folder: spec/21-app/07-features/
 scope: All 19 feature files (~2.4k lines) for endpoint canonicality, role/ULID drift, broken cross-refs.
 -->
 
-# Audit 115 — `07-features/` broad sweep
+# Audit 116 — `07-features/` broad sweep
 
-**Date:** 2026-04-30 (Session 115, Malaysia ~23:20 UTC+8)
+**Date:** 2026-04-30 (Session 116, Malaysia ~23:20 UTC+8)
 **Folder:** `spec/21-app/07-features/`
 **Files reviewed:** 19 markdown files (`00-overview.md` … `18-add-item-hover-button.md` + `readme.md`)
 

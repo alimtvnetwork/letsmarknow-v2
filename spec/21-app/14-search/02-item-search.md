@@ -95,9 +95,9 @@ Final order: `score desc`, then `updated_at desc`.
 
 ## 8. Pagination
 
-- Cursor-based; opaque token encoding `(score_lower_bound, last_id)`.
-- Default limit 25; max 100.
-- `total_estimate` is an HLL-style approximation (cheap) for large result sets.
+- Cursor-based per `03-api-endpoints/01-conventions.md §5`; opaque token encoding `(score_lower_bound, last_id)`.
+- Default limit 25; max 100 (search-class override of the global 50/200 default).
+- Total counts never returned (W-13). Use a dedicated `/count` endpoint when an exact count is required.
 
 ## 9. Permissions
 

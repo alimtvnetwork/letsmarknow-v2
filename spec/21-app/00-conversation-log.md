@@ -8,6 +8,22 @@
 
 ---
 
+## 2026-04-29 — Session 95 — Open extension gap-sweep (audit-95)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (NEW; 4 findings — EX1 S2, EX2/EX3/EX4 S3)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 94 — Drain HU4+HU5 (S3 polish; close audit-91)
 
 ```

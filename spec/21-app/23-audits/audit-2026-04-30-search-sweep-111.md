@@ -1,4 +1,15 @@
-<!-- audit-id: 111 | date: 2026-04-30 | scope: 14-search/ | score: 100 -->
+<!--
+audit-date: 2026-04-30
+next-audit-by: 2026-10-27
+audit-type: ad-hoc
+status: closed
+closed-on: 2026-04-30
+closed-because: 4 findings opened and closed same session — SR1 (S2 endpoint inventory mismatch: `02-item-search.md §1` declared `/v1/items/search` with `meta.total_estimate`; canon is `/v1/search` family in `03-api-endpoints/13-search.md` → §1 rewritten as pointer to API spec, bespoke endpoint removed), SR2 (S2 cross-Org capability contradiction: `06-search-engine.md §5` claimed cross-Org "impossible by design — RLS isolated" while `01-global-search.md §13`, `02-item-search.md §2` scope `account`, and entire `03-workspace-search.md` describe cross-Org Pro+ feature → §5 rewritten to scope limitation correctly, single-query cross-Org FTS out, fan-out orchestration in), SR3 (S3 missing `search_tsv` schema for spaces/collections/groups: `02-data-model/05-item.md §74` cites `06-search-engine.md §2.2` as authority but §2.2 only defined items.search_tsv → added three analogous `generated always as` definitions plus matching GIN indexes), SR4 (S2 `total_estimate` violates W-13: `02-item-search.md §1` and §8 returned HLL-style total counts; `03-api-endpoints/01-conventions.md §5` forbids totals in paginated lists → field removed, cursor-only contract documented, `/count` endpoints called out). Also added explicit `/v1/search/suggest` and `/v1/search/recent` references in `01-global-search.md §11`. All 17 lint sub-checks green.
+audit-id: 111
+scope: spec/21-app/14-search/
+score-before: 100/100
+score-after: 100/100
+-->
 
 # Audit 111 — `14-search/` gap-sweep
 

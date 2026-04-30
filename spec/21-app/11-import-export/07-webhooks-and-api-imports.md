@@ -91,6 +91,8 @@ Configurable in UI with live preview against last received payload.
 
 ## 4. Rate limits
 
+> **SoT for API-token tier limits.** This table is the canonical source for per-plan API-token rate buckets. The generic class-based limits in `03-api-endpoints/01-conventions.md §8` (`read`/`write`/`bulk`/`auth`) apply to all bearer requests; this table layers stricter per-tier caps on **API-token** (PAT/OAuth) bearers. Per-account session-token traffic is governed only by §8. Cross-referenced from `09-auth-accounts/13-rate-limit-values.md`.
+
 | Tier | API requests/min | Webhook events/min |
 |---|---|---|
 | Pro | 60 (read), n/a (write) | n/a |

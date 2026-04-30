@@ -1851,3 +1851,16 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - `06-sessions.md §1`: refresh cookie SameSite changed Strict → Lax with explicit rationale.
 - `10-device-and-security.md §2`: trusted-device cookie kept SameSite=Strict with explicit rationale ("only consulted on same-site sign-in form submit"). The Strict/Lax difference between the two cookies is now intentional and documented.
 - Audit status → 1 of 10 closed. Remaining: AU2-AU10.
+
+---
+
+## Session 72 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** Next, [...standard "list remaining tasks" instruction]
+
+**Action:** Closed S2 batch AU2-AU5 from auth-accounts audit.
+- **AU2 (JWT rotation language):** `06-sessions.md §11` no longer restates rotation cadence; now references `19-security-privacy/03-encryption.md §3` as numeric SoT (90 d / 1 d).
+- **AU3 (`system`-claim rejection):** `06-sessions.md §1` `roles` claim now mandates verifiers reject any JWT containing `"system"` (logs `security.jwt_system_role_rejected`, forces re-auth). Mirrors SP7 hardening pattern.
+- **AU4 (magic-link path family):** Callback renamed `/v1/auth/magic/callback` → `/v1/auth/magic-link/callback` in `02-signup-and-signin.md §5.1` + §5.4. Short stem deprecated and locked out by note.
+- **AU5 (OAuth callback canonical path):** Locked to `/v1/auth/oauth/:provider/callback` per `03-api-endpoints/03-auth.md §OAuth`. `02-signup-and-signin.md §1` updated; `13-rate-limit-values.md §2` updated to canonical form with lay-alias note.
+- Audit status → 5 of 10 closed. Remaining: AU6-AU10 (S3 polish, single session).

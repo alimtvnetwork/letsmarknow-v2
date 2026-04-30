@@ -11,7 +11,7 @@ All entry flows for getting an Account authenticated.
 | Web app | `/signup`, `/signin`, `/signin/magic`, `/signin/oauth/:provider`, `/invite/:token` |
 | Extension popup | "Sign in" button → opens `/signin?from=ext` in new tab |
 | PWA | Same as web app |
-| OAuth callbacks | `/auth/callback/:provider` |
+| OAuth callbacks | Canonical: `GET /v1/auth/oauth/:provider/callback` (per `03-api-endpoints/03-auth.md §OAuth`). The `/auth/callback/:provider` form used in `04-oauth-providers.md §1` is the lay alias / web-route narration of the same endpoint. |
 
 ## 2. Methods
 
@@ -47,7 +47,9 @@ All entry flows for getting an Account authenticated.
 | Verb | Path | Purpose | Auth |
 |---|---|---|---|
 | `POST` | `/v1/auth/magic-link/send` | Issue token, send email | none |
-| `GET`  | `/v1/auth/magic/callback?t={token}` | Consume token, sign in | none |
+| `GET`  | `/v1/auth/magic-link/callback?t={token}` | Consume token, sign in | none |
+
+> **Path-stem rule (locked):** Both magic-link endpoints use the `magic-link` kebab stem. The shorter `/magic/callback` form is **deprecated** and MUST NOT appear in new code, docs, or rate-limit tables.
 
 Both routes obey the rate-limit envelope in `13-rate-limit-values.md` and return errors per `03-api-endpoints/18-error-codes.md` (UPPER_SNAKE_CASE per W-8 closure).
 
@@ -68,7 +70,7 @@ Response is **always** `202 ACCEPTED` with empty body — no enumeration of whet
 
 ### 5.4 Callback / consume
 
-`GET /v1/auth/magic/callback?t={token}` performs, in order:
+`GET /v1/auth/magic-link/callback?t={token}` performs, in order:
 
 1. Hash incoming `t`, look up row.
 2. If missing / expired / already consumed → `410 GONE` with code `MAGIC_LINK_INVALID`; render `/auth/magic/expired` page with "Request a new link" CTA.

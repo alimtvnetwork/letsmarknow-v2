@@ -1929,7 +1929,6 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Audit status:** `audit-2026-04-29-licensing-billing-sweep-74.md` → **closed (10/10)**. `next-audit-by: 2026-10-26`.
 
 **Remaining open work across the whole spec:**
-1. SI-022 (S2) — 19 undeclared endpoints sweep (still open from session 73).
-2. SI-029 (S2) — Privacy-pack legal copy. **Blocked on human legal counsel.**
+1. SI-029 (S2) — Privacy-pack legal copy. **Blocked on human legal counsel** (only open spec issue).
 
 No open audit findings remain.

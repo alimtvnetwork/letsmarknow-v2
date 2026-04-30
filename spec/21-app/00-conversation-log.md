@@ -2443,3 +2443,19 @@ All 17 linters green. Scorecard 100/100/100.
 - AO5 (S3): `§3.4` bare "410 Gone" → canonical `SHARE_REVOKED` per registry §3.5.
 
 Role enum lock verified intact across glossary + member.md + 03-roles.md (7 values, same order). All 17 linters green. Scorecard 100/100/100.
+
+---
+## 2026-04-30 — Session 115: Gap-sweep `18-analytics-telemetry/`
+
+**User instruction (verbatim):** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Outcome.** Audit-115 closed 7 findings, all internal-folder SoT drift between `01-opt-in-analytics.md`/`02-error-reporting.md` and the master event catalog `03-events.md`:
+- AT1 (S2): §4 non-canonical naming `<surface>.<object>.<verb>` with invented examples → defers to master.
+- AT2 (S2): §4 envelope schema drift (`event`/`properties` vs `name`/`props`) → defers to master.
+- AT3 (S2): `analytics/events.yaml` vs canonical `schemas/events/<name>.schema.json` → fixed.
+- AT4 (S3): `analytics.*` meta-events undeclared → added `analytics` domain + new §2.16 (4 events).
+- AT5 (S3): `error.*` pipeline events undeclared → added 4 events to §2.16.
+- AT6 (S3): §7 sampling table conflicted with per-event Sample column → defers to master.
+- AT7 (S3): YAML excerpt invented `extension.popup.save_clicked` → removed.
+
+Master catalog now: 27 domains, §2.16 added with 8 events (4 analytics meta, 4 error pipeline). All 17 linters green. Scorecard 100/100/100.

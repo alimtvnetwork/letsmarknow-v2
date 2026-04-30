@@ -34,27 +34,9 @@ Default for opt-out regions: all off.
 
 ## 4. Event taxonomy
 
-All events follow `<surface>.<object>.<verb>` naming:
-- `extension.popup.opened`
-- `web.collection.created`
-- `mindmap.node.clicked`
+> **Source of truth.** All event names, props schemas, owners, and sampling rates are defined in `03-events.md` (the master catalog). This file does not enumerate or rename events. Naming format, envelope schema, props rules, and forbidden keys are declared in `03-events.md §1 (Conventions)`.
 
-Event payload schema:
-```json
-{
-  "event": "string",
-  "ts": "ISO 8601",
-  "anon_id": "uuid (rotated yearly per device)",
-  "session_id": "uuid (rotated per app session)",
-  "account_id": "uuidv7 (only if consent granted)",
-  "org_id": "uuidv7 (current org context)",
-  "surface": "web|extension|api",
-  "channel": "stable|beta",
-  "platform": "macos|windows|linux|ios|android",
-  "client_version": "semver",
-  "properties": { ... event-specific ... }
-}
-```
+This file owns the **consent gate** that decides whether any event in the master catalog is permitted to leave the client. Once the gate is open, every event MUST already exist in the master catalog (CI rejects unknown event names).
 
 ## 5. PII rules
 
@@ -74,32 +56,21 @@ Static linter on event definitions enforces this.
 
 ## 6. Event registry
 
-- Single file `analytics/events.yaml` defines every allowed event + schema.
-- CI fails build if code emits an event not in registry.
-- Each event documented: purpose, owner team, retention, sampling rate.
-- New events require code review + privacy review.
+Per-event JSON Schemas live at `schemas/events/<event_name>.schema.json` (one file per row in the master catalog `03-events.md §2`). CI step `validate-events` (defined in `03-events.md §3`):
 
-Excerpt:
-```yaml
-- name: extension.popup.save_clicked
-  owner: extension-team
-  sampling: 1.0
-  retention: 90d
-  properties:
-    save_target_kind: { type: enum, values: [collection, group, inbox] }
-    has_session_capture: { type: bool }
-```
+1. Verifies every event referenced in code/spec is listed in the master catalog.
+2. Verifies forbidden prop keys (`03-events.md §1.Props rules`) are absent from every schema.
+3. Rejects builds that emit an event name not declared in the master catalog.
+
+Privacy review is required for any new event whose props touch user-supplied content even indirectly (length, count, enum derived from text). See checklist in `03-events.md §4`.
 
 ## 7. Sampling
 
-| Volume | Sampling rate |
-|---|---|
-| < 1 event/min/user (avg) | 100% |
-| 1-10/min | 10% |
-| > 10/min | 1% |
-| Ultra-high (scroll, mouse-move) | Aggregate client-side; emit summary every 60 s |
+Per-event sampling rates are declared in the master catalog (`03-events.md §1.Sampling defaults` and the per-row `Sample` column in §2). Rates may be overridden at runtime via server flag for incident response, but the spec rate is the long-run target.
 
-Sampling deterministic per-Account so cohorts remain consistent.
+This file does not redefine sampling — see `03-events.md` for the canonical rates per event family.
+
+Sampling is deterministic per-Account so cohorts remain consistent across releases.
 
 ## 8. Transport
 
@@ -139,9 +110,7 @@ Public transparency report (annual):
 
 ## 12. Telemetry of telemetry
 
-- `analytics.consent_granted` / `analytics.consent_revoked`.
-- `analytics.purge_requested`.
-- `analytics.queue_overflow` (server health signal).
+Consent + pipeline-health meta-events are declared canonically in `03-events.md §2.16 (Analytics meta)`: `analytics.consent_granted`, `analytics.consent_revoked`, `analytics.purge_requested`, `analytics.queue_overflow`. This file does not redefine their props.
 
 ## 13. Edge cases
 

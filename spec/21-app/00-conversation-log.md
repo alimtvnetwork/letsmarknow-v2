@@ -1932,3 +1932,28 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 1. SI-029 (S2) — Privacy-pack legal copy. **Blocked on human legal counsel** (only open spec issue).
 
 No open audit findings remain.
+
+## Session 78 — 2026-04-29 (Malaysia, UTC+8)
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Previous audit queue was empty. Per memory's suggestion, opened a new gap-sweep audit on `11-import-export/` (highest-leverage un-audited folder).
+
+Created `spec/21-app/23-audits/audit-2026-04-29-import-export-sweep-78.md` with **8 findings (2 S1, 4 S2, 2 S3)**:
+
+- **IE1 (S1)** — `cancelled` (UK) drift: 3 instances in `03-import-pipeline.md` (lines 112, 170) and `06-large-imports.md` (line 105) plus prose at line 79. Same root-cause class as LB1 (Session 75).
+- **IE2 (S1)** — `import_state` enum drift: three conflicting enums for one concept. Pipeline uses `cancelled`/`resumed_from=…`; large-imports uses `uploaded → parsed → preview_ready → committing → committed`; canonical SoT (`03-api-endpoints/15-import-export.md` line 250) is `awaiting_upload | queued | running | succeeded | partial | failed | canceled`. Pick canonical wire enum; document large-imports stages as sub-state of `running`.
+- **IE3 (S2)** — Email-in rate-limit drift: `08-email-in.md §7` declares per-plan daily quotas; `09-auth-accounts/13-rate-limit-values.md §5` declares per-minute gateway limit. Both authoritative without cross-reference.
+- **IE4 (S2)** — API/webhook rate-limit drift: `07-webhooks-and-api-imports.md §4` declares its own per-plan API tier table; canonical SoT `13-rate-limit-values.md` does not contain these values. Pick one home.
+- **IE5 (S2)** — `dedup_mode` telemetry property used with no declared enum. Likely `merge | skip | import_anyway`. Add to `05-mapping-and-dedup.md` or `11-dedup-algorithm.md`.
+- **IE6 (S2)** — Idempotency-Key contract specified three different ways across `07-webhooks-and-api-imports.md §5`, `03-import-pipeline.md §87`, `09-gdpr-export.md §36`. Verify canonical lives in `03-api-endpoints/01-conventions.md` and replace local prose with cross-references.
+- **IE7 (S3)** — GDPR bundle filename casing: lowercase data files vs uppercase `README.md`. Add explanatory note.
+- **IE8 (S3)** — Path-token style drift: `:webhook_token`, `{account_token}`, `migration-token`. Normalize to canonical `:param`.
+
+Drain plan: 3 sessions (IE1+IE2 next, then IE3-IE6, then IE7+IE8).
+
+**Remaining open work across the whole spec:**
+1. Drain `audit-2026-04-29-import-export-sweep-78.md` (8 findings open, 0 closed).
+2. SI-029 (S2) — Privacy-pack legal copy. **Blocked on human legal counsel.**
+
+Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).

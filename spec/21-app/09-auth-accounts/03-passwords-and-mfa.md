@@ -104,7 +104,7 @@ Org Admins can require MFA Org-wide; non-MFA Members get 14-day grace then block
 ## 13. UX details
 
 - Eye toggle on every password field.
-- Live HIBP check debounced 600 ms; only after 10 chars typed.
+- Live HIBP check: debounced 600 ms; fires on input once **≥ 8 chars** typed (catches weak-but-typo'd passwords before the user reaches the 10-char §1 minimum); also re-fires `on blur` if length condition is met. Below 8 chars, only the local `zxcvbn`-style hint runs (no network).
 - TOTP input: 6-digit numeric, auto-submit on 6 chars.
 - Recovery code input: 8-char alphanumeric, auto-format with hyphen for readability.
 - Clear "lost device" link → recovery code form.

@@ -1864,3 +1864,17 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **AU4 (magic-link path family):** Callback renamed `/v1/auth/magic/callback` → `/v1/auth/magic-link/callback` in `02-signup-and-signin.md §5.1` + §5.4. Short stem deprecated and locked out by note.
 - **AU5 (OAuth callback canonical path):** Locked to `/v1/auth/oauth/:provider/callback` per `03-api-endpoints/03-auth.md §OAuth`. `02-signup-and-signin.md §1` updated; `13-rate-limit-values.md §2` updated to canonical form with lay-alias note.
 - Audit status → 5 of 10 closed. Remaining: AU6-AU10 (S3 polish, single session).
+
+---
+
+## Session 73 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** Next, [...standard "list remaining tasks" instruction]
+
+**Action:** Closed S3 batch AU6-AU10 — auth-accounts audit (Session 70) now **fully drained 10/10**.
+- **AU6:** `01-identity-model.md §1` `Account.password_hash` annotation inlines argon2 params + references `03-passwords-and-mfa.md §2`.
+- **AU7:** `Org.kind` and `Org.plan_id` rows now explicit on allowed combinations: personal → {free, pro, lifetime}; team → {team}.
+- **AU8:** `Org.plan_id` is now declared a **denormalization** of `License.plan` (canonical SoT: `02-data-model/10-license.md §1`). Lifecycle states (`trialing`, `past_due`, etc.) live on `License.status`, NOT on `Org.plan_id`. Resolves the "incomplete enum" suspicion.
+- **AU9:** Closed incidentally in Session 72 (the AU3 rewrite already removed the escaped-pipe JSON example from `06-sessions.md §1`).
+- **AU10:** `03-passwords-and-mfa.md §13` HIBP live-check trigger lowered from "≥10 chars" to "≥8 chars + on blur". Catches weak passwords before the 10-char minimum.
+- Audit `audit-2026-04-29-auth-accounts-sweep-70.md` status → **closed**.

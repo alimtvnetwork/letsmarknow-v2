@@ -54,9 +54,13 @@ When the Mark Now Chrome extension is installed and the user is signed in, typin
 
 ## 2. Reserved slugs
 
+> **Scope:** This list applies to the **random `/t/{slug}` namespace** (§1.1) AND, per §1.2, is inherited by the **memorable `lmk/{org_handle}/{memorable_slug}` namespace** (plus the extra four `lmk`, `t`, `new`, `edit`). It does **not** restrict `{org_handle}` itself — Organization handles live in a separate namespace governed by `09-auth-accounts/` (Org-handle rules), and the `org` entry below blocks only the path segment `/t/org` and `/lmk/{org_handle}/org`, not the use of `org` as a substring of an Org handle.
+
 Blocked at create time (case-insensitive):
 
 `t`, `e`, `s`, `app`, `api`, `admin`, `account`, `auth`, `billing`, `blog`, `careers`, `changelog`, `community`, `contact`, `dashboard`, `docs`, `download`, `embed`, `extensions`, `features`, `feedback`, `help`, `home`, `jobs`, `legal`, `login`, `logout`, `marketing`, `oauth`, `org`, `pricing`, `privacy`, `pro`, `roadmap`, `security`, `settings`, `share`, `signin`, `signup`, `status`, `support`, `team`, `terms`, `trial`, `tos`, `upgrade`, `user`, `vs`, `webhooks`, `welcome`.
+
+> **Why `new` is in the §1.2 memorable-slug reserved list:** `/lmk/new?slug=...` is the create-redirect target used by the address-bar resolver (§1.4 row 4). Reserving `new` prevents users from claiming `/lmk/{org_handle}/new` and shadowing the create flow inside their own Org.
 
 Configurable blocklist appendable by ops.
 

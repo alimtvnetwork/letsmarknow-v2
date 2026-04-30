@@ -29,11 +29,11 @@ Each stage is observable, cancellable, and resumable.
 
 ## 4. Parse
 
-- Triggered by `POST /v1/imports/:id/parse?source=<id>`.
-- Spawns background job (Bull / Lovable Cloud function).
+- Triggered automatically by the server when `POST /v1/imports/upload` (one-shot) or `POST /v1/imports` + PUT-to-presigned-URL (two-phase) completes. **There is no separate `POST /v1/imports/:id/parse` endpoint** — parsing is implicit; clients observe progress via `GET /v1/imports/:id/status` (canonical `phase` enum: `parsing | previewing | …`, see `03-api-endpoints/15-import-export.md` line 115).
+- Spawns background job (Bull / Lovable Cloud function) that consumes from the canonical queue (`22-infrastructure/07-queues.md`).
 - Streams records; computes summary stats.
-- Status tracked in `import_jobs` table with `progress_pct`.
-- Errors per record collected (max 1000 logged, count of overflow).
+- Status tracked in `import_jobs` table with `progress_pct`; surfaced as `progress.percent` on the wire.
+- Errors per record collected (max 1000 logged, count of overflow). Per-record reasons emitted as `warnings[].code` on the preview payload using the warning vocabulary in §11 below — these are **not** API envelope error codes (those follow the `IMPORT_*` family in `03-api-endpoints/18-error-codes.md §3.7`).
 
 ### Parse output (preview cache)
 - Stored in object storage as Parquet (compact columnar) for fast preview rendering.
@@ -124,22 +124,31 @@ Exceeding cap → 402 with upgrade CTA.
 
 ## 11. Error model
 
-Per-record errors don't fail the import; collected and reported.
+> **Two layers.** Per-record warnings (table immediately below) are emitted as `warnings[].code` strings inside the preview payload and as rows in the per-job `errors_url` JSON. They are NOT API envelope error codes — the envelope `IMPORT_*` family (`03-api-endpoints/18-error-codes.md §3.7`) governs HTTP responses on the import endpoints. Per-record warnings never fail the import; they reduce or annotate the record set.
 
-| Error | Behavior |
+Per-record warnings (collected, never fatal):
+
+| Warning code | Behavior |
 |---|---|
 | `MISSING_URL` | Skip record |
-| `INVALID_URL` | Skip; log raw |
+| `INVALID_URL` | Skip; log raw (mirrors preview-payload sample, see API spec §preview) |
 | `URL_TOO_LONG` (> 4 KB) | Skip; log |
 | `MALFORMED_DATE` | Use today's date |
 | `UNKNOWN_TAG_REFERENCE` | Drop tag from item |
 | `DUPLICATE_IN_FILE` | Keep first only |
+| `MISSING_FAVICON` | Lazy-fetch later (already in preview sample) |
 
-Fatal errors (full file fail):
-- `INVALID_FORMAT`
-- `CHECKSUM_MISMATCH` (LMN JSON)
-- `CORRUPT_FILE`
-- `SCHEMA_VERSION_TOO_NEW`
+Fatal conditions (whole-file failure → maps to API envelope error per `03-api-endpoints/18-error-codes.md §3.7`):
+
+| Condition | Envelope code |
+|---|---|
+| Format unrecognised / structurally invalid | `IMPORT_FORMAT_UNSUPPORTED` (415) or `IMPORT_PARSE_FAILED` (422) |
+| LMN JSON checksum mismatch | `IMPORT_PARSE_FAILED` (422) with `details.reason="checksum_mismatch"` |
+| Truncated / corrupt file | `IMPORT_PARSE_FAILED` (422) with `details.reason="corrupt_file"` |
+| LMN JSON `schema_version` newer than supported major | `IMPORT_PARSE_FAILED` (422) with `details.reason="schema_version_too_new"` |
+| File exceeds size cap | `IMPORT_FILE_TOO_LARGE` (413) |
+| Quota exceeded | `IMPORT_QUOTA_EXCEEDED` (402) |
+| Worker pipeline crash | `IMPORT_JOB_FAILED` (500) |
 
 ## 12. Performance
 

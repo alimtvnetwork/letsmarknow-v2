@@ -82,7 +82,16 @@ When dedup fires:
 
 ## 6. Telemetry
 
-> **`dedup_mode` enum (canonical, telemetry-only).** Allowed values: `skip | merge | allow`. Mirrors the `X-Dedup-Mode` header in §4 and the per-import wizard toggle. Distinct from the wire-level `on_duplicate` enum on `POST /v1/imports/:id/commit` (`skip | overwrite | create_new | merge_tags` — see `03-api-endpoints/15-import-export.md`); the request-time `on_duplicate` is mapped down to `dedup_mode` for emission. Cross-referenced from `03-import-pipeline.md §14` (`import.commit_started`) and `05-mapping-and-dedup.md §12` (`import.dedup_summary.mode`).
+> **Three vocabularies, one matcher.** The system uses three dedup-mode names by layer; the mapping below is canonical. Importer code MUST translate via this table; never invent a fourth vocabulary.
+>
+> | UX wizard label (`05-mapping-and-dedup.md §5`) | Wire `on_duplicate` (`POST /v1/imports/:id/commit`) | Telemetry `dedup_mode` (this file §4 / `X-Dedup-Mode`) | Behavior |
+> |---|---|---|---|
+> | `merge_by_url` (default) | `merge_tags` | `merge` | Stages 1–4 active; matched items merged per `05-mapping-and-dedup.md §8` |
+> | `skip_duplicates` | `skip` | `skip` | Stages 1–4 active; matches dropped (incoming discarded) |
+> | `keep_both` | `create_new` | `allow` | Stage 1 only (telemetry); always insert, never merge |
+> | (no UX label — admin only) | `overwrite` | `merge` | Stages 1–3 active; matched item REPLACED (existing tags/notes lost). Restricted to API import jobs with `X-Dedup-Mode: merge` and `on_duplicate=overwrite` AND caller has Admin role. |
+>
+> **`dedup_mode` enum (canonical, telemetry-only).** Allowed values: `skip | merge | allow`. Mirrors the `X-Dedup-Mode` header in §4 and the per-import wizard toggle. Distinct from the wire-level `on_duplicate` enum on `POST /v1/imports/:id/commit` (`skip | overwrite | create_new | merge_tags` — see `03-api-endpoints/15-import-export.md`); the request-time `on_duplicate` is mapped down to `dedup_mode` per the table above for emission. Cross-referenced from `03-import-pipeline.md §14` (`import.commit_started`) and `05-mapping-and-dedup.md §12` (`import.dedup_summary.mode`).
 
 | Event | Props |
 |---|---|

@@ -2429,3 +2429,17 @@ All 17 linters green. Scorecard 100/100/100.
 - IA3 (S3): Permanent forward-ref to never-authored `06-ui-ux/04-layout-grid.md §6` "RTL guarantees" — replaced with roadmap pointer + interim guidance.
 
 All 17 linters green. Scorecard 100/100/100.
+
+---
+## 2026-04-30 — Session 114: Gap-sweep `17-admin-org/`
+
+**User instruction (verbatim):** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Outcome.** Audit-114 closed 5 findings:
+- AO1 (S2): `03-roles.md §9` invented `INSUFFICIENT_ROLE` + bare `403 FORBIDDEN` → canonical `PERM_DENIED`/`PERM_ROLE_REQUIRED` per registry §3.3.
+- AO2 (S2): `04-audit-log.md §2` sample `"id": "01H..."` (ULID) → `01J...` (UUIDv7); honors Core rule.
+- AO3 (S3): `05-data-export-delete.md §1.Pipeline` `POST /exports` → canonical `POST /v1/organizations/:id/data-export`.
+- AO4 (S3): `§3.6` unregistered `/account/orgs/restore` → canonical `POST /v1/organizations/:id/restore`.
+- AO5 (S3): `§3.4` bare "410 Gone" → canonical `SHARE_REVOKED` per registry §3.5.
+
+Role enum lock verified intact across glossary + member.md + 03-roles.md (7 values, same order). All 17 linters green. Scorecard 100/100/100.

@@ -46,7 +46,7 @@ closed-because: Append-only retrospective documenting the 12-session drain patte
 | S47 | −1 | Authored `10-licensing-billing/16-billing-emails.md` | **Slot collision** — slot 07 occupied, used 16; rewrote citing ref in `03-api-endpoints/17-billing-webhooks.md` |
 | S48 | −1 | Converted v2 share-model ref to plain prose (no new file) | `03-api-endpoints/10-shares.md`. Also repaired bloated SI-026 tracker row (5 stitched-together failed `line_replace` versions) |
 | S49 | −1 | Converted payments-integration ref to plain prose | Pointed at existing `10-licensing-billing/03-stripe-integration.md` + `04-paddle-integration.md`; repaired `readme.md` tree (lines 214-222: 7 fictitious filenames → real NN- billing files) |
-| S50 | −5 | Authored `17-i18n-a11y/00-overview.md` + `01-extension-strings.md`, renamed 2 citing refs, scrubbed 1 latent backtick + 3 orphan self-reference allowlist entries | **Closed.** SI-026 renamed to SI-028 in tracker to preserve history given an earlier numbering collision |
+| S50 | −5 | Authored `24-i18n-a11y/00-overview.md` + `01-extension-strings.md`, renamed 2 citing refs, scrubbed 1 latent backtick + 3 orphan self-reference allowlist entries | **Closed.** SI-026 renamed to SI-028 in tracker to preserve history given an earlier numbering collision |
 
 **Cadence:** ~1.75 entries/session across active sessions; idle sessions broke the streak but no regressions occurred between drains.
 

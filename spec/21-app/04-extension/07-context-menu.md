@@ -112,4 +112,4 @@ Options toggle "Show 'Lets Mark Now' in right-click menus" (default ON). When OF
 
 ## 8. Localization
 
-`title` strings come from `_locale/<locale>/messages.json` via `chrome.i18n.getMessage("ctxSavePage")`. See `17-i18n-a11y/01-extension-strings.md`.
+`title` strings come from `_locale/<locale>/messages.json` via `chrome.i18n.getMessage("ctxSavePage")`. See `24-i18n-a11y/01-extension-strings.md`.

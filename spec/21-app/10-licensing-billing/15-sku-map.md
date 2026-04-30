@@ -101,7 +101,7 @@ export function resolveSku(provider: "stripe" | "paddle", key: SkuKey, env: "liv
 1. Adding a new SKU → update this file → regenerate `sku-map.ts` → add Stripe + Paddle IDs together (never one provider).
 2. Deprecating a SKU → mark `deprecated: true` in the table; keep the row for 24 months for invoice replay.
 3. Rotation: live IDs are immutable; never re-use a deleted price ID for a new product.
-4. SKU key MUST match a `plan_code` in `01-plans-matrix.md` §6. Drift is a spec bug.
+4. SKU key MUST match a Plan ID listed in `01-plans-matrix.md` §6 (Plan IDs). Drift is a spec bug. (LB8 closure: the locked term is "Plan ID", not "plan_code".)
 
 ## 8. Locked rules
 

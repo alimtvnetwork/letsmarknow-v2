@@ -1,96 +1,62 @@
 # View Modes
 
-Four ways to render Items in a Collection / Space / Search.
+> 📌 **Pointer file.** This is the *feature* entry — the user-facing capability "switch how my Collection is rendered". Render contracts, storage shape, persistence rules, entitlements, keyboard shortcuts, and telemetry all live in `15-visualization/`. This file enumerates the modes and routes the reader.
 
 ---
 
-## 1. Modes
+## 1. The 5 modes
 
-| Mode | Best for | Density |
+| Mode | Surface spec | Phase |
 |---|---|---|
-| `grid` | Visual browsing (default) | Comfortable |
-| `list` | Reading-heavy users | Cozy |
-| `compact` | Power users / large sets | Compact |
-| `column` | Kanban-style overviews / Space rollup | Cozy |
+| `list` | `15-visualization/01-list-view.md` | P0 (default) |
+| `grid` | `15-visualization/02-grid-view.md` | P0 |
+| `compact` | `15-visualization/03-compact-view.md` | P0 |
+| `column` | `15-visualization/05-tabextend-column-view.md` | P1 |
+| `mindmap` | `15-visualization/04-mindmap-view.md` | P3 |
 
-## 2. Selection
+Default mode is `list` (per `15-visualization/readme.md §C2`).
 
-- Per-Collection preferred mode persisted in `collection.default_view`.
-- Per-route override via `?view=`.
-- Per-Account default in `prefs.default_view`.
-- View-mode switcher in Collection header always visible.
-- Keyboard `1` / `2` / `3` / `4` switches modes when card focused.
+## 2. Storage
 
-## 3. Visual specs
+Per-Collection mode lives at `collections.view_settings.mode` (jsonb). Per-Account fallback lives at `account.preferences.default_view`. Schema, defaults, and merge rules are defined in **`15-visualization/readme.md §C2`** — never duplicate them here.
 
-### 3.1 Grid
-- Card 220×180 px (default), responsive `repeat(auto-fill, minmax(220px, 1fr))`.
-- Thumbnail 220×140 (16:11) with favicon overlay.
-- Title 2-line clamp.
-- Tags row (chips, max 3 visible + "+N").
-- Footer micro-row: domain · saved-ago · star.
+Data-model fields:
+- `02-data-model/03-collection.md` `view_settings` (jsonb).
+- `02-data-model/11-account.md` `preferences.default_view` (enum).
 
-### 3.2 List
-- Row 64 px tall.
-- Layout: favicon · title (1 line, truncate) · domain · tags · ⋯ menu.
-- Description preview as second line if present.
-- Hover row reveals quick actions on right.
+## 3. Switching the mode
 
-### 3.3 Compact
-- Row 28 px tall (Compact density).
-- Layout: favicon · title (truncate) · tags inline · domain right-aligned.
-- No description.
-- High-density power view; great for keyboard navigation.
+User-facing affordances:
+- View-mode switcher in Collection header (always visible).
+- Command palette: `13-command-palette.md` action `view.set_mode`.
+- Keyboard: shortcut bindings live in `06-ui-ux/08-keyboard-input.md §3` (registry is the single source of truth — do not invent shortcuts here).
 
-### 3.4 Column
-- Horizontal scroll; columns 280 px wide.
-- Each Group is a column header.
-- Items as small grid cards inside.
-- Drag items between columns = reassign Group.
-- "+ Group" column at the right end.
+API surface for the switch is `PATCH /v1/collections/:id` with body `{ view_settings: { mode: ... } }` per `15-visualization/readme.md §C3` and `03-api-endpoints/06-collections.md`.
 
-## 4. Behavior parity
+## 4. Cross-mode behavior
 
-All modes support:
-- Multi-select.
-- Drag-and-drop.
-- Hover-to-jump.
-- Right-click context menu.
-- Keyboard nav (`j/k`, `h/l`).
-- Bulk action bar.
-- Filters (tag chips + search).
+The visualization folder canon (`readme.md §C1`, §C6) guarantees:
+- Same `Item[]` payload underlies every mode (no data loss on switch).
+- Selection state persists across mode switches (sessionStorage, per `readme.md §C6`).
+- Drag-and-drop, multi-select, keyboard nav, right-click context menu, hover-to-jump work in every mode (per `06-ui-ux/09-drag-and-drop.md`, `06-ui-ux/08-keyboard-input.md`).
 
-## 5. Performance
+## 5. Plan gating
 
-- Virtualization at > 100 visible items in any mode (TanStack Virtual).
-- Image lazy-load (`loading="lazy"`, `decoding="async"`).
-- Skeletons match the active mode's row/card shape.
+Mode availability and per-mode capability gates (custom covers, WIP limits, mind-map access, etc.) are tabulated in **`15-visualization/readme.md §C10`**. Entitlement keys flow from `10-licensing-billing/02-entitlements-engine.md`.
 
-## 6. Empty per mode
+This file does NOT enumerate plan gates — it would drift. Read the canon table.
 
-Empty state composition (illustration + headline + CTA) is identical regardless of mode.
+## 6. Telemetry
 
-## 7. Switcher UI
+Mode-switch events live in the `view.*` namespace per `18-analytics-telemetry/03-events.md`:
+- `view.mode_changed` `{ from, to, surface, collection_id }`
 
-`<ViewModeSwitch>` component:
-- Pills with icons (Grid, List, Compact, Column).
-- Tooltip on hover with name.
-- Persists choice immediately.
+Per-mode events are enumerated in each view file's §12.
 
-## 8. Entitlements
+## 7. Cross-references
 
-All view modes available on every plan.
-
-## 9. Telemetry
-
-- `view_mode.changed` `{ from, to, surface }`
-- `view_mode.column_drag_between` `{ same_collection: bool }`
-
-## 10. Edge cases
-
-| Case | Behavior |
-|---|---|
-| Switch mode while items selected | Selection preserved |
-| Mode change while modal open | Modal stays; mode applies behind |
-| Column mode with no Groups | Single column "(no group)" with all items |
-| Compact mode on touch | Density bumped to Cozy automatically |
+- Canon (storage / API / entitlements / keyboard / cache invalidation): `15-visualization/readme.md §C1–C13`.
+- Per-mode render contracts: `15-visualization/01-list-view.md` … `15-visualization/06-resizable-sections.md`.
+- Switcher UI affordance + dashboard placement: `05-web-app/03-dashboard.md`.
+- Command palette: `07-features/13-command-palette.md`.
+- Plan gating engine: `10-licensing-billing/02-entitlements-engine.md`.

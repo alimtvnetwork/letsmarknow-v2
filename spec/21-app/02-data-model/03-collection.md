@@ -26,7 +26,7 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 | `starred_pin_position` | float8 | yes | null | non-null iff `is_starred=true` | Manual ordering within the parent Space's "⭐ Starred" pinned section (Toby parity, SI-021). Independent of `position`. Re-balanced like `position`. When unstarred, set to null. |
 | `is_collapsed_by_default` | bool | no | false | — | Whether to render collapsed initially (Toby's collapse arrow). |
 | `tag_ids` | array<uuid> | no | `[]` | ≤ 32, all in same Org | Tags attached. |
-| `default_view_mode` | enum(`list`\|`grid`\|`compact`) | yes | inherits | — | Per-collection view override. |
+| `view_settings` | jsonb | yes | null | shape per `15-visualization/readme.md` §C2 | Per-Collection view settings. Carries `mode` (enum: `list`\|`grid`\|`compact`\|`column`\|`mindmap`), `density`, `size`, `aspect`, `sort`, `group_by`, `filters`. Falls back to `account.preferences.default_view` when null. **Single source of truth: `15-visualization/readme.md` §C2.** Do not redefine the schema here. |
 | `item_count_cache` | int | no | 0 | computed | Number of non-deleted Items inside (direct + via Groups). Maintained by service layer. |
 | `group_count_cache` | int | no | 0 | computed | Number of non-deleted Groups inside. |
 

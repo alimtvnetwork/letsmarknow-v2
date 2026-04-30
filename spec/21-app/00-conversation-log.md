@@ -1839,3 +1839,15 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **S2 cluster:** AU2 (JWT rotation language drift "quarterly/24h" vs "90d/1d"); AU3 (no enforcement that JWT `roles` claim rejects `system`); AU4 (magic-link path family inconsistent: `/magic-link/send` vs `/magic/callback`); AU5 (OAuth callback `/auth/callback/:provider` vs `/v1/auth/oauth/:provider/callback`).
 - **S3:** AU6-AU10 polish (Argon2 param annotation, kind/plan_id relationship, JSON example formatting, HIBP debounce threshold).
 - Plan: 3 sessions to drain. SI-029 still blocked on legal.
+
+---
+
+## Session 71 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Closed S1 finding AU1 from auth-accounts audit.
+- Decision: refresh cookie = `SameSite=Lax` (matches `19-security-privacy/01-threat-model.md §2`); needed for magic-link sign-in. CSRF protection delegated to double-submit token pattern (`03-encryption.md §8`).
+- `06-sessions.md §1`: refresh cookie SameSite changed Strict → Lax with explicit rationale.
+- `10-device-and-security.md §2`: trusted-device cookie kept SameSite=Strict with explicit rationale ("only consulted on same-site sign-in form submit"). The Strict/Lax difference between the two cookies is now intentional and documented.
+- Audit status → 1 of 10 closed. Remaining: AU2-AU10.

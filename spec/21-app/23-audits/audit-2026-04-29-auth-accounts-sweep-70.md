@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: open
+status: in_progress (1 of 10 closed: AU1 — session 71)
 opened-on: 2026-04-29
 scope: 09-auth-accounts/ folder — JWT/cookie consistency vs encryption spec, role-enum coverage, magic-link/OAuth path drift
 -->

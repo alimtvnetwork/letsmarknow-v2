@@ -94,17 +94,17 @@ Always 202 even if email doesn't exist (no enumeration).
 ---
 
 ### Consume magic link
-`POST /v1/auth/magic-link/consume`
+`GET /v1/auth/magic-link/callback?t={token}`
 
-**Request**
-```json
-{ "token": "lmn-ml-..." }
-```
-**Response 200** — same shape as signin.
+> **Canonical SoT:** `09-auth-accounts/02-signup-and-signin.md §5.1, §5.4`. The earlier `POST /v1/auth/magic-link/consume` form is **withdrawn** and MUST NOT appear in new code or rate-limit tables (per the §5.1 path-stem lock). The shorter `/magic/callback` form is also withdrawn (audit-70 AU4 closure).
+
+**Query params**
+- `t` (string, required) — single-use token from the email link.
+
+**Response 302** → `?next=` (validated against same-origin allow-list) or `/dashboard`, with refresh cookie set per `09-auth-accounts/06-sessions.md §1.3`. The full consume sequence (hash lookup → mint session → 24 h denylist) is specified in `09-auth-accounts/02-signup-and-signin.md §5.4`.
 
 **Errors**
-- `400 VALIDATION_FAILED` — malformed/expired token
-- `401 UNAUTHENTICATED` — token already used / revoked
+- `410 MAGIC_LINK_INVALID` — token missing, expired, or already consumed.
 
 ---
 

@@ -15,8 +15,9 @@ One per shareable scope (Collection, Group, or Item). Bag of policy.
 |---|---|---|
 | `id` | UUIDv7 | |
 | `org_id` | UUIDv7 | |
-| `scope_type` | `collection \| group \| item` | |
-| `scope_id` | UUIDv7 | the shared entity |
+| `target_type` | `collection \| group \| item` | **Naming reconciled with v1** (`02-data-model/07-share.md`). Earlier drafts of this v2 note used `scope_type`; do not reintroduce. |
+| `target_id` | UUIDv7 | the shared entity (was `scope_id` in earlier drafts) |
+| `memorable_slug` | string? | Org-scoped uniqueness. Pro+. Carried forward unchanged from v1 (`02-data-model/07-share.md` + `13-share-link.md §1.2`). Reserved-slug list in `13-share-link.md §2`. v2 does NOT move this onto `ShareLink` — memorable URL stays one-per-Share. |
 | `created_by` | account_id | |
 | `is_active` | bool | revoked = false |
 | `include_notes` | bool | default false |

@@ -1764,3 +1764,14 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - `01-share-model.md §1 Share` table: renamed `scope_type`→`target_type`, `scope_id`→`target_id` (reconciled with v1). Added `memorable_slug` row pointing at v1 spec (Pro+, Org-scoped, stays on `Share` not `ShareLink`).
 - Added v2→v1 reconciliation note above §1 listing what v2 actually adds (multi-link, embed, custom domain, per-link analytics) vs what is unchanged.
 - Audit status updated to 7 of 9 closed. Remaining: SH6, SH9 (both S3 doc cleanup).
+
+---
+
+## Session 65 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Drained final two findings (SH6, SH9) — sharing-collab audit fully closed (9/9).
+- `00-overview.md §2`: added `Status` column (v1 / v1 locked / ⚠️ v2-future design note) for row format consistency. Updated `13-share-link.md` row to mention memorable shortlinks.
+- `10-embed-widget.md` §3: added "Sandbox security note" explaining why `allow-same-origin` and `allow-top-navigation` are omitted, why `allow-popups-to-escape-sandbox` is acceptable (user-gesture gated), with cross-citation to `19-security-privacy/05-share-link-security.md §Embed`.
+- Audit `audit-2026-04-29-sharing-collab-sweep.md` status → closed (9/9).

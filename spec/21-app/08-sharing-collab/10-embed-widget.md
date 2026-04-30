@@ -30,6 +30,8 @@ Iframe-friendly variant of a public/password share for embedding in blogs, docs,
 <script src="https://letsmarknow.com/e/embed.js" async></script>
 ```
 
+> **Sandbox security note.** The `sandbox` attribute intentionally **omits** `allow-same-origin` (prevents the embed from reading parent cookies/localStorage) and `allow-top-navigation` (prevents clickjacking redirects of the host page). `allow-popups-to-escape-sandbox` is required so that user-initiated "Open in new tab" lands on a normal `letsmarknow.com` tab (not a sandboxed one), which is acceptable because popups are user-gesture-gated. Threat-model context: `19-security-privacy/05-share-link-security.md §Embed`. Origin allowlist enforcement: §4 below.
+
 The optional `embed.js` listens for `postMessage` and updates iframe height; if absent, iframe falls back to fixed height.
 
 ## 4. Allowlist

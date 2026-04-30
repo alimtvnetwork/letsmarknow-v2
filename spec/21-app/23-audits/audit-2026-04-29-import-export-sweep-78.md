@@ -1,9 +1,11 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (8 of 8 closed, 2026-04-29)
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-29
+closed-because: 8 of 8 findings drained 2026-04-29.
 scope: 11-import-export/ folder — status enum coherence, US/UK spelling, rate-limit SoT alignment, dedup_mode enum, idempotency rules, GDPR-export field naming
 -->
 

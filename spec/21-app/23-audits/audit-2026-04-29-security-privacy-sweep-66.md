@@ -1,9 +1,11 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (10 of 10 closed: SP1, SP2 — session 67; SP3, SP4, SP5, SP6 — session 68; SP7, SP8, SP9, SP10 — session 69)
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-29
+closed-because: 10 of 10 findings drained — SP1, SP2 session 67; SP3-SP6 session 68; SP7-SP10 session 69.
 scope: 19-security-privacy/ folder — hashing-algorithm consistency, share-link cross-references, sub-processor SoT enforcement
 -->
 

@@ -1,3 +1,14 @@
+<!--
+audit-date: 2026-04-30
+next-audit-by: 2026-10-27
+audit-type: ad-hoc
+status: closed
+opened-on: 2026-04-30
+closed-on: 2026-04-30
+closed-because: All 3 findings (NQ1+NQ2 S2, NQ3 S3) drained same session — see resolutions table.
+scope: 07-features/17-next-queue.md build-readiness — cross-reference verification, schema-grep on §7 settings + §10 realtime channel, roadmap presence
+-->
+
 # Audit: Next-Queue Build-Readiness Review
 
 **Date:** 2026-04-30 (MYT)

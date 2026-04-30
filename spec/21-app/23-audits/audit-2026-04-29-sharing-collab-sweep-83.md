@@ -1,10 +1,11 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (7 of 7 closed)
-closed-on: 2026-04-29
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-29
+closed-because: 7 of 7 findings drained.
 scope: 08-sharing-collab/ folder — rate-limit SoT splits, reserved-slug list collisions, share-model v1/v2 invariant integrity, endpoint cross-references, idempotency on revoke/purge
 -->
 

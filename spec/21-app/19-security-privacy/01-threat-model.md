@@ -25,7 +25,7 @@ STRIDE-based analysis of attack surfaces, adversaries, and mitigations.
 | Tampering (modified tokens) | Signed JWTs (EdDSA), short TTL access tokens, refresh-token rotation |
 | Repudiation | Audit log of every auth event; immutable |
 | Information disclosure (token leak) | HttpOnly + Secure + SameSite=Lax cookies; CSRF tokens for state-changing requests |
-| Denial of service | Per-IP + per-account rate limits on `/auth/*`; CAPTCHA after thresholds |
+| Denial of service | Per-IP + per-account rate limits on `/auth/*` per `09-auth-accounts/13-rate-limit-values.md §2` (SoT); CAPTCHA escalation thresholds per `13-rate-limit-values.md §2.1` (SoT) |
 | Elevation of privilege | RLS + `has_role` SECURITY DEFINER; no client-side role checks |
 
 ### Sharing

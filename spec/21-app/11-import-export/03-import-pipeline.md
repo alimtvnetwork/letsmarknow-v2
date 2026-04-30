@@ -29,11 +29,11 @@ Each stage is observable, cancellable, and resumable.
 
 ## 4. Parse
 
-- Triggered by `POST /v1/imports/:id/parse?source=<id>`.
-- Spawns background job (Bull / Lovable Cloud function).
+- Triggered automatically by the server when `POST /v1/imports/upload` (one-shot) or `POST /v1/imports` + PUT-to-presigned-URL (two-phase) completes. **There is no separate `POST /v1/imports/:id/parse` endpoint** — parsing is implicit; clients observe progress via `GET /v1/imports/:id/status` (canonical `phase` enum: `parsing | previewing | …`, see `03-api-endpoints/15-import-export.md` line 115).
+- Spawns background job (Bull / Lovable Cloud function) that consumes from the canonical queue (`22-infrastructure/07-queues.md`).
 - Streams records; computes summary stats.
-- Status tracked in `import_jobs` table with `progress_pct`.
-- Errors per record collected (max 1000 logged, count of overflow).
+- Status tracked in `import_jobs` table with `progress_pct`; surfaced as `progress.percent` on the wire.
+- Errors per record collected (max 1000 logged, count of overflow). Per-record reasons emitted as `warnings[].code` on the preview payload using the warning vocabulary in §11 below — these are **not** API envelope error codes (those follow the `IMPORT_*` family in `03-api-endpoints/18-error-codes.md §3.7`).
 
 ### Parse output (preview cache)
 - Stored in object storage as Parquet (compact columnar) for fast preview rendering.

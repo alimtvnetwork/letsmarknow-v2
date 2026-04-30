@@ -45,6 +45,7 @@ Append-only history of who did what for compliance and forensics.
 - `share.created` `{ scope_type, mode }`
 - `share.modified`
 - `share.revoked`
+- `share.purged` `{ scope_type, mode, retained_analytics_until: null }` — emitted by `POST /v1/shares/:id/purge` (see `12-revocation-and-expiry.md §12`); written before the row hard-delete commits so the audit row survives the purge.
 - `share.password_rotated`
 - `share.invite_sent` `{ count }`
 - `share.locked_brute_force`

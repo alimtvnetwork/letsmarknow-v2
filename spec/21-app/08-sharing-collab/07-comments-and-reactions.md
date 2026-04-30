@@ -19,7 +19,7 @@ Lightweight discussion attached to Items.
 | `item_id` | UUIDv7 | |
 | `author_account_id` | UUIDv7? | null for invited share viewer |
 | `author_invite_email` | citext? | for invited shares |
-| `body` | text | Markdown-lite, 4 KB |
+| `body` | text | Markdown-lite subset (see §2.1), 4 KB max (UTF-8 byte length, server-enforced) |
 | `parent_comment_id` | UUIDv7? | one level of threading |
 | `created_at`, `updated_at`, `deleted_at?` | | |
 
@@ -31,10 +31,30 @@ Lightweight discussion attached to Items.
 | `target_id` | UUIDv7 | |
 | `account_id` | UUIDv7? | |
 | `invite_email` | citext? | |
-| `emoji` | string | one of allowed set (~30) |
+| `emoji` | string | One of the curated set enumerated in §8 (20 entries; SoT for this folder). Free plan restricted to `👍` only per §10. |
 | `created_at` | | |
 
 Unique `(target_type, target_id, account_id|invite_email, emoji)`.
+
+### 2.1 Markdown-lite subset (locked)
+
+`Comment.body` accepts a deliberately narrow Markdown subset. Anything outside this list is rendered as literal text (escaped), not as Markdown.
+
+| Construct | Syntax | Notes |
+|---|---|---|
+| Bold | `**text**` | No `__text__` alternative form. |
+| Italic | `*text*` | No `_text_` alternative form. |
+| Inline code | `` `code` `` | Single backtick only; no triple-backtick code blocks. |
+| Strikethrough | `~~text~~` | |
+| Autolink | bare `https://…` / `http://…` URL | Auto-linkified; no `[label](url)` syntax in v1. |
+| Mention | `@handle` | Resolved against Org Members per §3 row 5; renders as chip; triggers notification per §6. Handle grammar: `[a-z0-9_-]{1,32}`. |
+| Line break | `\n` (single newline) | Hard break. Two newlines = paragraph break. |
+
+**Explicitly NOT supported in v1:** headings (`#`), lists (`-`, `*`, `1.`), blockquotes (`>`), tables, images, fenced code blocks, raw HTML, footnotes, task lists, `[label](url)` link syntax, reference-style links, horizontal rules.
+
+**Sanitization:** server escapes all HTML before parsing; render pipeline emits a fixed allow-list of tags (`<strong>`, `<em>`, `<code>`, `<del>`, `<a>`, `<span class="mention">`, `<br>`). All `<a>` get `rel="nofollow ugc noopener"` and `target="_blank"`.
+
+**Length:** the 4 KB limit in §2 is measured on the **raw Markdown source** (UTF-8 bytes), not the rendered HTML.
 
 ## 3. UI
 

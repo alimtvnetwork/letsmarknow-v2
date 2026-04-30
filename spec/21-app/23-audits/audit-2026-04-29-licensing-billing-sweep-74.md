@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (7 of 10 closed: LB1+LB2 — session 75; LB3-LB7 — session 76)
+status: closed (10 of 10 closed: LB1+LB2 — session 75; LB3-LB7 — session 76; LB8-LB10 — session 77)
 opened-on: 2026-04-29
 scope: 10-licensing-billing/ folder — provider parity (Stripe/Paddle), money-units, status-enum, SKU map integrity, telemetry naming
 -->
@@ -29,9 +29,9 @@ scope: 10-licensing-billing/ folder — provider parity (Stripe/Paddle), money-u
 | LB5 | **S2** | ✅ **Closed (Session 76).** Added `subscription.trial_will_end` Paddle event in both `12-billing-webhooks.md §4` (handler table) and `04-paddle-integration.md §7` (listened-events list); fires `BILL_TRIAL_ENDING` at T-3 days for parity with Stripe. | `12-billing-webhooks.md §4`; `04-paddle-integration.md §7` |
 | LB6 | **S2** | ✅ **Closed (Session 76).** Documented Paddle's design: no standalone `payment_method.*` events; PM state derived from `subscription.updated` + `transaction.completed` payloads. Note added to both `12-billing-webhooks.md §4` (parity note) and `04-paddle-integration.md §7`. Handlers MUST extract PM state from those events. | `12-billing-webhooks.md §4`; `04-paddle-integration.md §7` |
 | LB7 | **S2** | ✅ **Closed (Session 76).** `03-stripe-integration.md §5` `org_subscription.processor` enum widened to `stripe \| paddle` with explicit cross-reference to `04-paddle-integration.md §3` ("writes `processor='paddle'` to the same table"). The Stripe spec now correctly hosts the canonical enum SoT. | `03-stripe-integration.md §5` |
-| LB8 | **S3** | **Dangling `plan_code` reference in `15-sku-map.md §4`.** Says "SKU key MUST match a `plan_code` in `01-plans-matrix.md §6`" but `01-plans-matrix.md` contains **zero** occurrences of `plan_code` (verified by `rg`). Reference is dead. Either rename to whatever the matrix actually uses (`tier`, `sku_key`, `plan_id`?) or add the missing column to the matrix. | `15-sku-map.md §4`; `01-plans-matrix.md §6` |
-| LB9 | **S3** | **Paddle product IDs use inconsistent `*_TBD` suffix.** `15-sku-map.md §3` Paddle Product IDs are `pro_paddle_TBD`, `team_paddle_TBD`, `lt_pro_paddle_TBD`, `lt_team_paddle_TBD`. The `_TBD` suffix is a placeholder leak — a real Paddle product ID is opaque (`pro_xxx`). Either replace with proper placeholders matching Paddle's `pro_xxx` convention, or add a one-line "TBD until dashboard provisioned" note like §2 has. | `15-sku-map.md §3` |
-| LB10 | **S3** | **Lifetime Team "5 seats" is a row-label aside, not a structured column.** `15-sku-map.md §2/§3` row labels say "Lifetime (Team, 5 seats)" but there's no `seat_count` or `included_seats` column. Pricing pages and the `licensing.skuMap` codegen will lose this attribute. Add an explicit `included_seats` field to the SKU map TS export (null for non-seat SKUs). | `15-sku-map.md §2, §3, §5` |
+| LB8 | **S3** | ✅ **Closed (Session 77).** `15-sku-map.md §7.4` rewritten: "SKU key MUST match a Plan ID listed in `01-plans-matrix.md §6 (Plan IDs)`". Also reinforced `01-plans-matrix.md §6` to define that `plan_code` is the runtime-field name carrying these Plan ID strings (referenced by `03-stripe-integration.md §6`, `04-paddle-integration.md`, `06-proration-and-upgrades.md`). | `15-sku-map.md §7`; `01-plans-matrix.md §6` |
+| LB9 | **S3** | ✅ **Closed (Session 77).** Paddle Product IDs in `15-sku-map.md §3` rewritten as `<pro_paddle_live>`, `<team_paddle_live>`, `<team_ent_paddle_live>`, `<lt_pro_paddle_live>`, `<lt_team_paddle_live>` — matching the placeholder convention used in §2 (Stripe `<price_*_live>`). Added §3 lead note explaining placeholders. `rg _TBD` over `10-licensing-billing/` now zero. | `15-sku-map.md §3` |
+| LB10 | **S3** | ✅ **Closed (Session 77).** Added explicit `included_seats` column to both Stripe (§2) and Paddle (§3) SKU tables (null for per-seat / non-seat SKUs; `5` for `lifetime_team`). Codegen target in §6 updated: every entry now carries `included_seats: number \| null`. Row labels de-duplicated ("Lifetime (Team)" instead of "Lifetime (Team, 5 seats)"). | `15-sku-map.md §2, §3, §6` |
 
 ---
 

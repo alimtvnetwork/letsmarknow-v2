@@ -71,7 +71,8 @@ All recurring plans offer 14-day Pro trial on signup; no card required.
 
 ## 6. Plan IDs
 
-Plan codes (stable, used in entitlements & telemetry):
+Plan codes (stable, used in entitlements & telemetry). The string value below is the canonical **Plan ID**; when carried as a runtime field it is named `plan_code` (see `03-stripe-integration.md §6`, `04-paddle-integration.md`, `06-proration-and-upgrades.md` — all reference these exact strings):
+
 - `free`
 - `pro_monthly` / `pro_yearly`
 - `team_monthly` / `team_yearly`

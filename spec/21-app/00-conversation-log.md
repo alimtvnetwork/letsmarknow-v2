@@ -1915,3 +1915,20 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **LB6 (Paddle payment_method parity):** Documented Paddle's design — no standalone `payment_method.*` events; PM state is conveyed inside `subscription.updated` + `transaction.completed` payloads. Notes added to both `12-billing-webhooks.md §4` and `04-paddle-integration.md §7`. Handlers MUST extract PM state from those events.
 - **LB7 (processor enum):** `03-stripe-integration.md §5` `org_subscription.processor` enum widened from `stripe` → `stripe \| paddle` with cross-reference to `04-paddle-integration.md §3`. Canonical SoT for the enum now correctly hosted in the Stripe spec.
 - Remaining: LB8-LB10 (S3 polish, single session).
+
+## Session 77 — 2026-04-29 (Malaysia, UTC+8)
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained S3 batch LB8-LB10 of `audit-2026-04-29-licensing-billing-sweep-74.md`. **Audit fully closed (10/10).**
+
+- **LB8 (dangling `plan_code` reference):** `15-sku-map.md §7.4` rewritten to "SKU key MUST match a Plan ID listed in `01-plans-matrix.md §6 (Plan IDs)`". Reinforced `01-plans-matrix.md §6` to define `plan_code` as the runtime field name carrying these Plan ID strings (referenced by `03-stripe-integration.md §6`, `04-paddle-integration.md`, `06-proration-and-upgrades.md`).
+- **LB9 (`_TBD` placeholder leak):** Paddle Product IDs in `15-sku-map.md §3` rewritten as `<pro_paddle_live>`, `<team_paddle_live>`, `<team_ent_paddle_live>`, `<lt_pro_paddle_live>`, `<lt_team_paddle_live>` — matching the Stripe `<price_*_live>` placeholder convention from §2. Added §3 lead note explaining the placeholder. `rg _TBD` over `10-licensing-billing/` now returns zero.
+- **LB10 (`included_seats` not structured):** Added `included_seats` column to both Stripe (§2) and Paddle (§3) SKU tables — `5` for `lifetime_team`, `null` for all per-seat / non-seat SKUs. Codegen target in §6 updated: every entry carries `included_seats: number | null`. Row labels de-duplicated ("Lifetime (Team)" instead of "Lifetime (Team, 5 seats)").
+
+**Audit status:** `audit-2026-04-29-licensing-billing-sweep-74.md` → **closed (10/10)**. `next-audit-by: 2026-10-26`.
+
+**Remaining open work across the whole spec:**
+1. SI-029 (S2) — Privacy-pack legal copy. **Blocked on human legal counsel** (only open spec issue).
+
+No open audit findings remain.

@@ -2037,3 +2037,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - SC3: `13-share-link.md §2` — added scope note (reserved list applies to `/t/{slug}` and memorable-slug namespaces; not to `{org_handle}` namespace which is governed by `09-auth-accounts/`). Added explicit "why `new` is reserved" note pointing to the §1.4 create-redirect resolver.
 - SC4: `12-revocation-and-expiry.md §12` — full `/v1/shares/:id/purge` contract written: `Idempotency-Key` required (`01-conventions.md §6`), `share.purged` audit event emitted before row hard-delete commits, terminates 90-d analytics retention early. `09-audit-log.md §3` — added `share.purged` event row with payload schema.
 - Audit log: 5/7 closed. Remaining: SC6+SC7 (S3 polish — `Reaction.emoji` enum + `Comment.body` Markdown-lite subset).
+
+---
+
+## Session 86 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained SC6+SC7 (S3 polish batch). **Sharing-collab audit fully closed (7/7).**
+- SC6: `07-comments-and-reactions.md §2` `Reaction.emoji` row now points to §8 as SoT (20 entries; prose "(~30)" corrected); Free-plan `👍`-only restriction noted with cross-ref to §10.
+- SC7: New §2.1 "Markdown-lite subset (locked)" — supported constructs (bold, italic, inline code, strikethrough, autolink, mention, hard break) + explicit NOT-supported list + sanitization contract (HTML-escape, allow-list output tags, `rel="nofollow ugc noopener"` on `<a>`) + 4 KB measured on raw source UTF-8 bytes.
+- Audit `audit-2026-04-29-sharing-collab-sweep-83.md` status: closed.

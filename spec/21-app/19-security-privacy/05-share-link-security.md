@@ -7,8 +7,8 @@ Specific threats and mitigations for shared content (public / password / invite-
 ## 1. Token generation
 
 - 132-bit entropy: `crypto.randomBytes(17)` → base64url 22 chars.
-- Format: `letsmarknow.com/t/{token}` for public; `letsmarknow.com/s/{token}` for invite/password.
-- Custom slugs (Pro+) reserved separately; do NOT replace token (token still required for collision-resistance + revocation).
+- **URL surface (locked v1):** ALL share modes (public, password, invite-only) use `letsmarknow.com/t/{slug}`. Mode is determined by the `share` row, not the URL. See `08-sharing-collab/13-share-link.md` (source of truth).
+- **Memorable shortlinks (Pro+, optional):** `letsmarknow.com/lmk/{org_handle}/{memorable_slug}` — Org-scoped uniqueness, replaces the random `/t/{slug}` in user-facing URLs but the random slug remains the canonical revocation key. Reserved memorable-slugs: `lmk`, `t`, `new`, `edit`. See `08-sharing-collab/13-share-link.md §1.2 + §1.4`.
 - DB stores HMAC-SHA256 of token (not the raw token).
 - Constant-time comparison on lookup.
 
@@ -17,7 +17,7 @@ Specific threats and mitigations for shared content (public / password / invite-
 | Mitigation | Detail |
 |---|---|
 | High entropy | 132 bits → 5×10³⁹ tokens |
-| Rate limit | 60 /min /IP on `/t/{token}` and `/s/{token}` |
+| Rate limit | 60 /min /IP on `/t/{slug}` and `/lmk/{org_handle}/{memorable_slug}` |
 | Constant 404 timing | Always 200ms+ even on miss to prevent timing oracle |
 | WAF | Cloudflare bot challenge after threshold |
 | Logging | Failed attempts logged but not surfaced (avoid amplification) |
@@ -88,11 +88,11 @@ Specific threats and mitigations for shared content (public / password / invite-
 
 ## 11. Embed widgets
 
-- iframe with `sandbox="allow-scripts allow-same-origin"` minimum.
+- iframe sandbox: **`sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"`** (locked in `08-sharing-collab/10-embed-widget.md §3`). `allow-same-origin` is intentionally OMITTED so the embed cannot read parent cookies/localStorage; `allow-top-navigation` is OMITTED to prevent clickjacking redirects of the host page.
 - Embedding origin allowlist per Org (Team+).
-- `X-Frame-Options: ALLOWALL` (or omit) only on dedicated `/embed/{token}` route.
-- All other routes: `X-Frame-Options: DENY`.
-- Postmessage protocol versioned; origin checked.
+- Embed route `/e/{slug}` enforces allowlist via **`Content-Security-Policy: frame-ancestors <allowlist>`** (CSP supersedes `X-Frame-Options` per spec, and supports multi-origin allowlists which XFO does not). `X-Frame-Options` is NOT set on `/e/{slug}` — relying on the deprecated/non-standard `XFO: ALLOWALL` is forbidden.
+- All non-embed routes: `Content-Security-Policy: frame-ancestors 'none'` AND `X-Frame-Options: DENY` (defense in depth).
+- Postmessage protocol versioned; origin checked against the same allowlist.
 
 ## 12. Share viewer hardening
 

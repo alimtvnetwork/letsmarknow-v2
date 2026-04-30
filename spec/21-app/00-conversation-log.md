@@ -1801,3 +1801,16 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - `03-encryption.md §5`: rewrote password-hashing section. Argon2id now the locked algorithm (m=64MB,t=3,p=4); explicit "verifiers MUST reject bcrypt-prefixed hashes" rule added.
 - `05-share-link-security.md §6.1`: share-password hashing changed from "bcrypt cost 12" → "Argon2id with m=64MB,t=3,p=4 (same as user passwords)".
 - Audit status → in_progress (2 of 10 closed). Remaining: SP3-SP10 + SI-029 (blocked).
+
+---
+
+## Session 68 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Closed SP3+SP4+SP5+SP6 (all in `05-share-link-security.md`).
+- §1: removed phantom `/s/{token}` URL surface; locked to single `/t/{slug}` for ALL modes per `13-share-link.md`. Added memorable shortlinks bullet (`/lmk/{org_handle}/{memorable_slug}`, Pro+, reserved slugs).
+- §1: replaced "Custom slugs do NOT replace token" with correct memorable-slug behavior (replaces in user-facing URL but random slug remains canonical revocation key).
+- §2 rate-limit row: `/s/{token}` → `/lmk/{org_handle}/{memorable_slug}`.
+- §11: aligned embed sandbox to `10-embed-widget.md §3` (omit allow-same-origin/top-navigation; allow-popups + escape). Replaced non-standard `XFO: ALLOWALL` with `CSP: frame-ancestors <allowlist>` on `/e/{slug}`; defense-in-depth `frame-ancestors 'none' + XFO: DENY` elsewhere.
+- Audit status → 6 of 10 closed. Remaining: SP7, SP8, SP9, SP10.

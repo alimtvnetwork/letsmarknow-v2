@@ -3,6 +3,7 @@ audit-date: 2026-04-30
 next-audit-by: 2026-10-27
 audit-type: ad-hoc
 status: closed
+closed-on: 2026-04-30
 closed-because: 4 findings opened and closed same session — EX1 (popup §14 broken §-anchor → added §1.1 tab bar), EX2 (02-surfaces missing Open Tabs + Next surfaces → added §11 + §12), EX3 (12-messaging missing NEXT_* messages → added 4 surface→SW + 4 broadcasts), EX4 (SW missing realtime subscription → added §5.1). All 17 lint sub-checks green.
 audit-id: 108
 scope: spec/21-app/04-extension/

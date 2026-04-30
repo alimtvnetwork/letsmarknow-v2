@@ -84,11 +84,14 @@ All require bearer auth + `X-Organization-Id`. See `02-data-model/09-history-eve
 }
 ```
 
-**Errors**
-- `410 GONE` `details.reason="undo_window_expired"` — past `undo_expires_at` (default 30 days for soft-deletes; 30 s for moves/edits)
-- `409 CONFLICT` `details.reason="already_undone"`
-- `422 BUSINESS_RULE_VIOLATION` `details.reason="entity_modified_after_event"` — newer changes would be lost; client should confirm
-- `403 FORBIDDEN`
+**Errors** (codes per `18-error-codes.md §3.10`)
+- `HISTORY_UNDO_WINDOW_EXPIRED` (410) — past `undo_expires_at` (default 30 days for soft-deletes; 30 s for moves/edits).
+- `HISTORY_ALREADY_UNDONE` (409) — event already inverted; `details.undo_event_id` points to the existing inverse.
+- `HISTORY_ENTITY_MODIFIED_AFTER_EVENT` (422) — newer changes would be lost; client should confirm and retry with `?force=true` (or surface the diff per `12-history-undo/02-undo-redo.md §8`).
+- `HISTORY_NOT_UNDOABLE` (422) — event kind is not user-undoable (e.g., `share.viewed`, `system.*`; see `12-history-undo/02-undo-redo.md §13`).
+- `GONE_HARD_DELETED` / `GONE_SOFT_DELETED` (410) — target no longer exists.
+- `BILLING_QUOTA_EXCEEDED` (402) — re-creation would exceed plan cap.
+- `PERM_DENIED` (403) — actor lost edit access on the target.
 
 ---
 

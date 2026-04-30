@@ -1753,3 +1753,14 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 
 **Audit progress:** 5 of 9 closed. **S1 launch-blocker resolved.** Remaining: SH3 (v2 scope_*/target_* naming), SH5 (v2 memorable_slug), SH6 + SH9 (cleanup).
 **Linters:** no schema/lint touch; JSON revalidated.
+
+---
+
+## Session 64 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Drained SH3 + SH5 from sharing-collab audit.
+- `01-share-model.md §1 Share` table: renamed `scope_type`→`target_type`, `scope_id`→`target_id` (reconciled with v1). Added `memorable_slug` row pointing at v1 spec (Pro+, Org-scoped, stays on `Share` not `ShareLink`).
+- Added v2→v1 reconciliation note above §1 listing what v2 actually adds (multi-link, embed, custom domain, per-link analytics) vs what is unchanged.
+- Audit status updated to 7 of 9 closed. Remaining: SH6, SH9 (both S3 doc cleanup).

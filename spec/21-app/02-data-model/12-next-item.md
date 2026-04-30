@@ -84,6 +84,10 @@ Account (singleton — see `03-collection.md` Invariants 7–10 and
   cron hard-deletes rows where `done = true AND completed_at < now() - interval`.
   Emits `next_item.auto_archived`.
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `next_collection_id` + `account_id` `cascade`; `item_id` → Item `set null` (hard-purge converts row to tombstone — see Lifecycle); `source_collection_id` `set null` (dangling pointer tolerated).
+
 ## RLS
 
 - `SELECT`/`UPDATE`/`DELETE`: only `account_id = auth.account_id()`.

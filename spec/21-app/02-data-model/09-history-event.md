@@ -66,6 +66,10 @@ The append-only log of every mutation across the system. Powers Undo/Redo, audit
 - `history.redone`
 - `history.pruned` (system event; not user-visible)
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: append-only — `account_id` → Account `set null`; `target_id` is polymorphic and never enforced by FK (dangling tolerated); `undone_by_event_id` self-ref `set null`.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Append-only: this is the only table where UPDATE is whitelisted to specific columns and DELETE is reserved to a system-role pruning job.

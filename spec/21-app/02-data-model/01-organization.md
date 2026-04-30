@@ -74,6 +74,10 @@ The top-level container — the colored "workspace bubble" (PE / AU / XL …) sh
 - `organization.theme_changed`
 - `organization.avatar_changed`
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `owner_account_id` → Account `restrict` (Owner-loss forbidden); `subscription_id` / `default_space_id` → `set null`.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Calls `has_role()` per the role-enforcement SoT in `08-member.md §Role-enforcement contract`.

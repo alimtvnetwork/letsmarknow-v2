@@ -72,6 +72,10 @@ Optional sub-container inside a Collection (Tab Extend's "group inside group"). 
 - `group.restored`
 - `group.hard_deleted`
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Standard: all FKs `cascade` (`collection_id`, `space_id`, `organization_id`, `parent_group_id`).
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md).

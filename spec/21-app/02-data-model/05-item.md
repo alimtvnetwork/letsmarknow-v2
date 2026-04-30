@@ -115,6 +115,10 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - `item.restored`
 - `item.hard_deleted`
 
+## Foreign keys
+
+> See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-out: `group_id` → Group is `set null` (Item survives Group deletion, lives directly in Collection). All other FKs `cascade`.
+
 ## RLS
 
 > Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md).

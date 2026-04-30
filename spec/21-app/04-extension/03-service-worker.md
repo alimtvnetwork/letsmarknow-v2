@@ -59,6 +59,7 @@ type Msg =
   | { type: "GET_TREE",      payload: { org_id: string, since_etag?: string } }
   | { type: "MUTATE",        payload: { op: MutationOp } }
   | { type: "UNDO",          payload: { history_event_id: string } }
+  | { type: "NEXT_LIST" | "NEXT_ADD" | "NEXT_UPDATE" | "NEXT_REMOVE", payload: any }
   | { type: "PING" };
 
 type Reply<M extends Msg> = Promise<{ ok: true, data: any } | { ok: false, error: ApiError }>;

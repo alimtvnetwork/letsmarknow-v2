@@ -6,10 +6,10 @@ Inventory of every user-visible UI surface the extension exposes. Each links to 
 
 ## 1. Toolbar Popup (`action.default_popup`)
 - **File:** `popup/index.html`
-- **Purpose:** Quick-save current tab; show last-used Collection; quick-find.
+- **Purpose:** Quick-save current tab; show last-used Collection; quick-find. Body region is a 3-tab segmented control: **Saved** (default save flow) / **Open Tabs** (live `chrome.tabs` view, see surface §11) / **Next** (per-Account global queue, see surface §12).
 - **Size:** 380 × 540 px (CSS clamps).
 - **Triggers:** click extension icon, `Alt+S`, `chrome.action.openPopup()` from SW.
-- **Spec:** `04-popup.md`
+- **Spec:** `04-popup.md` (tab bar in §1.1; Next body in §14)
 
 ## 2. New Tab Dashboard (`chrome_url_overrides.newtab`)
 - **File:** `newtab/index.html`
@@ -59,6 +59,16 @@ Inventory of every user-visible UI surface the extension exposes. Each links to 
 
 ## 10. Service Worker (background)
 - Not a "surface" but the runtime that wires all of the above. See `03-service-worker.md`.
+
+## 11. Open Tabs Panel
+- **Renders inside:** popup §1.1 tab bar (as the **Open Tabs** tab) AND new-tab page (collapsible left rail).
+- **Purpose:** Live `chrome.tabs` view alongside saved Items; jump-to-tab, save individual / window / all open tabs into a Collection.
+- **Spec:** `16-open-tabs-panel.md`.
+
+## 12. Next Queue Panel
+- **Renders inside:** popup §1.1 tab bar (as the **Next** tab). Not present on new-tab page or side panel in v1.
+- **Purpose:** Per-Account global to-do queue (singleton Collection `kind = next`). Add from any Item, drag-reorder, check off to complete.
+- **Spec:** `04-popup.md §14` (UI) + `07-features/17-next-queue.md` (behavior, entry points, data) + `02-data-model/12-next-item.md` (data model).
 
 ---
 

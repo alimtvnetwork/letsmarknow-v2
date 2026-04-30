@@ -131,11 +131,13 @@ Query has typos that even fuzzy can't reach:
 
 ## 11. Recent searches
 
-- Stored per Account in DB (synced across devices).
+- Stored per Account in DB (synced across devices) via `GET /v1/search/recent` (see `03-api-endpoints/13-search.md`); cleared via `DELETE /v1/search/recent`.
 - Last 20 retained.
 - "Clear recent" link below list.
 - Searches with operators stored verbatim.
 - Anonymized after 7 days for analytics; cleared by user any time.
+
+> Autocomplete suggestions (tag/collection/domain hints in §7 chips and §8 empty state) are served by `GET /v1/search/suggest`.
 
 ## 12. Saved searches (Pro+)
 

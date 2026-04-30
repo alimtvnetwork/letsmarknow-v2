@@ -6,15 +6,13 @@ Search scoped to items. Used by global search, in-Collection filter bars, and th
 
 ## 1. Endpoint
 
-`GET /v1/items/search?org=...&q=...&scope=...&filters=...&cursor=...&limit=...`
+Item search is served by the canonical search family in [`03-api-endpoints/13-search.md`](../03-api-endpoints/13-search.md):
 
-Returns:
-```json
-{
-  "data": [ { "id": "...", "title": "...", "url": "...", "snippet": "...", "score": 0.92, "highlights": { "title": "<em>Example</em>", "note": "..." } } ],
-  "meta": { "total_estimate": 1234, "next_cursor": "..." }
-}
-```
+- `GET /v1/search` — full search (this surface)
+- `GET /v1/search/quick` — omnibox quick-find (extension)
+- `GET /v1/search/suggest` — autocomplete
+
+Pagination follows the cursor-only contract in [`03-api-endpoints/01-conventions.md §5`](../03-api-endpoints/01-conventions.md) (W-13). Total counts are NEVER returned in paginated lists; use `/count` endpoints when needed. There is no `/v1/items/search` route.
 
 ## 2. Scopes
 
@@ -97,9 +95,9 @@ Final order: `score desc`, then `updated_at desc`.
 
 ## 8. Pagination
 
-- Cursor-based; opaque token encoding `(score_lower_bound, last_id)`.
-- Default limit 25; max 100.
-- `total_estimate` is an HLL-style approximation (cheap) for large result sets.
+- Cursor-based per `03-api-endpoints/01-conventions.md §5`; opaque token encoding `(score_lower_bound, last_id)`.
+- Default limit 25; max 100 (search-class override of the global 50/200 default).
+- Total counts never returned (W-13). Use a dedicated `/count` endpoint when an exact count is required.
 
 ## 9. Permissions
 

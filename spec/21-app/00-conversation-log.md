@@ -8,6 +8,23 @@
 
 ---
 
+## 2026-04-29 — Session 96 — Drain EX1 (manifest webNavigation permission)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/04-extension/01-manifest.md (§96-107 `webNavigation` perm + §148 rationale row)
+- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX1 closed; 1/4)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 95 — Open extension gap-sweep (audit-95)
 
 ```

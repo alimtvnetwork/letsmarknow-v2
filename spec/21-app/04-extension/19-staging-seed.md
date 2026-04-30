@@ -65,6 +65,7 @@ Exact item content is fixture data, version-controlled in the staging-seed scrip
 
 - Cited from: `04-extension/15-dev-loop.md` §"Staging seed" line 83.
 - Role enum (locked): `09-auth-accounts/07-org-membership.md` and `00-overview/02-glossary.md`.
+- Role enforcement pattern (SECURITY DEFINER `has_role(_user_id, _role)` for RLS): `19-security-privacy/01-threat-model.md` "Elevation of privilege" row. Seed-policy tests must use this pattern, never client-side role checks.
 - Tier definitions: `10-licensing-billing/01-plans-matrix.md`.
 - Collection kinds: `02-data-model/03-collection.md`.
 - Next queue singleton: `07-features/17-next-queue.md`.

@@ -8,6 +8,24 @@
 
 ---
 
+## 2026-04-29 — Session 98 — Drain EX3+EX4 (S3 polish; close audit-95)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/04-extension/19-staging-seed.md (§6 — role-enforcement SoT cross-ref)
+- spec/21-app/04-extension/11-auth-bridge.md (§4 — Idempotency-Key SoT cross-ref)
+- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX3+EX4 closed; audit fully CLOSED 4/4)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 97 — Drain EX2 (surface-vs-API vocabulary)
 
 ```

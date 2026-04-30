@@ -22,12 +22,12 @@ Cipher suite policy:
 ### Postgres
 - Disk-level encryption (cloud-managed, AES-256-XTS).
 - Selected columns app-layer encrypted (AES-256-GCM with envelope key from KMS):
-  - `users.password_hash` (already bcrypt; the bcrypt output itself is not re-encrypted).
+  - `users.password_hash` (already Argon2id per `09-auth-accounts/03-passwords-and-mfa.md §1`; the Argon2id output itself is not re-encrypted).
   - `users.mfa_secret` (TOTP shared secret).
   - `users.recovery_codes` (hashed individually).
   - `payment_methods.token` (provider token).
   - `api_tokens.hash` (SHA-256 of token; lookup-only).
-  - `share_passwords.hash` (bcrypt).
+  - `share_passwords.hash` (Argon2id; same parameters as user passwords).
   - `org.security_settings.ip_allowlist` (operationally sensitive).
 
 ### Object storage

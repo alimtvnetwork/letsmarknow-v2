@@ -42,7 +42,7 @@ Only the `billing` and `owner` roles receive billing emails (per locked role enu
 | `BILL_SEAT_REMOVED` | Receipt | `seat.removed` | "{n} seat(s) removed from your Mark Now plan" | Seat count delta, credit applied, effective date. |
 | `BILL_LIFETIME_ACTIVATED` | Lifecycle | `lifetime_license.activated` | "Your Mark Now Lifetime license is active" | License key (also in account), what's included, support guarantee terms. |
 | `BILL_REFUND_ISSUED` | Lifecycle | `charge.refunded` | "Refund issued for {invoice.number}" | Refund amount, original charge date, expected settle window (5–10 business days). |
-| `BILL_CANCELLATION_CONFIRMED` | Lifecycle | `subscription.cancelled` | "Your Mark Now subscription has been cancelled" | Effective end date, what stays accessible until then, "changed your mind?" link. |
+| `BILL_CANCELLATION_CONFIRMED` | Lifecycle | `subscription.canceled` (Stripe + Paddle both emit this US spelling) | "Your Mark Now subscription has been canceled" | Effective end date, what stays accessible until then, "changed your mind?" link. |
 | `BILL_TAX_RECEIPT_AVAILABLE` | Receipt | Annual: Jan 15 each year | "Your {year} Mark Now receipts are ready" | Year total, link to invoice list, downloadable PDF bundle. |
 
 **16 email IDs.** This list is locked; new triggers require adding a row here AND in `09-dunning-and-recovery.md` if dunning-related.

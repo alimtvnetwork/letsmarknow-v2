@@ -21,9 +21,9 @@ Invoice generation, tax handling, and receipt delivery.
 | `processor_invoice_id` | text | |
 | `number` | text | human-readable (e.g., `LMN-2026-000123`) |
 | `status` | enum | `draft \| open \| paid \| uncollectible \| void` |
-| `amount_subtotal_minor` | int | |
-| `amount_tax_minor` | int | |
-| `amount_total_minor` | int | |
+| `amount_subtotal_cents` | int | minor units of `currency`; per locked rule in `02-data-model/00-overview.md` §1.3 + W-10 closure in `15-sku-map.md` line 6 |
+| `amount_tax_cents` | int | minor units of `currency` |
+| `amount_total_cents` | int | minor units of `currency` |
 | `currency` | text | ISO 4217 |
 | `period_start`, `period_end` | timestamptz | |
 | `issued_at`, `paid_at` | timestamptz? | |

@@ -78,14 +78,17 @@ Server checks before accepting an undo:
 - Has the target been modified by someone else since the original action?
 - Would the undo violate current invariants? (e.g., re-add an item that exceeds plan cap)
 
-Outcomes:
+Outcomes (canonical error codes per `03-api-endpoints/18-error-codes.md §3.10`):
 | Situation | Behavior |
 |---|---|
-| Target missing | Reject with `UNDO_TARGET_GONE`; offer "Recreate from snapshot" if possible |
+| Target missing (hard-deleted) | Reject with `GONE_HARD_DELETED`; offer "Recreate from snapshot" if the inverse_recipe carries a full payload |
+| Target soft-deleted | Reject with `GONE_SOFT_DELETED`; offer "Restore then undo" two-step |
 | Modified by others (no overlap) | Apply undo (some fields restore; others stay as-is) |
-| Modified by others (overlap on same field) | Soft conflict; apply with "your value wins"; show diff toast: "Restored your title; their edit kept" — Pro+ shows side-by-side |
-| Cap exceeded | Reject with `QUOTA_EXCEEDED`; explain |
-| Permission lost | Reject with `FORBIDDEN`; suggest re-request access |
+| Modified by others (overlap on same field) | Reject with `HISTORY_ENTITY_MODIFIED_AFTER_EVENT`; client surfaces diff toast: "Restored your title; their edit kept" — Pro+ shows side-by-side and may retry with `?force=true` |
+| Already inverted | Reject with `HISTORY_ALREADY_UNDONE`; `details.undo_event_id` points to existing inverse |
+| Event kind not user-undoable | Reject with `HISTORY_NOT_UNDOABLE` (e.g., `share.viewed`, `system.*` — see §13) |
+| Plan cap exceeded on re-create | Reject with `BILLING_QUOTA_EXCEEDED`; explain |
+| Permission lost | Reject with `PERM_DENIED`; suggest re-request access |
 
 ## 9. Multi-event correlations
 

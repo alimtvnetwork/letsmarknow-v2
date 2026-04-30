@@ -102,6 +102,10 @@ The DB team should store these denormalized for fast permission checks. Source o
 - `license.coupon_applied`
 - `license.seat_added` / `license.seat_removed`
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `license`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `organization_id` → Organization `restrict` AND `account_id` → Account `restrict` — License rows block parent hard-delete (cancel / refund / transfer required first).

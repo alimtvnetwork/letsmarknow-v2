@@ -62,6 +62,10 @@ The human user (or service principal). One per real person. Owns or is a Member 
 - `account.signed_in` / `account.signed_out`
 - `account.soft_deleted` / `account.restored` / `account.hard_deleted`
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `account`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. No outgoing FKs beyond the universal Audit-Block `created_by` / `updated_by` (`set null`). Inbound: many entities reference Account; deletion paths governed by per-child rows in §4a.

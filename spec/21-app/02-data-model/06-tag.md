@@ -47,6 +47,10 @@ A short, color-coded label that can be attached to **three entity types — Coll
 - `tag.deleted`
 - `tag.merged` (from → into)
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `tag`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-out: `created_by` → Account `set null` (author tombstone). `organization_id` `cascade`.

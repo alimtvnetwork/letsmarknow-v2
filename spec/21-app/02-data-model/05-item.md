@@ -115,6 +115,10 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - `item.restored`
 - `item.hard_deleted`
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `item`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-out: `group_id` → Group is `set null` (Item survives Group deletion, lives directly in Collection). All other FKs `cascade`.

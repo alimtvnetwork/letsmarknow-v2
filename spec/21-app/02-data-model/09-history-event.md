@@ -66,6 +66,10 @@ The append-only log of every mutation across the system. Powers Undo/Redo, audit
 - `history.redone`
 - `history.pruned` (system event; not user-visible)
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `history-event`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: append-only — `account_id` → Account `set null`; `target_id` is polymorphic and never enforced by FK (dangling tolerated); `undone_by_event_id` self-ref `set null`.

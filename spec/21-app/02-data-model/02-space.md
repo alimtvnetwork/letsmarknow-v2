@@ -64,6 +64,10 @@ The `is_starred` flag and `collapsed_collections` are per-Account, not per-Space
 - `space.shared` (when first Share created)
 - `space.unshared` (when last Share revoked)
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `space`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Standard: all FKs `cascade` from Organization. No carve-outs.

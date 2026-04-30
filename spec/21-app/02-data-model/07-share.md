@@ -87,6 +87,10 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 - `share.target_repointed` (orphaned-state recovery, see invariant §10)
 - `share.access_requested` (visitor without access submits the request-access form, see `08-sharing-collab/13-share-link.md` §8)
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `share`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-out: `target_id` is polymorphic (Space/Collection/Group/Item/mindmap_layout) — application-managed via trigger, not a Postgres FK. Soft-delete of target sets `revoked_at` (Invariant 7); hard-delete cascades.

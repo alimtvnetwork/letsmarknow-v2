@@ -88,6 +88,10 @@ The primary container of saved tabs inside a Space — e.g. "Marketing Improveme
 - `collection.session_recaptured` (SI-023, `captured_at` and items replaced)
 - `collection.session_restored` `{ scope: current_window | new_window, opened: int, skipped: int }`
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `collection`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `space_id` is nullable when `kind = next` (Invariant 10) — partial FK enforces non-null + `cascade` for `manual`/`session`; `account_id` set + `cascade` only when `kind = next`.

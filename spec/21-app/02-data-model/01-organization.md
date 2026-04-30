@@ -74,6 +74,10 @@ The top-level container — the colored "workspace bubble" (PE / AU / XL …) sh
 - `organization.theme_changed`
 - `organization.avatar_changed`
 
+## Permissions
+
+> Role × action mapping for this entity lives in [`08-sharing-collab/05-permissions-matrix.md`](../08-sharing-collab/05-permissions-matrix.md) (search anchor: `organization`). RLS policies in §RLS below translate that matrix into row-level predicates via `has_role()`; do not duplicate the matrix here.
+
 ## Foreign keys
 
 > See [`00-overview.md §4a`](./00-overview.md#4a-master-foreign-key-on-delete-table) for the canonical on-delete actions across the data model. Carve-outs: `owner_account_id` → Account `restrict` (Owner-loss forbidden); `subscription_id` / `default_space_id` → `set null`.

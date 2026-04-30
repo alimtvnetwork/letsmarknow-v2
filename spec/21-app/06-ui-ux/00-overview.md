@@ -47,6 +47,8 @@
 | `18-favicon-pipeline.md` | Per-Item favicon fetch, fallback, caching, storage path. |
 | `19-breakpoints.md` | Breakpoint table; mobile-first thresholds. |
 | `20-accessibility-wcag.md` | WCAG 2.2 AA acceptance criteria per component class. |
+| `21-options-page.md` | Extension options-page surface (sections, persistence, save semantics, a11y). |
+| `22-keyboard-cheatsheet.md` | Keyboard cheatsheet overlay (trigger, content sources, OS/surface awareness, customise/print). |
 | `wireframes/` | Low-fi references for dashboard, popup, share viewer, onboarding, billing. |
 
 ---

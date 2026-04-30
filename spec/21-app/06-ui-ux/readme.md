@@ -22,6 +22,12 @@ This folder is the **single source of truth** for both the extension (`04-extens
 14. `14-copy-voice.md` — tone, terminology, microcopy patterns, error wording.
 15. `15-data-density.md` — Comfortable / Cozy / Compact density across surfaces.
 16. `16-print-stylesheet.md` — printable Collection / Item / Share viewer.
+17. `17-copy-strings.md` — microcopy strings catalogue with i18n keys.
+18. `18-favicon-pipeline.md` — per-Item favicon fetch, fallback, caching.
+19. `19-breakpoints.md` — breakpoint table; mobile-first thresholds.
+20. `20-accessibility-wcag.md` — WCAG 2.2 AA acceptance criteria per component class.
+21. `21-options-page.md` — extension options-page surface composition.
+22. `22-keyboard-cheatsheet.md` — keyboard cheatsheet overlay surface.
 
 ## Files
 
@@ -43,6 +49,13 @@ This folder is the **single source of truth** for both the extension (`04-extens
 | `14-copy-voice.md` | Voice & tone |
 | `15-data-density.md` | Density modes |
 | `16-print-stylesheet.md` | Print CSS |
+| `17-copy-strings.md` | Microcopy catalogue (i18n keys) |
+| `18-favicon-pipeline.md` | Favicon fetch / cache pipeline |
+| `19-breakpoints.md` | Breakpoint table |
+| `20-accessibility-wcag.md` | WCAG 2.2 AA criteria |
+| `21-options-page.md` | Options-page surface |
+| `22-keyboard-cheatsheet.md` | Keyboard cheatsheet overlay |
+| `wireframes/` | Low-fi reference screens |
 
 ## Locked rules
 

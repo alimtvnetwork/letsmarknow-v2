@@ -172,7 +172,19 @@ Every non-2xx response uses this envelope:
 | `SYS_FEATURE_DISABLED` | 403 | no | `toast.sys.feature_disabled` | `feature_flag` |
 | `SYS_UPGRADE_REQUIRED` | 426 | no | `toast.sys.upgrade_required` | `min_client_version`, `current_version`, `surface` |
 
-### 3.10 Realtime (`RT_*`)
+### 3.10 History & undo (`HISTORY_*`)
+
+| Code | HTTP | Retryable | Toast key | Details fields |
+|---|---|---|---|---|
+| `HISTORY_UNDO_WINDOW_EXPIRED` | 410 | no | `toast.history.undo_window_expired` | `event_id`, `expires_at` |
+| `HISTORY_ALREADY_UNDONE` | 409 | no | `toast.history.already_undone` | `event_id`, `undo_event_id` |
+| `HISTORY_ENTITY_MODIFIED_AFTER_EVENT` | 422 | no | `toast.history.entity_modified` | `event_id`, `target_type`, `target_id`, `last_modified_at` |
+| `HISTORY_NOT_UNDOABLE` | 422 | no | `toast.history.not_undoable` | `event_id`, `kind` |
+| `HISTORY_REDO_NOT_AVAILABLE` | 409 | no | `toast.history.redo_unavailable` | `event_id` |
+
+> Generic codes also commonly returned by `/v1/history/*`: `GONE_HARD_DELETED`, `GONE_SOFT_DELETED` (target gone), `PERM_DENIED` (lost access mid-undo), `BILLING_QUOTA_EXCEEDED` (re-creation would exceed plan cap), `NOT_FOUND` (event id unknown).
+
+### 3.11 Realtime (`RT_*`)
 
 | Code | HTTP | Retryable | Toast key | Details fields |
 |---|---|---|---|---|

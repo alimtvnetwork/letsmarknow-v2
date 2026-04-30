@@ -100,7 +100,7 @@ For bulk moves: per-item LWW; partial overlap possible (some items follow A's mo
 | Edits title | Trashes item | Trash wins (it was the later action by server timestamp); A's edit appears in trash |
 | Trashes | Trashes | Single trash; deduped |
 | Trashes | Restores (was already trashed) | Trash wins if newer; restore wins if newer |
-| Hard-deletes | Anything later | Hard delete is final; later mutations rejected with `TARGET_GONE` |
+| Hard-deletes | Anything later | Hard delete is final; later mutations rejected with `GONE_HARD_DELETED` (per `03-api-endpoints/18-error-codes.md §3.3`) |
 
 Hard delete only happens after 30-day soft-delete grace; window is large enough to make this rare.
 

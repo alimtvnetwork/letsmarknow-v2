@@ -1901,3 +1901,17 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **LB1 (spelling):** Unified to `canceled` (US — matches both Stripe and Paddle webhook payloads). `01-plans-matrix.md §10` telemetry `plan.cancelled` → `plan.canceled`. `16-billing-emails.md` `BILL_CANCELLATION_CONFIRMED` trigger `subscription.cancelled` → `subscription.canceled`; subject line de-Britishized. Verified `rg cancelled` over `10-licensing-billing/` returns zero.
 - **LB2 (money units):** `08-invoices-and-tax.md` Invoice schema fields renamed `amount_{subtotal,tax,total}_minor` → `amount_{subtotal,tax,total}_cents` per locked W-10 rule and `02-data-model/00-overview.md §1.3`. Verified `rg _minor` over `10-licensing-billing/` returns zero.
 - Audit status → 2 of 10 closed. Remaining: LB3-LB7 (S2 batch — provider parity + enum SoT), LB8-LB10 (S3 polish).
+
+---
+
+## Session 76 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** Next, [...standard "list remaining tasks" instruction]
+
+**Action:** Closed S2 batch LB3-LB7 from licensing-billing audit (Session 74). Now 7/10 closed.
+- **LB3 (`team_enterprise` enum clash):** `02-entitlements-engine.md §50` `max_tier` ranking rewritten to use `License.plan` enum directly (`free < pro < team`). Team Enterprise documented as `License.plan = team` + per-deal uplifts in `org_entitlement_overrides`. No enum change to `02-data-model/10-license.md` required — preserves AU8 SoT.
+- **LB4 (Paddle SKU missing team_enterprise):** False alarm — `team_enterprise_yearly` IS present in `15-sku-map.md §3` Paddle table (line 46, `team_ent_paddle_TBD`). Initial audit scan missed it. Closed as not-an-issue.
+- **LB5 (Paddle trial_will_end):** Added `subscription.trial_will_end` Paddle event in `12-billing-webhooks.md §4` handler table + `04-paddle-integration.md §7` listened-events. Paddle subscribers now receive `BILL_TRIAL_ENDING` email at T-3 days, matching Stripe.
+- **LB6 (Paddle payment_method parity):** Documented Paddle's design — no standalone `payment_method.*` events; PM state is conveyed inside `subscription.updated` + `transaction.completed` payloads. Notes added to both `12-billing-webhooks.md §4` and `04-paddle-integration.md §7`. Handlers MUST extract PM state from those events.
+- **LB7 (processor enum):** `03-stripe-integration.md §5` `org_subscription.processor` enum widened from `stripe` → `stripe \| paddle` with cross-reference to `04-paddle-integration.md §3`. Canonical SoT for the enum now correctly hosted in the Stripe spec.
+- Remaining: LB8-LB10 (S3 polish, single session).

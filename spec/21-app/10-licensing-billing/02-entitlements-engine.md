@@ -47,7 +47,7 @@ Per request context `(account_id, org_id)`:
 6. Return { values, hash, source_breakdown }
 ```
 
-`max_tier` ranking: `free < pro < team < team_enterprise`. Lifetime plans rank with their tier (Lifetime Pro = pro).
+`max_tier` ranking uses the `License.plan` enum directly (canonical SoT: `02-data-model/10-license.md §1`): `free < pro < team`. **Note on Team Enterprise:** the `team_enterprise_yearly` SKU resolves to `License.plan = team` with bespoke capability uplifts written to `org_entitlement_overrides` per deal — there is no `team_enterprise` value in the plan enum. Lifetime plans rank with their underlying tier (Lifetime Pro = pro).
 
 ## 3. Storage
 

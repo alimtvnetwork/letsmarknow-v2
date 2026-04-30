@@ -64,6 +64,14 @@ function walk(dir: string): void {
     if (st.isDirectory()) {
       if (isHidden(name)) continue;
       if (name === 'templates') continue; // non-domain folder
+      // 23-audits/ filenames follow `audit-YYYY-MM-DD-...md`, governed by audit-cadence linter.
+      // Skip recursion here to avoid duplicating ownership and exhausting the allowlist cap.
+      if (name === '23-audits' && relative('.', dir) === ROOT) {
+        // still register the dir number for contiguity check
+        const m = name.match(DIR_RE);
+        if (m) dirNumbers.set(parseInt(m[1], 10), name);
+        continue;
+      }
       if (allowlist.has(rel)) continue; // allowlisted non-domain folder; skip recursion + naming check
       const m = name.match(DIR_RE);
       if (m) {

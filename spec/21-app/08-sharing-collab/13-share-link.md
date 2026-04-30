@@ -40,7 +40,7 @@ Browser-native shorthand (when the Mark Now extension is installed): typing `lmk
 
 ### 1.4 Address-bar resolver (extension-mediated)
 
-When the Mark Now Chrome extension is installed and the user is signed in, typing `lmk/{slug}` in the omnibox is intercepted (per `04-extension/06-omnibox.md` — keyword `lmk`):
+When the Mark Now Chrome extension is installed and the user is signed in, typing `lmk/{slug}` directly in the address bar is intercepted via `chrome.webNavigation.onBeforeNavigate` URL-pattern listener (per `04-extension/06-omnibox.md §11` — this is **NOT** a `chrome.omnibox` keyword route; the only registered manifest keyword is `lmn` for live search per `04-extension/01-manifest.md §54-56`):
 
 | Case | Resolver behavior |
 |---|---|
@@ -48,7 +48,7 @@ When the Mark Now Chrome extension is installed and the user is signed in, typin
 | `{slug}` exists in another Org the user belongs to but not active | Switch to that Org, then navigate. Toast: "Switched to {org_name}". |
 | `{slug}` exists in multiple of the user's Orgs | Show disambiguation page listing matches with org name + target preview. |
 | `{slug}` does not exist anywhere | Redirect to `https://letsmarknow.com/lmk/new?slug={slug}` (Create-Share dialog pre-filled). |
-| Extension not installed (web-only) | The full `https://letsmarknow.com/lmk/{org_handle}/{slug}` URL is the only path; no omnibox shortcut. Server-side 302 still works for the full URL. |
+| Extension not installed (web-only) | The full `https://letsmarknow.com/lmk/{org_handle}/{slug}` URL is the only path; no address-bar shortcut. Server-side 302 still works for the full URL. |
 
 
 

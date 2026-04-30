@@ -99,4 +99,4 @@ Distinct from the `lmn ` keyword: when the user types `lmk/{slug}` directly into
 | Result | Suggestion list | Direct navigation (≤ 300 ms) |
 | Out-of-extension fallback | None — keyword needs the extension | Full URL `letsmarknow.com/lmk/{org_handle}/{slug}` works server-side |
 
-Both keywords (`lmn`, `lmk`) are reserved at registration time; users cannot rebind.
+Only `lmn` is a registered `chrome.omnibox` keyword (reserved at extension registration, users cannot rebind). `lmk` is **not** a keyword — it is a path-pattern intercepted by `chrome.webNavigation.onBeforeNavigate`. Both surfaces are reserved against rebinding (the manifest keyword by Chrome's omnibox API; the path pattern by the extension's webNavigation listener).

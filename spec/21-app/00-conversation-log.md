@@ -1981,3 +1981,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - IE5: Declared canonical `dedup_mode` telemetry enum (`skip|merge|allow`) in `11-dedup-algorithm.md §6`; distinguished from wire-level `on_duplicate` enum.
 - IE6: Verified `01-conventions.md §6` is canonical Idempotency-Key SoT; replaced local prose in `03-import-pipeline.md §7`, `07-webhooks-and-api-imports.md §5`, `09-gdpr-export.md §3` with cross-references.
 - Audit log: 6/8 closed.
+
+---
+
+## Session 81 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained IE7+IE8 (S3 polish). **Import-export audit fully closed (8/8).**
+- IE7: Added filename-convention note to `09-gdpr-export.md §4` — data files lowercase, `README.md` uppercase per repo-bundle convention.
+- IE8: Normalized `{account_token}` → `:account_token` in `10-migration-out.md §88` with cross-ref to `01-conventions.md` `:param` SoT.
+- Audit `audit-2026-04-29-import-export-sweep-78.md` status → `closed`.

@@ -8,6 +8,22 @@
 
 ---
 
+## 2026-04-29 — Session 99 — Open data-model gap-sweep (audit-99)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md (NEW; 4 findings — DM1+DM2 S2, DM3+DM4 S3)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 98 — Drain EX3+EX4 (S3 polish; close audit-95)
 
 ```

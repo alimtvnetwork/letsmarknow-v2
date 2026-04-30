@@ -7,7 +7,9 @@
  *   (b) Folder index is exactly `readme.md` (lowercase).
  *   (c) Sequence numbers are contiguous within each folder (no gaps, no duplicates).
  *
- * Scope: `spec/21-app/` recursively. Excludes `templates/` and `.lovable/`-style hidden dirs.
+ * Scope: `spec/21-app/` recursively. Excludes `templates/`, hidden dirs, and
+ *        `23-audits/` (governed by `audit-cadence` linter — `audit-YYYY-MM-DD-...md`
+ *        filenames are not the NN-prefix convention by design).
  *
  * Output: `{file}:{line}:{col} [naming-convention] {message}` — one violation per line.
  * Exit 0 = clean; exit 1 = violations.
@@ -64,6 +66,14 @@ function walk(dir: string): void {
     if (st.isDirectory()) {
       if (isHidden(name)) continue;
       if (name === 'templates') continue; // non-domain folder
+      // 23-audits/ filenames follow `audit-YYYY-MM-DD-...md`, governed by audit-cadence linter.
+      // Skip recursion here to avoid duplicating ownership and exhausting the allowlist cap.
+      if (name === '23-audits' && relative('.', dir) === ROOT) {
+        // still register the dir number for contiguity check
+        const m = name.match(DIR_RE);
+        if (m) dirNumbers.set(parseInt(m[1], 10), name);
+        continue;
+      }
       if (allowlist.has(rel)) continue; // allowlisted non-domain folder; skip recursion + naming check
       const m = name.match(DIR_RE);
       if (m) {

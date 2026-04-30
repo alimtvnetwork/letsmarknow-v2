@@ -4,43 +4,6 @@
 
 # (1) Audit corpus — date-prefix scheme owned by audit-cadence linter
 # PR:#0 reason:audit-YYYY-MM-DD-slug.md is the canonical name validated by audit-cadence sub-check, not naming-convention
-spec/21-app/23-audits/audit-2026-04-18.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-100-retrospective.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-ai-readiness-score.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-decisions-needed.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-impl-vs-spec.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-m-gaps.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-rescore-delta-v2.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-rescore-delta.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-sequencing.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-spec-internal.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-spec-wide.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-19-weakest-files-plan.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-20-rescore-delta-v3.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-ai-readiness-score-v2.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-glossary-sweep.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-orphan-endpoint-sweep.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-post-fix-reaudit.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-toby-parity-delta.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-full-green-milestone.md
 # PR:#0 reason:legacy un-prefixed audit file explicitly exempted by audit-cadence §2.1.4(f); pending merge or deletion
 spec/21-app/23-audits/audit.md
 # PR:#0 reason:supporting analysis doc for audit corpus, not itself an audit
@@ -58,55 +21,5 @@ spec/21-app/06-ui-ux/wireframes
 # PR:#0 reason:legacy root-level cross-folder diagram index; planned migration into 00-overview/ tracked by SI-026 (to be opened if not migrated by review-by date)
 spec/21-app/flow-diagrams-index.md
 
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-import-export-sweep-78.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-licensing-billing-sweep-74.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep-66.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep-87.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-sharing-collab-sweep-83.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-sharing-collab-sweep.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-ui-ux-sweep-103.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-auth-accounts-sweep-70.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md
 # PR:#0 reason:reference doc colocated with sharing-collab spec; pre-dates the NN- prefix convention and is referenced by URL across folder
 spec/21-app/08-sharing-collab/url-normalization.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-auth-accounts-sweep-106.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-extension-sweep-108.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-visualization-sweep-109.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-notifications-sweep-110.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-search-sweep-111.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-import-export-sweep-112.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-history-undo-sweep-112.md
-# PR:#0 reason:audit-cadence-owned filename
-spec/21-app/23-audits/audit-2026-04-30-i18n-a11y-sweep-113.md

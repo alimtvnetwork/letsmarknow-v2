@@ -8,6 +8,27 @@
 
 ---
 
+## 2026-04-30 — Session 105 — Cross-cutting linter sweep (audit-105)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md (NEW; 7 findings — LS1-LS4 S2, LS5-LS7 S3 — ALL CLOSED same session)
+- spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md (added missing metadata block)
+- spec/21-app/23-audits/audit-2026-04-29-{import-export-sweep-78,licensing-billing-sweep-74,security-privacy-sweep-66,security-privacy-sweep-87,security-privacy-sweep,sharing-collab-sweep-83,sharing-collab-sweep,auth-accounts-sweep-70,data-model-sweep-99,data-model-sweep,extension-sweep-95,history-undo-sweep-91}.md + audit-2026-04-30-ui-ux-sweep-103.md (header normalization: gap-sweep → ad-hoc, freeform status → bare closed + closed-because)
+- spec/21-app/24-i18n-a11y/ (RENAMED from 17-i18n-a11y/ to fix 17/17 collision; 00-overview.md restructured to canonical 5-section layout)
+- spec/21-app/{04-extension/07-context-menu.md,04-extension/17-store-listing.md,05-web-app/05-account-settings.md,06-ui-ux/22-keyboard-cheatsheet.md,10-licensing-billing/16-billing-emails.md,13-spec-issues/04-closed-issues.md,23-audits/audit-2026-04-29-si-026-closure.md,24-i18n-a11y/01-extension-strings.md} (path refs 17- → 24-)
+- scripts/lint/{link-check,naming-convention,sku-naming,backticked-path-resolution}.allowlist.txt (extended; review-by refreshed to 2026-10-27)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-30 — Session 104 — Next-queue build-readiness review (audit-104)
 
 ```

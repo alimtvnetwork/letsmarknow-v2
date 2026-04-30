@@ -39,13 +39,13 @@ Handling 50k+ items without blowing up memory, exceeding timeouts, or producing 
 ## 3. Resumability
 
 - Top-level `status` follows the canonical enum (`awaiting_upload | queued | running | succeeded | partial | failed | canceled`) defined in `03-api-endpoints/15-import-export.md` line 250.
-- Internal worker-side `phase` sub-states (all live under top-level `status=running`):
-  - `uploaded` → `parsed` → `preview_ready` → `committing(offset=N)` → `committed_internal`
-- These are **internal checkpoints**, not wire-visible status values. Clients only ever see the canonical top-level enum.
+- Wire-visible `phase` (returned by `GET /v1/imports/:id/status`) follows the canonical enum in `03-api-endpoints/15-import-export.md` line 115: `parsing | previewing | awaiting_commit | writing_spaces | writing_collections | writing_items | writing_tags | finalizing | done`.
+- Worker-side **internal checkpoints** (NOT wire-visible) track the resume offset within a `phase`: `{ phase, batch_offset, completed_count, resumed_from_batch_id }`. Persisted in `import_jobs.checkpoint` (jsonb).
 - On crash mid-commit:
   - Job picked up by next worker.
-  - State loaded; resumes from `offset=N`.
-  - Already-committed batches NOT redone (idempotent insert via batch_id + record_id).
+  - Internal checkpoint loaded; resumes from `batch_offset=N` within the same `phase`.
+  - Already-committed batches NOT redone (idempotent insert via `(import_id, batch_id, record_id)` unique constraint).
+  - Top-level `status` remains `running`; `phase` may advance through `writing_*` values as resumed work completes.
 
 ## 4. Memory budget
 

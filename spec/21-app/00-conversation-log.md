@@ -8,6 +8,27 @@
 
 ---
 
+## 2026-04-30 — Session 106 — Auth & Accounts second-pass sweep (audit-106)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/23-audits/audit-2026-04-30-auth-accounts-sweep-106.md (NEW; 4 findings — AA1 S1, AA2 S2, AA3+AA4 S3 — ALL CLOSED same session; verified audit-70 AU1 already closed)
+- spec/21-app/03-api-endpoints/03-auth.md (POST /magic-link/consume → GET /magic-link/callback to match SoT)
+- spec/21-app/03-api-endpoints/00-overview.md (count table: GET 50→51, POST 99→98)
+- spec/21-app/09-auth-accounts/06-sessions.md §1.3 (trust cookie name + SameSite + 2 broken §-anchors corrected)
+- spec/21-app/19-security-privacy/04-gdpr-ccpa.md §11 (trust cookie renamed to canonical __Host-lmn_trust)
+- scripts/lint/naming-convention.allowlist.txt (new audit file)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-30 — Session 105 — Cross-cutting linter sweep (audit-105)
 
 ```

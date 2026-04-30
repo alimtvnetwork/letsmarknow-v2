@@ -2417,3 +2417,15 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - HU3 (S3): Added cross-ref from undo spec to error-code registry.
 
 All 17 linters green. Scorecard 100/100/100.
+
+---
+## 2026-04-30 — Session 113: Gap-sweep `24-i18n-a11y/`
+
+**User instruction (verbatim):** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Outcome.** Audit-113 closed 3 cross-ref findings in `24-i18n-a11y/01-extension-strings.md`:
+- IA1 (S2): `04-extension/01-manifest.md §3` did not exist (manifest uses unnumbered headers) — replaced with section-title prose.
+- IA2 (S2): `04-extension/17-store-listing.md §6` was wrong (Image asset inventory); corrected to `§5 Localization`.
+- IA3 (S3): Permanent forward-ref to never-authored `06-ui-ux/04-layout-grid.md §6` "RTL guarantees" — replaced with roadmap pointer + interim guidance.
+
+All 17 linters green. Scorecard 100/100/100.

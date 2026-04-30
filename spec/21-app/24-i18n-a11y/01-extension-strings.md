@@ -71,7 +71,7 @@ The extension manifest references catalog keys via `__MSG_*__`:
 }
 ```
 
-Per `04-extension/01-manifest.md §3`. The `default_locale` field is **required** when any `__MSG_*__` substitution is used; `en` is the source.
+Per `04-extension/01-manifest.md` (manifest "Full manifest" + "Store listing extras" sections). The `default_locale` field is **required** when any `__MSG_*__` substitution is used; `en` is the source.
 
 ---
 
@@ -104,7 +104,7 @@ The Chrome Web Store listing has its own localized fields, sourced from the same
 | Promo tagline | `storePromoTagline` | 45 chars. |
 | Screenshots captions | `storeScreenshot1Caption` … `storeScreenshot5Caption` | 124 chars each. |
 
-Listings for non-source locales are uploaded via the Web Store API only when the corresponding locale is approved for release per `04-extension/17-store-listing.md §6`.
+Listings for non-source locales are uploaded via the Web Store API only when the corresponding locale is approved for release per `04-extension/17-store-listing.md §5` (Localization).
 
 ---
 
@@ -145,7 +145,7 @@ When the active locale is RTL (Arabic, Hebrew, etc.):
 - Extension surfaces set `dir="rtl"` on `<html>`.
 - Layout uses logical CSS properties (`margin-inline-start`, not `margin-left`).
 - Icons that have direction (back/forward arrows, "open in new" glyphs) flip via the `[dir="rtl"] &` selector.
-- Per `06-ui-ux/04-layout-grid.md §6` (RTL guarantees) once authored.
+- An RTL-specifics file in this folder is on the roadmap (tracked in `20-roadmap/`); until then, follow the logical-CSS-property rule above and the design-system layout primitives in `06-ui-ux/04-layout-grid.md`.
 
 ---
 

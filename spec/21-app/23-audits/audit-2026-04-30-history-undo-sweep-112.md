@@ -1,14 +1,15 @@
----
-audit_id: audit-2026-04-30-history-undo-sweep-112
-type: gap-sweep
-folder: 12-history-undo
-opened: 2026-04-30
-closed: 2026-04-30
+<!--
+audit-date: 2026-04-30
+next-audit-by: 2026-10-27
+audit-type: ad-hoc
 status: closed
-score_before: 100
-score_after: 100
-session: 112
----
+closed-on: 2026-04-30
+closed-because: 3 findings opened and closed same session — HU1 (S2 invented error tokens UNDO_TARGET_GONE/TARGET_GONE/QUOTA_EXCEEDED/FORBIDDEN in 12-history-undo/02-undo-redo.md §8 → replaced with canonical GONE_HARD_DELETED/GONE_SOFT_DELETED/BILLING_QUOTA_EXCEEDED/PERM_DENIED + new HISTORY_* family), HU2 (S2 03-api-endpoints/14-history.md §undo used bare HTTP labels with details.reason discriminators violating "switch on code" locked rule → added 5-code HISTORY_* family in 18-error-codes.md §3.10, RT_* renumbered to §3.11, §undo errors block rewritten), HU3 (S3 02-undo-redo.md §8 lacked back-ref to canonical registry → added). Also fixed 03-conflict-resolution.md §10 TARGET_GONE → GONE_HARD_DELETED. All 17 lint sub-checks green.
+audit-id: 112
+scope: spec/21-app/12-history-undo/
+score-before: 100/100
+score-after: 100/100
+-->
 
 # Audit 112 — `12-history-undo/` gap-sweep
 

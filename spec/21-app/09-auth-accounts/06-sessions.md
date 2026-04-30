@@ -29,7 +29,7 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 
 ### 1.3 Canonical cookie inventory (SoT)
 
-> **All cookies set by the platform are enumerated here.** Cross-referenced from `19-security-privacy/04-gdpr-ccpa.md §11` (consent-classification view) and from `19-security-privacy/01-threat-model.md §27` (security-attribute view). No other file may declare a new cookie without adding the row here.
+> **All cookies set by the platform are enumerated here.** Cross-referenced from `19-security-privacy/04-gdpr-ccpa.md §11` (consent-classification view) and from `19-security-privacy/01-threat-model.md §2` (security-attribute view). No other file may declare a new cookie without adding the row here.
 
 | Cookie | Purpose | Class | Attributes | TTL |
 |---|---|---|---|---|
@@ -39,7 +39,7 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 | `lmn_active_account` | Active Account selector for multi-Account users (per `01-identity-model.md §4`) | Essential | Secure, SameSite=Lax | session |
 | `lmn_active_org` | Active Org selector | Essential | Secure, SameSite=Lax | session |
 | `lmn_locale` | UI language | Functional | Secure, SameSite=Lax | 1 y |
-| `lmn_trust_device_<account_id>` | "Trust this device for 30 days" MFA bypass (per `03-passwords-and-mfa.md §85`) | Essential | HttpOnly, Secure, SameSite=Lax | 30 d |
+| `__Host-lmn_trust` | "Trust this device for 30 days" MFA bypass (per `03-passwords-and-mfa.md §10` and `10-device-and-security.md §1`) | Essential | HttpOnly, Secure, **SameSite=Strict** (intentional — only consulted on same-site sign-in form submit; never needs cross-site send), Path=/, no Domain | 30 d |
 | `lmn_analytics_id` | Anonymized analytics ID (only when consent granted) | Optional | Secure, SameSite=Lax | 1 y |
 
 **Naming convention:** auth-critical cookies use the `__Host-` prefix (locks scope to apex + Path=/ + Secure). Functional/optional cookies use the `lmn_` prefix. No third-party cookies set by first-party origin.

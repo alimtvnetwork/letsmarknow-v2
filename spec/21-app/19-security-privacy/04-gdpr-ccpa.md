@@ -110,7 +110,7 @@ Available to regulators on request.
 | `__Host-lmn_csrf` | CSRF token | Essential |
 | `lmn_consent` | Records consent prefs | Essential |
 | `lmn_active_account` / `lmn_active_org` | Active Account / Org selector | Essential |
-| `lmn_trust_device_<account_id>` | MFA "trust device" bypass | Essential |
+| `__Host-lmn_trust` | MFA "trust device" bypass | Essential |
 | `lmn_locale` | UI language | Functional |
 | `lmn_analytics_id` | Anonymized analytics ID | Optional |
 

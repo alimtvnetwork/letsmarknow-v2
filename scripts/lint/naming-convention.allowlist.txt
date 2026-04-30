@@ -92,3 +92,5 @@ spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md
 spec/21-app/08-sharing-collab/url-normalization.md
 # PR:#0 reason:audit-cadence-owned filename
 spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-30-auth-accounts-sweep-106.md

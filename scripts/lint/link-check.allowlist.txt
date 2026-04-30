@@ -30,3 +30,6 @@ spec/21-app/08-sharing-collab/07-comments-and-reactions.md:url
 
 # PR:#0 reason:audit-83 finding SC7 quotes the Markdown-lite-subset prose verbatim (`[label](url)` as documentation example) when narrating closure
 spec/21-app/23-audits/audit-2026-04-29-sharing-collab-sweep-83.md:url
+
+# PR:#0 reason:audit-105 narrative quotes literal `[label](url)` markdown syntax when documenting LS2 closure example
+spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md:url

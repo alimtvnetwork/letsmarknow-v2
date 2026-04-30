@@ -13,6 +13,8 @@
 > | 429 / 402 envelope shape | `../03-api-endpoints/01-conventions.md` §4 + `../03-api-endpoints/18-error-codes.md` §1 | ✅ aligned |
 > | Rate-limit error codes | `../03-api-endpoints/18-error-codes.md` §3.8 (`RATE_LIMITED`, `RATE_LIMITED_AUTH`, `RATE_LIMITED_SHARE_PASSWORD`) | ✅ aligned |
 > | Org-quota error code | `../03-api-endpoints/18-error-codes.md` §3.6 (`BILLING_QUOTA_EXCEEDED`) | ✅ aligned (no invented `QUOTA_EXCEEDED`) |
+> | API-token per-tier rate buckets (Pro/Team/Enterprise) | `11-import-export/07-webhooks-and-api-imports.md §4` | ✅ delegated (this file does NOT duplicate API-token tier limits) |
+> | Email-in plan-tier daily quotas | `11-import-export/08-email-in.md §7` | ✅ delegated (this file SoTs only the per-minute gateway burst) |
 > | `Retry-After` HTTP header | mirrors `retry_after_ms` (seconds, rounded up) | ✅ aligned |
 >
 > **Locked rule:** Rate limits enforced at the edge function gateway via Upstash Redis token-bucket. Numbers below are MINIMUMS for production. Lower in test environments allowed; never higher in prod without owner approval.

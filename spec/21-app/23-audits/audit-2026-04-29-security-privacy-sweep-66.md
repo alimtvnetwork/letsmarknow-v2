@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: open
+status: in_progress (2 of 10 closed: SP1, SP2 — session 67)
 opened-on: 2026-04-29
 scope: 19-security-privacy/ folder — hashing-algorithm consistency, share-link cross-references, sub-processor SoT enforcement
 -->

@@ -4,6 +4,8 @@
 
 The data model and lifecycle for every shareable surface.
 
+> **v2 → v1 naming reconciliation.** Field names in this note use the v1-locked vocabulary (`target_type`/`target_id`, `memorable_slug`). v2 only adds: (a) multi-link per Share (one `Share` row, many `ShareLink` rows), (b) embed-only links (`/e/{slug}`), (c) custom domains (Team), (d) per-link analytics. Everything else is unchanged from v1.
+
 ---
 
 ## 1. Entities

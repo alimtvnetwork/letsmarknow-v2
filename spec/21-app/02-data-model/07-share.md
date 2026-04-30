@@ -86,3 +86,14 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 - `share.hard_deleted`
 - `share.target_repointed` (orphaned-state recovery, see invariant §10)
 - `share.access_requested` (visitor without access submits the request-access form, see `08-sharing-collab/13-share-link.md` §8)
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). This entity OWNS the SECURITY DEFINER helper `share_grants_access(_target_type, _target_id, _account_id)` that other entity policies call.
+
+- enable row level security
+- SELECT: `has_role(auth.account_id(), 'viewer')` for `organization_id`. Public viewer access (`/t/{slug}`) does NOT go through this policy — it uses a SECURITY DEFINER `resolve_share_by_slug(slug, password?, viewer_email?)` RPC that returns the rendered payload without exposing the row.
+- INSERT: `has_role(auth.account_id(), 'editor')` for `organization_id` AND target entity write access. WITH CHECK that `target_id` belongs to `organization_id` (invariant on `target_id`).
+- UPDATE: `editor`+ on Org. `slug` immutable except via "Rotate link" RPC. `password_hash` writes go through the password-set RPC (server hashes argon2id; column never accepts plaintext).
+- DELETE: soft (revoke) = `editor`+; hard = `admin`+ AND `revoked_at IS NOT NULL` (lifecycle constraint).
+- Notes: `password_hash` MUST be excluded from any `SELECT` projection returned to non-service-role callers (column-level grant or view). Custom slug INSERT/UPDATE additionally requires `entitlements.custom_share_slug = true` on the Org's License (invariant 6), enforced in the share-create/update RPC.

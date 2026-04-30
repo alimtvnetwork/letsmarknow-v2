@@ -114,3 +114,14 @@ A single saved tab. The leaf of the hierarchy. Lives directly inside a Collectio
 - `item.soft_deleted`
 - `item.restored`
 - `item.hard_deleted`
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md).
+
+- enable row level security
+- SELECT: parent-Collection access (see `03-collection.md §RLS`) OR (when `group_id IS NOT NULL`) parent-Group access OR `share_grants_access('item', id, auth.account_id())`. AND `deleted_at IS NULL`.
+- INSERT: `has_role(auth.account_id(), 'editor')` for `organization_id` AND parent-Collection (and Group, when set) access. WITH CHECK that `group_id` (when set) belongs to the same `collection_id` (invariant 1).
+- UPDATE: `editor`+ on Org. `last_opened_at` and `open_count` writable by any `viewer`+ (Jump-to-Tab is a non-content mutation).
+- DELETE: soft = `editor`+; hard = `admin`+.
+- Notes: `color_label`, `is_starred`, `starred_pin_position` writes follow the `editor`+ rule; they are not per-Account state. NextItem rows referencing this Item are governed by `12-next-item.md §RLS` (per-Account, independent).

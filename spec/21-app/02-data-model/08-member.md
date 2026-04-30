@@ -77,3 +77,14 @@ This table is the **sole** source of `(account_id, organization_id) → role`. N
 All server-side authorization checks MUST go through the SECURITY DEFINER `has_role(_user_id uuid, _role app_role)` function defined as the canonical pattern in [`19-security-privacy/01-threat-model.md`](../19-security-privacy/01-threat-model.md) → "Elevation of privilege" row (pinned Session 90). RLS policies on every other entity (`01-organization` … `11-account`, plus `12-next-item`) call this function rather than joining `members` directly, which both prevents recursive RLS evaluation and centralizes the role-resolution logic.
 
 The `system` role is server-issued only (background workers, migrations) and MUST NOT be assignable through any user-facing endpoint; enforcement lives in `17-admin-org/03-roles.md §2` (SQL `CHECK` + endpoint guard).
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Note: this is the `user_roles` table per the `<user-roles>` directive — RLS policies on OTHER entities call `has_role()` rather than joining this table directly, to prevent recursive RLS evaluation.
+
+- enable row level security
+- SELECT: own row (`account_id = auth.account_id()`) OR `has_role(auth.account_id(), 'admin')` for the same `organization_id` OR `has_role(auth.account_id(), 'billing')` (billing seats see member list to compute seat usage).
+- INSERT: `has_role(auth.account_id(), 'admin')` for `organization_id`. WITH CHECK `role <> 'system'` (invariant from `17-admin-org/03-roles.md §2` — `system` is server-issued only). WITH CHECK `role <> 'owner'` (Owner is created only by the Org-create RPC and transferred only via the dedicated transfer RPC).
+- UPDATE: `admin`+ on `organization_id` for role/status changes. `role` change to `'owner'` rejected here — only `transfer_ownership()` RPC may set it. Self-update permitted for `accepted_2fa` and the membership-acceptance flow (sets `account_id`, `accepted_at`, `status='active'` when invitee accepts the magic link).
+- DELETE: hard-delete forbidden — use `status='removed'` (invariant 6 preserves `created_by` references). Removing requires `admin`+; Owner cannot be removed (invariant 4).
+- Notes: This table itself MUST NOT be queried inside `has_role()` — `has_role` reads it via SECURITY DEFINER, which is the only safe re-entry point.

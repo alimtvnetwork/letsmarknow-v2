@@ -65,3 +65,17 @@ The append-only log of every mutation across the system. Powers Undo/Redo, audit
 - `history.undone` (meta-event, recorded but not undoable)
 - `history.redone`
 - `history.pruned` (system event; not user-visible)
+
+## RLS
+
+> Follows the per-entity template at [`templates/entity-rls.md`](./templates/entity-rls.md). Append-only: this is the only table where UPDATE is whitelisted to specific columns and DELETE is reserved to a system-role pruning job.
+
+- enable row level security
+- SELECT:
+  - Own events: `account_id = auth.account_id()` (powers personal Undo).
+  - Audit feed: `has_role(auth.account_id(), 'admin')` for `organization_id` (full org history).
+  - Entity history view: `viewer`+ on `organization_id` (read-only audit of a specific target).
+- INSERT: any authenticated session may insert events for `organization_id` they belong to AND `account_id = auth.account_id()`. WITH CHECK `actor_role` matches the caller's actual role at insert time (computed via `has_role`, not trusted from client).
+- UPDATE: only the columns `undone_at`, `undone_by_event_id`, `redone_at` (invariant 1). Caller must own the event (`account_id = auth.account_id()`) OR be `admin`+ on the Org. Cannot mutate undo state on `member.role_changed → owner` rows without the ownership-transfer re-confirmation RPC (invariant 4).
+- DELETE: forbidden for non-service-role callers. Only the daily pruning job (service-role bypass) may delete rows past the retention window.
+- Notes: `before` / `after` JSON snapshots may contain field values that the caller wouldn't otherwise have read access to (e.g. an Editor's UPDATE that changed a `password_hash` on a Share). Sensitive columns MUST be redacted in the application-layer event-emit code BEFORE insert — RLS cannot retroactively scrub JSON.

@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (7 of 9 closed: SH2, SH4, SH7 — session 62; SH1, SH8 — session 63; SH3, SH5 — session 64)
+status: closed (9 of 9 closed: SH2/SH4/SH7 — session 62; SH1/SH8 — session 63; SH3/SH5 — session 64; SH6/SH9 — session 65)
 opened-on: 2026-04-29
 scope: 08-sharing-collab/ folder — share-model parity, role-enum coverage, channel naming, v2/v1 drift
 -->

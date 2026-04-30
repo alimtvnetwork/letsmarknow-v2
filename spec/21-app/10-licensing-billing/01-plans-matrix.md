@@ -111,6 +111,8 @@ features.email_in
 features.webhooks
 features.api_tokens
 features.audit_log.retention_days
+features.history.retention_days
+features.history.time_travel
 features.sso_saml
 analytics.shares.retention_days
 support.priority

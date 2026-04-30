@@ -91,6 +91,8 @@ Configurable in UI with live preview against last received payload.
 
 ## 4. Rate limits
 
+> **SoT for API-token tier limits.** This table is the canonical source for per-plan API-token rate buckets. The generic class-based limits in `03-api-endpoints/01-conventions.md §8` (`read`/`write`/`bulk`/`auth`) apply to all bearer requests; this table layers stricter per-tier caps on **API-token** (PAT/OAuth) bearers. Per-account session-token traffic is governed only by §8. Cross-referenced from `09-auth-accounts/13-rate-limit-values.md`.
+
 | Tier | API requests/min | Webhook events/min |
 |---|---|---|
 | Pro | 60 (read), n/a (write) | n/a |
@@ -101,9 +103,8 @@ Configurable in UI with live preview against last received payload.
 
 ## 5. Idempotency
 
-- `Idempotency-Key` header required on all writes.
-- Stored 24h; replay returns prior response.
-- Webhook receive uses `event.id` from payload OR `body_hash` if no ID present.
+- `Idempotency-Key` header required on all writes — full contract (UUID, 24h TTL, body-mismatch error) SoT'd in `03-api-endpoints/01-conventions.md §6`. This file does NOT redefine the contract.
+- Webhook receive uses `event.id` from payload OR `body_hash` if no ID present (replay key, distinct from caller-supplied `Idempotency-Key`).
 
 ## 6. Webhook outbound (alternative direction)
 

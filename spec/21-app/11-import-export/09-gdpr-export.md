@@ -34,7 +34,7 @@ Includes EVERYTHING associated with the Account:
 4. Job enqueued; UI shows "We'll email you within 24 hours".
 
 `POST /v1/me/gdpr-export` (canonical contract: `03-api-endpoints/19-account.md`):
-- Idempotency-Key auto-set per Account per 24h (prevents abuse).
+- `Idempotency-Key` auto-set per Account per 24h to prevent abuse — follows the canonical contract in `03-api-endpoints/01-conventions.md §6` (server synthesizes the key here rather than requiring caller-supplied since this is a self-service privacy endpoint).
 - Returns `{ request_id, eta_hours: 24 }`.
 
 ## 4. Generation

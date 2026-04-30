@@ -1968,3 +1968,16 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - IE1: Replaced UK `cancelled`/`Cancelled` → US `canceled` in `03-import-pipeline.md` (L112, L170) and `06-large-imports.md` (L79, L105). Verified clean via ripgrep.
 - IE2: Removed competing `import_state=…` enum from `03-import-pipeline.md`; reframed `06-large-imports.md §3` checkpoint chain as internal worker `phase` sub-states under top-level `status=running` (canonical SoT: `15-import-export.md` line 250).
 - Audit log: 2/8 closed.
+
+---
+
+## Session 80 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained IE3+IE4+IE5+IE6 (S2 batch) of import-export audit.
+- IE3: Cross-referenced email-in plan-tier daily quotas (`08-email-in.md §7`) and gateway per-minute limit (`13-rate-limit-values.md §5`). Both stack independently.
+- IE4: Marked `07-webhooks-and-api-imports.md §4` as SoT for API-token tier buckets; added back-ref row to `13-rate-limit-values.md §1` cross-ref table.
+- IE5: Declared canonical `dedup_mode` telemetry enum (`skip|merge|allow`) in `11-dedup-algorithm.md §6`; distinguished from wire-level `on_duplicate` enum.
+- IE6: Verified `01-conventions.md §6` is canonical Idempotency-Key SoT; replaced local prose in `03-import-pipeline.md §7`, `07-webhooks-and-api-imports.md §5`, `09-gdpr-export.md §3` with cross-references.
+- Audit log: 6/8 closed.

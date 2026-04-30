@@ -69,6 +69,8 @@ If body contains 5 URLs:
 
 ### Rate limits
 
+> **Two limits stack.** The per-plan **daily quota** below is the SoT for plan-tier email-in volume. The API-gateway **per-minute** burst limit (`60 / min` per inbound address) is the SoT in `09-auth-accounts/13-rate-limit-values.md §5` and applies independently. Whichever fires first wins.
+
 | Plan | Emails per 24h | Bytes per email |
 |---|---|---|
 | Pro | 100 | 5 MB |

@@ -102,7 +102,8 @@ The exact `manifest.json` shape, permission model, and rationale for each entry.
     "identity",
     "scripting",
     "notifications",
-    "favicon"
+    "favicon",
+    "webNavigation"
   ],
 
   "optional_permissions": [
@@ -145,6 +146,7 @@ The exact `manifest.json` shape, permission model, and rationale for each entry.
 | `scripting` | Inject save-confirmation toast on page when shortcut fires | yes (modest) |
 | `notifications` | Save-success toast when popup closed | yes |
 | `favicon` | `chrome://favicon/` access for fallback favicons | no |
+| `webNavigation` | Intercept address-bar `lmk/{slug}` typed-URL via `chrome.webNavigation.onBeforeNavigate` and resolve to a Share against the active Org (per `06-omnibox.md §11` and `08-sharing-collab/13-share-link.md §1.4`). Required for the memorable-shortlink surface locked in Core memory. | yes (Chrome wording: "Read your browsing history" — overlaps with `tabs` justification; install dialog text does not get worse) |
 | `bookmarks` *(optional)* | One-time import from Chrome bookmarks | requested at import time only |
 | `history` *(optional)* | "Find tabs visited but not saved" feature (Pro) | requested at feature first-use |
 | `downloads` *(optional)* | Export download UX | requested at export |

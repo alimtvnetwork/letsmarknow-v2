@@ -2,7 +2,9 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (3 of 5 closed)
+status: closed
+closed-on: 2026-04-29
+closed-because: All 5 findings drained across Sessions 92-94.
 opened-on: 2026-04-29
 scope: 12-history-undo/ folder — locked-rule violation (ULID), retention drift, entitlement pointer, idempotency cross-ref, endpoint cross-ref
 -->

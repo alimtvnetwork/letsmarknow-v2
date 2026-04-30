@@ -148,12 +148,12 @@ Archived events kept in cold storage (Parquet) for compliance per audit log poli
 
 ## 8. Reading
 
-`GET /v1/history?org=...&target_type=...&target_id=...&since=...&limit=...`
+`GET /v1/history?org=...&target_type=...&target_id=...&since=...&limit=...` — bare list with optional `target_type`/`target_id` query filters. Canonical contract: `03-api-endpoints/14-history.md §10` (query-filter form).
 - Cursor-paginated.
 - Filterable by `actor_account_id`, `kind`, date range.
 - Returns sanitized payload (sensitive fields stripped).
 
-`GET /v1/history/:id` — single event detail.
+`GET /v1/history/:id` — single event detail. Canonical contract: `03-api-endpoints/14-history.md` (event-detail section).
 
 `GET /v1/items/:id/history` — convenience alias scoped to an item. Canonical contract: `03-api-endpoints/14-history.md` (Per-item activity feed section).
 

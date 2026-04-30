@@ -1890,3 +1890,14 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **5 × S2:** LB3 `team_enterprise` plan tier in `02-entitlements-engine.md §50` ranking but not in `License.plan` enum (post-AU8 SoT clash); LB4 Paddle SKU table missing `team_enterprise_yearly` row without explanation; LB5 Paddle webhook lacks `trial_will_end` parity (T-3 trial email broken for Paddle subs); LB6 Paddle webhook lacks `payment_method.*` parity; LB7 `org_subscription.processor` enum declared single-valued in Stripe spec while Paddle writes the same column.
 - **3 × S3:** LB8 dangling `plan_code` reference in `15-sku-map.md §4` (zero hits in `01-plans-matrix.md`); LB9 Paddle `*_TBD` placeholder suffix leak; LB10 Lifetime Team "5 seats" not a structured column.
 - Drain plan: 3 sessions (S1 batch → S2 batch → S3 batch).
+
+---
+
+## Session 75 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** Next, [...standard "list remaining tasks" instruction]
+
+**Action:** Closed S1 pair LB1 + LB2 from licensing-billing audit (Session 74).
+- **LB1 (spelling):** Unified to `canceled` (US — matches both Stripe and Paddle webhook payloads). `01-plans-matrix.md §10` telemetry `plan.cancelled` → `plan.canceled`. `16-billing-emails.md` `BILL_CANCELLATION_CONFIRMED` trigger `subscription.cancelled` → `subscription.canceled`; subject line de-Britishized. Verified `rg cancelled` over `10-licensing-billing/` returns zero.
+- **LB2 (money units):** `08-invoices-and-tax.md` Invoice schema fields renamed `amount_{subtotal,tax,total}_minor` → `amount_{subtotal,tax,total}_cents` per locked W-10 rule and `02-data-model/00-overview.md §1.3`. Verified `rg _minor` over `10-licensing-billing/` returns zero.
+- Audit status → 2 of 10 closed. Remaining: LB3-LB7 (S2 batch — provider parity + enum SoT), LB8-LB10 (S3 polish).

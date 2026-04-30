@@ -137,7 +137,7 @@ Resolution rules in `02-entitlements-engine.md`.
 - `plan.trial_started`
 - `plan.trial_expired`
 - `plan.trial_converted` `{ to_plan }`
-- `plan.cancelled` `{ at_period_end: bool }`
+- `plan.canceled` `{ at_period_end: bool }`
 
 ## 11. Edge cases
 

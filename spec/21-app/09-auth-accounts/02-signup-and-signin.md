@@ -11,7 +11,7 @@ All entry flows for getting an Account authenticated.
 | Web app | `/signup`, `/signin`, `/signin/magic`, `/signin/oauth/:provider`, `/invite/:token` |
 | Extension popup | "Sign in" button → opens `/signin?from=ext` in new tab |
 | PWA | Same as web app |
-| OAuth callbacks | `/auth/callback/:provider` |
+| OAuth callbacks | Canonical: `GET /v1/auth/oauth/:provider/callback` (per `03-api-endpoints/03-auth.md §OAuth`). The `/auth/callback/:provider` form used in `04-oauth-providers.md §1` is the lay alias / web-route narration of the same endpoint. |
 
 ## 2. Methods
 

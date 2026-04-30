@@ -21,7 +21,8 @@ JWT model, refresh cookie, session table, sign-out everywhere.
 
 ### Refresh cookie
 - Name: `__Host-lmn_refresh`.
-- HttpOnly, Secure, SameSite=Strict, Path=/, no Domain attribute (locks to apex).
+- HttpOnly, Secure, **SameSite=Lax** (required so the cookie is sent on top-level cross-site navigations, e.g. clicking a magic-link from an email client). CSRF is mitigated by the double-submit token pattern in `19-security-privacy/03-encryption.md §8`, NOT by SameSite=Strict.
+- `Path=/`, no Domain attribute (locks to apex).
 - Value: opaque random 32 bytes; sha256-hashed in DB (`session.refresh_hash`).
 - TTL: 30 days, rolling on use.
 - Rotation: every refresh issues a new value; old denied (detection of theft).

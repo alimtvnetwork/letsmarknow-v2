@@ -2058,3 +2058,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 **Action:** Opened new gap-sweep audit on `19-security-privacy/` (default per Session 86 suggestion).
 - Created `audit-2026-04-29-security-privacy-sweep-87.md` with 7 findings: SP1+SP2 (S1, rate-limit SoT drift in threat-model + share-link-security — mirrors SC1+SC2 root cause), SP3 (S2, audit-event naming drift `brute_force_lockout` vs `locked_brute_force` + 3 missing events), SP4 (S2, CAPTCHA thresholds undeclared), SP5 (S2, cookie inventory has no SoT), SP6 (S3, session TTL vague), SP7 (S3, `has_role` pattern not cross-referenced to role-enum SoT).
 - Drain plan: 3 sessions.
+
+---
+
+## Session 88 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained SP1+SP2 (S1 batch) of security-privacy audit.
+- SP1: Replaced password-share brute-force numeric prose in `01-threat-model.md §36` and `05-share-link-security.md §6` with cross-reference to `13-rate-limit-values.md §4` SoT. Added drift-prevention note citing audits SC1 + SP1.
+- SP2: Replaced single-tier "60 /min /IP" in `05-share-link-security.md §2` with explicit two-tier SoT cross-reference.
+- Audit log: 2/7 closed.

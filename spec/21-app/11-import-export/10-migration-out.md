@@ -85,7 +85,7 @@ Implemented as static content (`/migrate-to/<tool>`) for SEO + helpfulness even 
 ## 8. API for third-parties
 
 A public, documented API endpoint others can use to ingest LMN data programmatically:
-- `GET /v1/exports/lmn-json/{account_token}` — token issued in `/settings/api/migration-token`.
+- `GET /v1/exports/lmn-json/:account_token` — token issued in `/settings/api/migration-token`. Path-param style follows `:param` convention per `03-api-endpoints/01-conventions.md` (no `{curly}` form).
 - 30-day TTL on token.
 - Streaming JSON response.
 - Rate-limited.

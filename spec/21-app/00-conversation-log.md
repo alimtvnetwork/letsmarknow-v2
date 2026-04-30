@@ -1814,3 +1814,16 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - §2 rate-limit row: `/s/{token}` → `/lmk/{org_handle}/{memorable_slug}`.
 - §11: aligned embed sandbox to `10-embed-widget.md §3` (omit allow-same-origin/top-navigation; allow-popups + escape). Replaced non-standard `XFO: ALLOWALL` with `CSP: frame-ancestors <allowlist>` on `/e/{slug}`; defense-in-depth `frame-ancestors 'none' + XFO: DENY` elsewhere.
 - Audit status → 6 of 10 closed. Remaining: SP7, SP8, SP9, SP10.
+
+---
+
+## Session 69 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Drained final 4 findings (SP7-SP10). **Security-privacy audit fully closed (10/10).**
+- SP7: `03-encryption.md §4` removed RS256 fallback; verifiers MUST reject `alg: RS256`. EdDSA marked **Locked**.
+- SP10: `03-encryption.md §1` "Q4 2026" → concrete `2026-12-31` deadline + cipher-policy CI job ref.
+- SP9: `02-data-handling.md §3` residency table fixed — UK/Switzerland served from EU region; Canada removed (US-only); v1-scope note updated.
+- SP8: sub-processor table triplication collapsed. `02-data-handling.md §7` and `04-gdpr-ccpa.md §5` no longer mirror the policy table; both now point to `07-privacy-policy.md §3` as the only source of truth.
+- Audit closed.

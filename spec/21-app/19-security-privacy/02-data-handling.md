@@ -36,10 +36,10 @@ Per-class retention:
 
 | Region | Where data lives |
 |---|---|
-| EU + UK + Switzerland (default) | Frankfurt + Dublin (multi-AZ) |
-| US + Canada (opt-in for US-billed Orgs) | Virginia + Oregon |
+| EU (default; serves EU + UK + Switzerland customers from this region in v1) | Frankfurt + Dublin (multi-AZ) |
+| US (opt-in for US-billed Orgs) | Virginia + Oregon |
 
-> **v1 scope (locked Session 56).** Only EU and US regions are offered in v1, matching the public privacy policy `19-security-privacy/07-privacy-policy.md §3`. AU/Sydney and Rest-of-world were spec'd in earlier drafts but are **deferred to v2**; opening them requires (a) a new sub-processor row in the policy, (b) a 30-day advance notice, and (c) a residency-migration tool (export → re-import in target region — out of v1 scope).
+> **v1 scope (locked Session 56).** Only EU and US regions are offered in v1, matching the public privacy policy `19-security-privacy/07-privacy-policy.md §3`. UK and Switzerland customers are served from the EU region (no separate residency boundary in v1). AU/Sydney and Rest-of-world were spec'd in earlier drafts but are **deferred to v2**; opening any new region requires (a) a new sub-processor row in the policy, (b) a 30-day advance notice, and (c) a residency-migration tool (export → re-import in target region — out of v1 scope).
 
 - Residency declared at Org creation; not migratable post-creation in v1 (would require export/import; planned for v2).
 - Backups stay in same region.
@@ -89,17 +89,9 @@ DSR portal also at `privacy.letsmarknow.com` for non-account holders (e.g., shar
 
 ## 7. Sub-processors
 
-> **Single source of truth:** `19-security-privacy/07-privacy-policy.md §3`. This section mirrors that table for engineering convenience; if the two ever differ, the privacy policy wins.
+> **Single source of truth:** `19-security-privacy/07-privacy-policy.md §3`. To prevent drift, this section deliberately does NOT mirror the table — see the policy for the authoritative list. Engineering implications (which sub-processor backs which capability) are cross-referenced from the locked infra files (e.g. Resend in `22-infrastructure/11-email-provider.md`, Stripe in `10-licensing-billing/`).
 
-| Sub-processor | Purpose | Underlying infra | Region |
-|---|---|---|---|
-| Lovable Cloud (managed Supabase) | Database, auth, storage, edge functions | per `22-infrastructure/01-hosting.md` | EU (default) / US (opt-in for US-billed Orgs) |
-| Stripe | Payment processing (primary) | — | US/EU per Stripe routing |
-| Paddle | Payment processing (Merchant-of-Record alternative, see `10-licensing-billing/04-paddle-integration.md`) | — | US/EU per Paddle routing |
-| Resend | Transactional email (primary, locked in `22-infrastructure/11-email-provider.md`) | — | EU |
-| Postmark | Transactional email (failover only, locked in `22-infrastructure/11-email-provider.md`) | — | US |
-
-Public list mirrored at `letsmarknow.com/legal/subprocessors`. Adding a sub-processor requires: updating `07-privacy-policy.md §3`, mirroring here, publishing 30-day advance notice, and updating the deployed policy. Each sub-processor has a DPA in place.
+Public list mirrored at `letsmarknow.com/legal/subprocessors`. Adding a sub-processor requires: updating `07-privacy-policy.md §3`, publishing 30-day advance notice, and updating the deployed policy. Each sub-processor has a DPA in place.
 
 
 ## 8. Backup strategy

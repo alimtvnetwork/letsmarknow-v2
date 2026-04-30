@@ -7,7 +7,7 @@ Cryptographic choices for data at rest and in transit.
 ## 1. In transit
 
 - **TLS 1.3 minimum** for every external connection.
-- TLS 1.2 disabled at LB level Q4 2026.
+- TLS 1.2 disabled at LB level by **2026-12-31** (action item: `22-infrastructure/09-ci-cd.md` cipher-policy job updates LB config + flips `min_tls_version=1.3` flag).
 - Certificates: Let's Encrypt with auto-renewal; OCSP stapling; CAA records.
 - HSTS preload: `max-age=63072000; includeSubDomains; preload`.
 - Internal service-to-service: mTLS with short-lived (1 h) certificates rotated by service mesh.
@@ -55,8 +55,8 @@ Key rotation steps documented in runbook; tested quarterly.
 
 ## 4. JWT specifics
 
-- Algorithm: **EdDSA (Ed25519)** — fast, no nonce risk, modern.
-- `RS256` fallback only for legacy clients (none expected).
+- Algorithm: **EdDSA (Ed25519)** — fast, no nonce risk, modern. **Locked.**
+- `RS256` NOT accepted. Verifiers MUST reject any JWT with `alg: RS256` (or any non-EdDSA value) at the parse stage.
 - HS256 forbidden (shared secret risk).
 - Keys exposed via JWKS endpoint `/.well-known/jwks.json` (rotation-aware).
 - Access token TTL: 15 min.

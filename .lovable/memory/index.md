@@ -11,6 +11,7 @@ File naming: `NN-name.md` numbered prefix convention.
 Never touch `.release/` folder. Code changes must bump at least minor version.
 User timezone: Malaysia (UTC+8). Milestone markers in readme.txt use format: `let's start now {date} {time}`.
 Always list remaining tasks at end of each work session; if all done, suggest next actions from memory.
+**Implementability Scorecard MANDATORY:** Every spec-improvement session must render the scorecard block (Lovable/Cursor/Raw-LLM, baseline 100/100/100 from `audit-2026-04-29-ai-readiness-score-v2.md`) BEFORE "Remaining tasks". Format + invalidation triggers in `mem://preferences/scorecard-reporting.md`. Never omit.
 Do NOT append boilerplate "If you have any question..." or "Do you understand?..." blocks.
 Brand primary = Toby pink #EC4868 (HSL `343 79% 60%`). Defined in `06-ui-ux/01-design-tokens.md` §1.1. Never hard-code; always reference `--primary` / `bg-primary` etc.
 Toby "Workspace" maps SPLIT: container of Collections = our Space; admin/billing/members surface = our Organization. Never collapse Space into Org. See `00-overview/02-glossary.md` "External-product mappings" and SI-021.

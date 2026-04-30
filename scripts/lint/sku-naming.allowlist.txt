@@ -20,3 +20,5 @@ spec/21-app/00-conversation-log.md
 
 # PR:#0 reason:audit-74 closure narrative quotes the forbidden `_annual` suffix when documenting W-6 closure ("_yearly not _annual")
 spec/21-app/23-audits/audit-2026-04-29-licensing-billing-sweep-74.md
+# PR:#0 reason:audit-105 LS7 narrative quotes the forbidden _annual suffix while documenting the W-6 lock allowlist addition for audit-74
+spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md

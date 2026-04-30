@@ -51,7 +51,7 @@ Future planned files (not yet authored, intentionally unlisted to avoid forward-
 
 ---
 
-## 5. Shared principles
+## 6. Shared principles
 
 1. **Single source of truth per surface.** Extension strings live in extension `_locales/`; web app strings live in a server-served catalog. No string is duplicated across surfaces — shared phrases reference a `core` namespace.
 2. **English (`en-US`) is the source language.** All other locales are translations. Source strings change → all locales auto-mark "needs review".
@@ -62,7 +62,7 @@ Future planned files (not yet authored, intentionally unlisted to avoid forward-
 
 ---
 
-## 6. Locale support (v1)
+## 7. Locale support (v1)
 
 | Locale | Status | Notes |
 |---|---|---|

@@ -103,7 +103,7 @@ Mapping table lives in `lib/billing/decline-reasons.ts` (planned). Updates requi
 
 ## 5. Localization
 
-- Subjects + body copy: keys live in `17-i18n-a11y/` (planned per SI-026); fall back to `en-US` until that catalog ships.
+- Subjects + body copy: keys live in `24-i18n-a11y/` (planned per SI-026); fall back to `en-US` until that catalog ships.
 - Currency: rendered with `Intl.NumberFormat(locale, { style: 'currency', currency })`.
 - Dates: ISO date with locale-formatted display (`Intl.DateTimeFormat`).
 - Time zone: account-level `timezone` field; if missing, `UTC` with explicit "UTC" suffix on date displays.

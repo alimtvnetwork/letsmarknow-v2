@@ -1,6 +1,6 @@
 # linter: naming-convention
 # purpose: Exempt files/folders that follow a different but documented naming scheme: (1) the audit corpus uses date-prefix `audit-YYYY-MM-DD-slug.md` per the Audit Cadence meta-rule (§2.1.4); (2) the `21-app` slot at the spec root is intentional (the parent directory IS the 21 slot — there is no `spec/21-app/21-*` child); (3) `06-ui-ux/wireframes/` holds non-numbered design assets (PNGs/SVGs); (4) `flow-diagrams-index.md` is a legacy root-level index pending migration to `00-overview/`.
-# review-by: 2026-10-26
+# review-by: 2026-10-27
 
 # (1) Audit corpus — date-prefix scheme owned by audit-cadence linter
 # PR:#0 reason:audit-YYYY-MM-DD-slug.md is the canonical name validated by audit-cadence sub-check, not naming-convention
@@ -57,3 +57,38 @@ spec/21-app/06-ui-ux/wireframes
 # (4) Legacy root-level index pending migration
 # PR:#0 reason:legacy root-level cross-folder diagram index; planned migration into 00-overview/ tracked by SI-026 (to be opened if not migrated by review-by date)
 spec/21-app/flow-diagrams-index.md
+
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-import-export-sweep-78.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-licensing-billing-sweep-74.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep-66.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep-87.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-sharing-collab-sweep-83.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-sharing-collab-sweep.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-30-ui-ux-sweep-103.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-auth-accounts-sweep-70.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md
+# PR:#0 reason:reference doc colocated with sharing-collab spec; pre-dates the NN- prefix convention and is referenced by URL across folder
+spec/21-app/08-sharing-collab/url-normalization.md
+# PR:#0 reason:audit-cadence-owned filename
+spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md

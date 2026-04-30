@@ -1,10 +1,11 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (4 of 4)
-closed-on: 2026-04-30
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-30
+closed-because: All 4 findings (DM1-DM4) drained across sessions 100-102.
 scope: 02-data-model/ folder — RLS coverage, has_role() SoT pin, FK on-delete clauses, per-entity permissions-matrix cross-ref
 -->
 

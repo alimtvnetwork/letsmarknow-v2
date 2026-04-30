@@ -169,5 +169,5 @@ Catalog format is **v1**. A breaking change (e.g. adopting Fluent FTL syntax) bu
 - `04-extension/01-manifest.md §3` — `__MSG_*__` substitution and `default_locale`.
 - `04-extension/07-context-menu.md` — `chrome.i18n.getMessage` consumer.
 - `04-extension/17-store-listing.md` — Chrome Web Store listing fields.
-- `17-i18n-a11y/00-overview.md` — folder principles.
+- `24-i18n-a11y/00-overview.md` — folder principles.
 - `06-ui-ux/22-keyboard-cheatsheet.md` — shared key-binding label catalog.

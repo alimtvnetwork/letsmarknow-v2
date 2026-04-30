@@ -10,7 +10,7 @@ Fields:
 - Avatar (upload or initials tile)
 - Display name (1–80 chars)
 - Email (read-only here; change via `/me/security`)
-- Locale (en, fr, es, de, ja, zh — see `17-i18n-a11y/`)
+- Locale (en, fr, es, de, ja, zh — see `24-i18n-a11y/`)
 - Timezone (auto-detected, overridable)
 - Default landing page on sign-in (Dashboard / Last Collection / Specific Collection)
 - Theme (System / Light / Dark)

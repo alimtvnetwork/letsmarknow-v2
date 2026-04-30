@@ -19,7 +19,7 @@ Single source of truth for the Chrome Web Store (CWS) listing fields. Cited from
 | Short description | `01-manifest.md` `description` (≤132 chars) | "Save and organize browser tabs and bookmarks visually." |
 | Detailed description | This file §3 | Markdown→plain text, ≤16 000 chars. |
 | Category | This file §4 | Primary: Productivity. |
-| Language | This file §5 | v1: `en` only. Additional locales tracked in `17-i18n-a11y/` (planned, SI-026). |
+| Language | This file §5 | v1: `en` only. Additional locales tracked in `24-i18n-a11y/` (planned, SI-026). |
 | Screenshots | This file §6 | 5 × 1280×800 PNG, no alpha. Asset paths under `assets/store/screenshots/` in extension package. |
 | Promo tile (small) | This file §6 | 440×280. |
 | Marquee promo tile | This file §6 | 1400×560 (optional, used for featured slots). |
@@ -45,7 +45,7 @@ To be authored. Must reuse the single-purpose statement verbatim as the opening 
 
 ## 5. Localization
 
-v1 ships English only. Locale-specific listings tracked in `17-i18n-a11y/01-extension-strings.md` (planned, SI-026).
+v1 ships English only. Locale-specific listings tracked in `24-i18n-a11y/01-extension-strings.md` (planned, SI-026).
 
 ---
 

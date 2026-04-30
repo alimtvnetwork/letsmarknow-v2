@@ -1,10 +1,11 @@
 <!--
 audit-date: 2026-04-30
-next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (2 of 2)
-closed-on: 2026-04-30
+next-audit-by: 2026-10-27
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-30
+closed-on: 2026-04-30
+closed-because: 2 of 2 findings drained.
 scope: 06-ui-ux/ folder — readme/overview drift after SI-026 drain (sessions 45 + later)
 -->
 

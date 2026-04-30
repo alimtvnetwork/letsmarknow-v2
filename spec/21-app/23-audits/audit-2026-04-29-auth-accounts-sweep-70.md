@@ -1,9 +1,11 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (10 of 10 closed: AU1 — session 71; AU2-AU5 — session 72; AU6-AU10 — session 73)
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-29
+closed-because: 10 of 10 findings drained — AU1 session 71; AU2-AU5 session 72; AU6-AU10 session 73.
 scope: 09-auth-accounts/ folder — JWT/cookie consistency vs encryption spec, role-enum coverage, magic-link/OAuth path drift
 -->
 

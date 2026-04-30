@@ -1,6 +1,6 @@
 # linter: link-check
 # purpose: Exempt link occurrences whose target is intentionally a template placeholder ({tos_url}, {url}, {signup_url}, etc.) resolved at render time, OR a literal example of markdown link syntax in documentation, OR a UI mockup using "?" as a clickable href stub. These are not navigational links and should never be required to resolve to a file.
-# review-by: 2026-10-26
+# review-by: 2026-10-27
 
 # PR:#0 reason:UI mockup uses (?) as a stub href to render a clickable example of an empty-state CTA
 spec/21-app/04-extension/05-new-tab.md:?
@@ -24,3 +24,9 @@ spec/21-app/00-conversation-log.md:url
 
 # PR:#0 reason:append-only verbatim instruction log — Session 26 internal session note used a relative path `../06-ui-ux/01-design-tokens.md` from a hypothetical sibling-folder file location
 spec/21-app/00-conversation-log.md:../06-ui-ux/01-design-tokens.md
+
+# PR:#0 reason:comments markdown-lite spec doc shows literal `[label](url)` syntax twice as documentation examples of unsupported v1 syntax (parser-rule rows + explicitly-not-supported list) — not navigational
+spec/21-app/08-sharing-collab/07-comments-and-reactions.md:url
+
+# PR:#0 reason:audit-83 finding SC7 quotes the Markdown-lite-subset prose verbatim (`[label](url)` as documentation example) when narrating closure
+spec/21-app/23-audits/audit-2026-04-29-sharing-collab-sweep-83.md:url

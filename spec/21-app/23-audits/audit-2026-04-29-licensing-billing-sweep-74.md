@@ -1,9 +1,11 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
-status: closed (10 of 10 closed: LB1+LB2 — session 75; LB3-LB7 — session 76; LB8-LB10 — session 77)
+audit-type: ad-hoc
+status: closed
 opened-on: 2026-04-29
+closed-on: 2026-04-29
+closed-because: 10 of 10 findings drained — LB1+LB2 session 75; LB3-LB7 session 76; LB8-LB10 session 77.
 scope: 10-licensing-billing/ folder — provider parity (Stripe/Paddle), money-units, status-enum, SKU map integrity, telemetry naming
 -->
 

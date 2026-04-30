@@ -1,7 +1,7 @@
 <!--
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
-audit-type: gap-sweep
+audit-type: ad-hoc
 status: closed
 closed-on: 2026-04-29
 closed-because: All 5 findings drained across Sessions 92-94.

@@ -2,7 +2,8 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (5 of 7 closed)
+status: closed (7 of 7 closed)
+closed-on: 2026-04-29
 opened-on: 2026-04-29
 scope: 08-sharing-collab/ folder — rate-limit SoT splits, reserved-slug list collisions, share-model v1/v2 invariant integrity, endpoint cross-references, idempotency on revoke/purge
 -->
@@ -28,8 +29,8 @@ scope: 08-sharing-collab/ folder — rate-limit SoT splits, reserved-slug list c
 | SC3 | **S2** | ✅ **CLOSED Session 85.** `13-share-link.md §2` now scopes the reserved list to the `/t/{slug}` and `lmk/{org_handle}/{memorable_slug}` namespaces, clarifies that `{org_handle}` lives in a separate namespace (governed by `09-auth-accounts/`), and adds an explicit "why `new` is reserved" note pointing to the §1.4 create-redirect resolver row. | `13-share-link.md §2` |
 | SC4 | **S2** | ✅ **CLOSED Session 85.** `12-revocation-and-expiry.md §12` now specifies the full `POST /v1/shares/:id/purge` contract: (a) `Idempotency-Key` required per `01-conventions.md §6`, (b) emits `share.purged` audit event written before row hard-delete commits, (c) terminates the 90-d analytics retention window early. `09-audit-log.md §3` adds the `share.purged` event row with payload schema. | `12-revocation-and-expiry.md §12`, `09-audit-log.md §3` |
 | SC5 | **S2** | **Share-model file naming collision.** Folder has `01-share-model.md` flagged "v2 design note — NOT shipped in v1" while the v1 SoT lives at `02-data-model/07-share.md`. Locked Core memory rule says "Share model v1 = single-table (`02-data-model/share.md`)". The Core memory rule cites the wrong path — actual path is `02-data-model/07-share.md` (numbered prefix). `00-overview.md §9` correctly references `02-data-model/07-share.md`. Fix Core memory rule path. | `mem://index.md` Core rule (path correction); no spec-file change needed |
-| SC6 | **S3** | **`Reaction.emoji` "one of allowed set (~30)" is not enumerated.** `07-comments-and-reactions.md §34` declares the field but does not list the 30 emojis or pin a SoT. For codegen and cross-platform consistency (extension + web + mobile), the allowed set must be enumerated once. Mirrors IE5 (dedup_mode enum was undeclared). | `07-comments-and-reactions.md §2` |
-| SC7 | **S3** | **`Comment.body` "Markdown-lite" is undefined.** `07-comments-and-reactions.md §22` declares "Markdown-lite, 4 KB" but never enumerates which Markdown subset is supported (bold? italic? links? code? mentions?). `@mention` syntax is mentioned in §45 but not formally part of the Markdown-lite contract. Lock the supported subset. | `07-comments-and-reactions.md §2` (or new §X) |
+| SC6 | **S3** | ✅ **CLOSED Session 86.** `07-comments-and-reactions.md §2` `Reaction.emoji` row now points to §8 as SoT (20 entries — list was already enumerated; "(~30)" prose corrected to "20 entries") and notes the Free-plan `👍`-only restriction per §10. | `07-comments-and-reactions.md §2` |
+| SC7 | **S3** | ✅ **CLOSED Session 86.** New §2.1 "Markdown-lite subset (locked)" enumerates supported constructs (bold, italic, inline code, strikethrough, autolink, mention, line break), explicitly lists what is NOT supported (headings, lists, blockquotes, tables, images, fenced code, raw HTML, `[label](url)` links, etc.), specifies sanitization (HTML-escape + fixed allow-list output tags + `rel="nofollow ugc noopener"` on `<a>`), and clarifies the 4 KB limit is measured on raw Markdown source UTF-8 bytes. | `07-comments-and-reactions.md §2.1` |
 
 ---
 

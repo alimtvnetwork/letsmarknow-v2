@@ -45,7 +45,7 @@ Each stack entry stores:
 ## 5. Optimistic application
 
 Every mutation:
-1. Generate `correlation_id` + per-event optimistic IDs (ULIDs).
+1. Generate `correlation_id` + per-event optimistic IDs (UUIDv7 per Core rule; k-sortable by embedded timestamp, drop-in compatible with the `event_log.id` UUIDv7 column declared in `01-event-log.md §2`).
 2. Apply to local cache immediately.
 3. Push events to server in a single transaction request.
 4. Server validates + commits + returns canonical events.

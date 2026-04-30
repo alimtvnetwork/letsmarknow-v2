@@ -95,7 +95,7 @@ User picks (defaults bold):
 
 ### Atomicity
 - Per-file atomic: full rollback on fatal error during commit.
-- Per-transaction durable: a partial-progress crash leaves committed batches intact, with `import_state=resumed_from=<batch_id>` for recovery.
+- Per-transaction durable: a partial-progress crash leaves committed batches intact, with internal checkpoint `resumed_from=<batch_id>` for recovery (top-level `status` remains `running` per the canonical enum in `03-api-endpoints/15-import-export.md` line 250).
 - User sees "X of Y imported" with retry option for failed batches.
 
 ## 8. Finalize
@@ -109,7 +109,7 @@ User picks (defaults bold):
 ## 9. Cancellation
 
 - User can cancel at any stage before commit.
-- During commit: cancellation halts new transactions; committed work persists; `import_state=cancelled`.
+- During commit: cancellation halts new transactions; committed work persists; top-level `status=canceled` (US spelling, per canonical enum in `03-api-endpoints/15-import-export.md` line 250).
 - Soft undo: bulk-delete imported items from `imports/:id` page within 24h (uses item's `imported_at_id` link).
 
 ## 10. Quotas
@@ -167,7 +167,7 @@ Fatal errors (full file fail):
 - `import.commit_started` `{ dedup_mode }`
 - `import.commit_progress` `{ pct }` (sampled)
 - `import.commit_completed` `{ items_added, items_merged, items_skipped, duration_ms }`
-- `import.cancelled` `{ stage }`
+- `import.canceled` `{ stage }`
 - `import.failed` `{ stage, reason }`
 
 ## 15. Tests

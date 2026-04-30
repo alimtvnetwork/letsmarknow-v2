@@ -41,7 +41,7 @@ Schema versioned (`schema_version: 1`). Future versions add fields backward-comp
 
 ### Pipeline
 
-1. `POST /exports` creates job; returns `export_id`.
+1. `POST /v1/organizations/:id/data-export` (per `03-api-endpoints/00-overview.md §POST` row 216) creates job; returns `export_id`.
 2. Background worker streams data → multi-part S3 upload.
 3. On complete: signed download URL valid 7 days.
 4. Email Owner with download link.
@@ -96,10 +96,10 @@ Schema versioned (`schema_version: 1`). Future versions add fields backward-comp
 4. Org enters `pending_deletion` state immediately:
    - All members signed out.
    - All API tokens revoked.
-   - All shares marked `revoked`; share viewer returns 410 Gone.
+   - All shares marked `revoked`; share viewer returns `SHARE_REVOKED` (HTTP 410) per `03-api-endpoints/18-error-codes.md §3.5`.
    - Org URL returns 410 with "This Org is scheduled for deletion".
 5. 30-day grace period.
-6. Owner can cancel via emailed link or `/account/orgs/restore` during grace.
+6. Owner can cancel via emailed link (which calls canonical `POST /v1/organizations/:id/restore`) during grace.
 7. After 30 days: hard delete cascades through DB + storage; audit purge per retention.
 
 ### Notifications

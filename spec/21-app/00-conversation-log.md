@@ -1878,3 +1878,15 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **AU9:** Closed incidentally in Session 72 (the AU3 rewrite already removed the escaped-pipe JSON example from `06-sessions.md §1`).
 - **AU10:** `03-passwords-and-mfa.md §13` HIBP live-check trigger lowered from "≥10 chars" to "≥8 chars + on blur". Catches weak passwords before the 10-char minimum.
 - Audit `audit-2026-04-29-auth-accounts-sweep-70.md` status → **closed**.
+
+---
+
+## Session 74 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** Next, [...standard "list remaining tasks" instruction]
+
+**Action:** Opened new audit `audit-2026-04-29-licensing-billing-sweep-74.md` covering all 19 files in `spec/21-app/10-licensing-billing/`. Identified 10 findings:
+- **2 × S1:** LB1 `canceled`/`cancelled` spelling drift (telemetry `plan.cancelled` + `BILL_CANCELLATION_CONFIRMED` email keyed on never-emitted Stripe event); LB2 `amount_*_minor` field names in `08-invoices-and-tax.md` violate locked W-10 `amount_cents` rule.
+- **5 × S2:** LB3 `team_enterprise` plan tier in `02-entitlements-engine.md §50` ranking but not in `License.plan` enum (post-AU8 SoT clash); LB4 Paddle SKU table missing `team_enterprise_yearly` row without explanation; LB5 Paddle webhook lacks `trial_will_end` parity (T-3 trial email broken for Paddle subs); LB6 Paddle webhook lacks `payment_method.*` parity; LB7 `org_subscription.processor` enum declared single-valued in Stripe spec while Paddle writes the same column.
+- **3 × S3:** LB8 dangling `plan_code` reference in `15-sku-map.md §4` (zero hits in `01-plans-matrix.md`); LB9 Paddle `*_TBD` placeholder suffix leak; LB10 Lifetime Team "5 seats" not a structured column.
+- Drain plan: 3 sessions (S1 batch → S2 batch → S3 batch).

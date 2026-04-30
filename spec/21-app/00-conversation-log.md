@@ -1957,3 +1957,14 @@ Drain plan: 3 sessions (IE1+IE2 next, then IE3-IE6, then IE7+IE8).
 2. SI-029 (S2) — Privacy-pack legal copy. **Blocked on human legal counsel.**
 
 Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
+
+---
+
+## Session 79 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained IE1+IE2 (S1 batch) of import-export audit.
+- IE1: Replaced UK `cancelled`/`Cancelled` → US `canceled` in `03-import-pipeline.md` (L112, L170) and `06-large-imports.md` (L79, L105). Verified clean via ripgrep.
+- IE2: Removed competing `import_state=…` enum from `03-import-pipeline.md`; reframed `06-large-imports.md §3` checkpoint chain as internal worker `phase` sub-states under top-level `status=running` (canonical SoT: `15-import-export.md` line 250).
+- Audit log: 2/8 closed.

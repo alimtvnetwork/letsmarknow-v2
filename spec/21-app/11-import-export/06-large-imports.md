@@ -38,8 +38,10 @@ Handling 50k+ items without blowing up memory, exceeding timeouts, or producing 
 
 ## 3. Resumability
 
-- Job state machine with checkpoints:
-  - `uploaded` → `parsed` → `preview_ready` → `committing(offset=N)` → `committed`
+- Top-level `status` follows the canonical enum (`awaiting_upload | queued | running | succeeded | partial | failed | canceled`) defined in `03-api-endpoints/15-import-export.md` line 250.
+- Internal worker-side `phase` sub-states (all live under top-level `status=running`):
+  - `uploaded` → `parsed` → `preview_ready` → `committing(offset=N)` → `committed_internal`
+- These are **internal checkpoints**, not wire-visible status values. Clients only ever see the canonical top-level enum.
 - On crash mid-commit:
   - Job picked up by next worker.
   - State loaded; resumes from `offset=N`.
@@ -76,7 +78,7 @@ Handling 50k+ items without blowing up memory, exceeding timeouts, or producing 
 
 - Cancel button visible throughout.
 - Pre-commit: temp files deleted; no DB writes.
-- Mid-commit: stops at next batch boundary; committed work persists; user sees "Cancelled at 23,456 of 50,000 items — those are kept".
+- Mid-commit: stops at next batch boundary; committed work persists; user sees "Canceled at 23,456 of 50,000 items — those are kept" (US spelling per LB1 lock).
 
 ## 8. Background priority
 
@@ -102,7 +104,7 @@ Handling 50k+ items without blowing up memory, exceeding timeouts, or producing 
 - `large_import.checkpoint` `{ offset, throughput_per_sec }` (every 60 s)
 - `large_import.completed` `{ duration_ms, items, errors }`
 - `large_import.failed` `{ reason, last_offset }`
-- `large_import.cancelled` `{ stage, last_offset }`
+- `large_import.canceled` `{ stage, last_offset }`
 - `large_import.resumed_from_crash` `{ offset }`
 
 ## 11. Backpressure

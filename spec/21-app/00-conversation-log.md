@@ -2092,3 +2092,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - SP6: `02-data-handling.md §3` Sessions retention row pinned to `06-sessions.md §1.2` (refresh cookie 30 d) + §1.1 (access JWT 15 min) SoTs.
 - SP7: `01-threat-model.md §29` and §103 — `has_role(_user_id, _role)` signature spelled out, `<user-roles>` directive cited as pattern SoT, role enum cross-referenced to `00-overview/02-glossary.md` with full 7-value enum inline.
 - Audit `audit-2026-04-29-security-privacy-sweep-87.md` status: closed.
+
+---
+
+## Session 91 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Opened new gap-sweep audit on `12-history-undo/` (default per Session 90 suggestion).
+- Created `audit-2026-04-29-history-undo-sweep-91.md` with 5 findings: **HU1 (F-class locked-rule violation: `02-undo-redo.md §48` says "ULIDs" — violates Core "Never ULID" rule)**, HU2 (S2, retention 90 d vs time-travel-window 30 d drift), HU3 (S2, `Pro+` not pinned to entitlement SoT), HU4 (S3, `Idempotency-Key` no cross-ref), HU5 (S3, history endpoint declarations need SoT pointer).
+- **Scorecard impact: HU1 depresses Raw-LLM + Cursor passes ~3 pts each until drained.** Recommend draining HU1 immediately next session.
+- Drain plan: 3 sessions.

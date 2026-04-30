@@ -100,10 +100,7 @@ Not personal; aggregated at server.
 
 ## 12. Telemetry
 
-- `error.captured` `{ severity, fingerprint, surface }`
-- `error.report_sent` `{ has_user_feedback }`
-- `error.consent_changed` `{ enabled, breadcrumbs_enabled }`
-- `error.rate_alert_fired` `{ release, fingerprint }`
+Error-pipeline meta-events are declared canonically in `03-events.md §2.16 (Analytics meta)`: `error.captured`, `error.report_sent`, `error.consent_changed`, `error.rate_alert_fired`. Product-error events are declared in `03-events.md §2.13 (Errors & performance)`: `error.unhandled`, `error.api`. This file does not redefine their props.
 
 ## 13. User access
 

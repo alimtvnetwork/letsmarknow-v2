@@ -124,7 +124,9 @@ Exceeding cap → 402 with upgrade CTA.
 
 ## 11. Error model
 
-Per-record errors don't fail the import; collected and reported.
+> **Two layers.** Per-record warnings (table immediately below) are emitted as `warnings[].code` strings inside the preview payload and as rows in the per-job `errors_url` JSON. They are NOT API envelope error codes — the envelope `IMPORT_*` family (`03-api-endpoints/18-error-codes.md §3.7`) governs HTTP responses on the import endpoints. Per-record warnings never fail the import; they reduce or annotate the record set.
+
+Per-record warnings (collected, never fatal):
 
 | Error | Behavior |
 |---|---|

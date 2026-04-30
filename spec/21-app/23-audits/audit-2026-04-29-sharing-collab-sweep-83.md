@@ -2,7 +2,7 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (0 of 7 closed)
+status: in_progress (3 of 7 closed)
 opened-on: 2026-04-29
 scope: 08-sharing-collab/ folder — rate-limit SoT splits, reserved-slug list collisions, share-model v1/v2 invariant integrity, endpoint cross-references, idempotency on revoke/purge
 -->

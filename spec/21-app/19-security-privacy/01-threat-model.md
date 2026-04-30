@@ -26,7 +26,7 @@ STRIDE-based analysis of attack surfaces, adversaries, and mitigations.
 | Repudiation | Audit log of every auth event; immutable |
 | Information disclosure (token leak) | HttpOnly + Secure + SameSite=Lax cookies; CSRF tokens for state-changing requests. Cookie inventory SoT: `09-auth-accounts/06-sessions.md §1.3` |
 | Denial of service | Per-IP + per-account rate limits on `/auth/*` per `09-auth-accounts/13-rate-limit-values.md §2` (SoT); CAPTCHA escalation thresholds per `13-rate-limit-values.md §2.1` (SoT) |
-| Elevation of privilege | RLS + `has_role` SECURITY DEFINER; no client-side role checks |
+| Elevation of privilege | RLS + `has_role(_user_id, _role)` SECURITY DEFINER (pattern locked in `<user-roles>` directive); role enum SoT: `00-overview/02-glossary.md` (`owner`, `admin`, `editor`, `viewer`, `billing`, `guest`, `system`); no client-side role checks |
 
 ### Sharing
 
@@ -100,7 +100,7 @@ Each boundary validates inputs and enforces auth independently. No "trusted inte
 
 1. **Account takeover via password reuse** → MFA push, breached-password check, anomaly alerts.
 2. **Shared link leakage** → high-entropy tokens, expiry defaults, revoke-all-from-suspended.
-3. **Member privilege escalation** → DB-enforced RLS + `has_role`; admin role changes audit-logged + notify Owner.
+3. **Member privilege escalation** → DB-enforced RLS + `has_role` SECURITY DEFINER (role enum SoT: `00-overview/02-glossary.md`); admin role changes audit-logged + notify Owner.
 4. **Browser extension supply-chain attack** → minimal deps, SBOM, signed builds, integrity checks.
 5. **SSRF via OG-image fetcher** → strict allowlist of schemes, public IPs only, timeouts.
 6. **Cross-tenant data leak via cache** → Redis keys include `org_id`; cache busted on membership change.

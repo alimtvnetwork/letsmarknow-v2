@@ -2,7 +2,8 @@
 audit-date: 2026-04-29
 next-audit-by: 2026-10-26
 audit-type: gap-sweep
-status: in_progress (5 of 7 closed)
+status: closed (7 of 7 closed)
+closed-on: 2026-04-29
 opened-on: 2026-04-29
 scope: 19-security-privacy/ folder — rate-limit SoT drift, audit-event naming drift, undeclared CAPTCHA thresholds, cookie inventory SoT, role enum cross-refs, session TTL pointer
 -->
@@ -27,8 +28,8 @@ scope: 19-security-privacy/ folder — rate-limit SoT drift, audit-event naming 
 | SP3 | **S2** | ✅ **CLOSED Session 89.** Renamed `share.brute_force_lockout` → `share.locked_brute_force` in `05-share-link-security.md §16` to match the `09-audit-log.md` past-tense `share.{verb}` convention. Added the three missing events (`share.token_404_burst`, `share.auto_disabled`, `share.password_attempts`) with payload schemas and source-file cross-references to `08-sharing-collab/09-audit-log.md §3 Sharing`. SoT pointer added at top of §16. | `05-share-link-security.md §16`, `09-audit-log.md §3` |
 | SP4 | **S2** | ✅ **CLOSED Session 89.** Added new §2.1 "CAPTCHA escalation" to `09-auth-accounts/13-rate-limit-values.md` with explicit thresholds (`/v1/auth/signin` ≥ 3 failures / 10 min / IP, plus `/password/forgot`, `/mfa/verify`, `/magic-link/send`), 30-min CAPTCHA-required window, response shape (`403 CAPTCHA_REQUIRED` + `X-Captcha-Solution` retry header). `01-threat-model.md §28` updated to cross-reference §2 + §2.1 SoTs. | `13-rate-limit-values.md §2.1`, `01-threat-model.md §28` |
 | SP5 | **S2** | ✅ **CLOSED Session 89.** Created canonical cookie inventory at `09-auth-accounts/06-sessions.md §1.3` (8 cookies: `__Host-lmn_refresh`, `__Host-lmn_csrf`, `lmn_consent`, `lmn_active_account`, `lmn_active_org`, `lmn_locale`, `lmn_trust_device_<account_id>`, `lmn_analytics_id`) with attributes + TTL + naming convention. Cross-referenced from `04-gdpr-ccpa.md §11` (consent-classification view, drift-corrected: was `__Host-session`/`__Host-csrf`, now matches actual `__Host-lmn_refresh`/`__Host-lmn_csrf`) and `01-threat-model.md §27`. | `06-sessions.md §1.3`, `04-gdpr-ccpa.md §11`, `01-threat-model.md §27` |
-| SP6 | **S3** | **Session TTL is vague.** `02-data-handling.md §32` declares retention row "Sessions \| Per session TTL \| n/a \| n/a \| on logout / TTL" without a numeric value or SoT pointer. `04-gdpr-ccpa.md §107` says `__Host-session` is "session / 30 d" — possibly inconsistent. Pin to SoT (likely `09-auth-accounts/`). | `02-data-handling.md §3` (retention table) |
-| SP7 | **S3** | **`has_role` SECURITY DEFINER pattern referenced but not anchored to Core memory rule.** `01-threat-model.md §29 + §103` say "RLS + `has_role` SECURITY DEFINER; no client-side role checks". The Core memory locks the role enum (owner/admin/editor/viewer/billing/guest/system) and the `<user-roles>` directive locks the SECURITY DEFINER pattern, but no spec file cross-references the role-enum SoT (`00-overview/02-glossary.md`). Add a one-line cross-reference. | `01-threat-model.md §29` |
+| SP6 | **S3** | ✅ **CLOSED Session 90.** `02-data-handling.md §3` Sessions row now declares "30 d rolling refresh-cookie TTL (SoT: `06-sessions.md §1.2`); 15 min access-JWT (SoT: `06-sessions.md §1.1`)" with explicit purge triggers. Resolves the `04-gdpr-ccpa.md` "session / 30 d" ambiguity (already corrected to canonical inventory in SP5). | `02-data-handling.md §3` |
+| SP7 | **S3** | ✅ **CLOSED Session 90.** `01-threat-model.md §29` (Elevation-of-privilege row) and §103 (top-10 risk #3) both updated: `has_role` signature spelled out, `<user-roles>` directive cited as pattern SoT, role enum cross-referenced to `00-overview/02-glossary.md` with full enum listed inline. | `01-threat-model.md §29 + §103` |
 
 ---
 

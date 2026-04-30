@@ -56,7 +56,7 @@ Anonymous-readable share links. The most common share mode.
 
 ## 7. Anti-abuse
 
-- Rate limit per IP: 60 req/min per share.
+- **Rate limits SoT'd in `09-auth-accounts/13-rate-limit-values.md §4`**: `GET /t/:slug` (HTML) **60/min per slug per IP**, `GET /v1/public/shares/:slug/items` **120/min per slug per IP**, `POST /v1/public/shares/:slug/comments` (if enabled) **10/min per slug per IP**. Do not duplicate numbers here.
 - DMCA reporting form linked in footer.
 - Trust & Safety: malicious content (CSAM/illegal) reports trigger automated kill switch on slug; owner notified.
 - All public shares scanned by safety classifier on creation; flagged → manual review queue.

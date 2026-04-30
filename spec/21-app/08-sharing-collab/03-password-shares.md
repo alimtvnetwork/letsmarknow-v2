@@ -25,9 +25,9 @@ Same as public: `https://letsmarknow.com/t/{slug}` — but loads a password gate
 
 ## 4. Brute-force defense
 
-- Per-IP rate limit: 5 attempts / 15 min / slug.
-- Per-slug rate limit: 50 attempts / 15 min / slug (anti-distributed).
-- After 5 fails per IP: exponential backoff (`429` with `Retry-After`).
+> **Rate limits SoT'd in `09-auth-accounts/13-rate-limit-values.md §4`** for `POST /v1/public/shares/:slug/unlock`: **10 / 15 min per slug**, **5 / 15 min per IP**, **lockout at 100 fails / 24 h on slug**. Do not duplicate numbers here.
+
+- After per-IP limit hit: exponential backoff (`429` with `Retry-After`).
 - After 100 fails on slug in 24 h: link auto-locked + owner notified by email + audit log.
 - Owner can re-enable from share settings (rotates password).
 

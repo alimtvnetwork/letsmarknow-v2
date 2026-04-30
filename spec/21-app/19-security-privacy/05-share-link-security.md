@@ -17,7 +17,7 @@ Specific threats and mitigations for shared content (public / password / invite-
 | Mitigation | Detail |
 |---|---|
 | High entropy | 132 bits → 5×10³⁹ tokens |
-| Rate limit | 60 /min /IP on `/t/{slug}` and `/lmk/{org_handle}/{memorable_slug}` |
+| Rate limit | Two-tier per `09-auth-accounts/13-rate-limit-values.md §4` (SoT): `/t/:slug` and `/lmk/{org_handle}/{memorable_slug}` 60/min/IP; nested `/items` 120/min/IP; nested `/comments` 10/min/IP |
 | Constant 404 timing | Always 200ms+ even on miss to prevent timing oracle |
 | WAF | Cloudflare bot challenge after threshold |
 | Logging | Failed attempts logged but not surfaced (avoid amplification) |
@@ -49,9 +49,8 @@ Specific threats and mitigations for shared content (public / password / invite-
 - Per-share salt.
 
 ### Brute force
-- 5 wrong attempts / 15 min / IP per share → 1 min lockout.
-- Continued failures: exponential lockout (1 min → 15 min → 1 h → 24 h).
-- All attempts logged in audit.
+- Rate limits + lockout escalation defined in `09-auth-accounts/13-rate-limit-values.md §4` (SoT). At a glance: 10/15min per slug, 5/15min per IP, 100/24h slug lockout. Numeric values are NOT mirrored here to prevent drift (see audits SC1, SP1).
+- All attempts logged in audit (event names per `08-sharing-collab/09-audit-log.md §3`).
 
 ### UX
 - Password entry page: minimal info (no preview of content).

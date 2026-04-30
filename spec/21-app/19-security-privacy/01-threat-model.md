@@ -33,7 +33,7 @@ STRIDE-based analysis of attack surfaces, adversaries, and mitigations.
 | Threat | Mitigation |
 |---|---|
 | Public link discovery | 22-char URL-safe token (132 bits entropy); no enumeration |
-| Password share brute force | Argon2id-hashed (parameters in `19-security-privacy/05-share-link-security.md`); 5 attempts → 1 min lockout, then exponential |
+| Password share brute force | Argon2id-hashed (parameters in `19-security-privacy/05-share-link-security.md §6`); rate limits + lockout per `09-auth-accounts/13-rate-limit-values.md §4` (SoT) |
 | Invite-only bypass | Token + email match; one-time-use; HTTPS-only; expiry |
 | Shared content escalation (read → write) | Permission re-validated on every mutation server-side |
 | Share leak via referrer | `Referrer-Policy: no-referrer` on share viewer |

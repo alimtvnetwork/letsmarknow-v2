@@ -50,9 +50,12 @@ Listened events:
 - `subscription.created` / `_updated` / `_canceled`
 - `subscription.activated`
 - `subscription.past_due`
+- `subscription.trial_will_end` (T-3 days; fires `BILL_TRIAL_ENDING` email — parity with Stripe `customer.subscription.trial_will_end`)
 - `transaction.completed` / `_payment_failed`
 - `customer.updated`
 - `adjustment.created` (refunds)
+
+> **No standalone `payment_method.*` events.** Paddle conveys payment-method state inside `subscription.updated` and `transaction.completed` payloads — handlers extract it there. See `12-billing-webhooks.md §4` parity note.
 
 Endpoint: `POST /v1/webhooks/paddle` (canonical; see `03-api-endpoints/00-overview.md` §2.15).
 Signature verified with `PADDLE_WEBHOOK_SECRET` (HMAC-SHA256).

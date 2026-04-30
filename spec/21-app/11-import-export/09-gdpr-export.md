@@ -49,6 +49,8 @@ Background job:
    - **`api_tokens.json`** — metadata (no secrets).
    - **`email_in.json`** — historical email-in events.
    - **`README.md`** — explains every file + structure + format reference.
+
+> **Filename convention.** All data files use lowercase (`account.json`, `billing.json`, `email_in.json`, `organizations/<org_slug>/`). `README.md` keeps standard uppercase per repository-bundle convention. Do not lowercase `README.md`.
 3. Bundled as ZIP.
 4. Compressed; signed for integrity.
 5. Encrypted with random per-export AES-256 key; key delivered separately to Account email (defense-in-depth against link leak).

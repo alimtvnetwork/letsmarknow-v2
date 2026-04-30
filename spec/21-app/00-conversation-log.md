@@ -2003,3 +2003,14 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - Created `mem://preferences/scorecard-reporting.md` with exact format and invalidation triggers (sourced from `audit-2026-04-29-ai-readiness-score-v2.md` §1+§3+§4).
 - Added Core rule to `mem://index.md` requiring scorecard block before "Remaining tasks" on every spec-touching session.
 - Re-rendered scorecard for Sessions 75–81 drain work: holds at 100/100/100 (no W-/F- regressions, no orphan endpoints, no role/identifier/share-model violations; SI-029 parked as content-blocked).
+
+---
+
+## Session 83 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Opened new gap-sweep audit on `08-sharing-collab/` (default per Session 81 suggestion).
+- Created `audit-2026-04-29-sharing-collab-sweep-83.md` with 7 findings: SC1+SC2 (S1, rate-limit SoT split: password-unlock 10/15min vs 50/15min, public-share blanket 60/min vs two-tier SoT), SC3 (S2, reserved-slug `org`/`new` clarification), SC4 (S2, `/purge` endpoint missing audit + idempotency cross-refs), SC5 (S2, Core memory rule cites wrong share-model path), SC6+SC7 (S3, undeclared `Reaction.emoji` set + undefined `Comment.body` Markdown-lite subset).
+- Drain plan: 3 sessions.
+- Sub-finding flagged in SC5: Core memory rule says `02-data-model/share.md`, actual path is `02-data-model/07-share.md`. Trivial path fix.

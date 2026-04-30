@@ -6,7 +6,7 @@ Conversation logging: append every user instruction verbatim to `spec/21-app/00-
 Instruction handling: write immediately. Only stop to ask when genuinely ambiguous (conflicting locked rules, missing data, multiple valid interpretations).
 Identifiers: UUIDv7 everywhere. Never ULID.
 Role enum is locked: owner, admin, editor, viewer, billing, guest, system. Do not introduce new roles without updating glossary + member.md together.
-Share model v1 = single-table (`02-data-model/share.md`). `08-sharing-collab/share-model.md` is a v2 design note only.
+Share model v1 = single-table (`02-data-model/07-share.md`). `08-sharing-collab/01-share-model.md` is a v2 design note only.
 File naming: `NN-name.md` numbered prefix convention.
 Never touch `.release/` folder. Code changes must bump at least minor version.
 User timezone: Malaysia (UTC+8). Milestone markers in readme.txt use format: `let's start now {date} {time}`.
@@ -22,6 +22,6 @@ Audit Cadence: every `23-audits/audit-*.md` declares `audit-date`, `next-audit-b
 Share has TWO URL surfaces: random `/t/{slug}` (globally unique, always available) AND optional memorable `/lmk/{org_handle}/{memorable_slug}` (Org-scoped uniqueness, Pro+, Toby-inspired). Resolver via extension omnibox `lmk` keyword OR full URL server-side. Reserved memorable-slugs include `lmk`, `t`, `new`, `edit`. Spec: `08-sharing-collab/13-share-link.md` §1.2 + §1.4. Data-model field: `02-data-model/07-share.md` `memorable_slug`.
 
 ## Memories
-- [Spec issue tracker](mem://features/spec-issue-tracker.md) — **1 SI open / 32 SIs closed + 2 audits closed (LB, IE).** Session 81 (2026-04-29): **import-export audit fully closed** (`audit-2026-04-29-import-export-sweep-78.md`, 8/8). IE7 (GDPR filename casing) + IE8 (path-param `:param` normalization) drained. SI-029 (privacy-pack legal copy, S2) remains the only open SI — **blocked on human legal counsel.** No active audits; suggested next: open new gap-sweep audit on `08-sharing-collab/`, `12-history-undo/`, or `19-security-privacy/`; OR review `07-features/17-next-queue.md` for build-readiness; OR run cross-cutting linter sweep (`endpoint-counts`, `audit-cadence`).
+- [Spec issue tracker](mem://features/spec-issue-tracker.md) — **1 SI open + 7 audit findings open / 32 SIs closed.** Session 83 (2026-04-29): **opened new gap-sweep audit on `08-sharing-collab/`** (`audit-2026-04-29-sharing-collab-sweep-83.md`, 0/7). SC1+SC2 (S1, rate-limit SoT split — password-unlock 50 vs 10 per-slug, public-share blanket 60/min vs two-tier SoT), SC3 (S2, reserved-slug `org`/`new` clarification), SC4 (S2, `/purge` endpoint missing audit + idempotency cross-refs), SC5 (S2, Core memory rule path correction — applied this session), SC6+SC7 (S3, undeclared `Reaction.emoji` + undefined `Comment.body` Markdown-lite subset). Drain plan: 3 sessions. SI-029 still blocked on legal counsel.
 - [Next feature](mem://features/next-feature.md) — Per-Account global to-do queue. Modeled as Collection kind=`next` (singleton). Done state on `next_item` join row. Realtime on `account:{account_id}:next`. Spec at `07-features/17-next-queue.md`.
 - [Scorecard reporting rule](mem://preferences/scorecard-reporting.md) — Mandatory scorecard block format for every spec-work session. Baseline 100/100/100. Invalidation triggers + parking rules.

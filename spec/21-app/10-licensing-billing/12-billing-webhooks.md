@@ -73,14 +73,17 @@ Map event type → handler module:
 | Paddle event | Handler |
 |---|---|
 | `subscription.created` | `handlers/paddle/subscription_created` |
-| `subscription.updated` | `handlers/paddle/subscription_updated` |
+| `subscription.updated` | `handlers/paddle/subscription_updated` (also conveys payment-method state changes — see note below) |
 | `subscription.canceled` | `handlers/paddle/subscription_canceled` |
 | `subscription.activated` | `handlers/paddle/subscription_activated` |
 | `subscription.past_due` | `handlers/paddle/subscription_past_due` |
-| `transaction.completed` | `handlers/paddle/transaction_completed` |
+| `subscription.trial_will_end` | `handlers/paddle/trial_will_end` (parity with Stripe `customer.subscription.trial_will_end`; fires `BILL_TRIAL_ENDING` email at T-3 days per `16-billing-emails.md §32`) |
+| `transaction.completed` | `handlers/paddle/transaction_completed` (also conveys payment-method state — see note below) |
 | `transaction.payment_failed` | `handlers/paddle/transaction_failed` |
 | `customer.updated` | `handlers/paddle/customer_updated` |
 | `adjustment.created` | `handlers/paddle/adjustment_created` |
+
+> **Payment-method parity note (closes LB6):** Paddle does NOT emit standalone `payment_method.attached` / `payment_method.detached` events (unlike Stripe). Card-on-file UI state for Paddle subscriptions is derived from the `payment_method` object embedded in `subscription.updated` and `transaction.completed` payloads. Handlers MUST extract and persist it on those events; no additional subscription is required.
 
 Unknown events: logged, return 200, no-op.
 

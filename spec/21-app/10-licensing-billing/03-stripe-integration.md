@@ -46,7 +46,7 @@ Price IDs configured via env vars per environment; never hardcoded.
 | Field | Type | Notes |
 |---|---|---|
 | `org_id` | UUIDv7 | |
-| `processor` | enum | `stripe` |
+| `processor` | enum | `stripe \| paddle` (canonical enum SoT: this row. `04-paddle-integration.md §3` writes `processor='paddle'` to the same table.) |
 | `processor_subscription_id` | text | |
 | `processor_customer_id` | text | |
 | `plan_code` | text | `pro_monthly` etc. |

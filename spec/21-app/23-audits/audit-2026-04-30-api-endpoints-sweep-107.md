@@ -1,13 +1,14 @@
----
+<!--
+audit-date: 2026-04-30
+next-audit-by: 2026-10-27
 audit-type: ad-hoc
-audit-id: 107
-date: 2026-04-30
-scope: spec/21-app/03-api-endpoints/
 status: closed
+audit-id: 107
+scope: spec/21-app/03-api-endpoints/
 score-before: 100/100
 score-after: 100/100
 findings: 0
----
+-->
 
 # Audit 107 — `03-api-endpoints/` gap-sweep
 

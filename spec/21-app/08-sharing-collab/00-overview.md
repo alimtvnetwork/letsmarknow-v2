@@ -21,23 +21,23 @@
 
 ## 2. File-by-file behaviour
 
-| File | Owns |
-|---|---|
-| `01-share-model.md` | ⚠️ **v2-future design note (do NOT implement for v1).** v1 is the single-table model in `02-data-model/07-share.md`. |
-| `02-public-shares.md` | Anonymous read; cookie-less except for view-mode preference; rate limit. |
-| `03-password-shares.md` | Argon2id-hashed password; unlock cookie; rotation rules. |
-| `04-invite-only-shares.md` | Named-user invites via email; token hash; expiry. |
-| `05-permissions-matrix.md` | Authoritative role × action table. Backed by `permissions-matrix.json`. |
-| `06-realtime-presence.md` | Who's currently viewing a Collection; cursor/selection broadcast. |
-| `07-comments-and-reactions.md` | Threaded comments per Item; emoji reactions; mention notifications. |
-| `08-notifications.md` | In-app inbox + email triggers; opt-out per category. |
-| `09-audit-log.md` | What gets logged (share created, password changed, member role changed). |
-| `10-embed-widget.md` | Iframe contract for embedding a Collection on third-party sites. |
-| `11-share-analytics.md` | View counts, anonymised geography; aggregation interval. |
-| `12-revocation-and-expiry.md` | Hard revoke, scheduled expiry, expired-link UX. |
-| `13-share-link.md` | Slug shape, character set, length, collision handling. |
-| `14-realtime-transport.md` | Supabase Realtime channels; W-4 channel-naming lock; subscribe/unsubscribe lifecycle. |
-| `permissions-matrix.json` | Machine-readable mirror of `05-permissions-matrix.md`. |
+| File | Status | Owns |
+|---|---|---|
+| `01-share-model.md` | ⚠️ v2-future design note | Do NOT implement for v1. v1 row schema is `02-data-model/07-share.md`. |
+| `02-public-shares.md` | v1 | Anonymous read; cookie-less except for view-mode preference; rate limit. |
+| `03-password-shares.md` | v1 | Argon2id-hashed password; unlock cookie; rotation rules. |
+| `04-invite-only-shares.md` | v1 | Named-user invites via email; token hash; expiry. |
+| `05-permissions-matrix.md` | v1 (locked) | Authoritative role × action table. Backed by `permissions-matrix.json`. |
+| `06-realtime-presence.md` | v1 | Who's currently viewing a Collection; cursor/selection broadcast. |
+| `07-comments-and-reactions.md` | v1 | Threaded comments per Item; emoji reactions; mention notifications. |
+| `08-notifications.md` | v1 | In-app inbox + email triggers; opt-out per category. |
+| `09-audit-log.md` | v1 | What gets logged (share created, password changed, member role changed). |
+| `10-embed-widget.md` | v1 | Iframe contract for embedding a Collection on third-party sites. |
+| `11-share-analytics.md` | v1 | View counts, anonymised geography; aggregation interval. |
+| `12-revocation-and-expiry.md` | v1 | Hard revoke, scheduled expiry, expired-link UX. |
+| `13-share-link.md` | v1 (locked) | Slug shape, character set, length, collision handling, memorable shortlinks. |
+| `14-realtime-transport.md` | v1 (W-4 lock) | Supabase Realtime channels; channel-naming lock; subscribe/unsubscribe lifecycle. |
+| `permissions-matrix.json` | v1 (locked) | Machine-readable mirror of `05-permissions-matrix.md`. |
 
 ---
 

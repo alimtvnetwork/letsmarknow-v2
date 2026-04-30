@@ -1775,3 +1775,17 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - `00-overview.md §2`: added `Status` column (v1 / v1 locked / ⚠️ v2-future design note) for row format consistency. Updated `13-share-link.md` row to mention memorable shortlinks.
 - `10-embed-widget.md` §3: added "Sandbox security note" explaining why `allow-same-origin` and `allow-top-navigation` are omitted, why `allow-popups-to-escape-sandbox` is acceptable (user-gesture gated), with cross-citation to `19-security-privacy/05-share-link-security.md §Embed`.
 - Audit `audit-2026-04-29-sharing-collab-sweep.md` status → closed (9/9).
+
+---
+
+## Session 66 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Opened new audit `audit-2026-04-29-security-privacy-sweep-66.md`. 10 findings (2×S1, 6×S2, 2×S3).
+- **S1 SP1:** `03-encryption.md` says bcrypt cost 12 for `users.password_hash` but `09-auth-accounts/03-passwords-and-mfa.md` locks Argon2id (m=64MB,t=3,p=4) — direct contradiction with auth source of truth.
+- **S1 SP2:** Same bcrypt-vs-Argon2id contradiction for share-link passwords across `03-encryption.md §2` + `05-share-link-security.md §6.1`.
+- **S2 SP3-SP6:** `05-share-link-security.md` has multiple drifts vs locked specs: phantom `/s/{token}` URL surface, "custom slugs" naming (vs locked "memorable slugs"), wrong embed sandbox attributes (vs `10-embed-widget.md` patched in S65), non-standard `X-Frame-Options: ALLOWALL`.
+- **S2 SP7:** `03-encryption.md §4` lists RS256 as JWT fallback — weakens EdDSA lock.
+- **S3 SP8-SP10:** sub-processor table triplication, EU residency drift, TLS 1.2 sunset date.
+- Plan: 3 sessions to drain. SI-029 still blocked on legal.

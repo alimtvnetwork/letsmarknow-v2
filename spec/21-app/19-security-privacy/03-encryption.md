@@ -65,9 +65,10 @@ Key rotation steps documented in runbook; tested quarterly.
 
 ## 5. Password hashing
 
-- **bcrypt cost 12** (current); review every 2 y.
+- **Argon2id** (locked source of truth: `09-auth-accounts/03-passwords-and-mfa.md §1`). Parameters: `m=64MB, t=3, p=4`. Encoded form: `$argon2id$v=19$m=65536,t=3,p=4$<salt>$<hash>`.
 - Pepper added pre-hash from server-side env (rotates rarely; old peppers kept for verification).
-- Migration path to **argon2id** documented; enabled when bcrypt verification too slow on commodity hardware.
+- Parameters reviewed every 2 y; migration on sign-in re-hashes if parameters change (`09-auth-accounts/03-passwords-and-mfa.md §9`).
+- bcrypt explicitly NOT used. Earlier drafts referenced bcrypt cost 12; that draft is superseded — verifiers MUST reject bcrypt-prefixed hashes (`$2a$`, `$2b$`, `$2y$`) and force a password reset if any are encountered post-migration.
 
 ## 6. Share-link tokens
 

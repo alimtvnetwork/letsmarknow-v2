@@ -140,6 +140,8 @@ One user action can produce N events:
 | Team | 1 year |
 | Enterprise | 7 years |
 
+Per-plan values resolved through entitlement key `features.history.retention_days` (SoT: `10-licensing-billing/01-plans-matrix.md §8`; resolution: `10-licensing-billing/02-entitlements-engine.md`). The cross-session "Time travel" UI is gated separately on `features.history.time_travel` (default Pro+).
+
 Beyond retention: events deleted; their effect persists in current state.
 
 Archived events kept in cold storage (Parquet) for compliance per audit log policy (`08-sharing-collab/09-audit-log.md`).

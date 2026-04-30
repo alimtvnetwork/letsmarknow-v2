@@ -20,7 +20,7 @@ Per `(account_id, org_id, session_id)`:
 
 Capacity: 200 entries (configurable, low ceiling).
 
-Cross-session ("server undo"): the last 30 days of history are queryable; a "Time travel" UI lets the user pick any past event and inverse it (Pro+).
+Cross-session ("server undo"): server-side history is queryable up to the per-plan retention window declared in `01-event-log.md §7` (Free 7 d / Pro 90 d / Team 1 y / Enterprise 7 y; SoT key `features.history.retention_days` per `10-licensing-billing/01-plans-matrix.md §8`). Within that window a "Time travel" UI lets the user pick any past event and inverse it; the UI itself is gated on entitlement key `features.history.time_travel` (resolved per `10-licensing-billing/02-entitlements-engine.md`; default Pro+ in current matrix).
 
 ## 3. What goes on the stack
 
@@ -40,7 +40,7 @@ Each stack entry stores:
 - `Ctrl+Shift+Z` / `Cmd+Shift+Z` / `Ctrl+Y` — redo last.
 - Toast "Undo" button (visible 6 s).
 - Command palette: `Undo`, `Redo`.
-- Right-click menu in History tab: "Undo this action" (Pro+).
+- Right-click menu in History tab: "Undo this action" (gated on entitlement `features.history.time_travel`; default Pro+ — SoT `10-licensing-billing/01-plans-matrix.md §8`).
 
 ## 5. Optimistic application
 
@@ -122,7 +122,7 @@ Some "deletes" are heavy:
 
 - Imports, plan downgrades, share-revoke cascades all produce events with their own correlation.
 - Most are NOT user-undoable from the stack (out of session; potentially destructive).
-- Pro+ "Time travel" can revert system actions case-by-case with explicit confirmation.
+- "Time travel" (entitlement `features.history.time_travel`; default Pro+ — SoT `10-licensing-billing/01-plans-matrix.md §8`) can revert system actions case-by-case with explicit confirmation.
 
 ## 14. Edge cases
 

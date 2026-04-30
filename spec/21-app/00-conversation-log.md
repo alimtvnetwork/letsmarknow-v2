@@ -8,6 +8,26 @@
 
 ---
 
+## 2026-04-29 — Session 93 — Drain HU2+HU3 (history retention + entitlement SoT pin)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/10-licensing-billing/01-plans-matrix.md (added `features.history.retention_days` + `features.history.time_travel` keys)
+- spec/21-app/12-history-undo/02-undo-redo.md (§2, §4, §13 — entitlement-pinned)
+- spec/21-app/12-history-undo/01-event-log.md (§7 — entitlement cross-ref)
+- spec/21-app/12-history-undo/readme.md (§26 — replaced "30 days" with per-plan retention)
+- spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md (HU2 + HU3 closed; 3/5)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Toby Collections feature spec (verbatim)
 
 ```

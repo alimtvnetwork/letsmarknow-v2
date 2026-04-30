@@ -9,7 +9,7 @@
 ### Naming
 - **Format:** `domain.subject.verb` or `domain.verb` — dot-namespaced, lowercase, snake_case segments.
 - **Stability:** event names are PUBLIC API. Renames require a deprecation cycle (emit both for ≥ 1 release).
-- **Domains:** `extension`, `web`, `save`, `quickfind`, `search`, `item`, `collection`, `group`, `space`, `tag`, `share`, `member`, `org`, `auth`, `entitlements`, `upsell`, `sync`, `offline`, `import`, `export`, `billing`, `share_analytics`, `history`, `next`, `error`, `perf`, `system`.
+- **Domains:** `extension`, `web`, `save`, `quickfind`, `search`, `item`, `collection`, `group`, `space`, `tag`, `share`, `member`, `org`, `auth`, `entitlements`, `upsell`, `sync`, `offline`, `import`, `export`, `billing`, `share_analytics`, `history`, `next`, `error`, `perf`, `system`, `analytics`.
 
 ### Envelope (every event)
 ```json
@@ -209,6 +209,19 @@ Legend — **Owner** = feature spec file that defines the trigger. **Surface** =
 | `system.cron_run` | cron job execution | `{ job_name: string, duration_ms: number, success: bool }` | `22-infrastructure/08-cron.md` | server | 100% |
 | `system.queue_drain_lag` | queue lag monitor | `{ queue: string, lag_ms_p95: number }` | `22-infrastructure/07-queues.md` | server | 100% |
 | `system.webhook_received` | inbound webhook | `{ provider: string, event_type: string, signature_valid: bool }` | `10-licensing-billing/12-billing-webhooks.md` | server | 100% |
+
+### 2.16 Analytics meta (consent + pipeline health)
+
+| Event | When fires | Props schema | Owner | Surface | Sample |
+|---|---|---|---|---|---|
+| `analytics.consent_granted` | user grants product-analytics consent | `{ region: string, surface: "web"\|"ext", scope: "product"\|"crash"\|"beta" }` | `18-analytics-telemetry/01-opt-in-analytics.md` | web+ext | 100% |
+| `analytics.consent_revoked` | user revokes consent | `{ region: string, surface: "web"\|"ext", scope: "product"\|"crash"\|"beta" }` | `18-analytics-telemetry/01-opt-in-analytics.md` | web+ext | 100% |
+| `analytics.purge_requested` | user clicks "Delete all my telemetry" | `{ scope: "events"\|"errors"\|"all" }` | `18-analytics-telemetry/01-opt-in-analytics.md` | web | 100% |
+| `analytics.queue_overflow` | client buffer dropped events | `{ surface: string, dropped_count: number }` | `18-analytics-telemetry/01-opt-in-analytics.md` | all | 100% |
+| `error.captured` | client emits error report | `{ severity: "fatal"\|"error"\|"warning"\|"info", fingerprint: string, surface: string }` | `18-analytics-telemetry/02-error-reporting.md` | all | 100% |
+| `error.report_sent` | report transmitted to backend | `{ has_user_feedback: bool }` | `18-analytics-telemetry/02-error-reporting.md` | all | 100% |
+| `error.consent_changed` | crash-reporting toggle flipped | `{ enabled: bool, breadcrumbs_enabled: bool }` | `18-analytics-telemetry/02-error-reporting.md` | web | 100% |
+| `error.rate_alert_fired` | server-side spike detector | `{ release: string, fingerprint: string }` | `18-analytics-telemetry/02-error-reporting.md` | server | 100% |
 
 ### 2.15 Next (focused to-do queue)
 

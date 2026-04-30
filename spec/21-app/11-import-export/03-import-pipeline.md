@@ -84,7 +84,7 @@ User picks (defaults bold):
 ## 7. Commit
 
 `POST /v1/imports/:id/commit` with selected options.
-- Idempotency-Key (UUID, client-generated) prevents double-commit.
+- `Idempotency-Key` per canonical contract in `03-api-endpoints/01-conventions.md §6` (UUID, client-generated, 24h TTL, `(account_id, key) → response` cache, body-mismatch → `400 IDEMPOTENCY_KEY_REUSED_DIFFERENT_BODY`). Prevents double-commit.
 - Spawns commit job.
 - Writes records in transactions of 500.
 - Each transaction:

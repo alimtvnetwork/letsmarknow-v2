@@ -2048,3 +2048,13 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - SC6: `07-comments-and-reactions.md §2` `Reaction.emoji` row now points to §8 as SoT (20 entries; prose "(~30)" corrected); Free-plan `👍`-only restriction noted with cross-ref to §10.
 - SC7: New §2.1 "Markdown-lite subset (locked)" — supported constructs (bold, italic, inline code, strikethrough, autolink, mention, hard break) + explicit NOT-supported list + sanitization contract (HTML-escape, allow-list output tags, `rel="nofollow ugc noopener"` on `<a>`) + 4 KB measured on raw source UTF-8 bytes.
 - Audit `audit-2026-04-29-sharing-collab-sweep-83.md` status: closed.
+
+---
+
+## Session 87 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Opened new gap-sweep audit on `19-security-privacy/` (default per Session 86 suggestion).
+- Created `audit-2026-04-29-security-privacy-sweep-87.md` with 7 findings: SP1+SP2 (S1, rate-limit SoT drift in threat-model + share-link-security — mirrors SC1+SC2 root cause), SP3 (S2, audit-event naming drift `brute_force_lockout` vs `locked_brute_force` + 3 missing events), SP4 (S2, CAPTCHA thresholds undeclared), SP5 (S2, cookie inventory has no SoT), SP6 (S3, session TTL vague), SP7 (S3, `has_role` pattern not cross-referenced to role-enum SoT).
+- Drain plan: 3 sessions.

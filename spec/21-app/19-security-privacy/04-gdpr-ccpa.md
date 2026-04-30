@@ -102,15 +102,19 @@ Available to regulators on request.
 
 ## 11. Cookies
 
-| Cookie | Purpose | Type | Expiry |
-|---|---|---|---|
-| `__Host-session` | Auth | Essential | session / 30 d |
-| `__Host-csrf` | CSRF token | Essential | session |
-| `lmn_consent` | Records consent prefs | Essential | 1 y |
-| `lmn_analytics_id` | Anonymized analytics ID | Optional | 1 y |
-| `lmn_locale` | UI language | Functional | 1 y |
+> **SoT:** `09-auth-accounts/06-sessions.md §1.3` (canonical cookie inventory). The summary below is consent-classification only; attribute/TTL details live in the SoT to prevent drift (audit SP5).
 
-Banner uses TCF v2.2-aligned UI (Accept / Reject / Customize) for EU.
+| Cookie | Purpose | Type |
+|---|---|---|
+| `__Host-lmn_refresh` | Auth | Essential |
+| `__Host-lmn_csrf` | CSRF token | Essential |
+| `lmn_consent` | Records consent prefs | Essential |
+| `lmn_active_account` / `lmn_active_org` | Active Account / Org selector | Essential |
+| `lmn_trust_device_<account_id>` | MFA "trust device" bypass | Essential |
+| `lmn_locale` | UI language | Functional |
+| `lmn_analytics_id` | Anonymized analytics ID | Optional |
+
+Banner uses TCF v2.2-aligned UI (Accept / Reject / Customize) for EU. Optional cookies are not set until consent is granted.
 
 ## 12. Children's data
 

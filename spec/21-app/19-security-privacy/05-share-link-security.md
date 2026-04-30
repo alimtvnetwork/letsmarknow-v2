@@ -124,10 +124,12 @@ Specific threats and mitigations for shared content (public / password / invite-
 
 ## 16. Telemetry (security-only)
 
-- `share.brute_force_lockout` `{ share_id, ip_hash }`
-- `share.token_404_burst` `{ ip_hash }` (potential enumeration)
-- `share.auto_disabled` `{ reason }`
-- `share.password_attempts` `{ count }` (aggregated)
+> **Audit-event names SoT:** `08-sharing-collab/09-audit-log.md §3 Sharing`. Names below match that file (past-tense, `share.{verb}`).
+
+- `share.locked_brute_force` `{ share_id, ip_hash }` — share auto-locked after exceeding the SoT lockout threshold (`13-rate-limit-values.md §4`). Replaces former in-folder name `share.brute_force_lockout` (renamed Session 89).
+- `share.token_404_burst` `{ ip_hash }` — potential enumeration probe; ≥ 50 consecutive 404s on `/t/:slug` from one IP within 5 min.
+- `share.auto_disabled` `{ reason }` — owner-notification path; `reason ∈ { brute_force, abuse_report, ttl_expired_with_violations }`.
+- `share.password_attempts` `{ count }` — aggregated counter (rolled up per share per hour); not per-attempt.
 
 ## 17. Edge cases
 

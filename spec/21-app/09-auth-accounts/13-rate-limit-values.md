@@ -49,6 +49,19 @@ When both IP and account exist, the **stricter** of the two applies.
 | `POST /v1/auth/mfa/verify` | n/a | 5/min per account | 15-min lockout after 10 failures |
 | `GET /v1/auth/oauth/:provider/start`, `GET /v1/auth/oauth/:provider/callback` | 30 / hour | n/a | Canonical paths per `03-api-endpoints/00-overview.md` and `03-api-endpoints/03-auth.md §OAuth`. The bare `/auth/callback/:provider` form sometimes referenced in narrative prose is a lay alias for the same callback endpoint. |
 
+### 2.1 CAPTCHA escalation
+
+CAPTCHA (Cloudflare Turnstile) is required on the **next** request when any of the following thresholds are crossed within a 10-minute sliding window per IP. SoT — referenced from `19-security-privacy/01-threat-model.md §28`.
+
+| Trigger | Threshold | Applies to |
+|---|---|---|
+| Failed `/v1/auth/signin` | ≥ 3 failures / 10 min / IP | All subsequent `/v1/auth/signin` from that IP for 30 min |
+| Failed `/v1/auth/password/forgot` | ≥ 3 / 10 min / IP | Same endpoint, 30 min |
+| Failed `/v1/auth/mfa/verify` | ≥ 3 / 10 min / IP | Same endpoint, 30 min |
+| Magic-link request burst | ≥ 5 / 10 min / IP | `/v1/auth/magic-link/send`, 30 min |
+
+CAPTCHA challenge served via `403 CAPTCHA_REQUIRED` with `{ "challenge_token": "<turnstile_sitekey>" }` payload. Solved token submitted in `X-Captcha-Solution` header on retry.
+
 ## 3. Content endpoints (per authenticated account)
 
 | Endpoint group | Limit | Window | Notes |

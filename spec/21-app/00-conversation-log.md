@@ -2069,3 +2069,15 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 - SP1: Replaced password-share brute-force numeric prose in `01-threat-model.md §36` and `05-share-link-security.md §6` with cross-reference to `13-rate-limit-values.md §4` SoT. Added drift-prevention note citing audits SC1 + SP1.
 - SP2: Replaced single-tier "60 /min /IP" in `05-share-link-security.md §2` with explicit two-tier SoT cross-reference.
 - Audit log: 2/7 closed.
+
+---
+
+## Session 89 — 2026-04-29
+
+**User:** Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+
+**Action:** Drained SP3+SP4+SP5 (S2 batch) of security-privacy audit. **Surfaced one drift-correction sub-finding.**
+- SP3: Renamed `share.brute_force_lockout` → `share.locked_brute_force` in `05-share-link-security.md §16` (matches `09-audit-log.md` past-tense convention). Added 3 missing events (`share.token_404_burst`, `share.auto_disabled`, `share.password_attempts`) with payload schemas to `09-audit-log.md §3`.
+- SP4: New §2.1 "CAPTCHA escalation" in `13-rate-limit-values.md` — thresholds for signin/forgot/mfa/magic-link, 30-min CAPTCHA-required window, `403 CAPTCHA_REQUIRED` + `X-Captcha-Solution` retry contract. `01-threat-model.md §28` cross-references SoT.
+- SP5: Created canonical cookie inventory at `06-sessions.md §1.3` (8 cookies w/ attributes + TTL). Cross-referenced from `04-gdpr-ccpa.md §11` and `01-threat-model.md §27`. **Drift correction:** `04-gdpr-ccpa.md §11` previously named cookies `__Host-session` / `__Host-csrf` but `06-sessions.md §1.2` had always declared `__Host-lmn_refresh`. Reconciled to actual names (`__Host-lmn_refresh`, `__Host-lmn_csrf`).
+- Audit log: 5/7 closed. Remaining: SP6+SP7 (S3 polish — session TTL pointer + `has_role` role-enum cross-ref).

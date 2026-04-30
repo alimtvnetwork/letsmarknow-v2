@@ -8,6 +8,24 @@
 
 ---
 
+## 2026-04-29 — Session 97 — Drain EX2 (surface-vs-API vocabulary)
+
+```
+Next,
+
+
+
+List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
+```
+
+**Refactored into:**
+- spec/21-app/08-sharing-collab/13-share-link.md (§1.4 lead-in + "Extension not installed" row)
+- spec/21-app/04-extension/06-omnibox.md (§102)
+- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX2 closed; 2/4)
+- .lovable/memory/index.md
+
+---
+
 ## 2026-04-29 — Session 96 — Drain EX1 (manifest webNavigation permission)
 
 ```

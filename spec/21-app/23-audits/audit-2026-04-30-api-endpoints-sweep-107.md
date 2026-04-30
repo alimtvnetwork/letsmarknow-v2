@@ -1,13 +1,16 @@
----
+<!--
+audit-date: 2026-04-30
+next-audit-by: 2026-10-27
 audit-type: ad-hoc
-audit-id: 107
-date: 2026-04-30
-scope: spec/21-app/03-api-endpoints/
 status: closed
+closed-on: 2026-04-30
+closed-because: gap-sweep complete; 0 findings; all 17 lint sub-checks green; idempotency contract 100% covered (29 Y + 1 Y-auto + 1 Idem-Key + 71 — across 98 POSTs); 16 forbidden-alias rows validated; cross-folder endpoint refs resolve via link-check.
+audit-id: 107
+scope: spec/21-app/03-api-endpoints/
 score-before: 100/100
 score-after: 100/100
 findings: 0
----
+-->
 
 # Audit 107 — `03-api-endpoints/` gap-sweep
 

@@ -55,6 +55,10 @@ All `sendMessage` handlers MUST return `Promise<Ack>` (so `sendResponse` can be 
 | `GET_DIAGNOSTICS` | `{}` | sync log + counters |
 | `CLEAR_CACHE` | `{ confirm }` | `{ ok: true }` |
 | `SET_PREF` | `{ key, value }` | new prefs object |
+| `NEXT_LIST` | `{ cursor? }` | `{ items: NextItem[], next_cursor? }` — fetch the Next queue (see `07-features/17-next-queue.md`) |
+| `NEXT_ADD` | `{ item_id, position? }` | created `next_item` row |
+| `NEXT_UPDATE` | `{ next_item_id, patch: { done?, position? } }` | updated row |
+| `NEXT_REMOVE` | `{ next_item_id }` | `{ ok: true }` (tombstones row) |
 
 ### From SW → all surfaces (broadcast)
 
@@ -71,6 +75,7 @@ All `sendMessage` handlers MUST return `Promise<Ack>` (so `sendResponse` can be 
 | `SYNC_PROGRESS` | `{ phase, pct }` |
 | `OFFLINE` / `ONLINE` | `{ pending_count }` |
 | `KILL_SWITCH` | `{ disabled, reason, min_required_version }` |
+| `NEXT_ITEM_ADDED` / `NEXT_ITEM_UPDATED` / `NEXT_ITEM_REMOVED` / `NEXT_ITEM_TOMBSTONED` | `{ next_item }` — relayed from realtime channel `account:{account_id}:next` (see `08-sharing-collab/14-realtime-transport.md`) |
 
 ### Web app ↔ extension (cross-origin)
 

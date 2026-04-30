@@ -59,6 +59,7 @@ type Msg =
   | { type: "GET_TREE",      payload: { org_id: string, since_etag?: string } }
   | { type: "MUTATE",        payload: { op: MutationOp } }
   | { type: "UNDO",          payload: { history_event_id: string } }
+  | { type: "NEXT_LIST" | "NEXT_ADD" | "NEXT_UPDATE" | "NEXT_REMOVE", payload: any }
   | { type: "PING" };
 
 type Reply<M extends Msg> = Promise<{ ok: true, data: any } | { ok: false, error: ApiError }>;
@@ -79,6 +80,15 @@ Rules:
 | `lmn.flush-offline-queue` | 30 s | Drain `pending_mutations` while online. |
 | `lmn.kill-switch-poll` | 6 h | `GET /v1/health/extension?version=...` to learn of force-update / kill-switch. |
 | `lmn.cleanup-cache` | 24 h | Evict items older than 30 days that are not in any starred Collection. |
+
+### 5.1 Realtime subscriptions
+
+While ≥1 surface (popup / new-tab / side panel) has an open port (per `12-messaging.md §4`), SW maintains a Supabase Realtime subscription to:
+
+- `account:{account_id}:next` — events `next.item.added`, `next.item.updated`, `next.item.removed`, `next.item.tombstoned`. Each event is relayed to all connected surfaces as the corresponding `NEXT_ITEM_*` broadcast (see `12-messaging.md §3`). Channel + event taxonomy locked in `08-sharing-collab/14-realtime-transport.md`.
+- Org-scoped channels for active Items / Collections / Groups (existing behaviour, unchanged).
+
+Subscription is torn down when the last port disconnects to avoid keeping SW alive past Chrome's idle window.
 
 ## 6. Network layer (`api.js`)
 

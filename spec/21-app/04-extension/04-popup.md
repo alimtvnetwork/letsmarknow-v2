@@ -12,10 +12,12 @@ The 380×540 popup that appears when the user clicks the extension icon or hits 
 ├──────────────────────────────────────────┤
 │ 🔍  Quick find…                          │  ← search (44px)
 ├──────────────────────────────────────────┤
+│  Saved   |  Open Tabs (14)  |  Next (3)  │  ← tab bar (48px) — see §1.1
+├──────────────────────────────────────────┤
 │ Saving:                                   │
 │ ┌──────────────────────────────────────┐ │
 │ │ favicon  Tab title (editable)        │ │
-│ │          example.com/page            │ │  ← current-tab card
+│ │          example.com/page            │ │  ← current-tab card (Saved tab body)
 │ │  [📎 Tags]  [📝 Notes]               │ │
 │ └──────────────────────────────────────┘ │
 │ Save to:  [Quick Tools  ▾]  [Save] ━━   │  ← destination + CTA
@@ -30,6 +32,18 @@ The 380×540 popup that appears when the user clicks the extension icon or hits 
 │ [Open dashboard]   [Side panel]  v1.4.0   │  ← footer (32px)
 └──────────────────────────────────────────┘
 ```
+
+### 1.1 Tab bar (segmented control, 3 tabs)
+
+The body region between header/search and footer is owned by **one of three tabs**. Tab bar is a segmented control, full-width, 48 px tall.
+
+| Tab | Body file | Default-tab condition |
+|---|---|---|
+| **Saved** | this file §3–§13 (current-tab save flow + recent) | `popup_default_tab = saved` (default for new Accounts), OR active tab URL is unsaved AND no Open-Tab matches no saved Item |
+| **Open Tabs** | `16-open-tabs-panel.md` §2 | `popup_default_tab = open_tabs`, OR ≥1 open tab matches no saved Item per `16-open-tabs-panel.md §2` |
+| **Next** | this file §14 | `popup_default_tab = next` (per `02-data-model/11-account.md` `account_setting.popup_default_tab`) |
+
+Active-tab styling for the **Next** tab: see §14.9. Active-tab styling for **Saved** and **Open Tabs**: matches §14.9 (icon recolors via `bg-primary/10` pill, label stays `text-foreground`, 2 px `bg-primary` underline). Tab persistence: last-active tab persists in `chrome.storage.local` key `ui.popup.activeTab` and overrides defaults on next open within the same browser session.
 
 ---
 
@@ -140,7 +154,7 @@ offline ──► queued ──► (synced when online) ──► saved
 ## 14. "Next" tab — body region
 
 > Authoritative wireframe + interaction reference for the **Next** body the
-> popup renders when the user taps the **Next** entry in §2's tab bar (or on
+> popup renders when the user taps the **Next** entry in §1.1's tab bar (or on
 > first open, since `popup_default_tab = next`). The behavior, settings, entry
 > points, and data model live in `07-features/17-next-queue.md` and
 > `02-data-model/12-next-item.md` — this section is UI-only.

@@ -42,6 +42,19 @@ alter table items add column search_tsv tsvector
 
 create index items_search_tsv_idx on items using gin (search_tsv);
 create index items_title_trgm_idx on items using gin (title gin_trgm_ops);
+
+-- Analogous columns on spaces, collections, groups (referenced by 02-data-model/05-item.md note):
+alter table spaces      add column search_tsv tsvector generated always as
+  (setweight(to_tsvector('simple', coalesce(name, '')), 'A')) stored;
+alter table collections add column search_tsv tsvector generated always as
+  (setweight(to_tsvector('simple', coalesce(name, '')), 'A') ||
+   setweight(to_tsvector('simple', coalesce(description, '')), 'B')) stored;
+alter table groups      add column search_tsv tsvector generated always as
+  (setweight(to_tsvector('simple', coalesce(name, '')), 'B')) stored;
+
+create index spaces_search_tsv_idx      on spaces      using gin (search_tsv);
+create index collections_search_tsv_idx on collections using gin (search_tsv);
+create index groups_search_tsv_idx      on groups      using gin (search_tsv);
 ```
 
 ### 2.3 Query pattern

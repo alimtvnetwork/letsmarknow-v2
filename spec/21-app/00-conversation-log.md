@@ -1827,3 +1827,15 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - SP9: `02-data-handling.md §3` residency table fixed — UK/Switzerland served from EU region; Canada removed (US-only); v1-scope note updated.
 - SP8: sub-processor table triplication collapsed. `02-data-handling.md §7` and `04-gdpr-ccpa.md §5` no longer mirror the policy table; both now point to `07-privacy-policy.md §3` as the only source of truth.
 - Audit closed.
+
+---
+
+## Session 70 — 2026-04-29 (Malaysia UTC+8)
+
+**User:** `Next, List out the remaining tasks always, if you finish then in future next command, find any remaining tasks from memory and suggest`
+
+**Action:** Opened new audit `audit-2026-04-29-auth-accounts-sweep-70.md`. 10 findings (1×S1, 4×S2, 5×S3).
+- **S1 AU1:** Refresh-cookie `SameSite=Strict` (locked in `06-sessions.md` + `10-device-and-security.md`) contradicts `19-security-privacy/01-threat-model.md` which says `SameSite=Lax`. Strict breaks magic-link sign-in (cookie not sent on cross-site nav). Decide which is right.
+- **S2 cluster:** AU2 (JWT rotation language drift "quarterly/24h" vs "90d/1d"); AU3 (no enforcement that JWT `roles` claim rejects `system`); AU4 (magic-link path family inconsistent: `/magic-link/send` vs `/magic/callback`); AU5 (OAuth callback `/auth/callback/:provider` vs `/v1/auth/oauth/:provider/callback`).
+- **S3:** AU6-AU10 polish (Argon2 param annotation, kind/plan_id relationship, JSON example formatting, HIBP debounce threshold).
+- Plan: 3 sessions to drain. SI-029 still blocked on legal.

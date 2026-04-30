@@ -48,7 +48,10 @@ Append-only history of who did what for compliance and forensics.
 - `share.purged` `{ scope_type, mode, retained_analytics_until: null }` — emitted by `POST /v1/shares/:id/purge` (see `12-revocation-and-expiry.md §12`); written before the row hard-delete commits so the audit row survives the purge.
 - `share.password_rotated`
 - `share.invite_sent` `{ count }`
-- `share.locked_brute_force`
+- `share.locked_brute_force` `{ share_id, ip_hash }` — emitted when a share auto-locks after exceeding the brute-force threshold per `09-auth-accounts/13-rate-limit-values.md §4`. Cross-referenced from `19-security-privacy/05-share-link-security.md §16`.
+- `share.token_404_burst` `{ ip_hash }` — potential enumeration probe (≥ 50 consecutive 404s on `/t/:slug` from one IP within 5 min). Source: `19-security-privacy/05-share-link-security.md §16`.
+- `share.auto_disabled` `{ reason }` — `reason ∈ { brute_force, abuse_report, ttl_expired_with_violations }`. Source: `19-security-privacy/05-share-link-security.md §16`.
+- `share.password_attempts` `{ count }` — aggregated counter (rolled up per share per hour). Source: `19-security-privacy/05-share-link-security.md §16`.
 
 ### Billing
 - `billing.plan_changed` `{ from, to }`

@@ -7,5 +7,8 @@ flowchart TD
     COMP --> A11Y[Keyboard · ARIA · WCAG]
     COMP --> COPY[Copy strings · voice]
     COMP --> SCR[Every screen in 05-web-app]
+    A11Y --> KEY[Keyboard input]
+    KEY --> KBD[Keyboard cheatsheet overlay]
+    COMP --> OPT[Options page surface]
     SCR --> USR[User]
     USR -. feedback toast / empty / loading .-> SCR

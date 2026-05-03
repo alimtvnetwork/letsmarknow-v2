@@ -136,7 +136,7 @@ Entitlement: `view.mindmap.export_json` for JSON; PNG/SVG free.
   {
     "version": "1",
     "exported_at": "2026-04-19T08:00:00Z",
-    "scope": { "type": "collection", "id": "01J..." },
+    "scope": { "type": "collection", "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" },
     "nodes": [ { "id", "kind", "label", "x", "y", "color", "size" } ],
     "edges": [ { "from", "to", "kind", "weight" } ]
   }

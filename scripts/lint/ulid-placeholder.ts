@@ -22,8 +22,10 @@ import { join } from 'node:path';
 
 const ROOT = 'spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/ulid-placeholder.allowlist.txt';
-// Matches `01J...`, `01H...` etc — Crockford base32 ULID prefix shorthand.
-const PATTERN = /\b01[A-HJ-NP-Z]\.{3}/;
+// Matches ULID placeholders like `"01J..."` or `[01J...]` — must be preceded by
+// a quote, bracket, paren, comma, space, or line start so ISO timestamps such
+// as `"2026-04-01T..."` are not flagged (the `-` before `01T` would otherwise match `\b`).
+const PATTERN = /(^|["'\[\(,\s])01[A-HJ-NP-Z]\.{3}/;
 
 function loadAllowlist(): Set<string> {
   if (!existsSync(ALLOWLIST_PATH)) return new Set();

@@ -2723,3 +2723,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `20-roadmap/` (Audit-135). Zero drift. All flagged hits (ULID, hex, Workspace) are intentional rule citations or "Google Workspace" proper nouns. No patches. Score 100/100. Open: 1 (SI-029).
+
+## Session 136 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `08-sharing-collab/` (Audit-136, first broad audit). 1 drift fixed: `05-permissions-matrix.md:70` "own workspace" → "own Organization". Public `/t/{slug}` route correctly retained (web route not API). Score 100/100. Open: 1 (SI-029).

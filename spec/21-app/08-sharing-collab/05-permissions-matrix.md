@@ -67,7 +67,7 @@ The role enum is **locked** (Core memory + `02-data-model/08-member.md` + `17-ad
 | Restore from Trash | ✅ | ✅ | ✅ (own) | ❌ | ❌ |
 | Permanent purge | ✅ | ✅ | ❌ | ❌ | ❌ |
 | Read shared Collection/Group/Item via public link | ✅ | ✅ | ✅ | ✅ | ✅ if Share active |
-| Clone shared target to own workspace | ✅ | ✅ | ✅ | ✅ | ✅ if `allow_clone_to_my_account` |
+| Clone shared target to own Organization | ✅ | ✅ | ✅ | ✅ | ✅ if `allow_clone_to_my_account` |
 
 ## 5. Sharing actions
 

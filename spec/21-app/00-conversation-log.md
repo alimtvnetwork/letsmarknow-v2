@@ -2623,3 +2623,17 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-05-03-import-export-sweep-126.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 127 — 2026-05-03 — `next` (16-notifications-updates/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Corrected prior suggestion (no `13-notifications/`; actual folder is `16-notifications-updates/`). Swept 4 files. Verified ULID/Workspace/hex/`/v1/` prefix; cross-checked 3 declared endpoints against canonical inventory.
+
+**Result:** Zero drift. No patches.
+
+Recorded in `23-audits/audit-2026-05-03-notifications-updates-sweep-127.md`.
+
+Open SI = 1 (SI-029, blocked).

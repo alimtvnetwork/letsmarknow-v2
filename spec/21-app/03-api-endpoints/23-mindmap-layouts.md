@@ -9,7 +9,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `write` for POS
 ---
 
 ### List layouts for a scope
-`GET /v1/mindmap-layouts?scope_type=collection&scope_id=01J...`
+`GET /v1/mindmap-layouts?scope_type=collection&scope_id=0190a4f1-6c5e-7c2a-9b3f-1234567890ab`
 
 **Auth:** bearer + `X-Organization-Id` + read access to the scope
 **Idempotent:** yes
@@ -25,13 +25,13 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `write` for POS
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Q1 priorities",
       "scope_type": "collection",
-      "scope_id": "01J...",
+      "scope_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "is_default": true,
       "node_count": 42,
-      "created_by_account_id": "01J...",
+      "created_by_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "shared_with_org": false,
       "created_at": "...",
       "updated_at": "..."
@@ -52,19 +52,19 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `write` for POS
 ```json
 {
   "data": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "name": "Q1 priorities",
     "scope_type": "collection",
-    "scope_id": "01J...",
+    "scope_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "is_default": true,
     "viewport": { "x": 0, "y": 0, "zoom": 1.0 },
     "nodes": [
-      { "id": "01J...", "kind": "item", "ref_id": "01J...", "x": 120, "y": 80, "collapsed": false, "color": null }
+      { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "kind": "item", "ref_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "x": 120, "y": 80, "collapsed": false, "color": null }
     ],
     "edges": [
-      { "from": "01J...", "to": "01J...", "kind": "tag", "label": "ai" }
+      { "from": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "to": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "kind": "tag", "label": "ai" }
     ],
-    "created_by_account_id": "01J...",
+    "created_by_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "shared_with_org": false,
     "created_at": "...",
     "updated_at": "..."
@@ -86,12 +86,12 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `write` for POS
 {
   "name": "Q1 priorities",
   "scope_type": "collection",
-  "scope_id": "01J...",
+  "scope_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "is_default": false,
   "shared_with_org": false,
   "viewport": { "x": 0, "y": 0, "zoom": 1.0 },
   "nodes": [
-    { "id": "01J...", "kind": "item", "ref_id": "01J...", "x": 120, "y": 80, "collapsed": false }
+    { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "kind": "item", "ref_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "x": 120, "y": 80, "collapsed": false }
   ],
   "edges": []
 }
@@ -132,10 +132,10 @@ Partial updates accepted. Whole-array replacement for `nodes` / `edges` (the can
 ```json
 {
   "data": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "deleted_at": "2026-04-20T08:30:00Z",
     "was_default": true,
-    "new_default_id": "01J..."
+    "new_default_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"
   }
 }
 ```

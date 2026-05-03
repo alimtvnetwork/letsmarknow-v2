@@ -18,7 +18,7 @@ Neither has been seriously updated in years. Neither is built for the AI era. Ne
 A single tool that:
 
 1. **Looks better than Tab Extend** (Apple-system + Ubuntu typography, dark-first, polished animation).
-2. **Organizes deeper than Toby** (5-level hierarchy: Workspace → Space → Collection → Group → Item, with no caps in paid tiers).
+2. **Organizes deeper than Toby** (5-level hierarchy: Organization → Space → Collection → Group → Item, with no caps in paid tiers).
 3. **Shares richer than both** (public link / password / expiry / invite-only roles at every level, custom slugs on `letsmarknow.com/t/{slug}`).
 4. **Works faster than both** (instant fuzzy search with jump-to-tab, Ctrl+K command palette, full keyboard control).
 5. **Never loses your data** (every action goes to history, Ctrl+Z always works, real-time multi-window sync).

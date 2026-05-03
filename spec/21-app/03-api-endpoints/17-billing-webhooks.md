@@ -62,7 +62,7 @@ These are the **exact** subset of fields the handler reads. All money values use
   "status": "complete",
   "customer": "cus_xxx",
   "subscription": "sub_xxx",
-  "client_reference_id": "01J...organization_id",
+  "client_reference_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890aborganization_id",
   "currency": "usd",
   "amount_total": 500,
   "amount_subtotal": 500,

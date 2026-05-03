@@ -441,7 +441,7 @@ GET /v1/items?limit=50&cursor=<opaque>
 ### Filtering & sorting
 
 ```
-GET /v1/items?collection_id=01J...&is_starred=true&tag=react&tag=ui&sort=-updated_at
+GET /v1/items?collection_id=0190a4f1-6c5e-7c2a-9b3f-1234567890ab&is_starred=true&tag=react&tag=ui&sort=-updated_at
 ```
 
 ### Sparse fields & embedded refs

@@ -258,7 +258,7 @@ Polled via `GET /v1/organizations/:id/data-export/:export_id` (declared below).
     "format": "json",
     "include": ["spaces","collections","groups","items","tags","shares","members","history"],
     "progress": { "processed": 4123, "total": 4123, "percent": 100 },
-    "download_url": "https://uploads.letsmarknow.com/gdpr/01J.../file?token=...",
+    "download_url": "https://uploads.letsmarknow.com/gdpr/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/file?token=...",
     "download_expires_at": "2026-04-27T08:30:00Z",
     "size_bytes": 1843200,
     "sha256": "...",

@@ -12,7 +12,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `search`.
 **Query**
 - `q` (string, required) — 1–200 chars; tokenized by whitespace; supports `"quoted phrases"`, `-exclude`, and field prefixes:
   - `tag:react` — has tag
-  - `in:collection-name` or `in:01J...` — within Collection
+  - `in:collection-name` or `in:0190a4f1-6c5e-7c2a-9b3f-1234567890ab` — within Collection
   - `space:my-collections` — within Space
   - `is:starred`, `is:hidden`, `is:trashed`
   - `domain:chatgpt.com`

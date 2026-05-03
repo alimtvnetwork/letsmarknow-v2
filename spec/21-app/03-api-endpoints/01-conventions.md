@@ -212,7 +212,7 @@ When supported, query param `sort=field,-other_field` (prefix `-` for desc). All
 Query params named after fields:
 
 ```
-GET /v1/items?collection_id=01J...&is_starred=true&tag=react
+GET /v1/items?collection_id=0190a4f1-6c5e-7c2a-9b3f-1234567890ab&is_starred=true&tag=react
 ```
 
 Multi-value via repeated keys: `?tag=react&tag=ui`.

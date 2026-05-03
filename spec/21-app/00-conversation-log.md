@@ -2637,3 +2637,17 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-05-03-notifications-updates-sweep-127.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 128 — 2026-05-03 — `next` (12-history-undo/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Broad sweep of `12-history-undo/` (4 files). Verified ULID/Workspace/hex/`/v1/`; cross-checked 3 endpoints + 3 HISTORY_* error codes against canonical registry.
+
+**Result:** Zero drift. No patches.
+
+Recorded in `23-audits/audit-2026-05-03-history-undo-sweep-128.md`.
+
+Open SI = 1 (SI-029, blocked).

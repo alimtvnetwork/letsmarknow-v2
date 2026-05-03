@@ -2747,3 +2747,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `09-auth-accounts/` (Audit-139, first broad audit, 14 files). 2 drifts fixed in `01-identity-model.md`: Org definition tagline and Personal-Org default name. Google Workspace / SSO proper nouns and `/t/:slug` web route verified intentional. Score 100/100. Open: 1 (SI-029).
+
+## Session 140 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `04-extension/` (Audit-140, first broad audit, 20 files). Zero drift across all four checks (ULID, hex, Workspace, non-v1 paths). No patches. Score 100/100. Open: 1 (SI-029).

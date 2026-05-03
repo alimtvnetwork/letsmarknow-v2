@@ -91,6 +91,7 @@ Every non-2xx response uses this envelope:
 | `CONFLICT_NAME_TAKEN` | 409 | no | `toast.conflict.name_taken` | `name` |
 | `GONE_SOFT_DELETED` | 410 | no | `toast.gone.soft_deleted` | `id`, `deleted_at`, `purges_at` |
 | `GONE_HARD_DELETED` | 410 | no | `toast.gone.hard_deleted` | — |
+| `GONE_CURSOR_STALE` | 410 | yes (full re-pull) | `toast.gone.cursor_stale` | `cursor`, `recovery_endpoint` (`/v1/sync/full`) |
 
 ### 3.4 Validation (`VALIDATION_*`)
 

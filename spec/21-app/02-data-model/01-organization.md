@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The top-level container — the colored "workspace bubble" (PE / AU / XL …) shown in the left rail. Holds Members, billing/subscription, and Spaces. One Account can own or belong to many Organizations.
+The top-level container — the colored Organization bubble (PE / AU / XL …) shown in the left rail. Holds Members, billing/subscription, and Spaces. One Account can own or belong to many Organizations. (Per SI-021, the Toby "Workspace" admin/billing surface maps to our Organization; the container-of-Collections surface maps to our Space — never collapse the two.)
 
 ## Fields
 

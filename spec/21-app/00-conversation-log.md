@@ -2711,3 +2711,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `05-web-app/` (Audit-133). 17 files scanned; only finding was undocumented hex-literal exception in PWA manifest. Added inline note in `15-pwa.md` §1 cross-linking `06-ui-ux/01-design-tokens.md`. No SI opened. Score 100/100. Open: 1 (SI-029, legal-blocked).
+
+## Session 134 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `00-overview/` (Audit-134, critical SoT folder, first ever broad audit). 3 real bare-`Workspace` drifts fixed inline: `01-vision.md:21` hierarchy line, `03-personas.md:25` "Workspace bubbles", `04-competitive-analysis.md:33` Org switch shortcut row. Glossary, "Google Workspace" SSO refs, and competitor-column entries verified clean. No SI opened. Score 100/100. Open: 1 (SI-029).

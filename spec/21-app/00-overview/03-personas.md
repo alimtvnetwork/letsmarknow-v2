@@ -22,7 +22,7 @@ Three primary personas drive every product decision. When in doubt, optimize for
 - No undo when accidentally deleting a Collection.
 
 **Key flows we must nail**
-- New Tab opens → instantly sees their Workspace bubbles, Spaces, Collections.
+- New Tab opens → instantly sees their Organization bubbles (the "workspace bubble" avatars per `02-glossary.md`), Spaces, Collections.
 - Ctrl+K → type 3 letters → Enter → tab opens (or focuses if already open).
 - Drag a tab from the Open Tabs panel → drops into a Collection → tab closes.
 - Ctrl+Z immediately after a delete → restored.

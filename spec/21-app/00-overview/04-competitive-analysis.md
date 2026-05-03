@@ -30,7 +30,7 @@ A side-by-side breakdown of **Toby** vs **Tab Extend** vs **Lets Mark Now**, plu
 | Drag tab from sidebar to Collection | ✅ | ✅ | ✅ + closes original tab |
 | Ctrl+K command palette | ❌ | ❌ | ✅ |
 | Full keyboard control | partial | partial | ✅ |
-| Workspace switch shortcut | ❌ | ❌ | ✅ Ctrl+↑ / Ctrl+↓ |
+| Organization switch shortcut | ❌ | ❌ | ✅ Ctrl+↑ / Ctrl+↓ |
 | Search speed | mediocre | broken / very slow | ✅ < 100 ms p95 |
 | Search jump-to-result | ❌ | ❌ | ✅ |
 | List view | ✅ | ❌ | ✅ |

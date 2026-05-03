@@ -474,11 +474,11 @@ Full code list lives in `01-conventions.md` §4 and `18-error-codes.md`.
 | Method | Rows | Distinct |
 |---|---|---|
 | GET | 51 | 51 |
-| POST | 98 | 98 |
+| POST | 99 | 99 |
 | PATCH | 10 | 10 |
 | PUT | 1 | 1 |
 | DELETE | 11 | 11 |
-| **Total** | **171** | **171** |
+| **Total** | **172** | **172** |
 
 > No duplicate `(method, path)` declarations. `GET /v1/me/entitlements` is declared once in `16-licenses.md:10` and cross-referenced (not re-declared) from `19-account.md:106`. The linter explicitly excludes cross-reference syntax (`- \`METHOD /v1/...\` → declared in ...`) from the row count.
 

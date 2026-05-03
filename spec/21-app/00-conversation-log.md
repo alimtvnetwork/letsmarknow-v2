@@ -2777,3 +2777,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `17-admin-org/` (Audit-144, first broad audit). 2 bare-"workspace" drifts in `00-overview.md` lines 3 + 31 fixed to "Organization". Score 100/100. Open: 1 (SI-029).
+
+## Session 145 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `01-information-architecture/` (Audit-145, first broad audit). 1 S3 drift in `readme.md:17` — quick-ref tree said "Organization (workspace bubble)" → patched to "(left-rail bubble)". Zero ULIDs, hex colors, or non-/v1/ paths. Score 100/100. Open: 1 (SI-029).

@@ -2651,3 +2651,17 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-05-03-history-undo-sweep-128.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 129 — 2026-05-03 — `next` (14-search/ delta)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Delta check on `14-search/` since audit-111. Verified ULID/hex/`/v1/` prefix; all 4 endpoints declared; W-13 + search_tsv fixes from S111 still intact.
+
+**Observation (not SI):** "Workspace Search" label + `workspace_search.*` telemetry are Toby-legacy terminology. Implementation is cross-Org search (correct). Not renaming — telemetry names are wire-format and audit-111 accepted this. Flagged only as future cleanup candidate.
+
+No patches. Recorded in `23-audits/audit-2026-05-03-search-delta-129.md`.
+
+Open SI = 1 (SI-029, blocked).

@@ -2677,3 +2677,19 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-05-03-analytics-telemetry-sweep-130.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 131 — 2026-05-03 — `next` (22-infrastructure/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** First broad sweep of `22-infrastructure/` (14 files). Three drift fixes:
+
+- F1: `04-secrets.md §1` — "Workspace Build Secrets" → "CI Build Secrets" (Workspace-term collision).
+- F2: `11-email-provider.md §4` — bare `POST /webhooks/email/{provider}` → canonical `POST /v1/webhooks/email-bounce`.
+- F3: `03-api-endpoints/00-overview.md §2.15` — declared new canonical `POST /v1/webhooks/email-bounce`. Inventory: 172 → 173.
+
+Recorded in `23-audits/audit-2026-05-03-infrastructure-sweep-131.md`.
+
+Open SI = 1 (SI-029, blocked).

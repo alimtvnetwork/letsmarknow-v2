@@ -2741,3 +2741,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `02-data-model/` (Audit-138, first broad audit, 14 files). 2 UI-label drifts fixed: `01-organization.md:60` "Create new workspace" → "Create new Organization"; `07-share.md:22` "Save to my workspace" → "Save to my Organization". "Workspace bubble" glossary phrase and "workspace search" telemetry-surface labels verified intentional. Score 100/100. Open: 1 (SI-029).
+
+## Session 139 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `09-auth-accounts/` (Audit-139, first broad audit, 14 files). 2 drifts fixed in `01-identity-model.md`: Org definition tagline and Personal-Org default name. Google Workspace / SSO proper nouns and `/t/:slug` web route verified intentional. Score 100/100. Open: 1 (SI-029).

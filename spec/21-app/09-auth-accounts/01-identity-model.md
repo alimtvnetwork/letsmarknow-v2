@@ -24,7 +24,7 @@ The human (or service principal). One per real person.
 | `created_at`, `updated_at`, `deleted_at?` | | |
 
 ### `Org`
-A workspace. Either Personal (auto-created) or Team.
+An Organization (the locked top-level container per `00-overview/02-glossary.md`). Either Personal (auto-created) or Team.
 
 | Field | Type | Notes |
 |---|---|---|
@@ -62,7 +62,7 @@ Mirrors the `Member.role` for fast RLS via `has_role(account_id, org_id, role)`.
 
 ## 2. Personal Org
 
-- Auto-created on first signup with `kind="personal"`, `name="<display_name>'s workspace"`.
+- Auto-created on first signup with `kind="personal"`, `name="<display_name>'s Organization"`.
 - Owner is the signing-up Account; cannot be transferred.
 - On Free, no other Members allowed; on Pro, up to 3 collaborators; on Team, must convert to a Team Org or create a separate one.
 - Cannot be deleted while the Account exists; deleting the Account purges it.

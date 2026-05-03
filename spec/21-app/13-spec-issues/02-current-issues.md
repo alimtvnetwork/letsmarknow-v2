@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 56 — **SI-029 OPENED** (privacy-pack stubs need pre-launch expansion; gates v1 Phase 1 launch; owner TBD legal counsel). Open count = 1. Score: 100/100 (S2 launch-gate, not a codegen blocker).
+**Last updated:** 2026-05-03 Session 147 — **SI-030 OPENED** (162 ULID `"01J..."` placeholders across 21 files in `03-api-endpoints/` violate Core "UUIDv7 everywhere, never ULID" rule; S1 codegen drift). Open count = 2. Score: 100 → 96.
 
 ---
 

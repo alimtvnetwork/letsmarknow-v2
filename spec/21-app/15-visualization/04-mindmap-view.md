@@ -1,6 +1,6 @@
 # Mind-map View
 
-Force-directed bubble graph showing the spatial relationships between Spaces, Collections, Groups, and Tags. Lets users *see* their workspace.
+Force-directed bubble graph showing the spatial relationships between Spaces, Collections, Groups, and Tags. Lets users *see* their Organization.
 
 > **Phase 3** per `20-roadmap/04-phase-3-mindmap-ai.md`. Specced now so the data model and API are reserved.
 >

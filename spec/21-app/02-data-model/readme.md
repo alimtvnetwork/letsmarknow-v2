@@ -60,7 +60,7 @@ Which History Events this entity produces.
 
 | File | Entity |
 |---|---|
-| `01-organization.md` | Organization (the workspace bubble) |
+| `01-organization.md` | Organization (the Org bubble in the left rail) |
 | `02-space.md` | Space |
 | `03-collection.md` | Collection |
 | `04-group.md` | Group (sub-container inside Collection) |

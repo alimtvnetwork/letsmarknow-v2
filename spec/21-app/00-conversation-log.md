@@ -2825,3 +2825,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `08-sharing-collab/` (Audit-152, first broad audit). Zero defects across 17 files. Single non-`/v1/` hit at `04-invite-only-shares.md:37` is the locked public share-viewer URL `/t/{slug}` (per Core memory + `13-share-link.md §1.2`), not an API path. Score 100/100. Open: 1 (SI-029).
+
+## Session 153 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `02-data-model/` (Audit-153, first broad audit, 14 entity files + readme + diagram). Found 2 SI-021 terminology drifts: `01-organization.md §Purpose` and `readme.md` index both called the Org bubble a "workspace bubble". Patched both — Org bubble now explicitly references SI-021 split. Surviving "workspace" hits (GIN-index notes in space/collection/group/item) are legitimate refs to canonical `14-search/03-workspace-search.md` scope. Zero ULID, hex, or non-`/v1/` leakage. Score 100/100. Open: 1 (SI-029).

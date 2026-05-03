@@ -295,7 +295,7 @@
 | `members.role.billing` | Billing |
 | `members.role.guest` | Guest |
 | `members.remove.confirm.title` | Remove {name}? |
-| `members.remove.confirm.body` | They lose access immediately. Their items stay in the workspace. |
+| `members.remove.confirm.body` | They lose access immediately. Their items stay in the organization. |
 
 ---
 

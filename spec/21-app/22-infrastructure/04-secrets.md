@@ -9,7 +9,7 @@ Where secrets live, how they rotate, who can read them.
 | Tier | What lives here | Read access |
 |---|---|---|
 | **Lovable Cloud Secrets** (runtime) | API runtime secrets (Stripe, Resend, OAuth, JWT) | Edge Functions only |
-| **Workspace Build Secrets** | Build-time tokens (npm, Sentry source-map upload) | CI only |
+| **CI Build Secrets** | Build-time tokens (npm, Sentry source-map upload) | CI only |
 | **Vault (1Password Business)** | Master copies, recovery codes, root certs | Owner + 1 designated Admin |
 | **Chrome Web Store** | Extension signing key | Owner only, hardware-key-protected |
 | **Domain registrar** | Registrar password, 2FA recovery | Owner + Billing |

@@ -2807,3 +2807,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `12-history-undo/` (Audit-149, first broad audit). Zero defects. All cross-references valid: retention key (`features.history.retention_days`) and time-travel key (`features.history.time_travel`) resolve through plans matrix §8 + entitlements engine, never inlined; all 3 `HISTORY_*` error codes registered at `03-api-endpoints/18-error-codes.md:181-183`; UUIDv7 throughout; `/rt` channel matches `08-sharing-collab/14-realtime-transport.md`. Score 100/100. Open: 1 (SI-029).
+
+## Session 150 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `16-notifications-updates/` (Audit-150, first broad audit). 1 S3 mock-copy drift in `01-in-app-updates-feed.md:29` ("See your workspace…" → "See your Space…" in Mind-map promo card). Zero hex/non-/v1/ paths/ULIDs. Score 100/100. Open: 1 (SI-029).

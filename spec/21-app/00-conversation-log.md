@@ -2609,3 +2609,17 @@ Open SI = 1 (SI-029, blocked).
 No patches. Recorded in `23-audits/audit-2026-05-03-licensing-billing-sweep-125.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 126 — 2026-05-03 — `next` (11-import-export/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** First broad sweep of `11-import-export/` (12 files). Verified ULID, Workspace, hex, /v1/ prefix; cross-checked all 11 declared endpoints against canonical inventory.
+
+**Result:** Zero drift. All endpoints declared. No patches.
+
+Recorded in `23-audits/audit-2026-05-03-import-export-sweep-126.md`.
+
+Open SI = 1 (SI-029, blocked).

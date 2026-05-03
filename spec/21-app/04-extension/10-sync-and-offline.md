@@ -60,12 +60,12 @@ Triggered by:
 
 Algorithm (incremental):
 ```
-GET /v1/sync/since?org=<id>&etag=<last_etag>
-→ { changes: [...], deletes: [...], next_etag: "..." }
+GET /v1/sync/since?cursor=<opaque>
+→ { changes: [...], deletes: [...], next_cursor: "..." }
 ```
-Apply changes / deletes to local stores. Persist `next_etag`.
+Apply changes / deletes to local stores. Persist `next_cursor`.
 
-If `since_etag` is stale (server can't replay), server returns `410 GONE` → extension does full re-pull (`/v1/sync/full`) — typically only on first install or after long absence.
+If the cursor is stale (server can't replay), server returns `410 GONE` with code `SYNC_CURSOR_STALE` → extension does a full re-pull via `GET /v1/sync/full` (declared in `03-api-endpoints/00-overview.md §1.15`). Typically only on first install or after long absence. Org scoping is taken from the bearer+org context, not a query param (per `01-conventions.md §16`).
 
 ## 6. Push sync
 

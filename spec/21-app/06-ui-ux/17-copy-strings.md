@@ -368,8 +368,8 @@
 |---|---|
 | `toast.perm.denied` | You don't have permission to do that. |
 | `toast.perm.role_required` | You need {required_role} access. |
-| `toast.perm.org_mismatch` | This belongs to a different workspace. |
-| `toast.perm.not_member` | You're not a member of this workspace. |
+| `toast.perm.org_mismatch` | This belongs to a different organization. |
+| `toast.perm.not_member` | You're not a member of this organization. |
 | `toast.perm.owner_required` | Only the owner can do this. |
 | `toast.perm.billing_locked` | Billing issue — access is restricted. |
 

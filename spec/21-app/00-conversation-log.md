@@ -2831,3 +2831,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `02-data-model/` (Audit-153, first broad audit, 14 entity files + readme + diagram). Found 2 SI-021 terminology drifts: `01-organization.md §Purpose` and `readme.md` index both called the Org bubble a "workspace bubble". Patched both — Org bubble now explicitly references SI-021 split. Surviving "workspace" hits (GIN-index notes in space/collection/group/item) are legitimate refs to canonical `14-search/03-workspace-search.md` scope. Zero ULID, hex, or non-`/v1/` leakage. Score 100/100. Open: 1 (SI-029).
+
+## Session 154 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `07-features/` (Audit-154, 19 files). Two "workspace"/hex hits in `04-collections.md` both validated as legit (SI-021 mapping reference + canonical Toby-pink documentation line mirroring Core memory phrasing). Zero ULID, zero rogue API paths. Score 100/100. Open: 1 (SI-029).

@@ -273,7 +273,7 @@
 | `billing.invoices.download` | Download |
 | `billing.invoices.empty` | No invoices yet. |
 | `billing.cancel.title` | Cancel subscription |
-| `billing.cancel.confirm.body` | You'll keep access until {until_date}. After that, your workspace becomes read-only. |
+| `billing.cancel.confirm.body` | You'll keep access until {until_date}. After that, your organization becomes read-only. |
 | `billing.past_due.banner` | Your last payment failed. [Update payment method]({url}) to keep access. |
 
 ---

@@ -10,3 +10,4 @@ spec/21-app/13-spec-issues/04-closed-issues.md  # PR-SI030: future SI-030 closur
 spec/21-app/23-audits/audit-2026-04-30-visualization-sweep-120.md  # PR-SI030: historical false-positive note
 spec/21-app/23-audits/audit-2026-05-03-api-endpoints-sweep-147.md  # PR-SI030: SI-030 discovery audit
 spec/21-app/23-audits/audit-2026-05-03-si-030-closure-148.md  # PR-SI030: SI-030 closure audit
+spec/21-app/23-audits/audit-2026-04-30-admin-org-sweep-114.md  # PR-SI030: historical audit references the old placeholder

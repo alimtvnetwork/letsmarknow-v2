@@ -1,6 +1,6 @@
 # 00 — Admin / Org Folder Overview
 
-> **Purpose.** Define **organisation-level administration** — settings, member management, roles, audit log, data export/delete. This folder is what an Org owner or admin uses to govern their workspace.
+> **Purpose.** Define **organisation-level administration** — settings, member management, roles, audit log, data export/delete. This folder is what an Org owner or admin uses to govern their Organization.
 
 ---
 
@@ -28,7 +28,7 @@
 
 ## 3. Tasks performed by this folder
 
-- **Govern the workspace** — who is in it, what they can do, how they were added/removed.
+- **Govern the Organization** — who is in it, what they can do, how they were added/removed.
 - **Lock the role enum** at the schema level so RLS, JWT claims, and UI cannot drift.
 - **Surface compliance evidence** via the audit log and export tooling.
 - **Provide a clean exit** — Org-level deletion that is deliberate, recoverable for 30 days, then irreversible.

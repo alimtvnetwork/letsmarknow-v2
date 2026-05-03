@@ -16,9 +16,9 @@ Microsoft and others deferred until demand justifies.
 
 ## 2. Common flow (web)
 
-1. Click provider button → `GET /auth/oauth/<provider>/start`.
+1. Click provider button → `GET /v1/auth/oauth/:provider/start` (canonical per `03-api-endpoints/03-auth.md §OAuth`).
 2. Server creates `state` + `nonce` (signed, 10-min TTL); redirects to provider authorize URL with PKCE.
-3. Provider returns to `/auth/callback/<provider>?code=...&state=...`.
+3. Provider returns to `GET /v1/auth/oauth/:provider/callback?code=...&state=...` (the bare `/auth/callback/<provider>` form is a lay alias only).
 4. Server validates `state`, exchanges code for tokens, fetches profile (`email`, `email_verified`, `sub`, `name`, `picture`).
 5. Match Account by verified email; create if missing.
 6. Issue JWT + refresh cookie; redirect to `?next=` or `/dashboard`.

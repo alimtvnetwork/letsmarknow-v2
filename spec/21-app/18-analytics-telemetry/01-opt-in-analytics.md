@@ -75,7 +75,7 @@ Sampling is deterministic per-Account so cohorts remain consistent across releas
 ## 8. Transport
 
 - Batched: events buffered client-side, flushed every 30 s or 50 events.
-- HTTPS POST to `https://t.letsmarknow.com/v1/ingest`.
+- HTTPS POST to `https://t.letsmarknow.com/v1/ingest` (telemetry subdomain — **separate host from the application REST API**; intentionally NOT listed in `03-api-endpoints/00-overview.md`, which scopes only `api.letsmarknow.com`).
 - gzip-compressed NDJSON.
 - Failure: queued in IndexedDB; retried with exponential backoff up to 24 h.
 - Beacon API used on `pagehide` to flush remaining.

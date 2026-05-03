@@ -468,6 +468,42 @@ See also `11-import-export/07-webhooks-and-api-imports.md §63`.
 
 ---
 
+### Apple "Sign in with Apple" server-to-server notifications
+`POST /v1/webhooks/apple-notifications`
+
+**Auth:** `webhook-sig` — Apple-signed JWS payload; verified against Apple's public keys (JWK Set at `https://appleid.apple.com/auth/keys`). NO bearer.
+**Idempotent:** by `(sub, event_time)` tuple from the decoded JWS payload (Apple may retry).
+**Rate limit class:** webhook (10000 / min global).
+
+> **Why this exists.** Apple sends `pop` events when a user revokes "Sign in with Apple" access, changes their relay email, or deletes their Apple ID. Per Apple's "REST API: process change notifications" requirement, every Sign in with Apple integration MUST register a callback URL and act on these events to keep account state in sync. Source-of-truth narrative: `09-auth-accounts/04-oauth-providers.md §4.2`.
+
+**Request body** — JWS-signed envelope `{ "payload": "<base64url-jws>" }`. Decoded JWS claims:
+
+```json
+{
+  "iss": "https://appleid.apple.com",
+  "aud": "<our-services-id>",
+  "iat": 1735000000,
+  "jti": "abc123",
+  "events": "{\"type\":\"email-disabled\",\"sub\":\"001234.abcdef.0001\",\"event_time\":1735000000000,\"email\":\"relay@privaterelay.appleid.com\",\"is_private_email\":\"true\"}"
+}
+```
+
+**Event types handled** (Apple-defined): `email-disabled`, `email-enabled`, `consent-revoked`, `account-delete`.
+
+**Behavior**
+- `consent-revoked` / `account-delete` → unlink Apple OAuth identity from Account; if it was the sole identity, schedule the Account into the standard 30-day deletion grace per `09-auth-accounts/08-account-deletion.md`.
+- `email-disabled` / `email-enabled` → flip the relay-email-active flag on the linked Account; never silently change the canonical `email` column.
+
+**Response 200** — `{ "received": true }`. Apple retries on any non-2xx.
+
+**Errors**
+- `400 VALIDATION_FAILED` — JWS signature invalid or claims malformed.
+- `401 UNAUTHENTICATED` — `iss` or `aud` mismatch.
+- `409 CONFLICT` — duplicate `(sub, event_time)` already processed (idempotent no-op; still returns 200 in production to keep Apple from retrying).
+
+---
+
 ### Webhook delivery diagnostics (admin)
 `GET /v1/webhooks/_recent`
 

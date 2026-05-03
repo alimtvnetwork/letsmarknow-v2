@@ -41,7 +41,7 @@ Microsoft and others deferred until demand justifies.
 - Apple returns name only on FIRST authorization; persist immediately.
 - `email_verified` always true.
 - "Hide my email" (private relay) supported; we store relay address as canonical email.
-- Server-to-server notifications (`pop` events) handled at `/auth/apple/notifications` for revocation.
+- Server-to-server notifications (`pop` events — revocation, email change, account deletion) handled at canonical inbound webhook `POST /v1/webhooks/apple-notifications` (declared in `03-api-endpoints/00-overview.md §2.15`; auth: `webhook-sig` Apple JWS).
 
 ### 4.3 GitHub
 - Scopes: `read:user user:email`.

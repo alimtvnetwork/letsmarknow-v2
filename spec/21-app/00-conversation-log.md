@@ -2533,3 +2533,19 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-04-30-visualization-sweep-120.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 121 — 2026-04-30 — `next` (Apple SiwA webhook declaration + share-modals withdrawal)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Resolved two open backlog items from S118/S120 next-action lists:
+
+1. **`/v1/webhooks/apple-notifications` declared** (S118 F5). Renamed bare `/auth/apple/notifications` → canonical webhook path; added §2.15 inventory row; full contract written in `17-billing-webhooks.md` (auth: Apple JWS `webhook-sig`; events: `email-disabled`/`email-enabled`/`consent-revoked`/`account-delete`; idempotency by `(sub, event_time)`; sole-identity revocation → 30-d deletion grace). Endpoint count 171 → 172 via `endpoint-counts --write`.
+
+2. **`06-ui-ux/22-share-modals.md` withdrawn**. On inspection: `11-feedback.md §4` already locks modal widths (560/720) and `§2.2` locks toast durations. A new file would duplicate locked tokens. Closed without action.
+
+Recorded in `23-audits/audit-2026-04-30-apple-webhook-declaration-121.md`.
+
+Open SI = 1 (SI-029, blocked).

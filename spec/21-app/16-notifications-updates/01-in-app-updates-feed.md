@@ -26,7 +26,7 @@ The "What's new" panel — product changelog visible inside the app.
 ┌────────────────────────────────────────────┐
 │ ✨ FEATURE · v1.4.0 · 2 days ago          │
 │ Mind-map view                              │
-│ See your workspace as a force-directed     │
+│ See your Space as a force-directed         │
 │ bubble graph. Drag, zoom, lasso-select.    │
 │ [Try it →] [Read more →]                   │
 └────────────────────────────────────────────┘

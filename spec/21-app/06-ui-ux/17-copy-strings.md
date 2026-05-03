@@ -209,7 +209,7 @@
 
 | Key | EN |
 |---|---|
-| `search.placeholder` | Search your workspace… |
+| `search.placeholder` | Search your Space… |
 | `search.empty` | No results for "{query}" |
 | `search.empty.hint` | Try a different keyword or check your filters. |
 | `search.recent` | Recent searches |

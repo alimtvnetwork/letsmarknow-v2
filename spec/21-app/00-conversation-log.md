@@ -2813,3 +2813,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `16-notifications-updates/` (Audit-150, first broad audit). 1 S3 mock-copy drift in `01-in-app-updates-feed.md:29` ("See your workspace…" → "See your Space…" in Mind-map promo card). Zero hex/non-/v1/ paths/ULIDs. Score 100/100. Open: 1 (SI-029).
+
+## Session 151 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `22-infrastructure/` (Audit-151, first broad audit). Zero defects. All 4 `workspace` mentions verified as technical (Lovable platform workspace, Terraform workspace, the linter row that *bans* "per-workspace Next"). The single `#EC4868` hit is in the `brand-pink-anchor` linter description that bans the literal hex. 18-sub-check linter table (post-SI-030) confirmed intact. Score 100/100. Open: 1 (SI-029).

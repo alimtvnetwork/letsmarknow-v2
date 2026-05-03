@@ -2595,3 +2595,17 @@ Open SI = 1 (SI-029, blocked).
 No patches. Recorded in `23-audits/audit-2026-05-03-data-model-sweep-124.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 125 — 2026-05-03 — `next` (10-licensing-billing/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** First broad sweep of `10-licensing-billing/` (17 files). Verified ULID, Workspace, role enum, hex, /v1/ prefix; cross-checked billing endpoints against canonical inventory.
+
+**Result:** Zero drift. All billing endpoints declared in canonical inventory. `/settings/billing/refund` is a UI route (legitimate). Locked enum semantics enforced correctly in `16-billing-emails.md`.
+
+No patches. Recorded in `23-audits/audit-2026-05-03-licensing-billing-sweep-125.md`.
+
+Open SI = 1 (SI-029, blocked).

@@ -2843,3 +2843,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `24-i18n-a11y/` (Audit-155, first broad audit, 2 files). Zero hits across all checks. Score 100/100. Open: 1 (SI-029). Note: folder is thin — flagged future-expansion candidates (plural rules, RTL matrix, SR catalog) as roadmap, not gaps.
+
+## Session 156 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `10-licensing-billing/` (Audit-156, 17 files + readme + diagram). Zero hits across all checks (workspace, ULID, hex, non-`/v1/`). Folder consistently uses "Organization" for billing surface, no SI-021 drift. Score 100/100. Open: 1 (SI-029).

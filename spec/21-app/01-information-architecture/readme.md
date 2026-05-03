@@ -14,7 +14,7 @@ Every other folder (data model, API, extension, UI) MUST conform to this structu
 
 ```
 Account
-└── Organization (workspace bubble)
+└── Organization (left-rail bubble)
     ├── Members (Owner/Admin/Editor/Viewer)
     ├── Subscription
     └── Space

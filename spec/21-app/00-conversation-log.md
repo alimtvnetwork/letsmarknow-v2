@@ -2783,3 +2783,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `01-information-architecture/` (Audit-145, first broad audit). 1 S3 drift in `readme.md:17` — quick-ref tree said "Organization (workspace bubble)" → patched to "(left-rail bubble)". Zero ULIDs, hex colors, or non-/v1/ paths. Score 100/100. Open: 1 (SI-029).
+
+## Session 146 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `06-ui-ux/` (Audit-146). 11 S2 string drifts in `17-copy-strings.md` patched: 5 body-text "workspace" → "account" / "Space" / "organization" per Toby split, plus 6 `{workspace_name}`/`{workspace}` placeholders renamed to `{org_name}` in email/notif templates. `14-copy-voice.md` already had "workspace" on the Don't-use list. Zero ULIDs/hex/non-/v1/. Score 100/100. Open: 1 (SI-029).

@@ -90,7 +90,7 @@
 | Key | EN |
 |---|---|
 | `auth.signin.title` | Welcome back |
-| `auth.signin.subtitle` | Sign in to your workspace. |
+| `auth.signin.subtitle` | Sign in to your account. |
 | `auth.signup.title` | Create your account |
 | `auth.signup.subtitle` | Free to start. No credit card required. |
 | `auth.divider.or` | or |
@@ -209,7 +209,7 @@
 
 | Key | EN |
 |---|---|
-| `search.placeholder` | Search your workspace… |
+| `search.placeholder` | Search your Space… |
 | `search.empty` | No results for "{query}" |
 | `search.empty.hint` | Try a different keyword or check your filters. |
 | `search.recent` | Recent searches |
@@ -273,7 +273,7 @@
 | `billing.invoices.download` | Download |
 | `billing.invoices.empty` | No invoices yet. |
 | `billing.cancel.title` | Cancel subscription |
-| `billing.cancel.confirm.body` | You'll keep access until {until_date}. After that, your workspace becomes read-only. |
+| `billing.cancel.confirm.body` | You'll keep access until {until_date}. After that, your organization becomes read-only. |
 | `billing.past_due.banner` | Your last payment failed. [Update payment method]({url}) to keep access. |
 
 ---
@@ -295,7 +295,7 @@
 | `members.role.billing` | Billing |
 | `members.role.guest` | Guest |
 | `members.remove.confirm.title` | Remove {name}? |
-| `members.remove.confirm.body` | They lose access immediately. Their items stay in the workspace. |
+| `members.remove.confirm.body` | They lose access immediately. Their items stay in the organization. |
 
 ---
 
@@ -368,8 +368,8 @@
 |---|---|
 | `toast.perm.denied` | You don't have permission to do that. |
 | `toast.perm.role_required` | You need {required_role} access. |
-| `toast.perm.org_mismatch` | This belongs to a different workspace. |
-| `toast.perm.not_member` | You're not a member of this workspace. |
+| `toast.perm.org_mismatch` | This belongs to a different organization. |
+| `toast.perm.not_member` | You're not a member of this organization. |
 | `toast.perm.owner_required` | Only the owner can do this. |
 | `toast.perm.billing_locked` | Billing issue — access is restricted. |
 
@@ -479,14 +479,14 @@
 | `email.verify.subject` | Verify your {product_name} email |
 | `email.welcome.subject` | Welcome to {product_name} |
 | `email.password_reset.subject` | Reset your {product_name} password |
-| `email.invite.subject` | {inviter_name} invited you to {workspace_name} |
+| `email.invite.subject` | {inviter_name} invited you to {org_name} |
 | `email.share_received.subject` | {sharer_name} shared "{name}" with you |
 | `email.share_expiring.subject` | Your share "{name}" expires soon |
-| `email.payment_failed.subject` | Payment failed for {workspace_name} |
+| `email.payment_failed.subject` | Payment failed for {org_name} |
 | `email.payment_succeeded.subject` | Receipt from {product_name} |
 | `email.subscription_canceled.subject` | Your {product_name} subscription was canceled |
 | `email.export_ready.subject` | Your {product_name} export is ready |
-| `email.import_complete.subject` | Your import to {workspace_name} is complete |
+| `email.import_complete.subject` | Your import to {org_name} is complete |
 | `email.security_alert.subject` | Security alert for your {product_name} account |
 | `email.weekly_digest.subject` | Your week on {product_name} |
 
@@ -496,7 +496,7 @@
 | `email.verify.lead` | Click below to confirm this is your email. The link expires in 24 hours. |
 | `email.welcome.lead` | You're in. Here are three things to try first. |
 | `email.password_reset.lead` | We got a request to reset your password. If it wasn't you, ignore this email. |
-| `email.invite.lead` | {inviter_name} added you to **{workspace_name}** as a {role}. |
+| `email.invite.lead` | {inviter_name} added you to **{org_name}** as a {role}. |
 | `email.share_received.lead` | {sharer_name} shared a collection with you. |
 | `email.payment_failed.lead` | We couldn't charge your card. Update your payment method to keep access. |
 | `email.export_ready.lead` | Your export is ready to download. The link expires in 7 days. |
@@ -526,12 +526,12 @@
 
 | Key | EN |
 |---|---|
-| `notif.invite_received` | {inviter} invited you to {workspace}. |
+| `notif.invite_received` | {inviter} invited you to {org_name}. |
 | `notif.share_viewed` | Someone viewed "{name}". |
 | `notif.share_expiring` | Your share "{name}" expires in {days} days. |
 | `notif.import_complete` | Imported {count} items. |
 | `notif.payment_failed` | Payment failed. Update your card. |
-| `notif.member_joined` | {name} joined the workspace. |
+| `notif.member_joined` | {name} joined the organization. |
 | `notif.empty.title` | You're all caught up |
 | `notif.empty.body` | New activity will show up here. |
 

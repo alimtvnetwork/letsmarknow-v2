@@ -2506,3 +2506,18 @@ All 17 linters expected green. Scorecard 100/100/100. Open SI count 0.
 Recorded in `23-audits/audit-2026-04-30-auth-accounts-second-pass-118.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 119 — 2026-04-30 — `next` (security-privacy full-folder sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Per Suggested Next from S118, swept `19-security-privacy/` (8 files, 969 lines). Two drift fixes:
+
+- F1: `03-encryption.md §15` — bcrypt test bullet → Argon2id calibration referencing §5.
+- F2: `05-share-link-security.md §7` — invite TTL `7 d` → `14 d default, 1 h–90 d` per SoT in `08-sharing-collab/04-invite-only-shares.md §1`.
+
+SI-029 carve-out respected (06-extension-privacy.md, 07-privacy-policy.md untouched — legal counsel work). Recorded in `23-audits/audit-2026-04-30-security-privacy-sweep-119.md`.
+
+Open SI = 1 (SI-029, blocked).

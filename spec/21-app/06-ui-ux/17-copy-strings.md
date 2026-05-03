@@ -90,7 +90,7 @@
 | Key | EN |
 |---|---|
 | `auth.signin.title` | Welcome back |
-| `auth.signin.subtitle` | Sign in to your workspace. |
+| `auth.signin.subtitle` | Sign in to your account. |
 | `auth.signup.title` | Create your account |
 | `auth.signup.subtitle` | Free to start. No credit card required. |
 | `auth.divider.or` | or |

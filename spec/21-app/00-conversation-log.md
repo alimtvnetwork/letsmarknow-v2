@@ -2872,3 +2872,9 @@ Open SI = 1 (SI-029, blocked).
 ## Session 161 — 2026-05-03 — Homepage + Search UI briefs
 **User:** Create two separate self-contained MD files describing (1) the homepage UI and (2) the search UI, including endpoints (names only) and database tables. Output as downloadable artifacts.
 **AI:** Wrote `/mnt/documents/homepage-ui-brief.md` (shell, left rail, sidebar, top bar, sections, cards, drag/drop, realtime, endpoints, DB tables, telemetry, DoD) and `/mnt/documents/search-ui-brief.md` (palette, results page, per-Collection input, filter grammar, ranking, recents, saved, suggest, endpoints, DB tables, telemetry, edge cases, DoD). Both reference Toby pink `--primary`, UUIDv7, locked role enum, cursor pagination (W-13), and existing endpoint inventory.
+
+## 2026-05-03 — Next feature UI brief request
+
+User: "give me the details about, uh, next feature... so any AI can make the next sections easily"
+
+Action: Created /mnt/documents/next-feature-ui-brief.md — self-contained UI brief for the Next feature mirroring the share/homepage/search briefs. Includes purpose, locked vocabulary, IA, surfaces (web rail + /next page + extension popup tab), row anatomy, 8 entry points, idempotency rules, all 4 states (empty/loading/error/all-done), multi-Org grouping, 8 settings, 9 keyboard shortcuts, limits, edge cases, realtime channel, endpoints (10), DB schema (next_item + collection.kind + account_setting), analytics events, acceptance checklist, out-of-scope. Sourced from 07-features/17-next-queue.md + 04-extension/04-popup.md §14 + 02-data-model/12-next-item.md.

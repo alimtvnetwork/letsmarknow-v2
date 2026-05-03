@@ -2759,3 +2759,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `10-licensing-billing/` (Audit-141, first broad audit, 17 files). Zero drift across all checks. No patches. Score 100/100. Open: 1 (SI-029).
+
+## Session 142 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `11-import-export/` (Audit-142, first broad audit, 12 files). Zero drift; sole Workspace match is "Notion workspace" source proper noun. No patches. Score 100/100. Open: 1 (SI-029).

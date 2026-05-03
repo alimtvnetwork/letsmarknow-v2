@@ -168,7 +168,8 @@
 | Method | Path | Auth | Purpose | Source |
 |---|---|---|---|---|
 | GET | `/v1/health/extension` | bearer (optional) | Lightweight liveness/version probe used by the extension service worker before each session burst. Returns `{ ok, server_time, min_client_version }` (field harmonised with `SYS_UPGRADE_REQUIRED.details.min_client_version` per `18-error-codes.md §3.9`). | `../04-extension/03-service-worker.md` |
-| GET | `/v1/sync/since` | bearer+org | Delta-sync poll: returns entities (items, collections, groups, tags) changed since `?cursor=<opaque>` for offline reconciliation. | `../04-extension/10-sync-and-offline.md` |
+| GET | `/v1/sync/since` | bearer+org | Delta-sync poll: returns entities (items, collections, groups, tags) changed since `?cursor=<opaque>` for offline reconciliation. Returns `410 GONE` with code `SYNC_CURSOR_STALE` if the cursor is too old to replay. | `../04-extension/10-sync-and-offline.md` |
+| GET | `/v1/sync/full` | bearer+org | Full snapshot of an Org's items + collections + groups + tags for first-install or post-`SYNC_CURSOR_STALE` recovery. Returns initial `next_cursor` for subsequent `/v1/sync/since` calls. | `../04-extension/10-sync-and-offline.md` |
 | GET | `/v1/whats-new` | bearer | In-app updates feed (release notes, product announcements, maintenance banners). Query: `?since={iso8601}&channel={stable\|beta}` (canonical per `01-in-app-updates-feed.md §6`). Server additionally applies user-locale + audience-filter narrowing per feed §7. | `../16-notifications-updates/01-in-app-updates-feed.md` |
 
 ---

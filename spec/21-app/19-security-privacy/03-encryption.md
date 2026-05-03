@@ -138,6 +138,6 @@ Key rotation steps documented in runbook; tested quarterly.
 - JWT verification with correct + wrong + rotated keys.
 - Refresh-token reuse triggers invalidation.
 - Constant-time comparison for share token (timing attack test).
-- Bcrypt cost calibrated to ≥ 250 ms on baseline hardware.
+- Argon2id verify time calibrated to ≥ 250 ms on baseline hardware (parameters per §5; bcrypt is forbidden — see §5).
 - KMS failure simulated (chaos test).
 - Backup restore round-trip with encryption.

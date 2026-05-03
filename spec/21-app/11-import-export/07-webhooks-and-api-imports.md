@@ -35,7 +35,7 @@ Content-Type: application/json
   "title": "Example",
   "description": "Optional",
   "tags": ["read-later"],
-  "collection_id": "01J...",
+  "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "group_id": null,
   "note": "Markdown note",
   "starred": false,
@@ -45,7 +45,7 @@ Content-Type: application/json
 
 ### Response 201
 ```json
-{ "data": { "id": "01J...", "url": "...", ... } }
+{ "data": { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "url": "...", ... } }
 ```
 
 ### Errors

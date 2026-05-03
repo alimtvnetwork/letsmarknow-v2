@@ -66,34 +66,34 @@ Our canonical format. Round-trips losslessly.
   "exported_at": "2026-04-18T12:34:56Z",
   "exporter": "lmn-web/2.4.1",
   "account": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "email": "alim@example.com"
   },
   "organization": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "name": "Personal",
     "slug": "personal"
   },
   "spaces": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Work",
       "icon": "💼",
       "collections": [
         {
-          "id": "01J...",
+          "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
           "name": "Reading List",
           "color": "amber",
           "groups": [
             {
-              "id": "01J...",
+              "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
               "name": "AI papers",
-              "items": ["01J...", "01J..."]
+              "items": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"]
             }
           ],
           "items": [
             {
-              "id": "01J...",
+              "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
               "url": "https://example.com",
               "title": "Example",
               "description": "...",

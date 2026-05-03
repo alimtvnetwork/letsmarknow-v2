@@ -61,7 +61,7 @@ Specific threats and mitigations for shared content (public / password / invite-
 
 - Token + email match required.
 - Invite links one-time-use; consumed on first claim.
-- TTL 7 d for unaccepted invites; renewable.
+- TTL: 14 d default for unaccepted invites; configurable 1 h–90 d (SoT: `08-sharing-collab/04-invite-only-shares.md §1`).
 - After acceptance: associates with recipient's Account; future visits via Account auth.
 - Recipient must be signed in (or sign up) to consume invite.
 

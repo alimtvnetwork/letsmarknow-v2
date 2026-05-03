@@ -31,7 +31,7 @@ Invite, suspend, remove, transfer ownership. The single source of truth for who'
   - Optional: target Collection access list.
   - Personal message (≤ 500 chars).
 - Submit → `POST /v1/members/invites` (per `03-api-endpoints/11-members-invites.md`).
-- Each invitee gets email with magic-link valid for 7 days.
+- Each invitee gets email with magic-link. **TTL: 14 days default; configurable 1 h–90 d** — SoT `09-auth-accounts/07-org-membership.md §2` (do not duplicate the number elsewhere).
 - Pending invites visible in table with "Resend" / "Revoke" actions.
 
 ## 4. Bulk invite
@@ -128,7 +128,7 @@ Opens on row click:
 |---|---|
 | Last Owner tries to leave | Block with "Transfer ownership first" |
 | Invite to email already in another Org | Allowed; user accepts and joins both |
-| Invite expires (7 d) | Pending row marked "Expired"; one-click resend |
+| Invite expires (default 14 d, see SoT) | Pending row marked "Expired"; one-click resend |
 | Invitee already accepted from another invite | New invite no-ops with friendly message |
 | Member uses SSO + tries to change role to Owner | Allowed; SSO doesn't restrict role |
 | Removed member re-invited within 30 d | Original profile + activity restored |

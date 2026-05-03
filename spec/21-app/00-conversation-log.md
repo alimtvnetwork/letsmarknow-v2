@@ -2470,3 +2470,23 @@ Master catalog now: 27 domains, §2.16 added with 8 events (4 analytics meta, 4 
 - FT2 (S3): `13-command-palette.md:46` generic `/v1/search` for omnibox → latency-optimized `GET /v1/search/quick`.
 
 No ULID, role, color-label, brand, or share-model drift. All 60+ cross-folder file refs resolved. All 17 linters green. Scorecard 100/100/100.
+
+---
+## 2026-04-30 — Session 117: Toby Invite & Share parity sweep
+
+**User instruction (verbatim):** [Pasted Toby's "Invite & Share — AI-Readable Feature Specification v1.0" in full] "This is the extended version, uh, the invite and share option, how it works… in Tobi, it's works like this. So you have to take some idea from here, and also you have to apply this idea in your app. I know in your application, there are several sharing options, so you have to use these options with the exact same things that you are used. And for the other sharing option, you can add your plan… here has its own data model, so don't need to use it. You can use your data model… So you have to read these things and take some idea for how these things works. Then you can add these things in your applications."
+
+**Decision (3-question intake):**
+1. Scope = Audit + targeted patches (not full rewrite).
+2. Conflicts = Keep our locked role enum; map Toby roles → ours in audit (no glossary edit).
+3. UI tokens = Already aligned (brand pink, modal sizes deferred to `06-ui-ux/` per-modal files).
+
+**Outcome.** Audit-117 (Toby parity sweep). 6 findings categorized:
+- TIS-1 (S2) — fixed: invite TTL drift in `17-admin-org/02-members-management.md` (7d → 14d ×2, link SoT `09-auth-accounts/07-org-membership.md §2`).
+- TIS-2/3/4/5/6 — no-op: ours already covers (or intentionally diverges from) Toby on slug 410-vs-301, per-Collection invite roles, bulk-50 cap, request-access page, brand pink token.
+
+**New folder created:** `25-references/` (external-product reference snapshots). First file: `toby-invite-share-v1.md`. Rules in `25-references/readme.md`: never edit, never link from runtime spec, only audits may reference.
+
+**Role mapping recorded** (audit §2): Owner→owner, Full Member→editor (or admin if given workspace mgmt rights), Limited Member→editor scoped, Viewer→viewer. Locked enum unchanged.
+
+All 17 linters expected green. Scorecard 100/100/100. Open SI count 0.

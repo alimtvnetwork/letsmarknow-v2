@@ -2490,3 +2490,19 @@ No ULID, role, color-label, brand, or share-model drift. All 60+ cross-folder fi
 **Role mapping recorded** (audit §2): Owner→owner, Full Member→editor (or admin if given workspace mgmt rights), Limited Member→editor scoped, Viewer→viewer. Locked enum unchanged.
 
 All 17 linters expected green. Scorecard 100/100/100. Open SI count 0.
+
+---
+
+## Session 118 — 2026-04-30 — `next` (auth-accounts second-pass)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Per Suggested Next from S117, swept `09-auth-accounts/` (14 files) for endpoint canonicality, role-enum drift, and external-product label leakage. Three drift fixes applied:
+
+- F1: `04-oauth-providers.md §2` — bare `/auth/oauth/...` → canonical `/v1/auth/oauth/:provider/{start,callback}`.
+- F2: `09-email-verification.md §3, §4` — bare `/auth/verify?t=` → canonical `GET /v1/auth/verify?token=`.
+- F3: `03-passwords-and-mfa.md §8` — Toby-style "Team Owner/Admin/Member" labels → locked role enum + mapping note.
+
+Recorded in `23-audits/audit-2026-04-30-auth-accounts-second-pass-118.md`.
+
+Open SI = 1 (SI-029, blocked).

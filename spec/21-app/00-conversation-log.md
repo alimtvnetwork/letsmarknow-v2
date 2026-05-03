@@ -2849,3 +2849,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `10-licensing-billing/` (Audit-156, 17 files + readme + diagram). Zero hits across all checks (workspace, ULID, hex, non-`/v1/`). Folder consistently uses "Organization" for billing surface, no SI-021 drift. Score 100/100. Open: 1 (SI-029).
+
+## Session 157 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `14-search/` (Audit-157, 7 files). All "workspace" hits are the canonical search-scope name (file `03-workspace-search.md` = "across all Orgs"), distinct from SI-021 product-hierarchy term. Zero ULID/hex/non-`/v1/`. Noted (but did not file) potential glossary disambiguation as roadmap candidate. Score 100/100. Open: 1 (SI-029).

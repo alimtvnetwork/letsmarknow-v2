@@ -2665,3 +2665,15 @@ Open SI = 1 (SI-029, blocked).
 No patches. Recorded in `23-audits/audit-2026-05-03-search-delta-129.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 130 — 2026-05-03 — `next` (18-analytics-telemetry/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** First broad sweep of `18-analytics-telemetry/` (4 files). One annotation patch (F1) on `01-opt-in-analytics.md §8` clarifying that `/v1/ingest` lives on a separate telemetry subdomain (`t.letsmarknow.com`), explicitly out of scope for the canonical inventory — prevents future false-positive undeclared-endpoint SIs.
+
+Recorded in `23-audits/audit-2026-05-03-analytics-telemetry-sweep-130.md`.
+
+Open SI = 1 (SI-029, blocked).

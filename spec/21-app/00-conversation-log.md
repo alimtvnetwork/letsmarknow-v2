@@ -2765,3 +2765,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `11-import-export/` (Audit-142, first broad audit, 12 files). Zero drift; sole Workspace match is "Notion workspace" source proper noun. No patches. Score 100/100. Open: 1 (SI-029).
+
+## Session 143 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `15-visualization/` (Audit-143, first broad audit). 2 drifts fixed: `04-mindmap-view.md:3` "see their workspace" → "see their Organization"; `readme.md:147` `PATCH /collections` → `PATCH /v1/collections/{id}`. Score 100/100. Open: 1 (SI-029).

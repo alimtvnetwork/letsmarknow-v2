@@ -144,7 +144,7 @@ Used codes (full catalog in `03-api-endpoints/18-error-codes.md`):
 - `VALIDATION_FAILED` — invalid `view_settings` shape, unknown sort column.
 - `FORBIDDEN` — viewer trying to mutate `view_settings`.
 - `NOT_FOUND` — collection deleted mid-edit.
-- `RATE_LIMITED` — too many `PATCH /collections` from one client.
+- `RATE_LIMITED` — too many `PATCH /v1/collections/{id}` from one client.
 - `BILLING_QUOTA_EXCEEDED` — entitlement gate (e.g. mindmap on Free).
 - `CONFLICT` — concurrent `view_settings` PATCH (handled per `12-history-undo/03-conflict-resolution.md` §3 → LWW).
 

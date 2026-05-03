@@ -2735,3 +2735,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `07-features/` (Audit-137, first broad audit, 19 files). Zero drift; both flagged hits are intentional brand/glossary rule citations. No patches. Score 100/100. Open: 1 (SI-029).
+
+## Session 138 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `02-data-model/` (Audit-138, first broad audit, 14 files). 2 UI-label drifts fixed: `01-organization.md:60` "Create new workspace" → "Create new Organization"; `07-share.md:22` "Save to my workspace" → "Save to my Organization". "Workspace bubble" glossary phrase and "workspace search" telemetry-surface labels verified intentional. Score 100/100. Open: 1 (SI-029).

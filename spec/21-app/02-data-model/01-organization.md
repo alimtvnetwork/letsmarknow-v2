@@ -57,7 +57,7 @@ The top-level container — the colored "workspace bubble" (PE / AU / XL …) sh
 
 ## Lifecycle
 
-- **Create:** triggered by sign-up (auto "My Organization" for new Account) or by user "Create new workspace" action. On create, server inserts: 1 Organization + 1 Member (Owner) + 1 default Space "My Collections".
+- **Create:** triggered by sign-up (auto "My Organization" for new Account) or by user "Create new Organization" action. On create, server inserts: 1 Organization + 1 Member (Owner) + 1 default Space "My Collections".
 - **Update:** any field except `id`, `slug`, `created_at`, `created_by`.
 - **Soft-delete:** sets `deleted_at`. All children cascade-soft-delete in same transaction. Recoverable for 30 days via Trash.
 - **Hard-delete:** after 30 days OR immediate via "Permanently delete" with double-confirmation. Cascades to all children. License subscription must be canceled first.

@@ -19,7 +19,7 @@ A configuration that exposes a Space, Collection, Group, or Item to people outsi
 | `password_hash` | string(255) | yes | null | argon2id | Required when `mode=password`. Never returned by API. |
 | `expires_at` | timestamp | yes | null | future or null | When the share stops working. Null = never. |
 | `revoked_at` | timestamp | yes | null | — | Manual revoke marker. Revoked shares 410 Gone. |
-| `allow_clone_to_my_account` | bool | no | true | — | Whether viewer can "Save to my workspace" (deep-copy). |
+| `allow_clone_to_my_account` | bool | no | true | — | Whether viewer can "Save to my Organization" (deep-copy). |
 | `show_owner_branding` | bool | no | true | — | Display Organization avatar + name on share page. |
 | `allowed_emails` | array<email> | no | `[]` | required when `mode=invite_only`, ≤ 500 | Whitelist for invite-only. Each email must auth before access. |
 | `allowed_email_roles` | json | no | `{}` | map email→`viewer`\|`editor` | Per-email role for invite-only mode. |

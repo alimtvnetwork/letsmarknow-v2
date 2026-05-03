@@ -22,14 +22,14 @@ Verifying email ownership at signup and on email change.
 ## 3. Email content
 
 - Subject: "Verify your email for Lets Mark Now".
-- Plain CTA button: "Verify email" → `/auth/verify?t=<token>`.
+- Plain CTA button: "Verify email" → `GET /v1/auth/verify?token=<token>` (canonical per `03-api-endpoints/03-auth.md §192`).
 - Fallback URL displayed.
 - Expiry note: "Link expires in 24 hours."
 - Footer: "Didn't request this? Ignore."
 
 ## 4. Verification endpoint
 
-- `GET /auth/verify?t=<token>`:
+- `GET /v1/auth/verify?token=<token>`:
   - Lookup hashed token → mark Account `email_verified_at = now()`.
   - On change-email flow: replace `email` field; revoke other sessions.
   - Redirect to `/dashboard?verified=1` with success toast.

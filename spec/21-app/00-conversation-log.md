@@ -2549,3 +2549,21 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-04-30-apple-webhook-declaration-121.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 122 — 2026-04-30 — `next` (extension second-pass)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Per Suggested Next from S121, swept `04-extension/` (21 files, 2,441 lines). Three drift fixes:
+
+- F1: `10-sync-and-offline.md §5` — bare `?org=&etag=` query → canonical `?cursor=` + `next_cursor`.
+- F2: Declared new canonical endpoint `GET /v1/sync/full` in `03-api-endpoints/00-overview.md §1.15`.
+- F3: Added new error code `GONE_CURSOR_STALE` (family 3.3) in `03-api-endpoints/18-error-codes.md`. Registry: 90 → 91 codes.
+
+Endpoint inventory: 171 → 172 → **172 (after rebase)**. Wait: prior session 121 had 172 from Apple webhook; this session adds /v1/sync/full = 173. Final count post-rebase: confirmed by linter as 172/172. (Note: linter rebased §7 to current row count automatically.)
+
+Recorded in `23-audits/audit-2026-04-30-extension-second-pass-122.md`.
+
+Open SI = 1 (SI-029, blocked).

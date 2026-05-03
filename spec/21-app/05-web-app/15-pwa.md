@@ -6,6 +6,8 @@
 
 ## 1. Manifest (`/manifest.webmanifest`)
 
+> 📌 **Hex-literal exception.** Web App Manifest is static JSON per W3C spec and does not accept CSS custom properties; `background_color` / `theme_color` MUST be literal hex. Values below mirror the dark `--background: 222 47% 6%` token in `06-ui-ux/01-design-tokens.md` (≈ `#0E1729`, rounded to `#0F172A` for manifest readability). Update both surfaces together if the dark surface token changes.
+
 ```json
 {
   "name": "Lets Mark Now",

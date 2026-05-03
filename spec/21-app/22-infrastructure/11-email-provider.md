@@ -51,7 +51,7 @@ Templates live in `src/emails/*.tsx` (React Email). PR adds template → adds ro
 | API key secret | `RESEND_API_KEY` (Lovable Cloud secret) |
 | Reply-To default | `support@letsmarknow.com` |
 | List-Unsubscribe header | `<mailto:unsubscribe@letsmarknow.com>, <https://app.letsmarknow.com/unsubscribe?t=…>` |
-| Bounce + complaint webhook | `POST /webhooks/email/{provider}` |
+| Bounce + complaint webhook | `POST /v1/webhooks/email-bounce` (Resend/Postmark; declared in `03-api-endpoints/00-overview.md`). Distinct from `/v1/webhooks/email-in` (inbound mail-to-Org). |
 | Rate limit | 60/sec global (Resend free-tier safe) |
 
 ## 5. Failover

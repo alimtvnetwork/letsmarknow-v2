@@ -2801,3 +2801,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** **Closed SI-030 in single session.** Phase A: bulk-sed replaced 179 ULID `01J...` placeholders → UUIDv7 stub `0190a4f1-6c5e-7c2a-9b3f-1234567890ab` across 29 files (162 in `03-api-endpoints/`, 17 in 8 satellite files: `04-extension/`, `05-web-app/`, `11-import-export/`, `12-history-undo/`, `15-visualization/`, `17-admin-org/`). Phase B: new `scripts/lint/ulid-placeholder.ts` + 7-entry allowlist; registered as 18th sub-check in `22-infrastructure/09-ci-cd.md §2.1.1`. Phase C: linter exits 0. SI-030 moved to `04-closed-issues.md`. Audit-148 created. Open: 1 (SI-029 legal). Score 100/100.
+
+## Session 149 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `12-history-undo/` (Audit-149, first broad audit). Zero defects. All cross-references valid: retention key (`features.history.retention_days`) and time-travel key (`features.history.time_travel`) resolve through plans matrix §8 + entitlements engine, never inlined; all 3 `HISTORY_*` error codes registered at `03-api-endpoints/18-error-codes.md:181-183`; UUIDv7 throughout; `/rt` channel matches `08-sharing-collab/14-realtime-transport.md`. Score 100/100. Open: 1 (SI-029).

@@ -2795,3 +2795,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `03-api-endpoints/` (Audit-147, first broad audit). 1 S2 "workspace"→"Space" patch in `15-import-export.md`. **Discovered 162 ULID-shaped `"01J..."` placeholders across 21 files** — violates Core "UUIDv7 everywhere, never ULID". Filed as **SI-030 (S1)** with 3-phase fix plan (lint rule + bulk replace + verify). Score 100 → 96. Open: 2 (SI-029 legal, SI-030 ULID).
+
+## Session 148 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** **Closed SI-030 in single session.** Phase A: bulk-sed replaced 179 ULID `01J...` placeholders → UUIDv7 stub `0190a4f1-6c5e-7c2a-9b3f-1234567890ab` across 29 files (162 in `03-api-endpoints/`, 17 in 8 satellite files: `04-extension/`, `05-web-app/`, `11-import-export/`, `12-history-undo/`, `15-visualization/`, `17-admin-org/`). Phase B: new `scripts/lint/ulid-placeholder.ts` + 7-entry allowlist; registered as 18th sub-check in `22-infrastructure/09-ci-cd.md §2.1.1`. Phase C: linter exits 0. SI-030 moved to `04-closed-issues.md`. Audit-148 created. Open: 1 (SI-029 legal). Score 100/100.

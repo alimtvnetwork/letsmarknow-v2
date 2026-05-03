@@ -2581,3 +2581,17 @@ Open SI = 1 (SI-029, blocked).
 No patches. Recorded in `23-audits/audit-2026-05-03-features-deeper-sweep-123.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 124 — 2026-05-03 — `next` (02-data-model/ broad sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** First broad sweep of `02-data-model/` (14 files + templates/). Verified ULID, Workspace, role enum, color_label enum, hex colors, FK/PK discipline, RLS template.
+
+**Result:** Zero drift. Folder is the SoT for the locked rules and is internally consistent. Single ULID hit is the rule declaration itself.
+
+No patches. Recorded in `23-audits/audit-2026-05-03-data-model-sweep-124.md`.
+
+Open SI = 1 (SI-029, blocked).

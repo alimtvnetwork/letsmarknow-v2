@@ -2693,3 +2693,15 @@ Open SI = 1 (SI-029, blocked).
 Recorded in `23-audits/audit-2026-05-03-infrastructure-sweep-131.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 132 — 2026-05-03 — `next` (24-i18n-a11y/ sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Swept `24-i18n-a11y/` (2 files). Zero drift. Folder is sparse (v2 feature) but clean. No patches.
+
+Recorded in `23-audits/audit-2026-05-03-i18n-a11y-sweep-132.md`.
+
+Open SI = 1 (SI-029, blocked).

@@ -47,7 +47,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 **Idempotent:** yes
 **Rate limit class:** `read`
 
-> **Why this exists.** After upload, the server parses the file but does NOT mutate the workspace until the user confirms. Preview returns a structured summary so the client can show "We found 312 bookmarks in 8 lists. 18 are duplicates of items you already have." with per-collection drill-down, and let the user adjust mapping/dedup before committing.
+> **Why this exists.** After upload, the server parses the file but does NOT mutate the Space until the user confirms. Preview returns a structured summary so the client can show "We found 312 bookmarks in 8 lists. 18 are duplicates of items you already have." with per-collection drill-down, and let the user adjust mapping/dedup before committing.
 
 **Response 200**
 ```json

@@ -5,7 +5,7 @@
 **Severity legend:** `S0` blocks AI codegen · `S1` causes wrong output · `S2` causes ambiguity · `S3` cosmetic.
 
 **Discovered:** 2026-04-19 (post 100/100 claim).
-**Last updated:** 2026-04-29 Session 56 — **SI-029 OPENED** (privacy-pack stubs need pre-launch expansion; gates v1 Phase 1 launch; owner TBD legal counsel). Open count = 1. Score: 100/100 (S2 launch-gate, not a codegen blocker).
+**Last updated:** 2026-05-03 Session 147 — **SI-030 OPENED** (162 ULID `"01J..."` placeholders across 21 files in `03-api-endpoints/` violate Core "UUIDv7 everywhere, never ULID" rule; S1 codegen drift). Open count = 2. Score: 100 → 96.
 
 ---
 
@@ -24,6 +24,7 @@
 | SI-025 | S2 | ✅ closed Session 18 — see `04-closed-issues.md`. §7 rebased from 183/182 → 171/171 via `npx tsx scripts/lint/endpoint-counts.ts --write`. 5 real undeclared endpoints found and added; remaining 12-row gap was §7 over-count from prior hand-rebases. Linter now exits 0. | (moved) | (moved) | (moved) |
 | SI-026 (renamed SI-028) | S3 | ✅ closed 2026-04-29 Session 50 — see `04-closed-issues.md`. Forward-ref backlog drained 21 → 0 over S38–S50. Final allowlist: 4 non-SI-026 entries. | (moved) | (moved) | (moved) |
 | SI-029 | S2 | 🟡 **OPEN** 2026-04-29 Session 56 — Privacy-pack stubs need pre-launch expansion. Source: `23-audits/audit-2026-04-29-security-privacy-sweep.md` F4. Owner: **TBD (legal counsel)**. Two checklist items: (a) full per-permission justification narrative in `19-security-privacy/06-extension-privacy.md §4` (currently table with "draft target" placeholders); (b) full legal-reviewed copy for all 14 sections of `19-security-privacy/07-privacy-policy.md §2` (currently a section template). Gates: v1 Phase 1 launch (CWS submission + public privacy policy publish). Cannot be agent-resolved; requires human legal review. | `19-security-privacy/06-extension-privacy.md`, `19-security-privacy/07-privacy-policy.md` | n/a (content gap, not naming) |
+| SI-030 | S1 | 🔴 **OPEN** 2026-05-03 Session 147 — 162 ULID-shaped `"01J..."` placeholders across 21 files in `03-api-endpoints/` (every file except `18-error-codes.md`, `21-flags.md`, `23-mindmap-layouts.md`). Violates locked Core rule "Identifiers: UUIDv7 everywhere. Never ULID." Codegen risk: AI tools generating fixtures/clients from these examples will emit ULIDs. Canonical placeholder example exists in `23-mindmap-layouts.md` (`0190a4f1-6c5e-7c2a-9b3f-1234567890ab`). Source: `23-audits/audit-2026-05-03-api-endpoints-sweep-147.md`. Fix: bulk replace `"01J..."` → `"0190a4f1-..."` (or per-row distinct UUIDv7 stubs) folder-wide; add `naming-convention.ts` lint rule for `"01J..."` pattern. | All 21 files in `03-api-endpoints/` listed in audit-147 | Core rule "UUIDv7 everywhere, never ULID" |
 
 ---
 

@@ -2789,3 +2789,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `06-ui-ux/` (Audit-146). 11 S2 string drifts in `17-copy-strings.md` patched: 5 body-text "workspace" → "account" / "Space" / "organization" per Toby split, plus 6 `{workspace_name}`/`{workspace}` placeholders renamed to `{org_name}` in email/notif templates. `14-copy-voice.md` already had "workspace" on the Don't-use list. Zero ULIDs/hex/non-/v1/. Score 100/100. Open: 1 (SI-029).
+
+## Session 147 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `03-api-endpoints/` (Audit-147, first broad audit). 1 S2 "workspace"→"Space" patch in `15-import-export.md`. **Discovered 162 ULID-shaped `"01J..."` placeholders across 21 files** — violates Core "UUIDv7 everywhere, never ULID". Filed as **SI-030 (S1)** with 3-phase fix plan (lint rule + bulk replace + verify). Score 100 → 96. Open: 2 (SI-029 legal, SI-030 ULID).

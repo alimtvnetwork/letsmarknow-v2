@@ -11,13 +11,12 @@ type: feature
 **Closed archive:** `spec/21-app/13-spec-issues/04-closed-issues.md`
 **Naming rules:** `spec/21-app/13-spec-issues/01-naming-conventions.md`
 
-## Counts (updated 2026-04-29 Session 28, UTC+8 — after SI-027 close)
+## Counts (updated 2026-05-03 Session 147 — after SI-030 open)
 
-- Open: **0**
+- Open: **2** (SI-029 legal blocker, SI-030 ULID drift)
 - Closed: 31
-- ✅ **SI-025 CLOSED** Session 18. §7 rebased 183/182 → 171/171 via `--write`. Counter Discipline meta-rule earned its keep on day one. Endpoint inventory: 171 canonical declarations, 0 duplicates, linter green.
-- ✅ **SI-026 CLOSED** Session 23. `money-units` linter caught surviving `discount_minor` after W-10 sweep claimed clean.
-- ✅ **SI-027 CLOSED** Session 28. `pricing-source` linter caught 2 W-3 drifts in `06-ui-ux/14-copy-voice.md` and `10-licensing-billing/10-coupons-and-promotions.md` — both restating plan prices inline. Rewritten to `{plan.price}` template tokens with link-back to `01-plans-matrix.md §1`. **Linter tally: 11 of 19 sub-checks ✅** (real-drift catch rate 4/11 = 36%).
+- 🔴 **SI-030 OPENED** Session 147. Audit-147 swept `03-api-endpoints/` and found **162 ULID-shaped `"01J..."` placeholders across 21 files** — violates Core "UUIDv7 everywhere, never ULID". S1 codegen drift. Phase plan: (A) add lint rule, (B) bulk replace to UUIDv7 stub, (C) verify. Score 100 → 96.
+- 🟡 **SI-029** still open (privacy-pack legal copy, blocked on counsel).
 
 ## Counter discipline (lesson from 2026-04-29 re-audit)
 

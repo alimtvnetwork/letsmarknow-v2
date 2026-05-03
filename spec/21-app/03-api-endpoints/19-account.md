@@ -81,7 +81,7 @@ Both are **Account-scoped, not Org-scoped**. The active Org header is *ignored* 
 
 **Response 202**
 ```json
-{ "data": { "request_id": "01J...", "eta_hours": 24 } }
+{ "data": { "request_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "eta_hours": 24 } }
 ```
 
 **Side effects**

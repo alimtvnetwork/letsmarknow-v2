@@ -27,13 +27,13 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `search`.
   "data": [
     {
       "type": "item",
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "title": "ChatGPT",
       "url": "https://chatgpt.com/",
       "favicon_url": "...",
-      "collection": { "id": "01J...", "name": "Quick Tools", "color": "#e94560" },
+      "collection": { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "Quick Tools", "color": "#e94560" },
       "group": null,
-      "tags": [{ "id": "01J...", "name": "ai", "color": "#10b981" }],
+      "tags": [{ "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "ai", "color": "#10b981" }],
       "score": 0.97,
       "highlight": {
         "title": "<em>Chat</em>GPT",
@@ -42,7 +42,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `search`.
     },
     {
       "type": "collection",
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Marketing Improvements",
       "color": "#e94560",
       "item_count_cache": 4,
@@ -80,7 +80,7 @@ Optimized variant: returns at most 10 results, items only, no highlight, no pagi
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "title": "ChatGPT",
       "url": "https://chatgpt.com/",
       "favicon_url": "...",
@@ -107,8 +107,8 @@ Used to power the suggest dropdown as the user types.
 {
   "data": {
     "queries": [ "chat history", "chat templates" ],
-    "tags":    [ { "id": "01J...", "name": "chatgpt" } ],
-    "collections": [ { "id": "01J...", "name": "Chat Tools" } ],
+    "tags":    [ { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "chatgpt" } ],
+    "collections": [ { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "Chat Tools" } ],
     "domains": [ "chatgpt.com" ]
   }
 }

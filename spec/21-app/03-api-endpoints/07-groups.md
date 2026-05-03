@@ -18,10 +18,10 @@ All require bearer auth and `X-Organization-Id`.
 {
   "data": [
     {
-      "id": "01J...",
-      "collection_id": "01J...",
-      "space_id": "01J...",
-      "organization_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "parent_group_id": null,
       "name": "Quick Tools",
       "description": null,
@@ -51,7 +51,7 @@ All require bearer auth and `X-Organization-Id`.
 **Request body**
 ```json
 {
-  "collection_id": "01J...",
+  "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "name": "Quick Tools",
   "icon_emoji": "🐤",
   "view_mode": "compact",
@@ -85,7 +85,7 @@ Mutable fields per `02-data-model/04-group.md`.
 **Request body**
 ```json
 {
-  "to_collection_id": "01J...",
+  "to_collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "before_group_id": null,
   "after_group_id": null
 }

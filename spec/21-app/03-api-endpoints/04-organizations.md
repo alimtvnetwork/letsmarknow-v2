@@ -17,7 +17,7 @@ All endpoints require bearer auth. The `X-Organization-Id` header is NOT require
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Personal",
       "slug": "personal",
       "avatar_token": "PE",
@@ -72,7 +72,7 @@ Server-side side effects: creates Owner Member row; creates default Space `My Co
 ```json
 {
   "data": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "name": "Personal",
     "slug": "personal",
     "avatar_token": "PE",
@@ -80,7 +80,7 @@ Server-side side effects: creates Owner Member row; creates default Space `My Co
     "avatar_image_url": null,
     "theme": "pink",
     "description": null,
-    "owner_account_id": "01J...",
+    "owner_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "subscription": {
       "plan": "pro",
       "status": "active",
@@ -88,7 +88,7 @@ Server-side side effects: creates Owner Member row; creates default Space `My Co
       "seats_used": 1,
       "current_period_end": "2026-05-18T..."
     },
-    "default_space_id": "01J...",
+    "default_space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "settings": { /* see Organization.md */ },
     "my_role": "owner",
     "member_count": 1,
@@ -120,7 +120,7 @@ Server-side side effects: creates Owner Member row; creates default Space `My Co
   "avatar_image_url": "https://...",
   "theme": "indigo",
   "description": "...",
-  "default_space_id": "01J...",
+  "default_space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "settings": { /* partial settings merge */ }
 }
 ```
@@ -144,7 +144,7 @@ Server-side side effects: creates Owner Member row; creates default Space `My Co
 **Request body**
 ```json
 {
-  "new_owner_account_id": "01J...",
+  "new_owner_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "current_password": "..."   // re-auth required
 }
 ```
@@ -225,7 +225,7 @@ All data deleted permanently; cannot be undone.
 ```json
 {
   "data": {
-    "export_id": "01J...",
+    "export_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "queued",
     "estimated_completion_at": "2026-04-18T14:32:00.000Z"
   }
@@ -252,8 +252,8 @@ Polled via `GET /v1/organizations/:id/data-export/:export_id` (declared below).
 ```json
 {
   "data": {
-    "export_id": "01J...",
-    "organization_id": "01J...",
+    "export_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "succeeded",
     "format": "json",
     "include": ["spaces","collections","groups","items","tags","shares","members","history"],
@@ -263,7 +263,7 @@ Polled via `GET /v1/organizations/:id/data-export/:export_id` (declared below).
     "size_bytes": 1843200,
     "sha256": "...",
     "legal_basis": "gdpr_art_15",
-    "requested_by_account_id": "01J...",
+    "requested_by_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "requested_at": "2026-04-20T08:30:00Z",
     "completed_at": "2026-04-20T08:42:00Z"
   }

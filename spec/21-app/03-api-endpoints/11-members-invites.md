@@ -21,9 +21,9 @@ All require bearer auth + `X-Organization-Id` (except invite acceptance, which u
 {
   "data": [
     {
-      "id": "01J...",
-      "organization_id": "01J...",
-      "account_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "email": "alim@example.com",
       "name": "Alim Ul Karim",
       "avatar_url": null,
@@ -38,13 +38,13 @@ All require bearer auth + `X-Organization-Id` (except invite acceptance, which u
       "updated_at": "..."
     },
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "account_id": null,
       "email": "sara@example.com",
       "name": null,
       "role": "editor",
       "status": "pending",
-      "invited_by": "01J...",
+      "invited_by": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "invited_at": "2026-04-15T...",
       "invite_expires_at": "2026-04-22T...",
       "joined_at": null
@@ -73,7 +73,7 @@ All require bearer auth + `X-Organization-Id` (except invite acceptance, which u
     { "email": "sara@example.com", "role": "editor", "message": "Welcome!" },
     { "email": "joe@example.com", "role": "viewer" }
   ],
-  "default_space_ids": ["01J..."]
+  "default_space_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"]
 }
 ```
 - Max 50 invites per call.
@@ -84,7 +84,7 @@ All require bearer auth + `X-Organization-Id` (except invite acceptance, which u
 {
   "data": {
     "results": [
-      { "index": 0, "status": 201, "member_id": "01J...", "invite_token": "lmn-iv-..." },
+      { "index": 0, "status": 201, "member_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "invite_token": "lmn-iv-..." },
       { "index": 1, "status": 409, "error": { "code": "CONFLICT", "details": { "reason": "already_member" } } }
     ]
   }
@@ -122,8 +122,8 @@ All require bearer auth + `X-Organization-Id` (except invite acceptance, which u
 ```json
 {
   "data": {
-    "organization_id": "01J...",
-    "member_id": "01J...",
+    "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "member_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "role": "editor",
     "requires_signup": false,
     "access_token": "eyJ...",

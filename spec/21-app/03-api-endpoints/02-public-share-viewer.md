@@ -100,7 +100,7 @@ Side effect: sets cookie `lmn_share_<slug>=<signed-token>; Max-Age=86400; Secure
     "slug": "my-gear",
     "target_type": "collection",
     "target": {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Marketing Improvements",
       "color": "#e94560",
       "icon_emoji": "📈",
@@ -109,12 +109,12 @@ Side effect: sets cookie `lmn_share_<slug>=<signed-token>; Max-Age=86400; Secure
     },
     "groups": [
       {
-        "id": "01J...",
+        "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
         "name": "Quick Tools",
         "icon_emoji": "🐤",
         "items": [
           {
-            "id": "01J...",
+            "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
             "title": "ChatGPT",
             "url": "https://chatgpt.com/",
             "favicon_url": "https://cdn.letsmarknow.com/favicons/...",
@@ -124,7 +124,7 @@ Side effect: sets cookie `lmn_share_<slug>=<signed-token>; Max-Age=86400; Secure
       }
     ],
     "items": [
-      { "id": "01J...", "title": "...", "url": "...", "favicon_url": "..." }
+      { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "title": "...", "url": "...", "favicon_url": "..." }
     ]
   },
   "page": { "next_cursor": null, "has_more": false, "limit": 200 }
@@ -207,13 +207,13 @@ Server increments `view_count` and conditionally `unique_viewer_count`.
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "title": "ChatGPT",
       "url": "https://chatgpt.com/",
       "favicon_url": "https://cdn.letsmarknow.com/favicons/...",
       "description": null,
       "tags": ["ai", "tools"],
-      "group": { "id": "01J...", "name": "Quick Tools" },
+      "group": { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "Quick Tools" },
       "position": 0
     }
   ],
@@ -244,7 +244,7 @@ Server increments `view_count` and conditionally `unique_viewer_count`.
 {
   "body": "Great list, thanks!",
   "display_name": "Alim",
-  "in_reply_to": "01J..."
+  "in_reply_to": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"
 }
 ```
 - `body` — required, max 4000 chars, Markdown subset
@@ -255,11 +255,11 @@ Server increments `view_count` and conditionally `unique_viewer_count`.
 ```json
 {
   "data": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "share_slug": "my-gear",
     "author": { "display_name": "Alim", "account_id": null },
     "body": "Great list, thanks!",
-    "in_reply_to": "01J...",
+    "in_reply_to": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "created_at": "2026-04-20T08:30:00Z",
     "moderation_state": "pending"
   }

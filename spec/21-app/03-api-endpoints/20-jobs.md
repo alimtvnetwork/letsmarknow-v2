@@ -27,7 +27,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `read`.
 ```json
 {
   "data": {
-    "job_id": "01J...",
+    "job_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "kind": "import",
     "status": "running",
     "phase": "writing_items",
@@ -36,8 +36,8 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `read`.
     "result_url": null,
     "result_summary": null,
     "error": null,
-    "organization_id": "01J...",
-    "created_by_account_id": "01J...",
+    "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "created_by_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "created_at": "2026-04-20T08:30:00Z",
     "updated_at": "2026-04-20T08:30:42Z",
     "finished_at": null,

@@ -459,7 +459,7 @@ GET /v1/items/:id?fields=id,title,url&expand=tags,shares
     "message": "...",
     "field": "name",
     "details": { "min": 1, "max": 120 },
-    "request_id": "01J...",
+    "request_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "doc_url": "https://docs.letsmarknow.com/errors/validation_failed"
   }
 }

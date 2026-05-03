@@ -30,9 +30,9 @@ Default rate-limit class is `auth`.
 ```json
 {
   "data": {
-    "account_id": "01J...",
+    "account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "email_verified": false,
-    "default_organization_id": "01J...",
+    "default_organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "access_token": "eyJ...",
     "expires_in": 900
   }
@@ -59,8 +59,8 @@ Side effect: `lmn_refresh` cookie set. Verification email sent.
 ```json
 {
   "data": {
-    "account_id": "01J...",
-    "default_organization_id": "01J...",
+    "account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "default_organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "mfa_required": false,
     "mfa_challenge_id": null,
     "access_token": "eyJ...",
@@ -147,7 +147,7 @@ Always 202 even if email doesn't exist (no enumeration).
 
 **Request body** (optional)
 ```json
-{ "active_organization_id": "01J..." }
+{ "active_organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" }
 ```
 If absent, server picks last-used.
 
@@ -157,7 +157,7 @@ If absent, server picks last-used.
   "data": {
     "access_token": "eyJ...",
     "expires_in": 900,
-    "active_organization_id": "01J...",
+    "active_organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "entitlements_hash": "sha256:..."
   }
 }
@@ -247,7 +247,7 @@ Side effect: invalidates all other sessions.
 ```json
 {
   "data": {
-    "challenge_id": "01J...",
+    "challenge_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "secret": "base32...",
     "otpauth_url": "otpauth://totp/...",
     "recovery_codes": ["abcd-efgh", "..."]
@@ -262,7 +262,7 @@ Side effect: invalidates all other sessions.
 
 **Request**
 ```json
-{ "challenge_id": "01J...", "code": "123456" }
+{ "challenge_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "code": "123456" }
 ```
 **Response 200** — same shape as signin.
 
@@ -281,7 +281,7 @@ Side effect: invalidates all other sessions.
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "client": "chrome-ext/1.4.0",
       "ip": "203.0.113.10",
       "city": "Melbourne",

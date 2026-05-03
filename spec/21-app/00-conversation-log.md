@@ -2567,3 +2567,17 @@ Endpoint inventory: 171 → 172 → **172 (after rebase)**. Wait: prior session 
 Recorded in `23-audits/audit-2026-04-30-extension-second-pass-122.md`.
 
 Open SI = 1 (SI-029, blocked).
+
+---
+
+## Session 123 — 2026-05-03 — `next` (07-features/ deeper sweep)
+
+**User:** "Next, ... List out the remaining tasks always..."
+
+**Action:** Per Suggested Next from S122, swept all 19 files in `07-features/` against locked rules (UUIDv7, Workspace split, role enum, /v1/ prefix, color tokens, color_label enum).
+
+**Result:** Zero drift. Single "Workspace" hit (`04-collections.md:121`) is legitimate (cites the mapping rule itself). Single hex hit (`04-collections.md:216`) is legitimate (token definition cross-reference).
+
+No patches. Recorded in `23-audits/audit-2026-05-03-features-deeper-sweep-123.md`.
+
+Open SI = 1 (SI-029, blocked).

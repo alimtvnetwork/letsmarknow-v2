@@ -65,7 +65,7 @@ GET /v1/sync/since?cursor=<opaque>
 ```
 Apply changes / deletes to local stores. Persist `next_cursor`.
 
-If the cursor is stale (server can't replay), server returns `410 GONE` with code `SYNC_CURSOR_STALE` → extension does a full re-pull via `GET /v1/sync/full` (declared in `03-api-endpoints/00-overview.md §1.15`). Typically only on first install or after long absence. Org scoping is taken from the bearer+org context, not a query param (per `01-conventions.md §16`).
+If the cursor is stale (server can't replay), server returns `410 GONE` with code `GONE_CURSOR_STALE` → extension does a full re-pull via `GET /v1/sync/full` (declared in `03-api-endpoints/00-overview.md §1.15`). Typically only on first install or after long absence. Org scoping is taken from the bearer+org context, not a query param (per `01-conventions.md §16`).
 
 ## 6. Push sync
 

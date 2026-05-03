@@ -2819,3 +2819,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `22-infrastructure/` (Audit-151, first broad audit). Zero defects. All 4 `workspace` mentions verified as technical (Lovable platform workspace, Terraform workspace, the linter row that *bans* "per-workspace Next"). The single `#EC4868` hit is in the `brand-pink-anchor` linter description that bans the literal hex. 18-sub-check linter table (post-SI-030) confirmed intact. Score 100/100. Open: 1 (SI-029).
+
+## Session 152 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `08-sharing-collab/` (Audit-152, first broad audit). Zero defects across 17 files. Single non-`/v1/` hit at `04-invite-only-shares.md:37` is the locked public share-viewer URL `/t/{slug}` (per Core memory + `13-share-link.md §1.2`), not an API path. Score 100/100. Open: 1 (SI-029).

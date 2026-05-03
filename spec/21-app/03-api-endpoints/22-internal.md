@@ -24,14 +24,14 @@ All require bearer auth (Account scope; Org optional). Rate limit class: `write`
   "subject": "Drag and drop fails in column view",
   "body": "Steps:\n1. ...\n2. ...\nExpected: ...\nActual: ...",
   "context": {
-    "route": "/space/01J.../collection/01J...",
+    "route": "/space/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/collection/0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "client_version": "1.4.2",
     "user_agent": "Mozilla/5.0 ...",
     "viewport": { "w": 1440, "h": 900 },
     "locale": "en-US",
     "release_channel": "beta",
     "console_log_excerpt": "TypeError: Cannot read property 'id' of undefined\n  at ...",
-    "screenshot_attachment_id": "01J..."
+    "screenshot_attachment_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"
   },
   "consent": {
     "include_email": true,
@@ -52,7 +52,7 @@ All require bearer auth (Account scope; Org optional). Rate limit class: `write`
 ```json
 {
   "data": {
-    "feedback_id": "01J...",
+    "feedback_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "ticket_id": "PLAIN-04823",
     "ticket_url": "https://app.plain.com/...",
     "submitted_at": "2026-04-20T08:30:00Z",

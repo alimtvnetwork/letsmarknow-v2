@@ -13,11 +13,11 @@ All require bearer auth + `X-Organization-Id` (except `/me`).
 ```json
 {
   "data": {
-    "account_id": "01J...",
+    "account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "entitlements_hash": "sha256:...",
     "by_organization": [
       {
-        "organization_id": "01J...",
+        "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
         "plan": "pro",
         "status": "active",
         "trial_ends_at": null,
@@ -176,7 +176,7 @@ All require bearer auth + `X-Organization-Id` (except `/me`).
       "tier": "pro_lifetime",
       "stacked_seats": 1,
       "redeemed_at": "...",
-      "redeemed_by_account_id": "01J..."
+      "redeemed_by_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"
     },
     "plan": "pro",
     "status": "lifetime"
@@ -216,7 +216,7 @@ Same body. Adds seats or upgrades tier per code's stack rules. Response includes
 ```json
 {
   "data": {
-    "invoice_id": "01J...",
+    "invoice_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "processor": "stripe",
     "pdf_url": "https://files.stripe.com/.../invoice.pdf",
     "pdf_url_expires_at": "2026-05-20T08:30:00Z",

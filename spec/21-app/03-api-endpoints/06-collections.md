@@ -22,9 +22,9 @@ All require bearer auth and `X-Organization-Id`.
 {
   "data": [
     {
-      "id": "01J...",
-      "space_id": "01J...",
-      "organization_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Marketing Improvements",
       "description": "...",
       "color": "#e94560",
@@ -33,7 +33,7 @@ All require bearer auth and `X-Organization-Id`.
       "position": 1024,
       "is_starred": false,
       "is_collapsed_by_default": false,
-      "tag_ids": ["01J..."],
+      "tag_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"],
       "default_view_mode": "grid",
       "item_count_cache": 4,
       "group_count_cache": 1,
@@ -56,7 +56,7 @@ All require bearer auth and `X-Organization-Id`.
 **Request body**
 ```json
 {
-  "space_id": "01J...",
+  "space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "name": "New Collection",
   "color": "#e94560",
   "icon_emoji": "📈",
@@ -97,7 +97,7 @@ All require bearer auth and `X-Organization-Id`.
 **Request body**
 ```json
 {
-  "to_space_id": "01J...",
+  "to_space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "before_collection_id": null,
   "after_collection_id": null
 }
@@ -138,12 +138,12 @@ Body same as `spaces.reorder`.
 
 **Request body**
 ```json
-{ "add": ["01J...","01J..."], "remove": ["01J..."], "create": [{ "name": "ux", "color": "#a78bfa" }] }
+{ "add": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab","0190a4f1-6c5e-7c2a-9b3f-1234567890ab"], "remove": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"], "create": [{ "name": "ux", "color": "#a78bfa" }] }
 ```
 `create` allows inline tag creation. Newly-created tag IDs are auto-added.
 **Response 200**
 ```json
-{ "data": { "tag_ids": ["01J...","01J..."] } }
+{ "data": { "tag_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab","0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] } }
 ```
 
 ---

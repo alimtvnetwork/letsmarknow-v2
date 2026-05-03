@@ -23,7 +23,7 @@ What's NOT logged: routine reads, individual item edits, search queries, presenc
 
 ```json
 {
-  "id": "01J...",
+  "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "org_id": "...",
   "actor_id": "user_...",
   "actor_kind": "user|api_token|system|sso",

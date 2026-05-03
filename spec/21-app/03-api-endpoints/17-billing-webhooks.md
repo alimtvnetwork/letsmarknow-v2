@@ -62,12 +62,12 @@ These are the **exact** subset of fields the handler reads. All money values use
   "status": "complete",
   "customer": "cus_xxx",
   "subscription": "sub_xxx",
-  "client_reference_id": "01J...organization_id",
+  "client_reference_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890aborganization_id",
   "currency": "usd",
   "amount_total": 500,
   "amount_subtotal": 500,
   "metadata": {
-    "organization_id": "01J...",
+    "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "plan_code": "pro_monthly",
     "seats": "1"
   }
@@ -124,7 +124,7 @@ These are the **exact** subset of fields the handler reads. All money values use
       }
     ]
   },
-  "metadata": { "organization_id": "01J...", "plan_code": "pro_monthly" }
+  "metadata": { "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "plan_code": "pro_monthly" }
 }
 ```
 - **Required:** `customer`, `status`, `items.data[0].price.id`, `items.data[0].quantity`, `current_period_*`, `cancel_at_period_end`.
@@ -228,7 +228,7 @@ These are the **exact** subset of fields the handler reads. All money values are
     }
   ],
   "custom_data": {
-    "organization_id": "01J...",
+    "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "plan_code": "pro_monthly"
   }
 }
@@ -260,7 +260,7 @@ These are the **exact** subset of fields the handler reads. All money values are
       "status": "active"
     }
   ],
-  "custom_data": { "organization_id": "01J...", "plan_code": "team_monthly" }
+  "custom_data": { "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "plan_code": "team_monthly" }
 }
 ```
 - **Required:** `customer_id`, `status`, `items[0].price.id`, `items[0].quantity`, `current_billing_period.*`, `scheduled_change`.
@@ -400,8 +400,8 @@ Server marks the code as `issued` in the licenses table; user redeems it later v
 {
   "data": {
     "received": true,
-    "organization_id": "01J...",
-    "job_id": "01J...",
+    "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "job_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "deduped": false
   }
 }
@@ -437,7 +437,7 @@ Server marks the code as `issued` in the licenses table; user redeems it later v
   "title": "Optional override",
   "description": "Optional override",
   "tags": ["ai", "tools"],
-  "destination": { "kind": "collection", "collection_id": "01J..." },
+  "destination": { "kind": "collection", "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" },
   "source": { "name": "Zapier", "external_id": "zap-04823" }
 }
 ```
@@ -451,7 +451,7 @@ Server marks the code as `issued` in the licenses table; user redeems it later v
 {
   "data": {
     "received": true,
-    "job_id": "01J...",
+    "job_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "item_id": null
   }
 }
@@ -515,7 +515,7 @@ See also `11-import-export/07-webhooks-and-api-imports.md §63`.
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "provider": "stripe",
       "event_id": "evt_...",
       "event_type": "invoice.payment_failed",
@@ -523,7 +523,7 @@ See also `11-import-export/07-webhooks-and-api-imports.md §63`.
       "status": "succeeded",
       "attempts": 1,
       "last_error": null,
-      "organization_id": "01J..."
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"
     }
   ]
 }

@@ -1,0 +1,13 @@
+# ulid-placeholder allowlist
+# Format: one path per line. Comments after `#`.
+# Review-by: 2026-11-03 (180d)
+# Reason: meta files that catalogue or describe the SI-030 violation must be
+# allowed to mention `01J...` literally for historical/audit fidelity.
+
+spec/21-app/00-conversation-log.md  # PR-SI030: historical session entries reference the old placeholder verbatim
+spec/21-app/13-spec-issues/02-current-issues.md  # PR-SI030: SI-030 row cites the offending pattern as evidence
+spec/21-app/13-spec-issues/04-closed-issues.md  # PR-SI030: future SI-030 closure entry will cite the pattern
+spec/21-app/23-audits/audit-2026-04-30-visualization-sweep-120.md  # PR-SI030: historical false-positive note
+spec/21-app/23-audits/audit-2026-05-03-api-endpoints-sweep-147.md  # PR-SI030: SI-030 discovery audit
+spec/21-app/23-audits/audit-2026-05-03-si-030-closure-148.md  # PR-SI030: SI-030 closure audit
+spec/21-app/23-audits/audit-2026-04-30-admin-org-sweep-114.md  # PR-SI030: historical audit references the old placeholder

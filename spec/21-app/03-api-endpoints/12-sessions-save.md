@@ -18,7 +18,7 @@ All require bearer auth + `X-Organization-Id`.
 {
   "destination": {
     "kind": "new_collection",
-    "space_id": "01J...",
+    "space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "name": "2026-04-18 Research",
     "color": "#3b82f6",
     "icon_emoji": "📚"
@@ -61,7 +61,7 @@ All require bearer auth + `X-Organization-Id`.
   "data": {
     "destination": {
       "kind": "new_collection",
-      "collection_id": "01J...",
+      "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "group_id": null
     },
     "items_created": 12,
@@ -71,7 +71,7 @@ All require bearer auth + `X-Organization-Id`.
       { "url": "chrome://extensions", "reason": "internal_url_excluded" },
       { "url": "https://chatgpt.com/", "reason": "duplicate_in_session" }
     ],
-    "history_event_id": "01J...",
+    "history_event_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "undo_token": "lmn-undo-..."
   }
 }
@@ -117,9 +117,9 @@ Same body as `save` minus `client`. Returns what WOULD happen without writing.
 {
   "data": [
     {
-      "history_event_id": "01J...",
+      "history_event_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "saved_at": "...",
-      "destination": { "kind": "new_collection", "collection_id": "01J...", "name": "..." },
+      "destination": { "kind": "new_collection", "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "..." },
       "items_count": 12,
       "can_undo": true
     }
@@ -137,7 +137,7 @@ Backed by History Events of type `session.saved`.
 **Request body**
 ```json
 {
-  "source": { "kind": "collection", "id": "01J...", "include_groups": true },
+  "source": { "kind": "collection", "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "include_groups": true },
   "in_new_window": true,
   "limit": 50
 }

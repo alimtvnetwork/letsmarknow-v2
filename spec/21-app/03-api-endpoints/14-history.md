@@ -24,22 +24,22 @@ All require bearer auth + `X-Organization-Id`. See `02-data-model/09-history-eve
 {
   "data": [
     {
-      "id": "01J...",
-      "organization_id": "01J...",
-      "actor_account_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "actor_account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "actor_name": "Alim Ul Karim",
       "actor_avatar_url": null,
       "event_type": "item.deleted",
       "entity_type": "item",
-      "entity_id": "01J...",
+      "entity_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "entity_snapshot": {
         "title": "ChatGPT",
         "url": "https://chatgpt.com/",
-        "collection_id": "01J...",
+        "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
         "collection_name": "Quick Tools"
       },
       "diff": null,
-      "batch_id": "01J...",
+      "batch_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "client": "chrome-ext/1.4.0",
       "ip_country": "AU",
       "is_undone": false,
@@ -75,10 +75,10 @@ All require bearer auth + `X-Organization-Id`. See `02-data-model/09-history-eve
 ```json
 {
   "data": {
-    "undo_event_id": "01J...",
-    "restored_entity_ids": ["01J...", "01J..."],
+    "undo_event_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "restored_entity_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"],
     "skipped": [
-      { "entity_id": "01J...", "reason": "destination_deleted" }
+      { "entity_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "reason": "destination_deleted" }
     ]
   }
 }
@@ -148,20 +148,20 @@ Convenience alias for `GET /v1/history/for/item/:id`. Powers the item History ta
   "data": [
     {
       "entity_type": "collection",
-      "entity_id": "01J...",
+      "entity_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "Old Marketing",
       "deleted_at": "2026-04-01T...",
       "purges_at": "2026-05-01T...",
-      "deleted_by": { "account_id": "01J...", "name": "Alim" },
-      "history_event_id": "01J...",
+      "deleted_by": { "account_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "Alim" },
+      "history_event_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "size_summary": { "items": 42, "groups": 3 }
     }
   ]
 }
 ```
 
-`POST /v1/trash/restore` body `{ "entity_ids": ["01J..."] }` — bulk restore. Each id must reference the trash row's `entity_id`. Server resolves to entity-typed restore endpoints.
+`POST /v1/trash/restore` body `{ "entity_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] }` — bulk restore. Each id must reference the trash row's `entity_id`. Server resolves to entity-typed restore endpoints.
 
-`POST /v1/trash/purge` body `{ "entity_ids": ["01J..."], "current_password": "..." }` — bulk hard-delete now. Owner only.
+`POST /v1/trash/purge` body `{ "entity_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"], "current_password": "..." }` — bulk hard-delete now. Owner only.
 
 `POST /v1/trash/empty` body `{ "current_password": "..." }` — hard-delete everything in trash for the active Org. Owner only. Returns `202` with `job_id`.

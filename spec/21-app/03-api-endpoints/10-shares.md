@@ -18,13 +18,13 @@ All management endpoints require bearer auth + `X-Organization-Id`.
 {
   "data": [
     {
-      "id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "slug": "my-gear",
       "target_type": "collection",
-      "target_id": "01J...",
-      "organization_id": "01J...",
+      "target_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "mode": "public",
-      "created_by": "01J...",
+      "created_by": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "title_override": null,
       "description_override": null,
       "expires_at": null,
@@ -57,7 +57,7 @@ All management endpoints require bearer auth + `X-Organization-Id`.
 ```json
 {
   "target_type": "collection",
-  "target_id": "01J...",
+  "target_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "mode": "public",
   "slug": null,
   "title_override": null,
@@ -81,7 +81,7 @@ All management endpoints require bearer auth + `X-Organization-Id`.
 ```json
 {
   "data": {
-    "id": "01J...",
+    "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "slug": "my-gear",
     "url": "https://letsmarknow.com/t/my-gear",
     "...": "..."
@@ -143,7 +143,7 @@ Allowed within 7 days of revoke; same slug restored.
     "unique_viewer_count": 38,
     "click_count": 76,
     "top_items": [
-      { "item_id": "01J...", "title": "ChatGPT", "clicks": 19 }
+      { "item_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "title": "ChatGPT", "clicks": 19 }
     ],
     "by_day": [
       { "date": "2026-04-01", "views": 4, "clicks": 2 }
@@ -185,7 +185,7 @@ Allowed within 7 days of revoke; same slug restored.
 ```json
 {
   "data": {
-    "share_id": "01J...",
+    "share_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "slug_at_purge": "my-gear",
     "purged_at": "2026-04-20T08:30:00Z",
     "analytics_rows_deleted": 142,
@@ -228,8 +228,8 @@ In v1, one Share has one slug. In v2, a Share owns N independently revocable Lin
 ```json
 {
   "data": {
-    "link_id": "01J...",
-    "share_id": "01J...",
+    "link_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "share_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "slug": "my-gear-marketing",
     "revoked_at": "2026-04-20T08:30:00Z",
     "siblings_remaining": 2

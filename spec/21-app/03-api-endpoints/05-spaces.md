@@ -22,8 +22,8 @@ All endpoints require bearer auth and `X-Organization-Id` header.
 {
   "data": [
     {
-      "id": "01J...",
-      "organization_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "My Collections",
       "description": null,
       "icon": null,
@@ -78,7 +78,7 @@ All endpoints require bearer auth and `X-Organization-Id` header.
   "data": {
     "...": "...",
     "notes": "...",
-    "settings": { "show_collection_count": true, "collapsed_collections": ["01J..."] },
+    "settings": { "show_collection_count": true, "collapsed_collections": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] },
     "my_state": { "is_starred": false, "last_viewed_at": "..." }
   }
 }
@@ -114,7 +114,7 @@ All endpoints require bearer auth and `X-Organization-Id` header.
 **Auth:** bearer (Editor+)
 **Request body**
 ```json
-{ "before_space_id": "01J...", "after_space_id": "01J..." }
+{ "before_space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "after_space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" }
 ```
 At least one of `before_space_id`/`after_space_id` required. Server computes new `position` between neighbors.
 **Response 200** Updated Space.
@@ -136,11 +136,11 @@ Side effect: updates `account_space_state.is_starred`.
 
 **Request body**
 ```json
-{ "add": ["01J..."], "remove": ["01J..."] }
+{ "add": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"], "remove": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] }
 ```
 **Response 200**
 ```json
-{ "data": { "collapsed_collections": ["01J..."] } }
+{ "data": { "collapsed_collections": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] } }
 ```
 
 ---
@@ -162,7 +162,7 @@ Side effect: updates `account_space_state.is_starred`.
 ```
 **Response 202**
 ```json
-{ "data": { "job_id": "01J...", "new_space_id": "01J...", "status": "queued" } }
+{ "data": { "job_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "new_space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "status": "queued" } }
 ```
 
 Polled via `GET /v1/jobs/:job_id`.
@@ -176,7 +176,7 @@ Polled via `GET /v1/jobs/:job_id`.
 **If-Match:** required
 **Response 200**
 ```json
-{ "data": { "deleted_at": "...", "purges_at": "...", "history_event_id": "01J..." } }
+{ "data": { "deleted_at": "...", "purges_at": "...", "history_event_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" } }
 ```
 The `history_event_id` enables direct Undo.
 

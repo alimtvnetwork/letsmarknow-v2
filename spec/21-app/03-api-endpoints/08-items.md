@@ -22,11 +22,11 @@ All require bearer auth and `X-Organization-Id`.
 {
   "data": [
     {
-      "id": "01J...",
-      "collection_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "group_id": null,
-      "space_id": "01J...",
-      "organization_id": "01J...",
+      "space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "title": "ChatGPT",
       "url": "https://chatgpt.com/",
       "normalized_url": "https://chatgpt.com/",
@@ -36,7 +36,7 @@ All require bearer auth and `X-Organization-Id`.
       "favicon_url": "https://cdn.letsmarknow.com/favicons/chatgpt.com.png",
       "favicon_status": "ok",
       "color_override": null,
-      "tag_ids": ["01J..."],
+      "tag_ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"],
       "position": 1024,
       "is_starred": false,
       "last_opened_at": "2026-04-18T...",
@@ -59,7 +59,7 @@ All require bearer auth and `X-Organization-Id`.
 **Request body**
 ```json
 {
-  "collection_id": "01J...",
+  "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "group_id": null,
   "url": "https://chatgpt.com/",
   "title": "ChatGPT",
@@ -111,7 +111,7 @@ URL change triggers async favicon refetch + History Event with old/new URL.
 **Request body**
 ```json
 {
-  "to_collection_id": "01J...",
+  "to_collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "to_group_id": null,
   "before_item_id": null,
   "after_item_id": null
@@ -178,11 +178,11 @@ Body: `{ to_collection_id?, to_group_id? }`. Defaults to same parent.
 {
   "all_or_nothing": false,
   "operations": [
-    { "op": "create", "data": { "collection_id": "01J...", "url": "...", "title": "..." } },
-    { "op": "update", "id": "01J...", "data": { "title": "..." }, "if_match": "..." },
-    { "op": "move", "id": "01J...", "data": { "to_group_id": "01J..." } },
-    { "op": "delete", "id": "01J..." },
-    { "op": "tag", "id": "01J...", "data": { "add": ["01J..."] } }
+    { "op": "create", "data": { "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "url": "...", "title": "..." } },
+    { "op": "update", "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "data": { "title": "..." }, "if_match": "..." },
+    { "op": "move", "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "data": { "to_group_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" } },
+    { "op": "delete", "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" },
+    { "op": "tag", "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "data": { "add": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] } }
   ]
 }
 ```

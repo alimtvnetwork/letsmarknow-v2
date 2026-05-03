@@ -104,14 +104,14 @@ Every kind has a documented schema (`schemas/history/<kind>.json`). Common field
 {
   "kind": "item.moved",
   "payload": {
-    "from": { "collection_id": "01J...", "group_id": null, "position": 7 },
-    "to":   { "collection_id": "01J...", "group_id": "01J...", "position": 0 }
+    "from": { "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "group_id": null, "position": 7 },
+    "to":   { "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "group_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "position": 0 }
   },
   "before": { "collection_id": "...", "group_id": null, "position": 7 },
   "after":  { "collection_id": "...", "group_id": "...", "position": 0 },
   "inverse_recipe": {
     "kind": "item.moved",
-    "payload": { "to": { "collection_id": "01J...", "group_id": null, "position": 7 } }
+    "payload": { "to": { "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "group_id": null, "position": 7 } }
   }
 }
 ```

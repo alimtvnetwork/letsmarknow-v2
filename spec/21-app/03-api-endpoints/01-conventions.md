@@ -81,7 +81,7 @@ Every non-2xx response:
     "message": "Human-readable message in user's locale.",
     "field": "name",
     "details": { "min": 1, "max": 120 },
-    "request_id": "01J...",
+    "request_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "doc_url": "https://docs.letsmarknow.com/errors/validation_failed"
   }
 }
@@ -186,7 +186,7 @@ When an entity references another, the API returns a stub:
 
 ```json
 {
-  "id": "01J...",
+  "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
   "type": "collection",
   "name": "Marketing Improvements",
   "color": "#e94560"
@@ -212,7 +212,7 @@ When supported, query param `sort=field,-other_field` (prefix `-` for desc). All
 Query params named after fields:
 
 ```
-GET /v1/items?collection_id=01J...&is_starred=true&tag=react
+GET /v1/items?collection_id=0190a4f1-6c5e-7c2a-9b3f-1234567890ab&is_starred=true&tag=react
 ```
 
 Multi-value via repeated keys: `?tag=react&tag=ui`.

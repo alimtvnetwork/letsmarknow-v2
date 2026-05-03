@@ -28,7 +28,7 @@ Minimal, opt-out, no PII, privacy-first. Every event documented here.
     {
       "name": "extension.shortcut_used",
       "ts": "2026-04-18T14:22:31.123Z",
-      "session_id": "01J...",
+      "session_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "props": { "command": "save_current_tab", "latency_ms": 312 }
     }
   ],

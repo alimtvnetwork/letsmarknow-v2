@@ -72,7 +72,7 @@ Update flow:
 
 ## 5. Protocol handler
 
-- Registers `web+lmn://` so links like `web+lmn://collection/01J...` open in installed PWA on the user's device.
+- Registers `web+lmn://` so links like `web+lmn://collection/0190a4f1-6c5e-7c2a-9b3f-1234567890ab` open in installed PWA on the user's device.
 - Used in cross-device deep links (e.g. share link emailed to self → opens PWA on phone if installed).
 
 ## 6. Push notifications (PWA)

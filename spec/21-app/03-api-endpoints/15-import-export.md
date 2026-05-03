@@ -23,11 +23,11 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 ```json
 {
   "data": {
-    "import_id": "01J...",
+    "import_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "queued",
     "size_bytes": 184320,
     "sha256": "...",
-    "preview_url": "/v1/imports/01J.../preview"
+    "preview_url": "/v1/imports/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/preview"
   }
 }
 ```
@@ -53,7 +53,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 ```json
 {
   "data": {
-    "import_id": "01J...",
+    "import_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "source": "toby",
     "parsed_at": "2026-04-20T08:30:00Z",
     "totals": {
@@ -102,7 +102,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 ```json
 {
   "data": {
-    "import_id": "01J...",
+    "import_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "running",
     "phase": "writing_items",
     "progress": { "processed": 187, "total": 312, "percent": 60 },
@@ -140,7 +140,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
   },
   "destination": {
     "kind": "existing_collection",
-    "collection_id": "01J..."
+    "collection_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab"
   }
 }
 ```
@@ -151,7 +151,7 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 ```json
 {
   "data": {
-    "import_id": "01J...",
+    "import_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "queued",
     "committed_at": "2026-04-20T08:30:00Z"
   }
@@ -202,9 +202,9 @@ All require bearer auth + `X-Organization-Id`. Rate limit class: `bulk`.
 ```json
 {
   "data": {
-    "import_id": "01J...",
+    "import_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "awaiting_upload",
-    "upload_url": "https://uploads.letsmarknow.com/imports/01J.../put?token=...",
+    "upload_url": "https://uploads.letsmarknow.com/imports/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/put?token=...",
     "upload_method": "PUT",
     "upload_expires_at": "2026-04-18T15:22:31.000Z",
     "max_size_bytes": 52428800
@@ -227,7 +227,7 @@ Client then PUTs the file to `upload_url`. Server processes async.
 ```json
 {
   "data": {
-    "import_id": "01J...",
+    "import_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "source": "toby",
     "status": "succeeded",
     "progress": { "processed": 312, "total": 312, "percent": 100 },
@@ -240,7 +240,7 @@ Client then PUTs the file to `upload_url`. Server processes async.
       "items_failed": 7,
       "tags_created": 12
     },
-    "errors_url": "https://uploads.letsmarknow.com/imports/01J.../errors.json",
+    "errors_url": "https://uploads.letsmarknow.com/imports/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/errors.json",
     "started_at": "...",
     "finished_at": "..."
   }
@@ -288,7 +288,7 @@ Client then PUTs the file to `upload_url`. Server processes async.
 ```json
 {
   "data": {
-    "export_id": "01J...",
+    "export_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "queued",
     "estimated_completion_at": "..."
   }
@@ -304,10 +304,10 @@ Client then PUTs the file to `upload_url`. Server processes async.
 ```json
 {
   "data": {
-    "export_id": "01J...",
+    "export_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
     "status": "succeeded",
     "format": "lmn_native_json",
-    "download_url": "https://uploads.letsmarknow.com/exports/01J.../file?token=...",
+    "download_url": "https://uploads.letsmarknow.com/exports/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/file?token=...",
     "download_expires_at": "2026-04-25T...",
     "size_bytes": 1843200,
     "sha256": "...",
@@ -344,8 +344,8 @@ Client then PUTs the file to `upload_url`. Server processes async.
 ```json
 {
   "data": {
-    "export_id": "01J...",
-    "download_url": "https://uploads.letsmarknow.com/exports/01J.../file?token=...",
+    "export_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+    "download_url": "https://uploads.letsmarknow.com/exports/0190a4f1-6c5e-7c2a-9b3f-1234567890ab/file?token=...",
     "download_expires_at": "2026-04-27T08:30:00Z",
     "object_expires_at": "2026-05-05T08:30:00Z"
   }
@@ -397,11 +397,11 @@ Convenience: server orchestrates export from Org A and import into Org B in one 
 **Request body**
 ```json
 {
-  "from_organization_id": "01J...",
-  "to_organization_id": "01J...",
-  "scope": { "kind": "space", "space_id": "01J..." },
+  "from_organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+  "to_organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+  "scope": { "kind": "space", "space_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" },
   "destination": { "kind": "new_space", "space_name": "Imported from Personal" },
   "delete_source_after_success": false
 }
 ```
-**Response 202** `{ data: { transfer_id: "01J...", status: "queued" } }`
+**Response 202** `{ data: { transfer_id: "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", status: "queued" } }`

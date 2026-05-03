@@ -83,7 +83,7 @@ For `bulk` operations (e.g. multi-select tag), client uses `/v1/bulk/items` to k
   - `collection:{collection_id}` — for each Collection currently rendered in popup or new-tab
 - Application-level message shapes (delivered as Supabase Realtime `broadcast` payloads):
   ```json
-  { "type": "invalidate", "entity_type": "item", "ids": ["01J..."] }
+  { "type": "invalidate", "entity_type": "item", "ids": ["0190a4f1-6c5e-7c2a-9b3f-1234567890ab"] }
   { "type": "broadcast", "event_type": "item.created", "entity": { ... } }
   { "type": "entitlements_changed", "entitlements_hash": "..." }
   ```

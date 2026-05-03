@@ -19,14 +19,14 @@ All require bearer auth and `X-Organization-Id`.
 {
   "data": [
     {
-      "id": "01J...",
-      "organization_id": "01J...",
+      "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
+      "organization_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "name": "react",
       "slug": "react",
       "color": "#a78bfa",
       "description": null,
       "usage_count": 17,
-      "created_by": "01J...",
+      "created_by": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab",
       "created_at": "...",
       "updated_at": "..."
     }
@@ -87,10 +87,10 @@ Side effects: removes from `tag_ids` of all entities. Asynchronous if `usage_cou
 
 **Request body**
 ```json
-{ "merge_into_tag_id": "01J..." }
+{ "merge_into_tag_id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab" }
 ```
 All entities tagged with `:id` are re-tagged with `merge_into_tag_id` (de-duped); `:id` is then deleted.
-**Response 202** `{ data: { job_id: "01J...", status: "queued" } }`
+**Response 202** `{ data: { job_id: "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", status: "queued" } }`
 
 ---
 
@@ -105,7 +105,7 @@ All entities tagged with `:id` are re-tagged with `merge_into_tag_id` (de-duped)
 ```json
 {
   "data": [
-    { "id": "01J...", "name": "react", "color": "#a78bfa", "match": "prefix" },
+    { "id": "0190a4f1-6c5e-7c2a-9b3f-1234567890ab", "name": "react", "color": "#a78bfa", "match": "prefix" },
     { "id": null, "name": "react-native", "color": null, "match": "create_new" }
   ]
 }

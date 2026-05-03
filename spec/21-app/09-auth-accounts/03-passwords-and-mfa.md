@@ -66,11 +66,13 @@ Credential rules, TOTP, recovery codes, breach checks.
 |---|---|
 | Free | optional |
 | Pro | optional, prompted on signup |
-| Team Owner | required |
-| Team Admin | required (configurable; default required) |
-| Team Member | configurable per Org |
+| `owner` (Team plan) | required |
+| `admin` (Team plan) | required (configurable; default required) |
+| `editor` / `viewer` / `billing` / `guest` | configurable per Org |
 
-Org Admins can require MFA Org-wide; non-MFA Members get 14-day grace then blocked from sensitive ops.
+> Roles map to the locked enum in `00-overview/02-glossary.md` (owner, admin, editor, viewer, billing, guest, system). Toby's "Team Owner / Admin / Member" labels are external-product mappings, not roles in this spec.
+
+Org Admins can require MFA Org-wide; non-MFA members get 14-day grace then blocked from sensitive ops.
 
 ## 9. Sign-in with MFA
 

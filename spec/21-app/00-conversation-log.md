@@ -2867,3 +2867,8 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `05-web-app/` (Audit-159, first broad audit, 17 files). Only hex hits are the documented PWA manifest exception in `15-pwa.md` (W3C spec requires literal hex; already mirrors `--background` token with sync-warning). Zero ULID, zero workspace drift, zero non-`/v1/`. Score 100/100. Open: 1 (SI-029).
+
+---
+## Session 161 — 2026-05-03 — Homepage + Search UI briefs
+**User:** Create two separate self-contained MD files describing (1) the homepage UI and (2) the search UI, including endpoints (names only) and database tables. Output as downloadable artifacts.
+**AI:** Wrote `/mnt/documents/homepage-ui-brief.md` (shell, left rail, sidebar, top bar, sections, cards, drag/drop, realtime, endpoints, DB tables, telemetry, DoD) and `/mnt/documents/search-ui-brief.md` (palette, results page, per-Collection input, filter grammar, ranking, recents, saved, suggest, endpoints, DB tables, telemetry, edge cases, DoD). Both reference Toby pink `--primary`, UUIDv7, locked role enum, cursor pagination (W-13), and existing endpoint inventory.

@@ -2753,3 +2753,9 @@ Open SI = 1 (SI-029, blocked).
 **User:** next (list remaining tasks; if done find from memory)
 
 **Action:** Broad sweep of `04-extension/` (Audit-140, first broad audit, 20 files). Zero drift across all four checks (ULID, hex, Workspace, non-v1 paths). No patches. Score 100/100. Open: 1 (SI-029).
+
+## Session 141 — 2026-05-03
+
+**User:** next (list remaining tasks; if done find from memory)
+
+**Action:** Broad sweep of `10-licensing-billing/` (Audit-141, first broad audit, 17 files). Zero drift across all checks. No patches. Score 100/100. Open: 1 (SI-029).

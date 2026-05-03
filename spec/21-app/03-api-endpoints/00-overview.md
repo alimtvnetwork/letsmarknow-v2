@@ -351,6 +351,7 @@
 | POST | `/v1/webhooks/lifetime-redeem` | webhook-sig | — | AppSumo / PitchGround redeem callback. | `17-billing-webhooks.md` |
 | POST | `/v1/webhooks/email-in` | webhook-sig (Postmark/SES) | — | Inbound email-to-Org address; creates item-from-email job. | `17-billing-webhooks.md` |
 | POST | `/v1/webhooks/inbound/:webhook_token` | path-token (no bearer) | Idem-Key | Generic inbound webhook (Zapier / RSS bridges); creates item from JSON. | `17-billing-webhooks.md` |
+| POST | `/v1/webhooks/apple-notifications` | webhook-sig (Apple JWS) | — | Apple "Sign in with Apple" server-to-server notifications (`pop` events: revocation, email change, account deletion). | `09-auth-accounts/04-oauth-providers.md §4.2` |
 
 ---
 

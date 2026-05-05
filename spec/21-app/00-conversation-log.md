@@ -2878,3 +2878,25 @@ Open SI = 1 (SI-029, blocked).
 User: "give me the details about, uh, next feature... so any AI can make the next sections easily"
 
 Action: Created /mnt/documents/next-feature-ui-brief.md — self-contained UI brief for the Next feature mirroring the share/homepage/search briefs. Includes purpose, locked vocabulary, IA, surfaces (web rail + /next page + extension popup tab), row anatomy, 8 entry points, idempotency rules, all 4 states (empty/loading/error/all-done), multi-Org grouping, 8 settings, 9 keyboard shortcuts, limits, edge cases, realtime channel, endpoints (10), DB schema (next_item + collection.kind + account_setting), analytics events, acceptance checklist, out-of-scope. Sourced from 07-features/17-next-queue.md + 04-extension/04-popup.md §14 + 02-data-model/12-next-item.md.
+
+---
+
+## Session — 10 web-app UI slide briefs
+
+**User:** "I found that, that in the web app, uh, UI workflows you listed down, 10 items. So I want, uh, you, uh, need to create 10 separate text files... details and descriptions... if I give it to any AI, it can easily make the front-end UI... I want to make a presentation slide... how the button works, how it looks like, how these features works... when I click buttons or when what's the and when it, it hits. And also, I want to know about their diagram for every features and every items. Don't mix anything... only frontend."
+
+**Clarified scope (visual_choice):** Web-app pages only (10) · Mermaid flowchart per file · Endpoints + events included (no DB) · Filename pattern `slide-NN-name.md`.
+
+**Output:** 10 self-contained UI briefs in `/mnt/documents/`:
+1. slide-01-onboarding.md
+2. slide-02-dashboard.md
+3. slide-03-account-settings.md
+4. slide-04-org-settings.md
+5. slide-05-member-management.md
+6. slide-06-billing.md
+7. slide-07-trash.md
+8. slide-08-activity-feed.md
+9. slide-09-import-export.md
+10. slide-10-share-management.md
+
+Each contains: layout wireframe, Mermaid user-click flow, component specs (buttons/states/hover), endpoints hit, telemetry events, permissions, a11y, acceptance checklist. Brand `--primary` #EC4868 referenced via tokens; UUIDv7 + cursor pagination conventions applied.

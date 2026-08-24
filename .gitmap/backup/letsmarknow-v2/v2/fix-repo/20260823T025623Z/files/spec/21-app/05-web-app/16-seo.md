@@ -70,7 +70,7 @@ Every public page:
 ## 7. Twitter card
 
 - `twitter:card` = `summary_large_image` (or `summary` for narrow content)
-- `twitter:site` = `@letsmarknow-v2`
+- `twitter:site` = `@letsmarknow`
 - `twitter:title` / `twitter:description` / `twitter:image` (mirrors OG)
 
 ## 8. JSON-LD (Schema.org)

@@ -75,8 +75,8 @@ Server filters before sending.
 
 ## 9. Deep-linking
 
-- CTA links use `letsmarknow-v2://feature/<id>` or `https://letsmarknow.com/...`.
-- Extension intercepts `letsmarknow-v2://` and routes to internal surface.
+- CTA links use `letsmarknow://feature/<id>` or `https://letsmarknow.com/...`.
+- Extension intercepts `letsmarknow://` and routes to internal surface.
 - Web app handles via React Router with feature flag gate.
 
 ## 10. Notice entries

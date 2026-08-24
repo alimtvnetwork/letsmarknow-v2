@@ -980,7 +980,7 @@ So `storage-path` is the only remaining shippable linter without lifting impleme
 **First-run findings (no SI opened):** 11 hits, ALL triaged as legitimate non-bucket paths:
 - `migrations/` (in `09-ci-cd.md` SI-023 rule prose) — repo path
 - `infra/grafana/`, `infra/runbooks/`, `infra/postmortems/` (in `10-observability.md`) — monorepo `/infra/` subpaths
-- `infra/`, `modules/cloud-project/variables.tf`, `letsmarknow-v2/<env>` (in `13-iac.md`) — IaC repo paths + Pulumi stack name
+- `infra/`, `modules/cloud-project/variables.tf`, `letsmarknow/<env>` (in `13-iac.md`) — IaC repo paths + Pulumi stack name
 - `schemas/lmn-export-v1.json` (in `01-formats.md`) — JSON Schema repo path
 - `importers/` (in `02-importers.md`) — source module path
 - `organizations/<org_slug>/` (in `09-gdpr-export.md`) — internal zip-archive folder structure inside the export bundle, not a storage bucket name

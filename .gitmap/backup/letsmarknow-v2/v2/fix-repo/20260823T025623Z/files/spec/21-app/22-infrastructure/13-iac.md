@@ -266,7 +266,7 @@ new CronJob("purge-trash", {
 });
 ```
 
-State backend uses Pulumi Cloud (preferred) with a passphrase from the secrets vault. Stack names are `letsmarknow-v2/<env>`. `pulumi preview` is the equivalent gate to `terraform plan`.
+State backend uses Pulumi Cloud (preferred) with a passphrase from the secrets vault. Stack names are `letsmarknow/<env>`. `pulumi preview` is the equivalent gate to `terraform plan`.
 
 ---
 

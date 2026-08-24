@@ -21,8 +21,8 @@ spec/21-app/22-infrastructure/13-iac.md:infra
 # PR:#0 reason:Terraform module path modules/cloud-project/variables.tf
 spec/21-app/22-infrastructure/13-iac.md:modules
 
-# PR:#0 reason:Pulumi stack name letsmarknow-v2/<env>, not a storage bucket
-spec/21-app/22-infrastructure/13-iac.md:letsmarknow-v2
+# PR:#0 reason:Pulumi stack name letsmarknow/<env>, not a storage bucket
+spec/21-app/22-infrastructure/13-iac.md:letsmarknow
 
 # PR:#0 reason:JSON Schema repo path schemas/lmn-export-v1.json
 spec/21-app/11-import-export/01-formats.md:schemas

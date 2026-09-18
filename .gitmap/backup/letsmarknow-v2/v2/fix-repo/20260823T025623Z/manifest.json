@@ -7,9 +7,9 @@
   "files": [
     "scripts/lint/readme.md",
     "scripts/lint/storage-path.allowlist.txt",
-    "spec/21-app/00-conversation-log.md",
-    "spec/21-app/05-web-app/16-seo.md",
-    "spec/21-app/16-notifications-updates/01-in-app-updates-feed.md",
-    "spec/21-app/22-infrastructure/13-iac.md"
+    "02-spec/21-app/00-conversation-log.md",
+    "02-spec/21-app/05-web-app/16-seo.md",
+    "02-spec/21-app/16-notifications-updates/01-in-app-updates-feed.md",
+    "02-spec/21-app/22-infrastructure/13-iac.md"
   ]
 }

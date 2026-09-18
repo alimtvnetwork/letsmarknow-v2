@@ -19,14 +19,14 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-30-extension-sweep-108.md (NEW; 4 findings — EX1+EX2 S2, EX3 S2, EX4 S3 — ALL CLOSED same session)
-- spec/21-app/04-extension/04-popup.md (added §1.1 Tab bar segmented-control table; updated Saved tab in §1 anatomy ASCII; fixed §14 cross-ref §2 → §1.1)
-- spec/21-app/04-extension/02-surfaces.md (updated §1 popup description for 3-tab body; added §11 Open Tabs Panel + §12 Next Queue Panel)
-- spec/21-app/04-extension/12-messaging.md (added 4 surface→SW NEXT_* messages + 4 SW→surface broadcast NEXT_ITEM_* events)
-- spec/21-app/04-extension/03-service-worker.md (added NEXT_* to §4 Msg union; added §5.1 Realtime subscriptions block)
-- spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md (metadata format fix: ---frontmatter--- → HTML comment + closed-on + closed-because per audit-cadence)
+- 02-spec/21-app/23-audits/audit-2026-04-30-extension-sweep-108.md (NEW; 4 findings — EX1+EX2 S2, EX3 S2, EX4 S3 — ALL CLOSED same session)
+- 02-spec/21-app/04-extension/04-popup.md (added §1.1 Tab bar segmented-control table; updated Saved tab in §1 anatomy ASCII; fixed §14 cross-ref §2 → §1.1)
+- 02-spec/21-app/04-extension/02-surfaces.md (updated §1 popup description for 3-tab body; added §11 Open Tabs Panel + §12 Next Queue Panel)
+- 02-spec/21-app/04-extension/12-messaging.md (added 4 surface→SW NEXT_* messages + 4 SW→surface broadcast NEXT_ITEM_* events)
+- 02-spec/21-app/04-extension/03-service-worker.md (added NEXT_* to §4 Msg union; added §5.1 Realtime subscriptions block)
+- 02-spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md (metadata format fix: ---frontmatter--- → HTML comment + closed-on + closed-because per audit-cadence)
 - scripts/lint/naming-convention.allowlist.txt (added audits 107 + 108)
-- .lovable/memory/index.md
+- .ai-memory/memory/index.md
 
 ---
 
@@ -41,8 +41,8 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md (NEW; 0 findings; full idem-coverage matrix + 17 linter results)
-- .lovable/memory/index.md
+- 02-spec/21-app/23-audits/audit-2026-04-30-api-endpoints-sweep-107.md (NEW; 0 findings; full idem-coverage matrix + 17 linter results)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -57,13 +57,13 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-30-auth-accounts-sweep-106.md (NEW; 4 findings — AA1 S1, AA2 S2, AA3+AA4 S3 — ALL CLOSED same session; verified audit-70 AU1 already closed)
-- spec/21-app/03-api-endpoints/03-auth.md (POST /magic-link/consume → GET /magic-link/callback to match SoT)
-- spec/21-app/03-api-endpoints/00-overview.md (count table: GET 50→51, POST 99→98)
-- spec/21-app/09-auth-accounts/06-sessions.md §1.3 (trust cookie name + SameSite + 2 broken §-anchors corrected)
-- spec/21-app/19-security-privacy/04-gdpr-ccpa.md §11 (trust cookie renamed to canonical __Host-lmn_trust)
+- 02-spec/21-app/23-audits/audit-2026-04-30-auth-accounts-sweep-106.md (NEW; 4 findings — AA1 S1, AA2 S2, AA3+AA4 S3 — ALL CLOSED same session; verified audit-70 AU1 already closed)
+- 02-spec/21-app/03-api-endpoints/03-auth.md (POST /magic-link/consume → GET /magic-link/callback to match SoT)
+- 02-spec/21-app/03-api-endpoints/00-overview.md (count table: GET 50→51, POST 99→98)
+- 02-spec/21-app/09-auth-accounts/06-sessions.md §1.3 (trust cookie name + SameSite + 2 broken §-anchors corrected)
+- 02-spec/21-app/19-security-privacy/04-gdpr-ccpa.md §11 (trust cookie renamed to canonical __Host-lmn_trust)
 - scripts/lint/naming-convention.allowlist.txt (new audit file)
-- .lovable/memory/index.md
+- .ai-memory/memory/index.md
 
 ---
 
@@ -78,13 +78,13 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md (NEW; 7 findings — LS1-LS4 S2, LS5-LS7 S3 — ALL CLOSED same session)
-- spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md (added missing metadata block)
-- spec/21-app/23-audits/audit-2026-04-29-{import-export-sweep-78,licensing-billing-sweep-74,security-privacy-sweep-66,security-privacy-sweep-87,security-privacy-sweep,sharing-collab-sweep-83,sharing-collab-sweep,auth-accounts-sweep-70,data-model-sweep-99,data-model-sweep,extension-sweep-95,history-undo-sweep-91}.md + audit-2026-04-30-ui-ux-sweep-103.md (header normalization: gap-sweep → ad-hoc, freeform status → bare closed + closed-because)
-- spec/21-app/24-i18n-a11y/ (RENAMED from 17-i18n-a11y/ to fix 17/17 collision; 00-overview.md restructured to canonical 5-section layout)
-- spec/21-app/{04-extension/07-context-menu.md,04-extension/17-store-listing.md,05-web-app/05-account-settings.md,06-ui-ux/22-keyboard-cheatsheet.md,10-licensing-billing/16-billing-emails.md,13-spec-issues/04-closed-issues.md,23-audits/audit-2026-04-29-si-026-closure.md,24-i18n-a11y/01-extension-strings.md} (path refs 17- → 24-)
+- 02-spec/21-app/23-audits/audit-2026-04-30-linter-sweep-105.md (NEW; 7 findings — LS1-LS4 S2, LS5-LS7 S3 — ALL CLOSED same session)
+- 02-spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md (added missing metadata block)
+- 02-spec/21-app/23-audits/audit-2026-04-29-{import-export-sweep-78,licensing-billing-sweep-74,security-privacy-sweep-66,security-privacy-sweep-87,security-privacy-sweep,sharing-collab-sweep-83,sharing-collab-sweep,auth-accounts-sweep-70,data-model-sweep-99,data-model-sweep,extension-sweep-95,history-undo-sweep-91}.md + audit-2026-04-30-ui-ux-sweep-103.md (header normalization: gap-sweep → ad-hoc, freeform status → bare closed + closed-because)
+- 02-spec/21-app/24-i18n-a11y/ (RENAMED from 17-i18n-a11y/ to fix 17/17 collision; 00-overview.md restructured to canonical 5-section layout)
+- 02-spec/21-app/{04-extension/07-context-menu.md,04-extension/17-store-listing.md,05-web-app/05-account-settings.md,06-ui-ux/22-keyboard-cheatsheet.md,10-licensing-billing/16-billing-emails.md,13-spec-issues/04-closed-issues.md,23-audits/audit-2026-04-29-si-026-closure.md,24-i18n-a11y/01-extension-strings.md} (path refs 17- → 24-)
 - scripts/lint/{link-check,naming-convention,sku-naming,backticked-path-resolution}.allowlist.txt (extended; review-by refreshed to 2026-10-27)
-- .lovable/memory/index.md
+- .ai-memory/memory/index.md
 
 ---
 
@@ -99,11 +99,11 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md (NEW; 3 findings — NQ1+NQ2 S2, NQ3 S3 — ALL CLOSED same session)
-- spec/21-app/02-data-model/11-account.md (added `account_setting` sub-entity with 8 keys + RLS)
-- spec/21-app/08-sharing-collab/14-realtime-transport.md (added `account:{account_id}:next` channel row)
-- spec/21-app/20-roadmap/02-phase-1-v1.md (listed Next under Phase-1 Save flows)
-- .lovable/memory/index.md
+- 02-spec/21-app/23-audits/audit-2026-04-30-next-queue-readiness.md (NEW; 3 findings — NQ1+NQ2 S2, NQ3 S3 — ALL CLOSED same session)
+- 02-spec/21-app/02-data-model/11-account.md (added `account_setting` sub-entity with 8 keys + RLS)
+- 02-spec/21-app/08-sharing-collab/14-realtime-transport.md (added `account:{account_id}:next` channel row)
+- 02-spec/21-app/20-roadmap/02-phase-1-v1.md (listed Next under Phase-1 Save flows)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -118,8 +118,8 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md (NEW; 4 findings — DM1+DM2 S2, DM3+DM4 S3)
-- .lovable/memory/index.md
+- 02-spec/21-app/23-audits/audit-2026-04-29-data-model-sweep-99.md (NEW; 4 findings — DM1+DM2 S2, DM3+DM4 S3)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -134,10 +134,10 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/04-extension/19-staging-seed.md (§6 — role-enforcement SoT cross-ref)
-- spec/21-app/04-extension/11-auth-bridge.md (§4 — Idempotency-Key SoT cross-ref)
-- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX3+EX4 closed; audit fully CLOSED 4/4)
-- .lovable/memory/index.md
+- 02-spec/21-app/04-extension/19-staging-seed.md (§6 — role-enforcement SoT cross-ref)
+- 02-spec/21-app/04-extension/11-auth-bridge.md (§4 — Idempotency-Key SoT cross-ref)
+- 02-spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX3+EX4 closed; audit fully CLOSED 4/4)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -152,10 +152,10 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/08-sharing-collab/13-share-link.md (§1.4 lead-in + "Extension not installed" row)
-- spec/21-app/04-extension/06-omnibox.md (§102)
-- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX2 closed; 2/4)
-- .lovable/memory/index.md
+- 02-spec/21-app/08-sharing-collab/13-share-link.md (§1.4 lead-in + "Extension not installed" row)
+- 02-spec/21-app/04-extension/06-omnibox.md (§102)
+- 02-spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX2 closed; 2/4)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -170,9 +170,9 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/04-extension/01-manifest.md (§96-107 `webNavigation` perm + §148 rationale row)
-- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX1 closed; 1/4)
-- .lovable/memory/index.md
+- 02-spec/21-app/04-extension/01-manifest.md (§96-107 `webNavigation` perm + §148 rationale row)
+- 02-spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (EX1 closed; 1/4)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -187,8 +187,8 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (NEW; 4 findings — EX1 S2, EX2/EX3/EX4 S3)
-- .lovable/memory/index.md
+- 02-spec/21-app/23-audits/audit-2026-04-29-extension-sweep-95.md (NEW; 4 findings — EX1 S2, EX2/EX3/EX4 S3)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -203,10 +203,10 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/12-history-undo/03-conflict-resolution.md (§15 — Idempotency-Key SoT cross-ref)
-- spec/21-app/12-history-undo/01-event-log.md (§8 — history endpoints SoT cross-ref)
-- spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md (HU4+HU5 closed; audit fully CLOSED 5/5)
-- .lovable/memory/index.md
+- 02-spec/21-app/12-history-undo/03-conflict-resolution.md (§15 — Idempotency-Key SoT cross-ref)
+- 02-spec/21-app/12-history-undo/01-event-log.md (§8 — history endpoints SoT cross-ref)
+- 02-spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md (HU4+HU5 closed; audit fully CLOSED 5/5)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -221,12 +221,12 @@ List out the remaining tasks always, if you finish then in future `next` command
 ```
 
 **Refactored into:**
-- spec/21-app/10-licensing-billing/01-plans-matrix.md (added `features.history.retention_days` + `features.history.time_travel` keys)
-- spec/21-app/12-history-undo/02-undo-redo.md (§2, §4, §13 — entitlement-pinned)
-- spec/21-app/12-history-undo/01-event-log.md (§7 — entitlement cross-ref)
-- spec/21-app/12-history-undo/readme.md (§26 — replaced "30 days" with per-plan retention)
-- spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md (HU2 + HU3 closed; 3/5)
-- .lovable/memory/index.md
+- 02-spec/21-app/10-licensing-billing/01-plans-matrix.md (added `features.history.retention_days` + `features.history.time_travel` keys)
+- 02-spec/21-app/12-history-undo/02-undo-redo.md (§2, §4, §13 — entitlement-pinned)
+- 02-spec/21-app/12-history-undo/01-event-log.md (§7 — entitlement cross-ref)
+- 02-spec/21-app/12-history-undo/readme.md (§26 — replaced "30 days" with per-plan retention)
+- 02-spec/21-app/23-audits/audit-2026-04-29-history-undo-sweep-91.md (HU2 + HU3 closed; 3/5)
+- .ai-memory/memory/index.md
 
 ---
 
@@ -415,7 +415,7 @@ Next,
 List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 ```
 
-**Refactored into:** Backed yesterday's DoD §6 Locked Rule #5 ("Toby-parity invariants checked by CI lint, not by humans alone") with concrete linter specs in `22-infrastructure/09-ci-cd.md §2.1.1`. Added 4 new sub-checks to the `spec-drift-linter` registry: (1) `brand-pink-anchor` — verifies `--primary` resolves to `343 79% 60%`, blocks literal `#EC4868` outside the token site, blocks the rejected `347 81% 60%` value. (2) `color-label-tokens` — verifies all 9 locked enum tokens defined for light + dark, blocks `gray` (the Save Session v1 paste tried to add it), blocks hex literals in label rendering. (3) `collection-kind-discriminator` — verifies 2-value enum (`manual`, `session`) in spec + TS + SQL, gates UI conditionals on `kind===session` not `captured_at`, blocks post-create mutation. (4) `toast-placement` — verifies single `<Toaster />` at app root with bottom-right desktop / top-center mobile, blocks rejected `bottom-left`. Updated registry header from "twelve sub-checks" to "fifteen sub-checks" and broadened scope from `spec/21-app/**/*.md` only to also cover `src/**/*.{ts,tsx,css}` so the brand + token rules can fire on actual code. Each new linter cites its originating SI for traceability. Result: DoD Rule #5 is now executable, not aspirational.
+**Refactored into:** Backed yesterday's DoD §6 Locked Rule #5 ("Toby-parity invariants checked by CI lint, not by humans alone") with concrete linter specs in `22-infrastructure/09-ci-cd.md §2.1.1`. Added 4 new sub-checks to the `spec-drift-linter` registry: (1) `brand-pink-anchor` — verifies `--primary` resolves to `343 79% 60%`, blocks literal `#EC4868` outside the token site, blocks the rejected `347 81% 60%` value. (2) `color-label-tokens` — verifies all 9 locked enum tokens defined for light + dark, blocks `gray` (the Save Session v1 paste tried to add it), blocks hex literals in label rendering. (3) `collection-kind-discriminator` — verifies 2-value enum (`manual`, `session`) in spec + TS + SQL, gates UI conditionals on `kind===session` not `captured_at`, blocks post-create mutation. (4) `toast-placement` — verifies single `<Toaster />` at app root with bottom-right desktop / top-center mobile, blocks rejected `bottom-left`. Updated registry header from "twelve sub-checks" to "fifteen sub-checks" and broadened scope from `02-spec/21-app/**/*.md` only to also cover `src/**/*.{ts,tsx,css}` so the brand + token rules can fire on actual code. Each new linter cites its originating SI for traceability. Result: DoD Rule #5 is now executable, not aspirational.
 
 ---
 
@@ -555,7 +555,7 @@ List out the remaining tasks always, if you finish then in future `next` command
 
 **First run found 23 violations** — all legitimate documented exceptions, not real drift:
 - 19 audit corpus files using the `audit-YYYY-MM-DD-slug.md` scheme owned by the audit-cadence sub-check (§2.1.4(f) explicitly carves these out)
-- 1 root-level dir-gap at slot `21` (the `spec/21-app/` directory IS the 21 slot in its parent context — there is no nested `21-*` child by design)
+- 1 root-level dir-gap at slot `21` (the `02-spec/21-app/` directory IS the 21 slot in its parent context — there is no nested `21-*` child by design)
 - 1 non-domain assets folder `06-ui-ux/wireframes/` (PNG/SVG design assets, not numbered spec)
 - 1 legacy root-level `flow-diagrams-index.md` pending migration into `00-overview/`
 - 1 supporting analysis doc `23-audits/gap-analysis.md`
@@ -621,13 +621,13 @@ Next,
 List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 ```
 
-**Refactored into:** Wrote fifth real linter at `scripts/lint/folder-overview.ts` (~90 lines, zero deps). Implements the F-FOLDER-OVERVIEW invariant locked Session 19 retrospective: every directory under `spec/21-app/` (recursive, excluding hidden, `templates/`, allowlist, and root itself) MUST contain `00-overview.md` with ≥40 lines and the 5 canonical headings (Responsibilities, File-by-file behaviour|behavior, Tasks performed by this folder, What this folder is NOT, Cross-references). Heading regex tolerates the British/American spelling split for §2.
+**Refactored into:** Wrote fifth real linter at `scripts/lint/folder-overview.ts` (~90 lines, zero deps). Implements the F-FOLDER-OVERVIEW invariant locked Session 19 retrospective: every directory under `02-spec/21-app/` (recursive, excluding hidden, `templates/`, allowlist, and root itself) MUST contain `00-overview.md` with ≥40 lines and the 5 canonical headings (Responsibilities, File-by-file behaviour|behavior, Tasks performed by this folder, What this folder is NOT, Cross-references). Heading regex tolerates the British/American spelling split for §2.
 
 **First-run drift caught — 11 violations across 3 files:**
 
-1. `spec/21-app/00-overview/00-overview.md` — heading 1 was `## 1. Responsibilities of this folder` (trailing suffix). **Fixed:** renamed to canonical `## 1. Responsibilities`.
-2. `spec/21-app/23-audits/00-overview.md` — all 5 headings were unnumbered (`## Responsibilities`, `## File-by-file behaviour`, `## Tasks performed`, `## What this folder is NOT`, `## Cross-references`). **Fixed:** renumbered all 5 to canonical form. Side-effect: the standalone `## Audit cadence registry` section (between 4 and 5) is now correctly identified as a non-canonical extension, which is fine — the linter only requires the 5 canonical headings exist, not that no others do.
-3. `spec/21-app/03-api-endpoints/00-overview.md` — legitimate semantic mismatch. This file is an **HTTP-method index** where `## 1. GET — read endpoints`, `## 2. POST — ...`, `## 3. PATCH`, `## 4. PUT`, `## 5. DELETE` carry method-bucket semantics, not folder-overview semantics. Renumbering would destroy the index utility (and the file is already validated by the `endpoint-counts` sub-check, which is the right rule for it). **Allowlisted** in `scripts/lint/folder-overview.allowlist.txt` with PR:#0 + reason citing the alt-schema rationale + 2026-10-26 review-by.
+1. `02-spec/21-app/00-overview/00-overview.md` — heading 1 was `## 1. Responsibilities of this folder` (trailing suffix). **Fixed:** renamed to canonical `## 1. Responsibilities`.
+2. `02-spec/21-app/23-audits/00-overview.md` — all 5 headings were unnumbered (`## Responsibilities`, `## File-by-file behaviour`, `## Tasks performed`, `## What this folder is NOT`, `## Cross-references`). **Fixed:** renumbered all 5 to canonical form. Side-effect: the standalone `## Audit cadence registry` section (between 4 and 5) is now correctly identified as a non-canonical extension, which is fine — the linter only requires the 5 canonical headings exist, not that no others do.
+3. `02-spec/21-app/03-api-endpoints/00-overview.md` — legitimate semantic mismatch. This file is an **HTTP-method index** where `## 1. GET — read endpoints`, `## 2. POST — ...`, `## 3. PATCH`, `## 4. PUT`, `## 5. DELETE` carry method-bucket semantics, not folder-overview semantics. Renumbering would destroy the index utility (and the file is already validated by the `endpoint-counts` sub-check, which is the right rule for it). **Allowlisted** in `scripts/lint/folder-overview.allowlist.txt` with PR:#0 + reason citing the alt-schema rationale + 2026-10-26 review-by.
 
 **Cascade benefit — `allowlist-discipline` self-validates:** Adding the new allowlist file automatically triggered the Session-21 meta-rule linter to validate it. Result: `allowlist-discipline: clean — 2 allowlist file(s) validated against 19 known sub-checks`. The trilogy enforcement worked exactly as designed: a new exception got auto-policed without any extra wiring.
 
@@ -647,7 +647,7 @@ Next,
 List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 ```
 
-**Refactored into:** Wrote sixth real linter at `scripts/lint/money-units.ts` (~80 lines, zero deps). Implements W-10 lock from §2.1.1 row 5: forbids `amount_minor`, `amount_in_cents`, `priceInCents`, `discount_minor` (added the fourth term — it appears in spec-wide audit row 165 and was clearly meant to be locked) across all `.md` files under `spec/21-app/`. Word-boundary matching, case-sensitive (camelCase variants are themselves a smell). Reports `{file}:{line}:{col}` so editors can jump.
+**Refactored into:** Wrote sixth real linter at `scripts/lint/money-units.ts` (~80 lines, zero deps). Implements W-10 lock from §2.1.1 row 5: forbids `amount_minor`, `amount_in_cents`, `priceInCents`, `discount_minor` (added the fourth term — it appears in spec-wide audit row 165 and was clearly meant to be locked) across all `.md` files under `02-spec/21-app/`. Word-boundary matching, case-sensitive (camelCase variants are themselves a smell). Reports `{file}:{line}:{col}` so editors can jump.
 
 **First-run drift caught — 19 hits across 10 files:**
 - 18 hits triaged as legitimate documentation references → allowlisted with PR:#0 + per-file reasons
@@ -682,13 +682,13 @@ Next,
 List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 ```
 
-**Refactored into:** Wrote seventh real linter at `scripts/lint/sku-naming.ts` (~70 lines, zero deps). Implements W-6 lock from §2.1.1 row 6: forbids the `_annual` SKU suffix anywhere in `spec/21-app/**/*.md`. Word-boundary on the right (`/_annual\b/`) catches `pro_annual`, `team_annual`, `lifetime_pro_annual`, etc.
+**Refactored into:** Wrote seventh real linter at `scripts/lint/sku-naming.ts` (~70 lines, zero deps). Implements W-6 lock from §2.1.1 row 6: forbids the `_annual` SKU suffix anywhere in `02-spec/21-app/**/*.md`. Word-boundary on the right (`/_annual\b/`) catches `pro_annual`, `team_annual`, `lifetime_pro_annual`, etc.
 
 **First-run result: 9 hits across 6 files, all legitimate documentation references.** Unlike the W-10 sweep (Session 23) which left `discount_minor` in coupon telemetry, the W-6 sweep on 2026-04-19 was actually thorough — every survival of `_annual` in the corpus is a documented quote of the rejected alias (closure notes, audit history, template anti-pattern checklist, the linter rule definition itself). All 6 files allowlisted with PR:#0 + per-file reasons + 2026-10-26 review-by.
 
 **Comparison of the two sweep results:**
 - **W-10** (Session 23): `discount_minor` survived in `10-coupons-and-promotions.md:64` despite explicit "6 files swept" claim → SI-026 opened + closed.
-- **W-6** (Session 24): zero shippable survivors. The closure claim ("`grep -r "_annual" spec/21-app/10-licensing-billing/` returning only this withdrawal note") was accurate.
+- **W-6** (Session 24): zero shippable survivors. The closure claim ("`grep -r "_annual" 02-spec/21-app/10-licensing-billing/` returning only this withdrawal note") was accurate.
 
 **Pattern observation:** grep-verified closures track 5-10% miss rates when the verification grep was scoped to a single folder; they track 0% miss rates when they happened to cover the entire corpus. The W-6 grep happened to be correct because `_annual` is a niche SKU suffix that doesn't appear elsewhere; the W-10 grep was only scoped to billing files and missed `discount_minor` which lives in a telemetry payload. **Implication:** future closure protocols should mandate corpus-wide grep, not folder-scoped — but with a linter in place that's now moot (programmatic enforcement is the sweep).
 
@@ -710,12 +710,12 @@ Next,
 List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 ```
 
-**Refactored into:** Wrote eighth real linter at `scripts/lint/pagination-param.ts` (~80 lines, zero deps). Implements W-13 lock from §2.1.1 row 7: forbids `page_size` and `pageSize` in any file under `spec/21-app/03-api-endpoints/**` or `spec/21-app/05-web-app/**`. Scope is honored exactly as specified — narrower than the W-6/W-10 linters which scanned the whole spec.
+**Refactored into:** Wrote eighth real linter at `scripts/lint/pagination-param.ts` (~80 lines, zero deps). Implements W-13 lock from §2.1.1 row 7: forbids `page_size` and `pageSize` in any file under `02-spec/21-app/03-api-endpoints/**` or `02-spec/21-app/05-web-app/**`. Scope is honored exactly as specified — narrower than the W-6/W-10 linters which scanned the whole spec.
 
 **First-run result: 43 files scanned, 0 violations.** W-13 sweep on 2026-04-19 was thorough — `05-web-app/10-activity-feed.md:9` was the only offender at the time and it was correctly fixed. The forbidden tokens still exist in the corpus (12 hits across audit history, gap-analysis, template, ci-cd rule definition, data-model anti-pattern note) but all live OUTSIDE the scoped directories — so no allowlist is needed.
 
 **Architectural takeaway: scope-narrowing > allowlists.** Compare:
-- `money-units` (Session 23): scope = entire `spec/21-app/`, needed 8 allowlist entries to silence legitimate documentation references.
+- `money-units` (Session 23): scope = entire `02-spec/21-app/`, needed 8 allowlist entries to silence legitimate documentation references.
 - `pagination-param` (Session 25): scope = 2 specific subdirs, needed 0 allowlist entries because documentation lives outside.
 - **Lesson:** when the §2.1.1 row specifies a scope, honor it exactly. A narrower scope removes the chicken-and-egg problem where the linter's own rule definition would be flagged. Future linter implementers should prefer scope-narrowing over allowlist accumulation when both options exist.
 
@@ -783,7 +783,7 @@ List out the remaining tasks always, if you finish then in future `next` command
 - Relative paths resolved via `path.resolve(fileDir, target)`, anchor-stripped, checked against `existsSync`.
 - Allowlist syntax: `<file>:<rawTarget>` per OCCURRENCE, not per file — silencing one bad placeholder shouldn't silence real future drift in the same file.
 
-**Bug caught + fixed mid-session:** Initial header docstring contained `**/*.md` which esbuild interpreted as `*/` closing the JSDoc block. Rewrote to "spec/21-app (recursive `.md` files)". Took 1 retry to spot.
+**Bug caught + fixed mid-session:** Initial header docstring contained `**/*.md` which esbuild interpreted as `*/` closing the JSDoc block. Rewrote to "02-spec/21-app (recursive `.md` files)". Took 1 retry to spot.
 
 **First-run result: 11 violations across 4 files, 0 actual broken links.** All 11 hits triaged as legitimate non-paths:
 - 3× `(?)` — UI mockup empty-state CTA stubs (`04-extension/05-new-tab.md`, `05-web-app/04-onboarding.md`).
@@ -794,7 +794,7 @@ Created `scripts/lint/link-check.allowlist.txt` with 8 occurrence-keyed entries 
 
 **Unexpected finding (worth recording):** Only 34 relative markdown links exist across 294 spec files. The corpus convention is to write cross-references as backticked path strings (e.g. `` `06-ui-ux/01-design-tokens.md §1.1` ``) rather than markdown link syntax `[design tokens](../06-ui-ux/01-design-tokens.md)`. This is why no real broken-link drift surfaced — the surface area is naturally tiny. Two consequences:
 1. The link-check linter, while green, has lower ongoing value than expected.
-2. The backticked-path style is itself an implicit convention worth documenting in `spec/21-app/templates/` and potentially worth a future linter to lock (`backticked-path-validity` — every backticked spec path must resolve, same machinery as link-check but different scanner). Parking this as a future consideration; not opening an SI yet.
+2. The backticked-path style is itself an implicit convention worth documenting in `02-spec/21-app/templates/` and potentially worth a future linter to lock (`backticked-path-validity` — every backticked spec path must resolve, same machinery as link-check but different scanner). Parking this as a future consideration; not opening an SI yet.
 
 **Catch-rate update:** 3 of 10 linters caught real drift on first run (30%). Two of the seven that didn't catch drift (link-check, sku-naming) revealed the spec corpus is structurally cleaner than expected on those axes.
 
@@ -813,7 +813,7 @@ Updated `scripts/lint/readme.md`: **10 of 19 sub-checks now ✅ implemented**. H
 
 **Action taken:** picked #2 from prior queue — implement `pricing-source` linter enforcing the W-3 single-source-of-truth lock for plan prices.
 
-**Implementation:** `scripts/lint/pricing-source.ts` (~95 lines, zero deps). Walks `spec/21-app/**/*.md`, exempts the matrix itself + allowlist files, skips fenced code blocks (ASCII wireframes), skips lines mentioning `01-plans-matrix.md` (already linked-back).
+**Implementation:** `scripts/lint/pricing-source.ts` (~95 lines, zero deps). Walks `02-spec/21-app/**/*.md`, exempts the matrix itself + allowlist files, skips fenced code blocks (ASCII wireframes), skips lines mentioning `01-plans-matrix.md` (already linked-back).
 
 **Tuning iteration (the real story of this session):**
 
@@ -842,11 +842,11 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 **Files changed:**
 - `scripts/lint/pricing-source.ts` (new, 95 lines)
 - `scripts/lint/pricing-source.allowlist.txt` (new, 5 entries)
-- `spec/21-app/06-ui-ux/14-copy-voice.md` §11 — template tokens
-- `spec/21-app/10-licensing-billing/10-coupons-and-promotions.md` §10 — template token
-- `spec/21-app/13-spec-issues/04-closed-issues.md` — SI-027 row added
+- `02-spec/21-app/06-ui-ux/14-copy-voice.md` §11 — template tokens
+- `02-spec/21-app/10-licensing-billing/10-coupons-and-promotions.md` §10 — template token
+- `02-spec/21-app/13-spec-issues/04-closed-issues.md` — SI-027 row added
 - `scripts/lint/readme.md` — `pricing-source` row marked ✅
-- `.lovable/memory/index.md` — issue tracker memory updated to 11/19, +1 closed
+- `.ai-memory/memory/index.md` — issue tracker memory updated to 11/19, +1 closed
 
 **Linter tally: 11 of 19 sub-checks ✅.** Score remains 100/100. Open SI count: 0. Real-drift catch rate now 4/11 (36%).
 
@@ -866,15 +866,15 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 4. Coverage: **spec + one linter** (`next-singleton-invariants`).
 
 **Files changed (12):**
-- `spec/21-app/07-features/17-next-queue.md` — NEW. Authoritative feature spec; scope decisions, IA, 8 entry points, settings, shortcuts, edge cases, acceptance checklist (28 items).
-- `spec/21-app/02-data-model/12-next-item.md` — NEW. Join entity wrapping Item ref + done state + source provenance + tombstone fields. RLS, indexes, lifecycle, realtime channel.
-- `spec/21-app/02-data-model/03-collection.md` — `kind` enum extended to `manual|session|next` + new `account_id` column; Invariants 10–13 added (singleton uniqueness, hierarchy escape, immutability, no direct Items).
-- `spec/21-app/00-overview/02-glossary.md` — new "Next" section (5 terms locked: Next, Next Item, Add to Next, Source Collection, Tombstone).
-- `spec/21-app/04-extension/04-popup.md` — §14 "Next tab body region" appended; full UI wireframe + row anatomy + drag/empty/all-done/loading/error states + multi-Org grouping + active-tab styling.
+- `02-spec/21-app/07-features/17-next-queue.md` — NEW. Authoritative feature spec; scope decisions, IA, 8 entry points, settings, shortcuts, edge cases, acceptance checklist (28 items).
+- `02-spec/21-app/02-data-model/12-next-item.md` — NEW. Join entity wrapping Item ref + done state + source provenance + tombstone fields. RLS, indexes, lifecycle, realtime channel.
+- `02-spec/21-app/02-data-model/03-collection.md` — `kind` enum extended to `manual|session|next` + new `account_id` column; Invariants 10–13 added (singleton uniqueness, hierarchy escape, immutability, no direct Items).
+- `02-spec/21-app/00-overview/02-glossary.md` — new "Next" section (5 terms locked: Next, Next Item, Add to Next, Source Collection, Tombstone).
+- `02-spec/21-app/04-extension/04-popup.md` — §14 "Next tab body region" appended; full UI wireframe + row anatomy + drag/empty/all-done/loading/error states + multi-Org grouping + active-tab styling.
 - `scripts/lint/next-singleton-invariants.ts` — NEW. 5 cross-cutting rules: stale `kind` enum detection; `source_kind` value drift; verb synonym ban ("Add to To-do", "Save for later", etc.); scope phrase ban ("per-workspace Next", etc.); bad realtime channel ban (canonical = `account:{account_id}:next`).
 - `scripts/lint/next-singleton-invariants.allowlist.txt` — NEW. 3 file-level entries (conversation log, closed issues, glossary's own forbidden-list sentence).
 - `scripts/lint/readme.md` — added row for new linter.
-- `.lovable/memory/index.md` — counts updated.
+- `.ai-memory/memory/index.md` — counts updated.
 
 **Linter result:** clean — 296 files scanned, 0 violations. Confirms no other corner of the spec has stale `kind` enums or rejected verb/scope phrases.
 
@@ -898,7 +898,7 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 - NEW `scripts/lint/role-enum.ts` — two-rule linter (enum-drift + foreign-role).
 - NEW `scripts/lint/role-enum.allowlist.txt` — 1 entry (conversation log).
 - `scripts/lint/readme.md` — row updated ⏳ → ✅ with tuning note.
-- `.lovable/memory/index.md` — linter tally bumped 12/19 → 13/19.
+- `.ai-memory/memory/index.md` — linter tally bumped 12/19 → 13/19.
 
 **Linter result:** clean — 296 files scanned, 0 violations.
 
@@ -916,7 +916,7 @@ Both files had passed prior W-3 manual sweeps (W-3 was originally closed 2026-04
 - NEW `scripts/lint/error-code-casing.ts` — two-rule cross-file linter: (A) casing format check, (B) catalog membership check. Catalog (84 codes) auto-extracted from `03-api-endpoints/18-error-codes.md §3.x` table column-1.
 - NEW `scripts/lint/error-code-casing.allowlist.txt` — 4 entries: 2 file-level (conversation log, closed issues) + 2 per-occurrence (QUOTA_EXCEEDED in rule-teaching contexts).
 - `scripts/lint/readme.md` — row updated ⏳ → ✅ with first-run finding.
-- `.lovable/memory/index.md` — linter tally bumped 13/19 → 14/19.
+- `.ai-memory/memory/index.md` — linter tally bumped 13/19 → 14/19.
 
 **Linter result:** clean — 296 files scanned, 0 violations after triage; catalog size = 84.
 
@@ -944,7 +944,7 @@ Both per-occurrence allowlisted with `<file>:<TOKEN>` schema. The rule remains a
 - NEW `scripts/lint/env-var-naming.ts` — two-rule cross-file linter. Reference patterns: `process.env.X`, `process.env['X']`, `import.meta.env.X`, `Deno.env.get('X')`. Catalog (57 vars) auto-extracted from `03-env-vars.md` table column-1 + backticked prose tokens (so the W-12 closure note's `EXT_OAUTH_CLIENT_ID` reference also counts as canonical).
 - NEW `scripts/lint/env-var-naming.allowlist.txt` — Allowlist Discipline schema; 1 entry (conversation log, file-level, review-by 2026-10-29).
 - `scripts/lint/readme.md` — row updated ⏳ → ✅.
-- `.lovable/memory/index.md` — linter tally bumped 14/19 → 15/19.
+- `.ai-memory/memory/index.md` — linter tally bumped 14/19 → 15/19.
 
 **Linter result:** clean on first run — 296 files scanned, 57 cataloged vars, 0 violations. Greenfield (W-12 catalog is referentially intact).
 
@@ -973,7 +973,7 @@ So `storage-path` is the only remaining shippable linter without lifting impleme
 - NEW `scripts/lint/storage-path.ts` — two-rule scoped linter. Rule A `unknown-bucket` (wide-net), Rule B `legacy-prefix` (unconditional). Catalog auto-extracted from §1 table column-1 (10 buckets).
 - NEW `scripts/lint/storage-path.allowlist.txt` — Allowlist Discipline schema; 9 entries (1 file-level + 8 per-occurrence), all triaged.
 - `scripts/lint/readme.md` — row updated ⏳ → ✅.
-- `.lovable/memory/index.md` — linter tally bumped 15/19 → 16/19; noted **all shippable spec-only linters complete**.
+- `.ai-memory/memory/index.md` — linter tally bumped 15/19 → 16/19; noted **all shippable spec-only linters complete**.
 
 **Linter result:** clean — 28 files in scope, 10 cataloged buckets, 0 violations after triage.
 
@@ -1009,8 +1009,8 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 **Picked:** Suggested action #1 — close the dangling reference from `07-features/17-next-queue.md §13` by adding the Next event family to `18-analytics-telemetry/03-events.md`.
 
 **Files changed (8):**
-- `spec/21-app/18-analytics-telemetry/03-events.md` — added `next` to Domains list (§1) and inserted new §2.15 "Next (focused to-do queue)" with 6 events (`next.item.added`, `next.item.opened`, `next.item.done`, `next.item.removed`, `next.item.reordered`, `next.popup.opened`) — exact names promised by `17-next-queue.md §13`. Each row includes per-event props schema, owner file, surface, sample rate. No `org_id` prop on any (Next is per-Account by lock). Inserted at end of catalog to avoid renumbering existing §2.x sections (no cross-refs to numbers found via grep).
-- `spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1` — added row for `next-singleton-invariants` (was orphan per `allowlist-discipline`). Now lists 17 sub-checks (was 16; matches `subcheckNames` count of 20 including the 3 meta-rules).
+- `02-spec/21-app/18-analytics-telemetry/03-events.md` — added `next` to Domains list (§1) and inserted new §2.15 "Next (focused to-do queue)" with 6 events (`next.item.added`, `next.item.opened`, `next.item.done`, `next.item.removed`, `next.item.reordered`, `next.popup.opened`) — exact names promised by `17-next-queue.md §13`. Each row includes per-event props schema, owner file, surface, sample rate. No `org_id` prop on any (Next is per-Account by lock). Inserted at end of catalog to avoid renumbering existing §2.x sections (no cross-refs to numbers found via grep).
+- `02-spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1` — added row for `next-singleton-invariants` (was orphan per `allowlist-discipline`). Now lists 17 sub-checks (was 16; matches `subcheckNames` count of 20 including the 3 meta-rules).
 - `scripts/lint/env-var-naming.allowlist.txt` — reformatted to Allowlist Discipline schema: header + blank-line + per-entry `# PR:#0 reason:...` comment line (was inline format which fails the rule).
 - `scripts/lint/error-code-casing.allowlist.txt` — same reformat.
 - `scripts/lint/role-enum.allowlist.txt` — same reformat.
@@ -1087,8 +1087,8 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 **Discovery:** the referenced file `06-ui-ux/02-keyboard-shortcuts.md` does NOT EXIST. Slot 02 in `06-ui-ux/` is `02-theming.md`. The actual canonical file for keyboard shortcuts is `06-ui-ux/08-keyboard-input.md` (already exists with §1-§10 structure including §2 "Global keymap" with sub-sections 2.1-2.6). The Next-queue spec was referencing a phantom path. **Two wrong refs**, not one — both at line 170 (§8 body) and line 246 (§13 cross-references).
 
 **Files changed (2):**
-- `spec/21-app/06-ui-ux/08-keyboard-input.md` — inserted new `### 2.7 Next (focused to-do queue)` sub-section between §2.6 (Extension-only) and §3 (Focus management). 9 shortcut rows with a Scope column added (Global vs row-focused vs no-input-focused). Conflict notes section explains: `N` suppression on input focus (per §4), `Backspace` discrimination (Next row vs editor), and where `Cmd/Ctrl+Shift+N` is declared (MV3 manifest for ext, app-root keydown for web). The shortcuts mirror Next §8 inline table; this file is now the canonical source per the same "single source of truth" pattern as §1.
-- `spec/21-app/07-features/17-next-queue.md` — fixed both refs: §8 body line 170 + §13 cross-refs line 246, now point to `06-ui-ux/08-keyboard-input.md §2.7`.
+- `02-spec/21-app/06-ui-ux/08-keyboard-input.md` — inserted new `### 2.7 Next (focused to-do queue)` sub-section between §2.6 (Extension-only) and §3 (Focus management). 9 shortcut rows with a Scope column added (Global vs row-focused vs no-input-focused). Conflict notes section explains: `N` suppression on input focus (per §4), `Backspace` discrimination (Next row vs editor), and where `Cmd/Ctrl+Shift+N` is declared (MV3 manifest for ext, app-root keydown for web). The shortcuts mirror Next §8 inline table; this file is now the canonical source per the same "single source of truth" pattern as §1.
+- `02-spec/21-app/07-features/17-next-queue.md` — fixed both refs: §8 body line 170 + §13 cross-refs line 246, now point to `06-ui-ux/08-keyboard-input.md §2.7`.
 
 **Linter sweep result: 16 of 16 active linters still fully green.** No regressions. Specifically:
 - `next-singleton-invariants` clean — the new sub-section uses the locked verb "Add to Next" verbatim (not a forbidden synonym).
@@ -1119,8 +1119,8 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 **Action:** Picked suggested next-action #3 — **Comprehensive re-audit**. Wrote dated audit file `23-audits/audit-2026-04-29-full-green-milestone.md` documenting the milestone (16/16 active linters clean, 0 open SIs, 31 closed, 296 spec files, 171/171 endpoints, 100/100/100). Updated `23-audits/readme.md` reading-order to list the new audit + the four 2026-04-29 surge artifacts that had been missing from the index.
 
 **Files changed (2):**
-- created `spec/21-app/23-audits/audit-2026-04-29-full-green-milestone.md` — Session 37 milestone audit. Six sections: headline numbers, full linter sweep results table, spec-issue tracker state, what-changed-since-last-audit (Sessions 30→37), posture statement for next phase, reproducibility commands. Notes the 4 src-dependent linters parked under `no-implementation-mode` (`brand-pink-anchor`, `color-label-tokens`, `collection-kind-discriminator`, `toast-placement`). Reconciles the SI-022 "157 declared / 0 undeclared" vs linter "171 / 171" delta as fully accounted for by SI-025's §7 rebase.
-- edited `spec/21-app/23-audits/readme.md` — extended reading order from item 15 to items 16–18, listing the missing 2026-04-29 audits and the new milestone audit.
+- created `02-spec/21-app/23-audits/audit-2026-04-29-full-green-milestone.md` — Session 37 milestone audit. Six sections: headline numbers, full linter sweep results table, spec-issue tracker state, what-changed-since-last-audit (Sessions 30→37), posture statement for next phase, reproducibility commands. Notes the 4 src-dependent linters parked under `no-implementation-mode` (`brand-pink-anchor`, `color-label-tokens`, `collection-kind-discriminator`, `toast-placement`). Reconciles the SI-022 "157 declared / 0 undeclared" vs linter "171 / 171" delta as fully accounted for by SI-025's §7 rebase.
+- edited `02-spec/21-app/23-audits/readme.md` — extended reading order from item 15 to items 16–18, listing the missing 2026-04-29 audits and the new milestone audit.
 
 **Linter sweep result: 16 of 16 still clean.** No regressions; this session only added an audit file and one readme entry.
 
@@ -1147,10 +1147,10 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 **Files changed:**
 - created `scripts/lint/backticked-path-resolution.ts` — sister to link-check; scans 1843 backticked markdown-path strings across 297 files; tries (a) relative-to-file-dir + (b) relative-to-spec-root resolution; built-in skips for frozen files (conv-log, 23-audits/, templates/, 06-ui-ux/wireframes/, 13-spec-issues/01-naming-conventions.md, 13-spec-issues/03-phase-plan.md, 13-spec-issues/04-closed-issues.md, 15-visualization/readme.md) and bare uppercase `README.md` / `Readme.md` (export-bundle artifacts).
 - created `scripts/lint/backticked-path-resolution.allowlist.txt` — 21 per-occurrence forward-ref entries, all carrying `PR:#0 reason:SI-026 — ...` per-entry comments per Allowlist Discipline.
-- edited `spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1` — registered the new linter row (anchored after `next-singleton-invariants`); also fixed 3 self-referential basename drifts surfaced by the new linter (`18-error-codes.md` → `../03-api-endpoints/18-error-codes.md`, `audit.md` → `../23-audits/audit.md`, `spec/21-app/templates/folder-overview.md` → `../templates/folder-overview.md`).
+- edited `02-spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1` — registered the new linter row (anchored after `next-singleton-invariants`); also fixed 3 self-referential basename drifts surfaced by the new linter (`18-error-codes.md` → `../03-api-endpoints/18-error-codes.md`, `audit.md` → `../23-audits/audit.md`, `02-spec/21-app/templates/folder-overview.md` → `../templates/folder-overview.md`).
 - edited 14 active spec files to fix bare-basename backticked refs (added `../<folder>/` prefix where the target lived in a sibling folder): `06-ui-ux/17-copy-strings.md`, `06-ui-ux/20-accessibility-wcag.md`, `08-sharing-collab/13-share-link.md`, `08-sharing-collab/14-realtime-transport.md`, `09-auth-accounts/13-rate-limit-values.md` (5 refs), `02-data-model/11-account.md`, `07-features/04-collections.md`, `07-features/17-next-queue.md` (tooltip → `../06-ui-ux/03-component-library.md`), `13-spec-issues/02-current-issues.md`, `17-admin-org/01-organization-settings.md`, `17-admin-org/03-roles.md`, `05-web-app/08-billing-page.md` (3 refs to `../10-licensing-billing/01-plans-matrix.md`), `20-roadmap/03-phase-2-collab.md`, `20-roadmap/06-definition-of-done.md`, `20-roadmap/07-build-readiness.md` (5 refs), `16-notifications-updates/02-app-updater.md`, `16-notifications-updates/03-release-channels.md`, `22-infrastructure/02-environments.md`, `04-extension/16-open-tabs-panel.md`, `19-security-privacy/04-gdpr-ccpa.md`, `03-api-endpoints/18-error-codes.md`. ~30 ref fixes total.
-- edited `spec/21-app/13-spec-issues/02-current-issues.md` — opened **SI-026** (S3) tracking the 21 forward-ref allowlist entries; closure = author the planned files (or convert refs to `(planned)` prose).
-- edited `.lovable/memory/index.md` — refreshed spec-issue-tracker memory (1 open / 31 closed; 17/19 linters shipped).
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md` — opened **SI-026** (S3) tracking the 21 forward-ref allowlist entries; closure = author the planned files (or convert refs to `(planned)` prose).
+- edited `.ai-memory/memory/index.md` — refreshed spec-issue-tracker memory (1 open / 31 closed; 17/19 linters shipped).
 
 **Discovery:** First scan reported **513 violations across 56 files**. Built-in skip lists eliminated 457 (frozen files); ref-fix sweep eliminated 34 (real basename drift in active files); final 21 are genuine forward-refs to planned-but-not-yet-authored docs (`20-release-ops/`, `17-i18n-a11y/`, `share-model.md` v2, `06-ui-ux/options-page.md`, `07-features/add-item-hover-button.md`, `payments-integration.md`, etc.) — all allowlisted with SI-026 reason.
 
@@ -1177,12 +1177,12 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 >
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
-**Action taken.** Picked option #3 from S38's suggested actions: chip away at SI-026. Identified that 3 of the 21 forward-ref entries in `scripts/lint/backticked-path-resolution.allowlist.txt` were not actually missing files — they were bare basenames inside `00-overview/05-browser-scope.md` §2.7 (a section already prefixed with the `20-roadmap/` folder context). The target files (`02-phase-1-v1.md`, `04-phase-3-mindmap-ai.md`, `05-phase-4-cross-browser.md`) all exist under `spec/21-app/20-roadmap/`. Fix: qualified the bare basenames to their full relative paths (matching the style already used at lines 106–108 of the same file).
+**Action taken.** Picked option #3 from S38's suggested actions: chip away at SI-026. Identified that 3 of the 21 forward-ref entries in `scripts/lint/backticked-path-resolution.allowlist.txt` were not actually missing files — they were bare basenames inside `00-overview/05-browser-scope.md` §2.7 (a section already prefixed with the `20-roadmap/` folder context). The target files (`02-phase-1-v1.md`, `04-phase-3-mindmap-ai.md`, `05-phase-4-cross-browser.md`) all exist under `02-spec/21-app/20-roadmap/`. Fix: qualified the bare basenames to their full relative paths (matching the style already used at lines 106–108 of the same file).
 
 **Files changed.**
-- `spec/21-app/00-overview/05-browser-scope.md` §2.7: 3 bullets requalified.
+- `02-spec/21-app/00-overview/05-browser-scope.md` §2.7: 3 bullets requalified.
 - `scripts/lint/backticked-path-resolution.allowlist.txt`: removed 3 phase-roadmap entries (was 21, now 18).
-- `spec/21-app/13-spec-issues/02-current-issues.md`: SI-026 row updated (21 → 18); last-updated note refreshed.
+- `02-spec/21-app/13-spec-issues/02-current-issues.md`: SI-026 row updated (21 → 18); last-updated note refreshed.
 
 **Verification.**
 - `backticked-path-resolution`: clean — 1852 backticked paths resolved across 297 files.
@@ -1339,7 +1339,7 @@ All per-occurrence allowlisted with `<file>:<TOKEN>` schema. Rule B (legacy-pref
 - `08-sharing-collab/13-share-link.md`: §1 split into §1.1 (random surface) / §1.2 (lmk memorable surface) / §1.3 (canonical & redirects) / §1.4 (extension resolver matrix); §6 edge cases extended; new §7 (orphaned target repointing); new §8 (request-access page).
 - `04-extension/06-omnibox.md`: appended §11 distinguishing `lmn ` keyword (search) from `lmk/{slug}` URL interception (shortlink).
 - `00-overview/02-glossary.md`: Sharing block expanded — Share link now describes both surfaces; added Memorable slug + `lmk/` shortlink terms.
-- `.lovable/memory/index.md`: new Core rule about the two URL surfaces.
+- `.ai-memory/memory/index.md`: new Core rule about the two URL surfaces.
 
 **Verification.**
 - `backticked-path-resolution`: clean — 1926 backticked paths resolved across 302 files.
@@ -1412,11 +1412,11 @@ Plus a clarifying row for "Set / change memorable `lmk/` slug" so readers see th
 **Result.** SI-026 backlog 13 → 12. Open SI count unchanged (1).
 
 **Files touched.**
-- created `spec/21-app/08-sharing-collab/url-normalization.md`
+- created `02-spec/21-app/08-sharing-collab/url-normalization.md`
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md`
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Next.**
 1. **Drain SI-026 further** — author 2 `06-ui-ux/` stubs (`options-page.md`, `keyboard-cheatsheet.md`). Backlog 12 → 10.
@@ -1436,22 +1436,22 @@ Plus a clarifying row for "Set / change memorable `lmk/` slug" so readers see th
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
 **Action.** Picked suggestion #1 from S44. Authored two UI-surface stubs:
-- `spec/21-app/06-ui-ux/21-options-page.md` (9 sections: surface, layout, sections table, persistence, save semantics, empty/error/loading, accessibility, telemetry, refs).
-- `spec/21-app/06-ui-ux/22-keyboard-cheatsheet.md` (11 sections: trigger, layout, content sources, groups, OS/surface awareness, filter/search, customize/print, accessibility, telemetry, empty/error, refs).
+- `02-spec/21-app/06-ui-ux/21-options-page.md` (9 sections: surface, layout, sections table, persistence, save semantics, empty/error/loading, accessibility, telemetry, refs).
+- `02-spec/21-app/06-ui-ux/22-keyboard-cheatsheet.md` (11 sections: trigger, layout, content sources, groups, OS/surface awareness, filter/search, customize/print, accessibility, telemetry, empty/error, refs).
 
 Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-keyboard-shortcuts.md:48` to use NN- prefixed paths. Removed both allowlist entries. Fixed 4 self-introduced unresolved refs (state-sync → sync-and-offline; converted 2 forward-refs to plain prose). Linter `backticked-path-resolution` re-ran clean (1966 paths / 305 files).
 
 **Result.** SI-026 backlog 12 → 10. Open SI count unchanged (1).
 
 **Files touched.**
-- created `spec/21-app/06-ui-ux/21-options-page.md`
-- created `spec/21-app/06-ui-ux/22-keyboard-cheatsheet.md`
-- edited `spec/21-app/04-extension/02-surfaces.md`
-- edited `spec/21-app/04-extension/08-keyboard-shortcuts.md`
+- created `02-spec/21-app/06-ui-ux/21-options-page.md`
+- created `02-spec/21-app/06-ui-ux/22-keyboard-cheatsheet.md`
+- edited `02-spec/21-app/04-extension/02-surfaces.md`
+- edited `02-spec/21-app/04-extension/08-keyboard-shortcuts.md`
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md`
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Next.**
 1. **Author `07-features/add-item-hover-button.md`** — closes 2 allowlist citations (Toby parity, called from `00-overview/04-competitive-analysis.md` + `readme.md`).
@@ -1472,18 +1472,18 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 >
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
-**Action.** Picked S45 suggestion #1. Authored `spec/21-app/07-features/18-add-item-hover-button.md` (10 sections: rationale, surfaces, visual spec referencing `--primary` token, interaction Given/When/Then, empty states, keyboard `N` binding, telemetry events, accessibility, permission matrix, refs). Renamed 2 citing refs to NN- prefixed path (`00-overview/04-competitive-analysis.md:89` and `readme.md:176` + `:329`). Removed both allowlist entries. Linter clean (1989 paths / 306 files).
+**Action.** Picked S45 suggestion #1. Authored `02-spec/21-app/07-features/18-add-item-hover-button.md` (10 sections: rationale, surfaces, visual spec referencing `--primary` token, interaction Given/When/Then, empty states, keyboard `N` binding, telemetry events, accessibility, permission matrix, refs). Renamed 2 citing refs to NN- prefixed path (`00-overview/04-competitive-analysis.md:89` and `readme.md:176` + `:329`). Removed both allowlist entries. Linter clean (1989 paths / 306 files).
 
 **Result.** SI-026 backlog 10 → 8. Open SI count unchanged (1).
 
 **Files touched.**
-- created `spec/21-app/07-features/18-add-item-hover-button.md`
-- edited `spec/21-app/00-overview/04-competitive-analysis.md`
-- edited `spec/21-app/readme.md`
+- created `02-spec/21-app/07-features/18-add-item-hover-button.md`
+- edited `02-spec/21-app/00-overview/04-competitive-analysis.md`
+- edited `02-spec/21-app/readme.md`
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md`
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Next.**
 1. **Author `10-licensing-billing/07-billing-emails.md`** — single-file SI-026 drop.
@@ -1503,17 +1503,17 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 >
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
-**Action.** Picked S46 suggestion #1. Authored `spec/21-app/10-licensing-billing/16-billing-emails.md` (9 sections: taxonomy, 16-row catalog, typed envelope, decline-reason humanization map, localization, send transport, footer, audit, refs). **Slot decision:** original ref called `07-billing-emails.md` but slot 07 is occupied by `07-seats-and-quotas.md`; chose next free slot `16-` per locked NN- naming rule. Updated citing ref in `03-api-endpoints/17-billing-webhooks.md:345`. Removed allowlist entry. Fixed 2 self-introduced unresolved refs (`22-infrastructure/05-email-transport.md` → `11-email-provider.md`; `19-security-privacy/legal-entity.md` → folded into `07-privacy-policy.md` controller section). Linter clean (2009 paths / 307 files).
+**Action.** Picked S46 suggestion #1. Authored `02-spec/21-app/10-licensing-billing/16-billing-emails.md` (9 sections: taxonomy, 16-row catalog, typed envelope, decline-reason humanization map, localization, send transport, footer, audit, refs). **Slot decision:** original ref called `07-billing-emails.md` but slot 07 is occupied by `07-seats-and-quotas.md`; chose next free slot `16-` per locked NN- naming rule. Updated citing ref in `03-api-endpoints/17-billing-webhooks.md:345`. Removed allowlist entry. Fixed 2 self-introduced unresolved refs (`22-infrastructure/05-email-transport.md` → `11-email-provider.md`; `19-security-privacy/legal-entity.md` → folded into `07-privacy-policy.md` controller section). Linter clean (2009 paths / 307 files).
 
 **Result.** SI-026 backlog 8 → 7. Open SI count unchanged (1).
 
 **Files touched.**
-- created `spec/21-app/10-licensing-billing/16-billing-emails.md`
-- edited `spec/21-app/03-api-endpoints/17-billing-webhooks.md`
+- created `02-spec/21-app/10-licensing-billing/16-billing-emails.md`
+- edited `02-spec/21-app/03-api-endpoints/17-billing-webhooks.md`
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md`
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md`
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Next.**
 1. **Author root-level `payments-integration.md`** — single-file SI-026 drop (1 allowlist entry).
@@ -1538,11 +1538,11 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 **Result.** SI-026 backlog 7 → 6. Open SI count unchanged (1). Hidden tech-debt cleared.
 
 **Files touched.**
-- edited `spec/21-app/03-api-endpoints/10-shares.md`
+- edited `02-spec/21-app/03-api-endpoints/10-shares.md`
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md` (full row rewrite)
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md` (full row rewrite)
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Lesson learned.** When using `code--line_replace` on a single very long line, the `search` pattern must include enough trailing content to be unambiguous, OR use `code--write` / `python` to rewrite the line outright. Prefix-only searches risk silent append-instead-of-replace.
 
@@ -1568,11 +1568,11 @@ Renamed citing refs in `04-extension/02-surfaces.md:29` and `04-extension/08-key
 **Result.** SI-026 backlog 6 → 5. Open SI count unchanged (1). Tree-diagram drift fixed as a bonus.
 
 **Files touched.**
-- edited `spec/21-app/readme.md` (tree block + line 344 prose)
+- edited `02-spec/21-app/readme.md` (tree block + line 344 prose)
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md` (full row rewrite via python to avoid prefix-search pitfall noted in S48)
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md` (full row rewrite via python to avoid prefix-search pitfall noted in S48)
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Next.**
 1. **Author `17-i18n-a11y/` folder + `00-overview.md` + `extension-strings.md`** — closes ~4 of the remaining 5 entries (most cite the same target file). New folder, ~3 files.
@@ -1599,15 +1599,15 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Open SI count: 0.** All forward-ref work complete.
 
 **Files touched.**
-- created `spec/21-app/17-i18n-a11y/00-overview.md`
-- created `spec/21-app/17-i18n-a11y/01-extension-strings.md`
-- edited `spec/21-app/04-extension/07-context-menu.md`
-- edited `spec/21-app/04-extension/17-store-listing.md`
+- created `02-spec/21-app/17-i18n-a11y/00-overview.md`
+- created `02-spec/21-app/17-i18n-a11y/01-extension-strings.md`
+- edited `02-spec/21-app/04-extension/07-context-menu.md`
+- edited `02-spec/21-app/04-extension/17-store-listing.md`
 - edited `scripts/lint/backticked-path-resolution.allowlist.txt`
-- edited `spec/21-app/13-spec-issues/02-current-issues.md` (closed SI-026 row, updated header)
-- edited `spec/21-app/13-spec-issues/04-closed-issues.md` (appended SI-028 closing row with full drain history)
-- edited `.lovable/memory/index.md`
-- edited `spec/21-app/00-conversation-log.md`
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md` (closed SI-026 row, updated header)
+- edited `02-spec/21-app/13-spec-issues/04-closed-issues.md` (appended SI-028 closing row with full drain history)
+- edited `.ai-memory/memory/index.md`
+- edited `02-spec/21-app/00-conversation-log.md`
 
 **Next.**
 1. **Re-paste remaining Toby spec** — closes 6 ergonomics defaults currently parked in `20-roadmap/`.
@@ -1626,12 +1626,12 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 >
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
-**Action taken (suggestion #3):** Authored `spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md` — append-only retrospective documenting the SI-026 drain (21 → 0 over S38–S50). Captures: per-session drain table, file-author vs prose-rewrite decision rule, four recurring tooling failure modes (`line_replace` prefix bug, slot collisions in NN- folders, orphan allowlist entries, citing-ref discovery), final allowlist composition (4 non-SI-026 entries), score impact (held 100/100 throughout, +13 spec files net), and 4 recommendations for future bulk SIs.
+**Action taken (suggestion #3):** Authored `02-spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md` — append-only retrospective documenting the SI-026 drain (21 → 0 over S38–S50). Captures: per-session drain table, file-author vs prose-rewrite decision rule, four recurring tooling failure modes (`line_replace` prefix bug, slot collisions in NN- folders, orphan allowlist entries, citing-ref discovery), final allowlist composition (4 non-SI-026 entries), score impact (held 100/100 throughout, +13 spec files net), and 4 recommendations for future bulk SIs.
 
 **Files changed:**
-- created `spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md`
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md` (Session 51 marker)
+- created `02-spec/21-app/23-audits/audit-2026-04-29-si-026-closure.md`
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md` (Session 51 marker)
 
 **Linter status:** unchanged — 17/17 green. Audit file passes audit-cadence sub-check (declares `audit-date`, `next-audit-by`, `audit-type`, `status`).
 
@@ -1664,11 +1664,11 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 6. Incognito windows in panel = **No** (`incognito: split`)
 
 **Files changed:**
-- edited `spec/21-app/07-features/04-collections.md` §13.9 (Open questions → Locked decisions)
-- edited `spec/21-app/04-extension/16-open-tabs-panel.md` §15 (Open questions → Locked decisions)
-- edited `spec/21-app/20-roadmap/07-build-readiness.md` §4 (parking lot → resolved table)
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md` (Session 52 marker)
+- edited `02-spec/21-app/07-features/04-collections.md` §13.9 (Open questions → Locked decisions)
+- edited `02-spec/21-app/04-extension/16-open-tabs-panel.md` §15 (Open questions → Locked decisions)
+- edited `02-spec/21-app/20-roadmap/07-build-readiness.md` §4 (parking lot → resolved table)
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md` (Session 52 marker)
 
 **Linter status:** unchanged — 17/17 green. **Open SIs:** 0. **Score:** 100/100.
 
@@ -1687,7 +1687,7 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 >
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
-**Action taken (allowed-action #1: audit security-privacy):** Authored `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` — first dedicated audit of `19-security-privacy/` since `audit-2026-04-19-spec-internal.md`. Surfaced **8 findings** (F1–F8): 2× S1, 3× S2, 3× S3.
+**Action taken (allowed-action #1: audit security-privacy):** Authored `02-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` — first dedicated audit of `19-security-privacy/` since `audit-2026-04-19-spec-internal.md`. Surfaced **8 findings** (F1–F8): 2× S1, 3× S2, 3× S3.
 
 **Headline findings:**
 - **F1 (S1)** — Three contradictory sub-processor lists: `02-data-handling.md §7` (AWS/Cloudflare/Postmark/Plain), `04-gdpr-ccpa.md` (AWS/Cloudflare/Postmark), `07-privacy-policy.md §3` (Lovable Cloud/Stripe/Resend). Public-facing legal & CWS-submission risk.
@@ -1700,9 +1700,9 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - **F8 (S3)** — Orphan "Plain / front" sub-processor row, folded into F1.
 
 **Files changed:**
-- created `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md`
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md`
+- created `02-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md`
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md`
 
 **Linter status:** unchanged — 17/17 green (audit file declares all 4 audit-cadence headers + status `open`).
 
@@ -1738,11 +1738,11 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Verification:** `grep -rn` confirms no remaining "AWS / Cloudflare" or bare-"Postmark" references; all 3 surviving Postmark mentions correctly label it as failover.
 
 **Files changed:**
-- edited `spec/21-app/19-security-privacy/02-data-handling.md` §7
-- edited `spec/21-app/19-security-privacy/04-gdpr-ccpa.md` §5
-- edited `spec/21-app/10-licensing-billing/16-billing-emails.md` lines 115 + 142
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md`
+- edited `02-spec/21-app/19-security-privacy/02-data-handling.md` §7
+- edited `02-spec/21-app/19-security-privacy/04-gdpr-ccpa.md` §5
+- edited `02-spec/21-app/10-licensing-billing/16-billing-emails.md` lines 115 + 142
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md`
 
 **Linter status:** unchanged — 17/17 green (changes are within frozen-scope-exempt files; new `22-infrastructure/01-hosting.md` and `04-paddle-integration.md` cross-refs already exist as targets).
 
@@ -1773,10 +1773,10 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 **Verification:** `grep -n Bcrypt` returns empty across `19-security-privacy/01-threat-model.md`; `sed -n '36p;109p;110p'` confirms all three lines are clean.
 
 **Files changed:**
-- edited `spec/21-app/19-security-privacy/01-threat-model.md` (lines 36, 109, 110)
-- edited `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` (added `progress:` header line tracking 6 of 8 closed)
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md`
+- edited `02-spec/21-app/19-security-privacy/01-threat-model.md` (lines 36, 109, 110)
+- edited `02-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` (added `progress:` header line tracking 6 of 8 closed)
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md`
 
 **Linter status:** unchanged — 17/17 green.
 
@@ -1814,11 +1814,11 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 - 17/17 linters still green
 
 **Files changed (this session):**
-- edited `spec/21-app/19-security-privacy/02-data-handling.md` §3 (residency table)
-- edited `spec/21-app/13-spec-issues/02-current-issues.md` (SI-029 row + header)
-- edited `spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` (status closed)
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md`
+- edited `02-spec/21-app/19-security-privacy/02-data-handling.md` §3 (residency table)
+- edited `02-spec/21-app/13-spec-issues/02-current-issues.md` (SI-029 row + header)
+- edited `02-spec/21-app/23-audits/audit-2026-04-29-security-privacy-sweep.md` (status closed)
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md`
 
 **Open SIs:** **1** (SI-029, S2, blocked on human legal review). **Score:** 100/100.
 
@@ -1842,7 +1842,7 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 >
 > List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest
 
-**Action taken (suggested action #1: audit `02-data-model/`):** Authored `spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md` — first dedicated audit of this folder since pre-Phase-9. Surfaced **9 findings** (1×S1, 5×S2, 3×S3).
+**Action taken (suggested action #1: audit `02-data-model/`):** Authored `02-spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md` — first dedicated audit of this folder since pre-Phase-9. Surfaced **9 findings** (1×S1, 5×S2, 3×S3).
 
 **Headline:**
 - **D1 (S1, codegen-blocker)** — `09-history-event.md` `target_type` enum is missing `next_item` AND `account`. Any audit-log row for those entities crashes on first write. LLM building from spec would replicate the bug verbatim.
@@ -1859,9 +1859,9 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 4. Then: D8 + D9 (cleanup).
 
 **Files changed:**
-- created `spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md`
-- edited `spec/21-app/00-conversation-log.md`
-- edited `.lovable/memory/index.md`
+- created `02-spec/21-app/23-audits/audit-2026-04-29-data-model-sweep.md`
+- edited `02-spec/21-app/00-conversation-log.md`
+- edited `.ai-memory/memory/index.md`
 
 **Linter status:** unchanged — 17/17 green (audit file declares all 4 audit-cadence headers + status `open`).
 
@@ -2107,7 +2107,7 @@ Discovered 3 orphan SI-026 self-reference allowlist entries lingering after S48'
 
 **User:** Next, [...standard "list remaining tasks" instruction]
 
-**Action:** Opened new audit `audit-2026-04-29-licensing-billing-sweep-74.md` covering all 19 files in `spec/21-app/10-licensing-billing/`. Identified 10 findings:
+**Action:** Opened new audit `audit-2026-04-29-licensing-billing-sweep-74.md` covering all 19 files in `02-spec/21-app/10-licensing-billing/`. Identified 10 findings:
 - **2 × S1:** LB1 `canceled`/`cancelled` spelling drift (telemetry `plan.cancelled` + `BILL_CANCELLATION_CONFIRMED` email keyed on never-emitted Stripe event); LB2 `amount_*_minor` field names in `08-invoices-and-tax.md` violate locked W-10 `amount_cents` rule.
 - **5 × S2:** LB3 `team_enterprise` plan tier in `02-entitlements-engine.md §50` ranking but not in `License.plan` enum (post-AU8 SoT clash); LB4 Paddle SKU table missing `team_enterprise_yearly` row without explanation; LB5 Paddle webhook lacks `trial_will_end` parity (T-3 trial email broken for Paddle subs); LB6 Paddle webhook lacks `payment_method.*` parity; LB7 `org_subscription.processor` enum declared single-valued in Stripe spec while Paddle writes the same column.
 - **3 × S3:** LB8 dangling `plan_code` reference in `15-sku-map.md §4` (zero hits in `01-plans-matrix.md`); LB9 Paddle `*_TBD` placeholder suffix leak; LB10 Lifetime Team "5 seats" not a structured column.
@@ -2161,7 +2161,7 @@ No open audit findings remain.
 
 **Action:** Previous audit queue was empty. Per memory's suggestion, opened a new gap-sweep audit on `11-import-export/` (highest-leverage un-audited folder).
 
-Created `spec/21-app/23-audits/audit-2026-04-29-import-export-sweep-78.md` with **8 findings (2 S1, 4 S2, 2 S3)**:
+Created `02-spec/21-app/23-audits/audit-2026-04-29-import-export-sweep-78.md` with **8 findings (2 S1, 4 S2, 2 S3)**:
 
 - **IE1 (S1)** — `cancelled` (UK) drift: 3 instances in `03-import-pipeline.md` (lines 112, 170) and `06-large-imports.md` (line 105) plus prose at line 79. Same root-cause class as LB1 (Session 75).
 - **IE2 (S1)** — `import_state` enum drift: three conflicting enums for one concept. Pipeline uses `cancelled`/`resumed_from=…`; large-imports uses `uploaded → parsed → preview_ready → committing → committed`; canonical SoT (`03-api-endpoints/15-import-export.md` line 250) is `awaiting_upload | queued | running | succeeded | partial | failed | canceled`. Pick canonical wire enum; document large-imports stages as sub-state of `running`.
@@ -2335,7 +2335,7 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 **Action:** Drained HU1 (F-class) — restored scorecard to 100/100/100. **Repo-wide ULID sweep surfaced 2 previously-missed violations.**
 - HU1: `02-undo-redo.md §48` "ULIDs" → "UUIDv7" with explanatory note (k-sortable; drop-in compatible with `event_log.id`).
 - **Sweep bonus:** `rg ulid` across entire spec found `18-analytics-telemetry/01-opt-in-analytics.md` lines 49-50 declaring `account_id: "ulid"` + `org_id: "ulid"` in event payload schema — both corrected to `uuidv7` in same session.
-- Verification: `rg -i ulid spec/21-app/ | grep -v audits/` returns zero hits (excluding the 23-audits/ trail and explicit "never ULID" Core-rule citations).
+- Verification: `rg -i ulid 02-spec/21-app/ | grep -v audits/` returns zero hits (excluding the 23-audits/ trail and explicit "never ULID" Core-rule citations).
 - Audit log: 1/5 closed. Scorecard restored.
 
 ---
@@ -2350,7 +2350,7 @@ Reply `next` to start IE1+IE2 (the S1 batch — status enum drift).
 
 **User instruction (verbatim):** "Next, List out the remaining tasks always, if you finish then in future `next` command, find any remaining tasks from memory and suggest"
 
-**Action:** Drained **DM1 (S2)** of `audit-2026-04-29-data-model-sweep-99.md`. Created canonical template `spec/21-app/02-data-model/templates/entity-rls.md` (universal RLS rules + per-entity intent shape + role-action defaults) and appended uniform `## RLS` sections to all 11 entity files: `01-organization.md`, `02-space.md`, `03-collection.md` (kind=next carve-out), `04-group.md`, `05-item.md`, `06-tag.md` (no soft-delete), `07-share.md` (owns `share_grants_access()` helper), `08-member.md` (the user_roles table — non-recursive note), `09-history-event.md` (append-only), `10-license.md` (billing-role visibility), `11-account.md` (strictly per-Account). Each section declares enable-RLS + SELECT/INSERT/UPDATE/DELETE intent referencing `has_role()` SECURITY DEFINER and `share_grants_access()`, plus per-entity carve-outs. Audit-99 now **2 of 4 closed**. Cursor pass restored 99 → 100.
+**Action:** Drained **DM1 (S2)** of `audit-2026-04-29-data-model-sweep-99.md`. Created canonical template `02-spec/21-app/02-data-model/templates/entity-rls.md` (universal RLS rules + per-entity intent shape + role-action defaults) and appended uniform `## RLS` sections to all 11 entity files: `01-organization.md`, `02-space.md`, `03-collection.md` (kind=next carve-out), `04-group.md`, `05-item.md`, `06-tag.md` (no soft-delete), `07-share.md` (owns `share_grants_access()` helper), `08-member.md` (the user_roles table — non-recursive note), `09-history-event.md` (append-only), `10-license.md` (billing-role visibility), `11-account.md` (strictly per-Account). Each section declares enable-RLS + SELECT/INSERT/UPDATE/DELETE intent referencing `has_role()` SECURITY DEFINER and `share_grants_access()`, plus per-entity carve-outs. Audit-99 now **2 of 4 closed**. Cursor pass restored 99 → 100.
 
 ## Session 102 — 2026-04-30 16:20 (UTC+8)
 

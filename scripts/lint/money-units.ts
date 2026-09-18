@@ -4,7 +4,7 @@
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1`):
  *   Disallows `amount_minor`, `amount_in_cents`, `priceInCents`, `discount_minor`
- *   anywhere in `spec/21-app/`. Only `amount_cents` (and prefixed variants like
+ *   anywhere in `02-spec/21-app/`. Only `amount_cents` (and prefixed variants like
  *   `unit_amount_cents`, `discount_cents`, `tax_cents`) is permitted.
  *
  * Locks: W-10 (closed 2026-04-19; sweep across 6 files in 10-licensing-billing/).
@@ -18,7 +18,7 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/money-units.allowlist.txt';
 
 // Forbidden terms with word-boundary matching. Case-sensitive — `priceInCents` is

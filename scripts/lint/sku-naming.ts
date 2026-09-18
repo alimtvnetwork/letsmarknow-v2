@@ -3,7 +3,7 @@
  * sku-naming — spec-drift sub-check
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1`):
- *   Disallows the `_annual` SKU suffix anywhere in `spec/21-app/`.
+ *   Disallows the `_annual` SKU suffix anywhere in `02-spec/21-app/`.
  *   Canonical period suffix is `_yearly` (W-6 lock, closed 2026-04-19).
  *   Source of truth: `10-licensing-billing/15-sku-map.md`.
  *
@@ -16,7 +16,7 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/sku-naming.allowlist.txt';
 
 // `_annual` with word boundary on the right. Left side intentionally permissive

@@ -3,7 +3,7 @@
  * ulid-placeholder — spec-drift sub-check
  *
  * Bans ULID-shaped placeholders (`01J...`, `01H...`, `01K...` etc — Crockford
- * base32 starting with `01[A-Z]`) anywhere in `spec/21-app/`. Locked Core rule:
+ * base32 starting with `01[A-Z]`) anywhere in `02-spec/21-app/`. Locked Core rule:
  * "Identifiers: UUIDv7 everywhere. Never ULID."
  *
  * Canonical placeholder is the UUIDv7 stub `0190a4f1-6c5e-7c2a-9b3f-1234567890ab`.
@@ -20,7 +20,7 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/ulid-placeholder.allowlist.txt';
 // Matches ULID placeholders like `"01J..."` or `[01J...]` — must be preceded by
 // a quote, bracket, paren, comma, space, or line start so ISO timestamps such

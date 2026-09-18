@@ -35,8 +35,8 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
-const CATALOG_PATH = 'spec/21-app/22-infrastructure/03-env-vars.md';
+const ROOT = '02-spec/21-app';
+const CATALOG_PATH = '02-spec/21-app/22-infrastructure/03-env-vars.md';
 const ALLOWLIST_PATH = 'scripts/lint/env-var-naming.allowlist.txt';
 
 const SCREAMING_RE = /^[A-Z][A-Z0-9_]+$/;

@@ -1,0 +1,77 @@
+<!--
+audit-date: 2026-04-29
+next-audit-by: 2026-10-26
+audit-type: ad-hoc
+status: closed
+opened-on: 2026-04-29
+closed-on: 2026-04-30
+closed-because: All 4 findings (DM1-DM4) drained across sessions 100-102.
+scope: 02-data-model/ folder — RLS coverage, has_role() SoT pin, FK on-delete clauses, per-entity permissions-matrix cross-ref
+-->
+
+# Audit — Data Model Sweep (Session 99)
+
+**Date:** 2026-04-29 (Session 99, Malaysia time UTC+8)
+**Author:** Lovable agent
+**Scope:** 14 markdown files (~1,118 lines) in `02-spec/21-app/02-data-model/`. Cross-checked against Core memory ("UUIDv7 everywhere", "Role enum locked"), `<user-roles>` directive (separate `user_roles` table + SECURITY DEFINER `has_role()` pattern), `08-sharing-collab/05-permissions-matrix.md` (matrix SoT), `19-security-privacy/01-threat-model.md` "Elevation of privilege" row (role-enforcement pattern, established Session 90).
+**Reason:** Foundational folder; never deep-audited end-to-end. Drift here cascades everywhere.
+
+> **Open audit.** Drain in subsequent sessions.
+
+---
+
+## 1. Baseline strengths (no findings — verified clean)
+
+- ✅ **UUIDv7 discipline**: every entity declares `uuid` PK + FKs; `00-overview.md §10` locks the rule. Repo `rg ulid` clean (per Session 92 sweep).
+- ✅ **Role enum lock**: `08-member.md §15` enumerates the canonical 7-value `org_role` (`owner|admin|editor|viewer|billing|guest|system`); `system` server-issued only, enforced via SQL CHECK in `17-admin-org/03-roles.md §2`.
+- ✅ **Soft-delete uniformity**: `deleted_at` (`timestamptz UTC`) declared in `00-overview.md §11`; `01-organization.md`, `02-space.md`, `03-collection.md`, `04-group.md`, `05-item.md` all carry the partial index `(organization_id, deleted_at)` and a 30-day Trash window per `00-overview.md §3`.
+- ✅ **Color-label enum lock**: `05-item.md §26` carries the 9-value `color_label` enum with hex resolution explicitly delegated to `06-ui-ux/01-design-tokens.md` `--color-label-*` (matches Core memory).
+- ✅ **Permissions matrix exists**: `08-sharing-collab/05-permissions-matrix.md` is present (cross-ref from `00-overview.md §44 + §61` and `08-member.md §50` resolves correctly; the older spec-internal audit S19 worry that it was unindexed is partially closed by `00-overview.md`, but per-entity drift remains — see DM4).
+
+---
+
+## 2. Headline findings
+
+| # | Severity | Title | Owning file(s) for fix |
+|---|---|---|---|
+| DM1 | ✅ **CLOSED** (Session 101) | **RLS-section coverage gap.** Closed by creating canonical template `02-data-model/templates/entity-rls.md` (universal rules + per-entity intent shape + role-action defaults) AND appending a uniform `## RLS` section to all 11 entity files: `01-organization.md`, `02-space.md`, `03-collection.md` (with `kind = next` carve-out), `04-group.md`, `05-item.md`, `06-tag.md` (no soft-delete), `07-share.md` (owns the `share_grants_access()` helper), `08-member.md` (the `user_roles` table — special non-recursive note), `09-history-event.md` (append-only), `10-license.md` (billing-role visibility), `11-account.md` (strictly per-Account). Each section declares: `enable row level security`, SELECT/INSERT/UPDATE/DELETE intent referencing `has_role(_user_id, _role)` SECURITY DEFINER (per `19-security-privacy/01-threat-model.md`) and `share_grants_access()` for share-mediated reads, plus per-entity carve-outs (kind=next, billing-only, password_hash projection, system role server-only, etc.). Implementer AIs can now synthesize `CREATE POLICY` SQL per table without further inference. Cursor pass restored 99 → 100. Original finding text retained below for traceability. — `00-overview.md §15` declares "the schema is the law; functions only translate intent" and §44 promises an "RLS hook surface" per entity, but only `12-next-item.md` carries an explicit `## RLS` section. | `02-data-model/01-organization.md … 11-account.md` (11 files) + `02-data-model/templates/entity-rls.md` (new) |
+| DM2 | ✅ **CLOSED** (Session 100) | **Role-enforcement pattern not pinned to SoT in `08-member.md`.** Closed by appending `## Role-enforcement contract` section to `02-data-model/08-member.md` citing `19-security-privacy/01-threat-model.md` "Elevation of privilege" row + reaffirming `system` role server-issued-only constraint pinned to `17-admin-org/03-roles.md §2`. Original finding: `08-member.md` IS the canonical `user_roles` table per the `<user-roles>` directive (membership is the only place where `(account_id, organization_id) → role` lives), but the file never says so explicitly and never cites the SECURITY DEFINER `has_role(_user_id, _role)` function pattern that all RLS policies must call. A new AI reading this file in isolation could plausibly build a `profile.role` shortcut — the exact vulnerability the directive forbids. Fix: append a `## Role-enforcement contract` section pointing at `19-security-privacy/01-threat-model.md` "Elevation of privilege" row (canonical pattern citation, Session 90) and stating: "This table is the **sole** source of `(account_id, organization_id) → role`. Never store `role` on `accounts` or any profile table. Server-side checks always go through the `has_role(_user_id, _role)` SECURITY DEFINER function defined in `19-security-privacy/01-threat-model.md`." | `02-data-model/08-member.md` |
+| DM3 | ✅ **CLOSED** (Session 102) | **FK `on delete` clauses missing.** Closed by adding **§4a Master foreign-key on-delete table** to `02-data-model/00-overview.md` enumerating every cross-entity FK (Org-tree cascades, Item.group_id `set null`, License `restrict`, Owner `restrict`, polymorphic application-managed FKs for Share.target_id and HistoryEvent.target_id, universal `created_by`/`updated_by` `set null` Audit-Block rule), AND adding a `## Foreign keys` pointer block to all 12 entity files (01–11 + 12-next-item) with per-entity carve-outs. Original finding text retained: Older spec-internal audit S3 (2026-04-19) declared a Locked rule "FKs `on delete cascade` per file" for `02-data-model/`; repo `grep -i "on delete"` returned zero hits. | `02-data-model/00-overview.md` (master table) + 12 entity files |
+| DM4 | ✅ **CLOSED** (Session 103) | **Per-entity Permissions-matrix cross-ref drift.** Closed by appending a one-line `## Permissions` block to all 10 entity files (Organization, Space, Collection, Group, Item, Tag, Share, HistoryEvent, License, Account) pointing at `08-sharing-collab/05-permissions-matrix.md` with a per-entity search anchor. `08-member.md` already carried the matrix excerpt + cross-ref (lines 50–61) so was skipped. Original finding text: Only `08-member.md §50` and `00-overview.md §44 + §61` linked to `05-permissions-matrix.md`; per-entity drift carried S19 from `audit-2026-04-19-spec-internal.md`. | `02-data-model/{01-organization,02-space,03-collection,04-group,05-item,06-tag,07-share,09-history-event,10-license,11-account}.md` |
+
+---
+
+## 3. Recommended drain plan
+
+| Session | Findings | Notes |
+|---|---|---|
+| Next | DM2 | Single **S2** with the highest cascade risk (role-storage hygiene). One-section addition to one file. Easy, isolated. |
+| Following | DM1 | The big one: 11-file uniform `## RLS` section addition. Use a template-write approach (one canonical template + per-entity specifics). Likely 2 sessions. |
+| Following | DM3 | Master FK table in `00-overview.md` + per-entity pointers. One coherent session. |
+| Following | DM4 | One-line cross-ref appended to 10 entity files. Mechanical. |
+
+Total estimated: 4-5 sessions to fully drain.
+
+**Scorecard impact NOW (audit-opening only):** No F-class findings. DM1 + DM2 are **S2 functional gaps** (RLS surface declared but not specified per-table; role-enforcement pattern not pinned). Cursor/Claude-Code pass docks 1 point because the spec promises RLS coverage that an implementer can't generate from per-entity files. Lovable and Raw-LLM passes hold (they evaluate prose intent, not per-table SQL synthesizability).
+
+| Pass | Lovable | Cursor/Claude-Code | Raw-LLM |
+|---|---:|---:|---:|
+| Pre-audit | 100 | 100 | 100 |
+| Audit-99 opening | **100** | **99** | **100** |
+| After DM1 + DM2 drain | **100** | **100** | **100** |
+
+---
+
+## 4. Files NOT deeply audited (spot-checked only)
+
+`flow-diagram.mmd`, `readme.md`, `00-overview.md` (read fully for headline rules; no further drift detected beyond the four findings above).
+
+## 5. Cross-references
+
+- `<user-roles>` directive (system-prompt level): canonical pattern for `user_roles` table + SECURITY DEFINER `has_role()`.
+- Role-enforcement-pattern citation SoT: `19-security-privacy/01-threat-model.md` "Elevation of privilege" (per Session 90).
+- Permissions matrix SoT: `08-sharing-collab/05-permissions-matrix.md` (Markdown SoT) + `08-sharing-collab/permissions-matrix.json` (machine-readable mirror).
+- Identifier rule SoT: Core memory + `00-overview.md §10` ("UUIDv7 everywhere. Never ULID.").
+- Color-label SoT: `06-ui-ux/01-design-tokens.md §1.6` `--color-label-*` tokens.
+- Older spec-internal audit (carries S19 + S3): `audit-2026-04-19-spec-internal.md`.
+- Last closed audit: `audit-2026-04-29-extension-sweep-95.md` (4/4).

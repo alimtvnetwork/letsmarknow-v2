@@ -7,7 +7,7 @@
  *   (b) Folder index is exactly `readme.md` (lowercase).
  *   (c) Sequence numbers are contiguous within each folder (no gaps, no duplicates).
  *
- * Scope: `spec/21-app/` recursively. Excludes `templates/`, hidden dirs, and
+ * Scope: `02-spec/21-app/` recursively. Excludes `templates/`, hidden dirs, and
  *        `23-audits/` (governed by `audit-cadence` linter — `audit-YYYY-MM-DD-...md`
  *        filenames are not the NN-prefix convention by design).
  *
@@ -18,14 +18,14 @@
  * The legacy un-prefixed files `flow-diagrams-index.md` (root) and `flow-diagram.mmd`
  * (per-folder) are recognized via allowlist, not hard-coded exceptions.
  *
- * Top-level numbering note: `spec/21-app/` itself jumps 20→22 (no `21-*` folder)
+ * Top-level numbering note: `02-spec/21-app/` itself jumps 20→22 (no `21-*` folder)
  * because `21-app` IS the slot. This is intentional and the contiguity check at the
  * root level treats the missing 21 as a documented exception via allowlist.
  */
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/naming-convention.allowlist.txt';
 const FILE_RE = /^(\d{2})-[a-z0-9-]+\.md$/;
 const DIR_RE = /^(\d{2})-[a-z0-9-]+$/;

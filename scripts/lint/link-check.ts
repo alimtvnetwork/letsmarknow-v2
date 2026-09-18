@@ -3,7 +3,7 @@
  * link-check — spec-drift sub-check
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1` row): every relative
- * markdown link in spec/21-app (recursive `.md` files) resolves to an existing file. Locks W-5.
+ * markdown link in 02-spec/21-app (recursive `.md` files) resolves to an existing file. Locks W-5.
  *
  * Implementation note: the §2.1.1 row suggests `lychee --offline`. This
  * implementation is a pure-Node equivalent — same offline guarantee, no Rust
@@ -27,7 +27,7 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, normalize, relative, resolve } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/link-check.allowlist.txt';
 
 // Markdown link/image regex. Permits images (`![...](...)`) too.

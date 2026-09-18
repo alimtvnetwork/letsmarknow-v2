@@ -22,7 +22,7 @@
  *      `account:{account_id}:next` (curly W-4 form) — bare `next:<...>` or
  *      `next-list:{...}` channel forms are forbidden.
  *
- * Scope: `spec/21-app/**` (entire spec corpus — Next invariants are
+ * Scope: `02-spec/21-app/**` (entire spec corpus — Next invariants are
  * cross-cutting).
  *
  * Allowlist: `scripts/lint/next-singleton-invariants.allowlist.txt` —
@@ -34,7 +34,7 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/next-singleton-invariants.allowlist.txt';
 
 // (1) Stale Collection.kind enum — must include `next`.

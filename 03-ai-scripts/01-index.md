@@ -49,7 +49,7 @@ Follow this sequence before and during any repository modification task:
 | **21** | `21-sequence-integrity-linter.py` | Verifies numeric sequences and headers across plans and subtasks | ~10ms | `sequence`, `linter`, `plans`, `integrity` |
 | **22** | `22-doc-path-linter.py` | Lints markdown references and verifies documentation paths | ~15ms | `paths`, `docs`, `linter`, `relative-paths` |
 | **23** | `23-coding-guideline-path-consolidator.py` | Consolidates coding guideline references to canonical specs | ~18ms | `guidelines`, `paths`, `consolidator` |
-| **24** | `24-spec-path-migrator.py` | Migrates legacy spec references to updated paths | ~15ms | `spec`, `migration`, `paths` |
+| **24** | `24-spec-path-migrator.py` | Migrates legacy spec references to updated paths | ~15ms | `02-spec`, `migration`, `paths` |
 | **25** | `25-repo-migrator.py` | Repository-wide asset and structural migration utility | ~25ms | `migrator`, `repo`, `assets` |
 | **26** | `26-go-code-formatter.py` | Cross-platform Go code formatter via gofmt with staged support | ~20ms | `go`, `gofmt`, `formatter`, `staged` |
 | **27** | `27-misspell-auditor.py` | Audits and auto-fixes British to American English spelling | ~15ms | `spelling`, `misspell`, `us-english`, `autofix` |
@@ -649,7 +649,7 @@ python 03-ai-scripts/19-artifact-remover.py --clean-all --force --permanent
 
 #### Why It Exists
 
-Automates the lifecycle management of Lovable execution plans and subtasks (`.lovable/plans/pending/`, `completed/`, `subtasks/`), keeping planning directories lean, archived, and sequentially ordered.
+Automates the lifecycle management of Lovable execution plans and subtasks (`.ai-memory/plans/pending/`, `completed/`, `subtasks/`), keeping planning directories lean, archived, and sequentially ordered.
 
 #### What It Does
 
@@ -683,7 +683,7 @@ Enforces integrity across all sequential documentation, prompts, execution plans
 
 #### What It Does
 
-- Audits documents in `.lovable/prompts`, `.lovable/plans`, `.agents/skills`, `.lovable/coding-guidelines`, etc.
+- Audits documents in `.ai-memory/prompts`, `.ai-memory/plans`, `.agents/skills`, `.ai-memory/coding-guidelines`, etc.
 - Parses markdown links `[text](target)` and inline backtick paths.
 - Resolves target paths against the repository root while ignoring template placeholders (`<slug>`, `vX.Y.Z`, `XX-`).
 - Returns exit code 0 when all links resolve cleanly, or exit code 1 with broken link details.
@@ -702,7 +702,7 @@ python 03-ai-scripts/21-sequence-integrity-linter.py
 
 #### Why It Exists
 
-Autonomously verifies all markdown links and path references across `01-prompts/`, `02-spec/`, `.lovable/`, and `.agents/`, eliminating dead references and preventing AI agent hallucinations.
+Autonomously verifies all markdown links and path references across `01-prompts/`, `02-spec/`, `.ai-memory/`, and `.agents/`, eliminating dead references and preventing AI agent hallucinations.
 
 #### What It Does
 
@@ -724,12 +724,12 @@ python 03-ai-scripts/22-doc-path-linter.py
 
 #### Why It Exists
 
-Autonomously consolidates references from the legacy nested path (`.lovable/coding-guidelines/coding-guidelines.md`) to the canonical path (`.lovable/coding-guidelines.md`) across all documentation, code, specs, and linters.
+Autonomously consolidates references from the legacy nested path (`.ai-memory/coding-guidelines.md`) to the canonical path (`.ai-memory/coding-guidelines.md`) across all documentation, code, specs, and linters.
 
 #### What It Does
 
 - Recursively scans markdown, Python, JavaScript, TypeScript, Go, shell, and config files.
-- Replaces old paths with the canonical relative path `.lovable/coding-guidelines.md`.
+- Replaces old paths with the canonical relative path `.ai-memory/coding-guidelines.md`.
 - Preserves file formatting and skips ignored directories (`.git`, `node_modules`, `tmp`).
 
 #### CLI Usage & Examples
@@ -768,7 +768,7 @@ python 03-ai-scripts/24-spec-path-migrator.py
 
 #### Why It Exists
 
-Provides a fully transactional, reversible engine to restructure repository layouts (such as migrating legacy `02-spec/` to `02-spec/`, `.lovable/prompts/` to `01-prompts/`, and `.lovable/ai-fix-scripts/` to `03-ai-scripts/`) with 100% undo/redo safety.
+Provides a fully transactional, reversible engine to restructure repository layouts (such as migrating legacy `02-spec/` to `02-spec/`, `01-prompts/` to `01-prompts/`, and `03-ai-scripts/` to `03-ai-scripts/`) with 100% undo/redo safety.
 
 #### What It Does
 
@@ -1013,9 +1013,9 @@ Provides a high-performance auditing and recovery tool to trace files deleted th
 - Deeply inspects Git deletion history (`git log --diff-filter=D`) across the repository or targeted subdirectories.
 - Provides built-in fast presets:
   - `--preset-audit` (or `--audit`, `--spec-audit`): Targets spec audit reports directory (`02-spec/25-app-spec-audit/`).
-  - `--preset-lovable` (or `--lovable`): Targets `.lovable/` folder.
-  - `--preset-plans` (or `--plans`): Targets `.lovable/plans/`.
-  - `--preset-subtasks` (or `--subtasks`): Targets `.lovable/plans/subtasks/`.
+  - `--preset-lovable` (or `--lovable`): Targets `.ai-memory/` folder.
+  - `--preset-plans` (or `--plans`): Targets `.ai-memory/plans/`.
+  - `--preset-subtasks` (or `--subtasks`): Targets `.ai-memory/plans/subtasks/`.
   - `--preset-spec` (or `--spec`): Targets `02-spec/`.
 - Displays a structured, numbered pre-flight report with deletion commit SHA, date, author, commit message, pre-deletion file size, and current on-disk presence.
 - Supports selective filtering via numbered ranges/lists (`--include 1-5`, `--exclude 2,4`) and glob patterns (`--exclude-pattern`).
@@ -1029,10 +1029,10 @@ Provides a high-performance auditing and recovery tool to trace files deleted th
 # Pre-flight inspection of removed audit files in 02-spec/25-app-spec-audit/
 python 03-ai-scripts/32-git-history-file-tracer.py --preset-audit
 
-# Pre-flight inspection of removed markdown files in .lovable/
+# Pre-flight inspection of removed markdown files in .ai-memory/
 python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable
 
-# Pre-flight inspection of removed subtasks in .lovable/plans/subtasks/
+# Pre-flight inspection of removed subtasks in .ai-memory/plans/subtasks/
 python 03-ai-scripts/32-git-history-file-tracer.py --preset-subtasks
 
 # Custom path and extension scan from repository root
@@ -1061,19 +1061,19 @@ python 03-ai-scripts/32-git-history-file-tracer.py --preset-lovable --include 1,
 
 #### Why It Exists
 
-Maintains a single source of truth for repository test coverage at `.lovable/test-inventory.json` (similar to gitmap architecture) and provides a concurrency-safe atomic change tracking mechanism (`.lovable/temp/recent-file-changes.json`) with cross-platform file locking so multi-agent tasks can record file modifications without race conditions or crashes.
+Maintains a single source of truth for repository test coverage at `.ai-memory/test-inventory.json` (similar to gitmap architecture) and provides a concurrency-safe atomic change tracking mechanism (`.ai-memory/temp/recent-file-changes.json`) with cross-platform file locking so multi-agent tasks can record file modifications without race conditions or crashes.
 
 #### What It Does
 
 - Discovers and parses unit tests across Go (`*_test.go`), TypeScript/JavaScript (`*.test.ts`, `*.spec.ts`), and Python (`test_*.py`).
 - Maps tests to target source files, extracts function names, and generates SHA-256 code hashes.
-- Generates and maintains `.lovable/test-inventory.json` with test counts, status tracking, and dirty flags.
-- Under file lock (`.lovable/temp/recent-file-changes.lock`), records distinct repository-relative file paths to `.lovable/temp/recent-file-changes.json` and automatically resolves all associated tests that must be executed when release verification or test fixes are explicitly requested.
+- Generates and maintains `.ai-memory/test-inventory.json` with test counts, status tracking, and dirty flags.
+- Under file lock (`.ai-memory/temp/recent-file-changes.lock`), records distinct repository-relative file paths to `.ai-memory/temp/recent-file-changes.json` and automatically resolves all associated tests that must be executed when release verification or test fixes are explicitly requested.
 
 #### CLI Usage & Examples
 
 ```bash
-# Scan repository and generate / update .lovable/test-inventory.json
+# Scan repository and generate / update .ai-memory/test-inventory.json
 python 03-ai-scripts/33-test-inventory-generator.py
 
 # Safely record modified files under lock and resolve associated tests

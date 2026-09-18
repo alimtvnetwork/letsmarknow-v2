@@ -20,7 +20,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const LINT_DIR = 'scripts/lint';
-const CI_CD_SPEC = 'spec/21-app/22-infrastructure/09-ci-cd.md';
+const CI_CD_SPEC = '02-spec/21-app/22-infrastructure/09-ci-cd.md';
 const MAX_NON_COMMENT_LINES = 50;
 const MAX_REVIEW_WINDOW_DAYS = 180;
 

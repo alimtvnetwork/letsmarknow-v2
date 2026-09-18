@@ -31,8 +31,8 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
-const CATALOG_PATH = 'spec/21-app/03-api-endpoints/18-error-codes.md';
+const ROOT = '02-spec/21-app';
+const CATALOG_PATH = '02-spec/21-app/03-api-endpoints/18-error-codes.md';
 const ALLOWLIST_PATH = 'scripts/lint/error-code-casing.allowlist.txt';
 
 const SCREAMING_RE = /^[A-Z][A-Z0-9_]+$/;

@@ -2,14 +2,14 @@
 /**
  * endpoint-counts — sub-check of `spec-drift-linter`.
  *
- * Spec: spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1 row `endpoint-counts`.
+ * Spec: 02-spec/21-app/22-infrastructure/09-ci-cd.md §2.1.1 row `endpoint-counts`.
  * Meta-rule: Counter Discipline (§2.1.1 + mem://index Core).
  *
  * What this asserts:
- *   (a) Walks every table row across `spec/21-app/03-api-endpoints/0[1-9]-*.md` …
+ *   (a) Walks every table row across `02-spec/21-app/03-api-endpoints/0[1-9]-*.md` …
  *       `1[0-7]-*.md`, excluding `00-overview.md` and `18-error-codes.md`.
  *       Each row's first cell carries either `METHOD /path` or `| METHOD | `/path`...`.
- *   (b) Re-reads `spec/21-app/03-api-endpoints/00-overview.md §7` and asserts the
+ *   (b) Re-reads `02-spec/21-app/03-api-endpoints/00-overview.md §7` and asserts the
  *       printed totals (rows + distinct, per-method) match the computed ones exactly.
  *   (c) Asserts `distinct ≤ total` and lists which paths are duplicated.
  *   (d) Asserts every method bucket sum equals `total`.
@@ -23,7 +23,7 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const RULE = 'endpoint-counts';
-const ROOT = 'spec/21-app/03-api-endpoints';
+const ROOT = '02-spec/21-app/03-api-endpoints';
 const OVERVIEW = join(ROOT, '00-overview.md');
 const EXCLUDE = new Set(['00-overview.md', '18-error-codes.md']);
 

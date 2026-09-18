@@ -45,7 +45,7 @@ infra/
     └── tflint/               # tflint config
 ```
 
-`infra/` lives in the same monorepo as `spec/` and `src/`. PRs that change infra require a label `infra-change` and an additional reviewer from the on-call rotation.
+`infra/` lives in the same monorepo as `02-spec/` and `src/`. PRs that change infra require a label `infra-change` and an additional reviewer from the on-call rotation.
 
 ---
 
@@ -222,7 +222,7 @@ module "dns_apex" {
   records = [
     { name = "@",    type = "A",     value = "1.2.3.4",            proxied = true  },
     { name = "app",  type = "CNAME", value = "lovable.app.",       proxied = true  },
-    { name = "api",  type = "CNAME", value = "cloud.lovable.app.", proxied = true  },
+    { name = "api",  type = "CNAME", value = "cloud.ai-memory.app.", proxied = true  },
     { name = "docs", type = "CNAME", value = "lovable.app.",       proxied = true  },
     { name = "@",    type = "MX",    value = "10 mx.resend.com.",  proxied = false },
     { name = "@",    type = "TXT",   value = "v=spf1 include:_spf.resend.com -all", proxied = false },

@@ -4,7 +4,7 @@
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1`):
  *   Every price string (e.g. `$5`, `$48/yr`, `$79 one-time`, `$9/seat/mo`) MUST
- *   appear ONLY in `spec/21-app/10-licensing-billing/01-plans-matrix.md`. Any
+ *   appear ONLY in `02-spec/21-app/10-licensing-billing/01-plans-matrix.md`. Any
  *   other file that needs to reference pricing must link back to the matrix
  *   instead of restating numbers — otherwise drift between sources is inevitable.
  *
@@ -23,8 +23,8 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
-const SOURCE_OF_TRUTH = 'spec/21-app/10-licensing-billing/01-plans-matrix.md';
+const ROOT = '02-spec/21-app';
+const SOURCE_OF_TRUTH = '02-spec/21-app/10-licensing-billing/01-plans-matrix.md';
 const ALLOWLIST_PATH = 'scripts/lint/pricing-source.allowlist.txt';
 
 // Detection limited to *plan-shaped* prices: must carry a billing-cadence suffix

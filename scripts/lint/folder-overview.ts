@@ -3,7 +3,7 @@
  * folder-overview — spec-drift sub-check
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1` row F-FOLDER-OVERVIEW):
- *   Every directory under `spec/21-app/` (recursive, excluding hidden + `templates/`) MUST contain
+ *   Every directory under `02-spec/21-app/` (recursive, excluding hidden + `templates/`) MUST contain
  *   a file named exactly `00-overview.md` with:
  *     - ≥ 40 lines (proxy for "not a stub")
  *     - The 5 required headings:
@@ -14,14 +14,14 @@
  *         `## 5. Cross-references`
  *
  * Allowlist: `scripts/lint/folder-overview.allowlist.txt` (folders explicitly exempt).
- * `spec/21-app/templates/` is auto-exempt as a non-domain folder.
+ * `02-spec/21-app/templates/` is auto-exempt as a non-domain folder.
  *
  * Output: `{file}:{line}:{col} [folder-overview] {message}`. Exit 0 = clean; 1 = violations.
  */
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/folder-overview.allowlist.txt';
 const MIN_LINES = 40;
 
@@ -85,7 +85,7 @@ function walk(dir: string, isRoot = false): void {
 }
 
 // Root itself MUST also have an overview (it's a domain folder containing readme.md + 00-overview/ subfolder)
-// Per spec wording "Every directory under spec/21-app/ (recursively, excluding hidden dirs and the root itself)",
+// Per spec wording "Every directory under 02-spec/21-app/ (recursively, excluding hidden dirs and the root itself)",
 // we exclude the root from the check.
 walk(ROOT, true);
 

@@ -42,7 +42,7 @@ CHANGELOG_MD = REPO_ROOT / "changelog.md"
 
 # Known bump scripts
 NODE_BUMP_SCRIPT = REPO_ROOT / "scripts" / "bump-version.mjs"
-PYTHON_BUMP_SCRIPT = REPO_ROOT / ".lovable" / "release" / "bump_versions.py"
+PYTHON_BUMP_SCRIPT = REPO_ROOT / ".ai-memory" / "release" / "bump_versions.py"
 
 
 def run_cmd(cmd, cwd=None, check=True, capture_output=True):

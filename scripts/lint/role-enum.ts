@@ -21,7 +21,7 @@
  * `owner` AND `admin` (the strongest tell of a role enum). Then split
  * tokens, compare to locked set.
  *
- * Scope: `spec/21-app/**`.
+ * Scope: `02-spec/21-app/**`.
  *
  * Allowlist: `scripts/lint/role-enum.allowlist.txt` — file-level
  * exemptions (audit history, conversation log, glossary's own forbidden
@@ -32,7 +32,7 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/role-enum.allowlist.txt';
 
 const LOCKED = new Set(['owner', 'admin', 'editor', 'viewer', 'billing', 'guest', 'system']);

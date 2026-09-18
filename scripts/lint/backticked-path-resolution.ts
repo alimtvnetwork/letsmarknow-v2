@@ -3,7 +3,7 @@
  * backticked-path-resolution — spec-drift sub-check
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1` row): every backticked
- * markdown-path string in spec/21-app prose resolves to an existing file.
+ * markdown-path string in 02-spec/21-app prose resolves to an existing file.
  *
  * Why: link-check covers `[text](path)` markdown links, but the corpus's
  * primary cross-ref convention is backticked path strings in prose like
@@ -16,7 +16,7 @@
  *     or as a bare basename), optionally followed by `#anchor`.
  *   - Resolution candidates (any one passing → OK):
  *       (a) relative to the referencing file's directory
- *       (b) relative to spec root (`spec/21-app/`)
+ *       (b) relative to spec root (`02-spec/21-app/`)
  *   - Fenced code blocks (```...```) are skipped — paths inside code are
  *     illustrative, not navigational.
  *   - Markdown link bodies `[text](path)` are stripped before scanning to
@@ -47,8 +47,8 @@
  *      IS a spec convention and is checked normally).
  *
  * Allowlist: `scripts/lint/backticked-path-resolution.allowlist.txt`
- *   - File-level entry: `spec/21-app/path/to/file.md`
- *   - Per-occurrence entry: `spec/21-app/path/to/file.md:`<target>``
+ *   - File-level entry: `02-spec/21-app/path/to/file.md`
+ *   - Per-occurrence entry: `02-spec/21-app/path/to/file.md:`<target>``
  *
  * Real drift not yet fixed is tracked as **SI-026** in
  * `13-spec-issues/02-current-issues.md`. Each per-occurrence allowlist entry
@@ -60,22 +60,22 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 
-const ROOT = 'spec/21-app';
+const ROOT = '02-spec/21-app';
 const ALLOWLIST_PATH = 'scripts/lint/backticked-path-resolution.allowlist.txt';
 
 const RE = /`((?:\.{1,2}\/)*(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_.-]+\.md)(?:#[A-Za-z0-9_-]+)?`/g;
 
 const SKIP_FILES = new Set([
-  'spec/21-app/00-conversation-log.md',
-  'spec/21-app/13-spec-issues/01-naming-conventions.md',
-  'spec/21-app/13-spec-issues/03-phase-plan.md',
-  'spec/21-app/13-spec-issues/04-closed-issues.md',
-  'spec/21-app/15-visualization/readme.md',
+  '02-spec/21-app/00-conversation-log.md',
+  '02-spec/21-app/13-spec-issues/01-naming-conventions.md',
+  '02-spec/21-app/13-spec-issues/03-phase-plan.md',
+  '02-spec/21-app/13-spec-issues/04-closed-issues.md',
+  '02-spec/21-app/15-visualization/readme.md',
 ]);
 const SKIP_DIR_PREFIXES = [
-  'spec/21-app/23-audits/',
-  'spec/21-app/templates/',
-  'spec/21-app/06-ui-ux/wireframes/',
+  '02-spec/21-app/23-audits/',
+  '02-spec/21-app/templates/',
+  '02-spec/21-app/06-ui-ux/wireframes/',
 ];
 
 function isSkipped(rel: string): boolean {

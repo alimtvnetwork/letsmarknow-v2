@@ -3,8 +3,8 @@
  * pagination-param — spec-drift sub-check
  *
  * Asserts (per `22-infrastructure/09-ci-cd.md §2.1.1`):
- *   Disallows `page_size` and `pageSize` in any `spec/21-app/03-api-endpoints/**` or
- *   `spec/21-app/05-web-app/**` file. Only `limit` permitted.
+ *   Disallows `page_size` and `pageSize` in any `02-spec/21-app/03-api-endpoints/**` or
+ *   `02-spec/21-app/05-web-app/**` file. Only `limit` permitted.
  *
  * Locks W-13 (closed 2026-04-19; `limit` locked in `01-conventions.md` §5;
  * `page_size` alias withdrawn after fixing `05-web-app/10-activity-feed.md`).
@@ -17,8 +17,8 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const SCOPED_DIRS = [
-  'spec/21-app/03-api-endpoints',
-  'spec/21-app/05-web-app',
+  '02-spec/21-app/03-api-endpoints',
+  '02-spec/21-app/05-web-app',
 ];
 const ALLOWLIST_PATH = 'scripts/lint/pagination-param.allowlist.txt';
 

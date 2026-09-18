@@ -11,8 +11,8 @@
  *      live outside scope).
  *
  * Scope (per §2.1.1):
- *   - `spec/21-app/22-infrastructure/**`
- *   - `spec/21-app/11-import-export/**`
+ *   - `02-spec/21-app/22-infrastructure/**`
+ *   - `02-spec/21-app/11-import-export/**`
  *   The canonical layout file itself + the cdn-storage historical note
  *   carry W-7 closure quotes; allowlisted file-level.
  *
@@ -43,10 +43,10 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const CATALOG_PATH = 'spec/21-app/22-infrastructure/12-storage-layout.md';
+const CATALOG_PATH = '02-spec/21-app/22-infrastructure/12-storage-layout.md';
 const SCOPED_DIRS = [
-  'spec/21-app/22-infrastructure',
-  'spec/21-app/11-import-export',
+  '02-spec/21-app/22-infrastructure',
+  '02-spec/21-app/11-import-export',
 ];
 const ALLOWLIST_PATH = 'scripts/lint/storage-path.allowlist.txt';
 

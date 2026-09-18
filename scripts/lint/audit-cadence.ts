@@ -2,12 +2,12 @@
 /**
  * audit-cadence — sub-check of `spec-drift-linter`.
  *
- * Spec: spec/21-app/22-infrastructure/09-ci-cd.md §2.1.4 (Audit Cadence meta-rule).
+ * Spec: 02-spec/21-app/22-infrastructure/09-ci-cd.md §2.1.4 (Audit Cadence meta-rule).
  * Backfilled ground truth: Session 15 (2026-04-29) — all 18 audit files carry the
  * mandatory metadata block.
  *
  * What this asserts:
- *   (a) Every `spec/21-app/23-audits/audit-*.md` MUST start with an HTML-comment
+ *   (a) Every `02-spec/21-app/23-audits/audit-*.md` MUST start with an HTML-comment
  *       metadata block declaring `audit-date`, `next-audit-by`, `audit-type`,
  *       `status`. `supersedes:` / `superseded-by:` required when status=superseded.
  *       `closed-on:` + `closed-because:` required when status=closed.
@@ -26,7 +26,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const RULE = 'audit-cadence';
-const ROOT = 'spec/21-app/23-audits';
+const ROOT = '02-spec/21-app/23-audits';
 const FILE_RE = /^audit-\d{4}-\d{2}-\d{2}.*\.md$/;
 const TYPES = new Set([
   'ai-readiness', 'endpoint-sweep', 'glossary', 'parity',

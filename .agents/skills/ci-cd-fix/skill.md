@@ -46,11 +46,31 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 > 6. **Temp & Failure Folder Isolation:** All temporary directories, runner caches, and test artifacts MUST be strictly placed in `.ai-memory/temp/`. Creating `.tmp/` at the repository root or outside `.ai-memory/` is strictly forbidden.
 >    - Dedicated Failure Directory: `.ai-memory/temp/failures/` is the dedicated folder where failed tests and failed quality gates write error logs (`<test-or-job-name>.log`).
 >    - Passing Tests Completely Silent: Passing tests must produce ZERO filesystem artifacts (zero files written) and remain completely silent in output logs.
-> 7. **Runner In-Flight ETA Wait Protocol:** When running background commands, the runner dynamically writes live status and remaining ETA to `.ai-memory/temp/runner-eta.json` (emitting in-flight heartbeats strictly every 25 seconds or more). If an agent inspects an active background job and it is still running, the agent MUST sleep/wait for **1 minute (60 seconds) each time**, or dynamically sleep for the remaining ETA duration read from `.ai-memory/temp/runner-eta.json` (or based on previous total approximate delay) instead of busy-polling or querying in loops.
-> 8. **Centralized Test Inventory & Incremental Caching:** All unit tests are cataloged in `.ai-memory/test-inventory.json` with strictly repository-relative paths (`target_file`, `test_file`). First run executes all tests to establish baseline timings; subsequent runs execute incrementally only if target code files or test files change. Slow test threshold defaults to `4.0s` (configurable via `GITMAP_SLOW_TEST_THRESHOLD`).
+> 7. **Runner In-Flight ETA Wait & GitMap Dynamic Waiting Protocol:**
+>    - **Local Runner:** The runner dynamically writes live status and remaining ETA to `.ai-memory/temp/runner-eta.json` (emitting in-flight heartbeats strictly every 25 seconds or more). If an agent inspects an active background job and it is still running, the agent MUST sleep/wait for **1 minute (60 seconds) each time**, or dynamically sleep for the remaining ETA duration read from `.ai-memory/temp/runner-eta.json` instead of busy-polling or querying in loops.
+>    - **Remote CI/CD Pipelines (GitMap Mandate):** When checking remote pipeline workflows, the agent MUST use `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status --json`). To inspect running pipelines without burning tokens or user credits, use `gitmap pipeline-ai status -t <etaSeconds>` (or alias `gitmap pl-ai status -t <sec>`). Tight-loop polling (e.g. `gh run view` in rapid loops) is STRICTLY BANNED. Adaptive sleep intervals: ETA > 120s wait 20s-30s; 60s < ETA <= 120s wait 10s-20s; ETA <= 60s wait 5s-10s.
+>    - **Targeted Failure Extraction:** Extract targeted failure lines (`##[error]`, `FAIL:`, compile errors) from GitMap output directly into 4-part RCA files without reading noisy passing step logs.
+> 8. **Centralized Test Inventory & Incremental Caching:** All unit tests are cataloged in `.ai-memory/test-inventory.json` with strictly repository-relative paths (`target_file`, `test_file`). Modified files MUST be recorded safely under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`. First run executes all tests to establish baseline timings; subsequent runs execute incrementally only if target code files or test files change. Slow test threshold defaults to `4.0s` (configurable via `GITMAP_SLOW_TEST_THRESHOLD`).
 > 9. **Dual-Queue Worker Pools:** Slow tests run in a dedicated 4-worker pool running at most 2 tests at a time per batch. Fast tests run in a 4-worker pool running at most 4 tests at a time, pulling in chunks of 100 tests from the test inventory queue until all are complete.
-> 10. **Dynamic ETA Sleep Protocol:** The AI agent reads `.ai-memory/temp/runner-eta.json`, sleeps for the estimated wait time rather than looping, and if still active upon waking, re-checks remaining ETA and sleeps again to avoid burning tokens.
+> 10. **Dynamic ETA Sleep Protocol:** The AI agent reads `.ai-memory/temp/runner-eta.json` (or `gitmap pipeline-ai status --json`), sleeps for the estimated wait time rather than looping, and if still active upon waking, re-checks remaining ETA and sleeps again to avoid burning tokens.
 > 11. **Zero-Storage GitHub Actions Mandate (Total Ban on CI Artifact Uploads):** Workflows MUST NOT upload test outputs, coverage files, Playwright reports, or drift summaries via `actions/upload-artifact`. Free-tier accounts have a strict 0.5 GB shared quota across all repositories. All reports, failures, and summaries MUST be emitted directly to `$GITHUB_STEP_SUMMARY`, console stdout (`cat log.txt`), or sticky PR comments with zero storage consumption. Only true GitHub release assets (binaries/tarballs on tagged releases) are permitted.
+
+---
+
+## Fast File Discovery & Diagnostic Toolchain (Mandatory Acceleration)
+
+To rapidly locate failing pipeline definitions, broken source files, test fixtures, and error logs without hitting 50-result tool caps, the AI agent MUST utilize the diagnostic toolchain:
+- **Remote Pipeline AI Status (<50ms):** `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status --json`)
+- **Remote Dynamic Timeout Wait:** `gitmap pipeline-ai status -t <etaSeconds>` (or alias `gitmap pl-ai status -t <sec>`)
+- **Scan Source & Test Files:** `python 03-ai-scripts/11-fast-file-scanner.py --lang go,ts,py --limit 100 --stats`
+- **Fast Cached Pattern Search (<15ms):** `python 03-ai-scripts/12-fast-cached-grep.py --pattern "<error-or-symbol>" --limit 50`
+- **Sub-Millisecond Folder Listing & Reader:** `python 03-ai-scripts/17-fast-file-reader.py --list-folder .github/workflows --limit 20`
+- **Read Workflow or Log File:** `python 03-ai-scripts/17-fast-file-reader.py --read-file .github/workflows/ci.yml`
+- **Codebase Topology Overview:** `python 03-ai-scripts/18-codebase-topology-discoverer.py --summary`
+- **Record Modified Files Under Lock:** `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`
+
+> [!NOTE]
+> **CI/CD Fix Verification Allowance:** Unlike routine refactoring turns, CI/CD Fix workflows ARE explicitly authorized and expected to run local builds, tests, and runner scripts (`python 03-ai-scripts/06-cicd-local-runner.py`) to diagnose failures, reproduce errors, and verify that all quality gates pass (exit code 0).
 
 ---
 
@@ -66,8 +86,8 @@ Both N, PHASE_1_STEPS, and PHASE_2_STEPS are read-only after the user sets them.
 
 Every step must be **singly done** using bounded self-looping turns:
 
-- **Self-Loop Step 1 (Extract Pipeline Name from Screenshot):**
-  1. Read image to extract the pipeline name, failing job name, and error snippet.
+- **Self-Loop Step 1 (Extract Pipeline Name from Screenshot or GitMap):**
+  1. Read image or query `gitmap pipeline-ai status --json` (or alias `gitmap pl-ai status -t <etaSeconds>`) to extract the pipeline name, failing job name, and targeted failure diagnostics (`##[error]`, `FAIL:`, compile errors).
   2. Scan `.github/workflows/*.yml` to identify the corresponding shell commands and dependencies.
 
 - **Self-Loop Step 2 (FIRST ACTION: Update Python Runner Script):**
@@ -86,6 +106,7 @@ Every step must be **singly done** using bounded self-looping turns:
 - **Self-Loop Step 5 (Surgical Code Fix):**
   1. Open the specific file and line, apply minimal surgical fix.
   2. Run `python 03-ai-scripts/05-guideline-autofixer.py <modified-files>`.
+  3. Record modified files safely under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <modified-files>`.
 
 - **Self-Loop Step 6 (Re-Verify & Loop):**
   1. Re-run `python 03-ai-scripts/06-cicd-local-runner.py`.
@@ -302,10 +323,10 @@ IF STEP >= PHASE_2_STEPS AND exit_code != 0:
 
 ## Phase 3: 4-Part RCA Requirement
 
-For each distinct failure write `.ai-memory/memory/issues/xx-<slug>.md` with:
+For each distinct failure (encountered locally or extracted via `gitmap pipeline-ai status --json`), write `.ai-memory/memory/issues/xx-<slug>.md` with:
 
 1. **Why it happened:** High-level architectural reason.
-2. **How it happened:** Exact execution flow that triggered the error.
+2. **How it happened:** Exact execution flow that triggered the error (using GitMap targeted failure extraction `##[error]`, `FAIL:`, compile errors for remote pipelines).
 3. **Root Cause:** Exact file, line number, and dependency responsible.
 4. **Code Fix:** Before/after code snippet.
 
@@ -328,14 +349,16 @@ Also append any new forbidden patterns to `.ai-memory/strictly-avoid.md`.
 ## Strictly Avoid: No Automatic Releases & Run All Tests (Strict Policy)
 
 > [!CAUTION]
-> **NO AUTOMATIC RELEASES:** Do NOT bump versions or cut a release unless the user explicitly says so. Use `fix(ci): <description>` commits only.
-> **RUN ALL TESTS & QUALITY GATES (FULL PIPELINE FIDELITY):** `ci-cd-fix` is an explicit CI pipeline repair workflow. It MUST run all CI/CD quality gates, linters, static analysis, and test suites properly (`python 03-ai-scripts/06-cicd-local-runner.py`). NEVER skip or disable tests with `--no-tests` in CI/CD fix workflows; all unit test suites, AST checks, and verification jobs must be executed and diagnosed until they legitimately pass (`exit 0`).
-> **ATOMIC CHANGE TRACKING:** Record all modified files under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
+> **NO AUTOMATIC RELEASES (TOTAL BAN IN STANDARD CI-CD-FIX):** This is a development fix workflow. You MUST NOT bump versions, update changelogs, or cut a release. Releases are exclusively handled by `04-ci-cd-fix-with-release.md` or `release-orchestrator`.
+> **NO ROUTINE UNIT TEST RUNNING (EXCLUSIVE TO CI-CD WITH RELEASE):** Routine heavy unit test execution is STRICTLY RESERVED for `04-ci-cd-fix-with-release.md` and release workflows! In standard `ci-cd-fix`, do NOT run full unit test suites or test runner pools (`go test ./...`, `06-cicd-local-runner.py --run-tests`). Instead, diagnose and verify fixes using targeted file-level linters, AST validators, and syntax checks on the specific modified files. ONLY `04-ci-cd-fix-with-release.md` will execute the full test suite (`--run-tests` / `--all`) before cutting the release!
+> **NO PER-FILE COMMITTING (TOTAL BAN):** Never commit each file individually. All modified files across the turn must be accumulated in the working tree and committed together in a single atomic commit at the final step.
 
 ---
 
 ## Non-Negotiable Coding Standards
 
+- [ ] **GitMap Pipeline-AI & Dynamic Waiting:** If diagnosing remote pipeline failures, used `gitmap pipeline-ai status --json` / `gitmap pl-ai status -t <sec>` with adaptive sleep to prevent credit waste, and extracted targeted diagnostics (`##[error]`, `FAIL:`, compile errors).
+- [ ] **Atomic Change Tracking:** All modified files were recorded safely under lock via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
 - [ ] **No Disabling CLI Linting (Zero Bypassing):** All CLI linters and CI/CD quality gates executed fully without `|| true`, `continue-on-error`, or suppression comments. Code was legitimately fixed.
 - [ ] **Zero Actions Storage (Total Ban on CI Artifacts):** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows; all diagnostic outputs stream to `$GITHUB_STEP_SUMMARY` or console logs.
 - [ ] **Legitimate Multi-Step Self-Looping:** If complex errors occurred, I performed dedicated, single-step self-loop iterations to resolve each underlying failure instead of taking shortcuts.
@@ -353,6 +376,7 @@ Also append any new forbidden patterns to `.ai-memory/strictly-avoid.md`.
 - [ ] **Zero Actions Storage:** Confirmed that NO `actions/upload-artifact` steps exist in CI workflows, eliminating quota depletion.
 - [ ] `python 03-ai-scripts/06-cicd-local-runner.py` exited with code 0 (with all quality gates and tests passing).
 - [ ] All failures documented in `.ai-memory/memory/issues/xx-<slug>.md`.
+- [ ] **Modified Files Recorded:** Confirmed all modified files were tracked via `python 03-ai-scripts/33-test-inventory-generator.py --record <files...>`.
 - [ ] Changes committed: `fix(ci): resolve <summary>`.
 - [ ] Pushed to the current branch.
 - [ ] File change summary posted in chat (file, what changed, why).
@@ -363,3 +387,21 @@ Also append any new forbidden patterns to `.ai-memory/strictly-avoid.md`.
 
 - slug: cicd-fix
 - status: active
+
+---
+
+## Banned Operations Checklist (TOTAL BAN — Auto-Reject on Violation)
+
+- [ ] **NO ROUTINE UNIT TEST RUNNING (TOTAL BAN IN STANDARD CI-CD-FIX):** NEVER run heavy unit test suites (`go test ./...`, `06-cicd-local-runner.py --run-tests`, runner scripts) during standard CI/CD fix turns. All full test suite runs are strictly reserved for `04-ci-cd-fix-with-release.md` and release workflows.
+- [ ] **NO ROUTINE BUILD CHECKING (TOTAL BAN):** NEVER run broad build commands (`go build ./...`, `npm run build`) to verify compilation during intermediate micro-refactoring steps.
+- [ ] **NO RUNNER SCRIPTS (TOTAL BAN):** NEVER launch background test runners, worker pools, or test inventory loops during routine execution.
+- [ ] **NO AUTOMATIC RELEASES (TOTAL BAN IN STANDARD CI-CD-FIX):** NEVER bump versions, update changelogs, or trigger releases in standard `ci-cd-fix`. Releases are exclusively handled by `04-ci-cd-fix-with-release.md` or `release-orchestrator`.
+- [ ] **NO PER-FILE COMMITTING (TOTAL BAN):** NEVER commit each file individually as you work. Committing file-by-file pollutes git history, creates subagent lock collisions, and breaks atomic changes. All modified files across the turn must be accumulated and committed together in a single atomic commit at the final step.
+
+---
+
+## Final Step Git Commit & Push Mandate (Strict Checklist)
+
+- [ ] **MANDATORY FINAL COMMIT & PUSH TO GIT (ANYHOW):** At the FINAL step of the turn, after all targeted files have been refactored and verified with targeted linters, you MUST stage everything (`git add -A`), create a clean, descriptive conventional commit (`git commit -m "fix(ci): <description>"`), and push directly to the remote repository (`git push origin <branch>`). Leaving uncommitted changes or unpushed commits on the active branch at the end of a turn is an immediate failure.
+- [ ] **TOTAL BAN ON PER-FILE COMMITS (DO NOT COMMIT EACH FILE INDIVIDUALLY):** You MUST NOT create separate git commits for each individual file as you edit them. All modified files across the turn MUST be accumulated in the working tree and committed together in a SINGLE grouped atomic commit at the final step before pushing!
+

@@ -26,6 +26,8 @@ dist-ssr
 
 # GitMap & Task Persistence
 .gitmap/backup/
+.gitmap/*.db
+.gitmap/pull_errors.db
 antigravity-resume_task.json
 .antigravity_resume_task.json
 antigravity_resume_task.json

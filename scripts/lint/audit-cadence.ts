@@ -28,12 +28,11 @@ import { join } from 'node:path';
 const RULE = 'audit-cadence';
 const ROOT = '02-spec/21-app/23-audits';
 const FILE_RE = /^audit-\d{4}-\d{2}-\d{2}.*\.md$/;
-const TYPES = new Set([
+const TYPES: Set<string> = new Set([
   'ai-readiness', 'endpoint-sweep', 'glossary', 'parity',
   'retrospective', 'post-fix', 'ad-hoc',
 ] as const);
-type AuditType = typeof TYPES extends Set<infer T> ? T : never;
-const STATUSES = new Set(['open', 'closed', 'superseded'] as const);
+const STATUSES: Set<string> = new Set(['open', 'closed', 'superseded'] as const);
 
 type Meta = {
   file: string;
@@ -47,6 +46,18 @@ type Meta = {
   'closed-because'?: string;
   blockStartLine: number; // 1-indexed
 };
+
+type MetaField = Exclude<keyof Meta, 'file' | 'blockStartLine'>;
+const META_FIELDS: Set<string> = new Set([
+  'audit-date',
+  'next-audit-by',
+  'audit-type',
+  'status',
+  'supersedes',
+  'superseded-by',
+  'closed-on',
+  'closed-because',
+]);
 
 const META_RE = /^<!--\s*\n([\s\S]*?)\n-->/;
 
@@ -63,7 +74,9 @@ function parseMeta(file: string): { meta: Meta | null; errs: string[] } {
   for (const line of m[1].split('\n')) {
     const kv = /^([a-z-]+):\s*(.+?)\s*$/.exec(line);
     if (!kv) continue;
-    (meta as any)[kv[1]] = kv[2];
+    if (META_FIELDS.has(kv[1])) {
+      meta[kv[1] as MetaField] = kv[2];
+    }
   }
   return { meta, errs: [] };
 }
@@ -85,10 +98,10 @@ function validateOne(meta: Meta): string[] {
   if (errs.length) return errs;
 
   // Enum validation
-  if (!TYPES.has(meta['audit-type'] as any)) {
+  if (!TYPES.has(meta['audit-type']!)) {
     at(`invalid audit-type "${meta['audit-type']}" — must be one of: ${[...TYPES].join(', ')}`);
   }
-  if (!STATUSES.has(meta.status as any)) {
+  if (!STATUSES.has(meta.status!)) {
     at(`invalid status "${meta.status}" — must be one of: ${[...STATUSES].join(', ')}`);
   }
 
@@ -167,7 +180,10 @@ function main() {
     for (const m of metas) {
       const t = m['audit-type']!;
       if (!byType.has(t)) byType.set(t, { open: 0, closed: 0, superseded: 0 });
-      (byType.get(t)! as any)[m.status!]++;
+      const counts = byType.get(t)!;
+      if (m.status === 'open') counts.open++;
+      if (m.status === 'closed') counts.closed++;
+      if (m.status === 'superseded') counts.superseded++;
     }
     const summary = [...byType.entries()]
       .map(([t, c]) => `${t}=${c.open}o/${c.closed}c/${c.superseded}s`)

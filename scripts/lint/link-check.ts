@@ -86,7 +86,7 @@ for (const path of walkFiles(ROOT)) {
     const re = new RegExp(LINK_RE.source, 'g');
     let m: RegExpExecArray | null;
     while ((m = re.exec(line)) !== null) {
-      let target = m[1].trim();
+      const target = m[1].trim();
       if (!target) continue;
       if (SKIP_SCHEMES.test(target)) continue;
 

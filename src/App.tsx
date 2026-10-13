@@ -16,6 +16,14 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/dashboard" element={<Index />} />
+          <Route path="/spaces/:spaceId" element={<Index />} />
+          <Route path="/settings" element={<Index />} />
+          <Route path="/trash" element={<Index />} />
+          <Route path="/activity" element={<Index />} />
+          <Route path="/share" element={<Index />} />
+          <Route path="/share/:shareId" element={<Index />} />
+          <Route path="/share/:targetType/:slug" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

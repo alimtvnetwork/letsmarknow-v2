@@ -1,0 +1,164 @@
+import type { AppData } from "@/types/lmn";
+
+export const mockWorkspace: AppData = {
+  organizations: [
+    { id: "org-personal", name: "Personal Engine", initials: "PE", plan: "Pro" },
+    { id: "org-agency", name: "Agency Ops", initials: "AU", plan: "Team" },
+    { id: "org-lab", name: "Experiment Lab", initials: "XL", plan: "Free" },
+  ],
+  spaces: [
+    {
+      id: "space-home",
+      organizationId: "org-personal",
+      name: "My Collections",
+      description: "Daily research, useful tools, and saved reading.",
+      accentClass: "bg-primary",
+    },
+    {
+      id: "space-launch",
+      organizationId: "org-personal",
+      name: "LMN Launch",
+      description: "Product launch references and competitor notes.",
+      accentClass: "bg-sky-500",
+    },
+    {
+      id: "space-client",
+      organizationId: "org-agency",
+      name: "Client Work",
+      description: "Shared client resources and handoff links.",
+      accentClass: "bg-emerald-500",
+    },
+  ],
+  collections: [
+    {
+      id: "collection-design",
+      spaceId: "space-home",
+      name: "Design Systems",
+      note: "Reusable UI decisions, dense app patterns, and extension-ready components.",
+      color: "pink",
+      isStarred: true,
+      groups: [
+        {
+          id: "group-reference",
+          name: "Reference",
+          items: [
+            {
+              id: "item-radix",
+              title: "Radix UI primitives",
+              url: "https://www.radix-ui.com",
+              description: "Accessible primitives for menus, dialogs, popovers, and tabs.",
+              tags: ["ui", "accessibility"],
+              color: "purple",
+              addedAt: "Today",
+            },
+            {
+              id: "item-linear",
+              title: "Linear app layout",
+              url: "https://linear.app",
+              description: "Dense command-first SaaS layout reference.",
+              tags: ["layout", "saas"],
+              color: "blue",
+              addedAt: "Yesterday",
+            },
+          ],
+        },
+        {
+          id: "group-assets",
+          name: "Assets",
+          items: [
+            {
+              id: "item-icons",
+              title: "Lucide icons",
+              url: "https://lucide.dev",
+              description: "Icon system for web app and extension controls.",
+              tags: ["icons"],
+              color: "teal",
+              addedAt: "Sep 29",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "collection-research",
+      spaceId: "space-home",
+      name: "Browser Productivity",
+      note: "Toby, Tab Extend, Chrome APIs, open-tabs behavior, and save-session patterns.",
+      color: "blue",
+      isStarred: false,
+      groups: [
+        {
+          id: "group-competitors",
+          name: "Competitors",
+          items: [
+            {
+              id: "item-toby",
+              title: "Toby",
+              url: "https://www.gettoby.com",
+              description: "Workspace and collection sharing reference.",
+              tags: ["competitor", "sharing"],
+              color: "pink",
+              addedAt: "Oct 1",
+            },
+            {
+              id: "item-tabextend",
+              title: "Tab Extend",
+              url: "https://tabextend.com",
+              description: "Column layout, typography, and grouping reference.",
+              tags: ["competitor", "columns"],
+              color: "orange",
+              addedAt: "Oct 2",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "collection-build",
+      spaceId: "space-launch",
+      name: "Phase 0 Build",
+      note: "First dashboard, mock data, local interactions, and extension-ready components.",
+      color: "green",
+      isStarred: true,
+      groups: [
+        {
+          id: "group-week-one",
+          name: "Week 1",
+          items: [
+            {
+              id: "item-shell",
+              title: "Dashboard shell spec",
+              url: "https://letsmarknow.com/spec/dashboard-shell",
+              description: "Left rail, space sidebar, top toolbar, and main canvas.",
+              tags: ["mvp", "dashboard"],
+              color: "green",
+              addedAt: "Today",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  shareSettings: [
+    {
+      id: "share-design",
+      targetType: "collection",
+      targetId: "collection-design",
+      visibility: "public",
+      permission: "view",
+      publicSlug: "design-systems",
+      allowCopy: true,
+      createdAt: "Yesterday",
+    },
+    {
+      id: "share-personal",
+      targetType: "workspace",
+      targetId: "org-personal",
+      visibility: "members",
+      permission: "view",
+      publicSlug: "personal-engine",
+      allowCopy: true,
+      createdAt: "2 days ago",
+    },
+  ],
+};

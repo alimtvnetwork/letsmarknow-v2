@@ -8,15 +8,21 @@ describe("ExtensionTabApp", () => {
     vi.restoreAllMocks();
   });
 
-  it("renders the extension tab dashboard with collections and items", async () => {
+  it("renders the extension tab dashboard with collections and items in grid view by default", async () => {
     render(<ExtensionTabApp />);
 
     await waitFor(() => {
       expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
     });
 
-    expect(screen.getByText("LetsMarkNow Extension")).toBeInTheDocument();
+    expect(screen.getByText("LetsMarkNow")).toBeInTheDocument();
     expect(screen.getByText("Design Systems")).toBeInTheDocument();
+
+    const gridViewBtn = screen.getByTitle("grid view");
+    expect(gridViewBtn.className).toContain("bg-primary");
+
+    const listViewBtn = screen.getByTitle("list view");
+    expect(listViewBtn.className).not.toContain("bg-primary");
   });
 
   it("navigates to Open Browser Tabs view and displays open tabs", async () => {
@@ -73,14 +79,21 @@ describe("ExtensionTabApp", () => {
     expect(screen.getByRole("button", { name: /save preferences/i })).toBeInTheDocument();
   });
 
-  it("renders docked Open Tabs panel on dashboard view", async () => {
+  it("keeps docked Open Tabs panel closed by default and opens on toggle", async () => {
     render(<ExtensionTabApp />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("docked-open-tabs-panel")).toBeInTheDocument();
+      expect(screen.getByTestId("topbar-save-session-button")).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId("topbar-save-session-button")).toBeInTheDocument();
+    // Closed by default
+    expect(screen.queryByTestId("docked-open-tabs-panel")).not.toBeInTheDocument();
+
+    // Toggle button opens the panel
+    const toggleTabsBtn = screen.getByTestId("toggle-docked-tabs-button");
+    fireEvent.click(toggleTabsBtn);
+
+    expect(screen.getByTestId("docked-open-tabs-panel")).toBeInTheDocument();
   });
 
   it("filters collections and items via search input", async () => {
@@ -140,5 +153,53 @@ describe("ExtensionTabApp", () => {
 
     expect(screen.getByTestId("workspace-name-input")).toHaveValue("Personal Engine");
     expect(screen.getByRole("button", { name: /members & invites/i })).toBeInTheDocument();
+  });
+
+  it("focuses sidebar search on '/' keyboard shortcut and renders Quick Focus queues", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByText("LetsMarkNow")).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText("Search links, spaces...");
+    expect(searchInput).toBeInTheDocument();
+
+    // Trigger '/' key press on window
+    fireEvent.keyDown(window, { key: "/" });
+    expect(document.activeElement).toBe(searchInput);
+
+    // Verify Quick Focus queues are rendered
+    expect(screen.getByText("Next")).toBeInTheDocument();
+    expect(screen.getByText("Quick Inbox")).toBeInTheDocument();
+
+    // Verify Space header is rendered
+    expect(screen.getByText(/Spaces \(\d+\)/)).toBeInTheDocument();
+  });
+
+  it("keeps the left sidebar section open by default and toggles it on demand", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-sidebar")).toBeInTheDocument();
+    });
+
+    const sidebar = screen.getByTestId("extension-sidebar");
+    // Open by default: has w-64
+    expect(sidebar.className).toContain("w-64");
+
+    // Click collapse button inside sidebar
+    const collapseBtn = screen.getByTestId("collapse-sidebar-button");
+    fireEvent.click(collapseBtn);
+
+    // Now closed: has w-0
+    expect(sidebar.className).toContain("w-0");
+
+    // Click toggle button in TopBar to reopen
+    const toggleBtn = screen.getByTestId("toggle-sidebar-button");
+    fireEvent.click(toggleBtn);
+
+    // Open again: has w-64
+    expect(sidebar.className).toContain("w-64");
   });
 });

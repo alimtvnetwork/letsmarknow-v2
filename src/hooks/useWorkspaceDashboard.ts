@@ -123,7 +123,7 @@ export function useWorkspaceDashboard() {
       initialState.data.spaces[0]?.id
   );
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>(initialState.viewMode ?? "list");
+  const [viewMode, setViewMode] = useState<ViewMode>(initialState.viewMode ?? "grid");
   const [activeFilter, setActiveFilter] = useState<ActiveFilter>(
     initialState.activeFilter ?? "all"
   );
@@ -728,7 +728,7 @@ export function useWorkspaceDashboard() {
     setData(mockWorkspace);
     setActiveOrganizationId(mockWorkspace.organizations[0].id);
     setActiveSpaceId(mockWorkspace.spaces[0].id);
-    setViewMode("list");
+    setViewMode("grid");
     setActiveFilter("all");
     navigate("/web/app");
     toast.success("Demo data restored");

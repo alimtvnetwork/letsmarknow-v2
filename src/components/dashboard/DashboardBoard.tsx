@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ArchiveRestore,
   Boxes,
@@ -9,16 +9,19 @@ import {
   Copy,
   ExternalLink,
   FilterX,
+  Globe,
   Grid3X3,
   GripVertical,
   Layers,
   Link2,
   List,
+  Minus,
   MoreHorizontal,
   Pencil,
   Plus,
   RotateCcw,
   Share2,
+  SlidersHorizontal,
   Sparkles,
   Star,
   Tag,
@@ -109,22 +112,149 @@ export function DashboardBoard({
   onRestoreDemoData,
 }: DashboardBoardProps) {
   const isFiltered = activeFilter !== "all" || hasSearchQuery;
+  const [cardDensity, setCardDensity] = useState<"compact" | "normal" | "comfortable">("normal");
+  const [sortMode, setSortMode] = useState<"custom" | "name" | "items" | "recent">("custom");
+
+  const totalItemCount = useMemo(() => {
+    return collections.reduce((acc, col) => {
+      return (
+        acc +
+        col.groups.reduce((gAcc, grp) => {
+          return gAcc + grp.items.filter((i) => !i.isDeleted).length;
+        }, 0)
+      );
+    }, 0);
+  }, [collections]);
+
+  const sortedCollections = useMemo(() => {
+    const list = [...collections];
+    if (sortMode === "name") {
+      return list.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    if (sortMode === "items") {
+      return list.sort((a, b) => {
+        const aCount = a.groups.reduce((acc, g) => acc + g.items.filter((i) => !i.isDeleted).length, 0);
+        const bCount = b.groups.reduce((acc, g) => acc + g.items.filter((i) => !i.isDeleted).length, 0);
+        return bCount - aCount;
+      });
+    }
+    return list;
+  }, [collections, sortMode]);
+
+  const handleZoomOut = () => {
+    if (cardDensity === "comfortable") setCardDensity("normal");
+    else if (cardDensity === "normal") setCardDensity("compact");
+  };
+
+  const handleZoomIn = () => {
+    if (cardDensity === "compact") setCardDensity("normal");
+    else if (cardDensity === "normal") setCardDensity("comfortable");
+  };
 
   return (
-    <section className="min-h-0 flex-1 overflow-auto">
-      <div className="border-b border-border bg-card/30 px-6 py-5">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-          <div>
-            <div className="mb-2.5 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              <Boxes className="h-3.5 w-3.5 text-primary" />
-              Space dashboard
+    <section className="min-h-0 flex-1 overflow-auto bg-background/50">
+      {/* 1. Toby-Style Space Header */}
+      <div className="border-b border-border/80 bg-card/40 px-6 py-5">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3.5 min-w-0">
+            {/* Space Avatar / Icon Badge */}
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500/20 via-pink-500/10 to-primary/10 border border-rose-500/30 text-rose-400 shadow-xs">
+              <Globe className="h-5 w-5" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight md:text-3xl">{activeSpace.name}</h1>
-            <p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">
-              {activeSpace.description}
-            </p>
+
+            <div className="min-w-0">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl truncate">
+                  {activeSpace.name}
+                </h1>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+                  <span className="text-border/80">|</span>
+                  <span>
+                    {collections.length} {collections.length === 1 ? "Collection" : "Collections"}
+                  </span>
+                  <span className="text-border/80">|</span>
+                  <span>
+                    {totalItemCount} {totalItemCount === 1 ? "tab" : "tabs"}
+                  </span>
+                </div>
+              </div>
+              {activeSpace.description && (
+                <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
+                  {activeSpace.description}
+                </p>
+              )}
+            </div>
           </div>
+
+          {/* Right Header Actions: Visibility + Collaborator + Primary CTA */}
+          <div className="flex items-center gap-3 shrink-0 self-end md:self-center">
+            {/* Public/Private Pill */}
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-muted/40 px-3 py-1 text-xs font-medium text-muted-foreground"
+              title="Space visibility"
+            >
+              <Globe className="h-3.5 w-3.5 text-emerald-400" />
+              Public
+            </span>
+
+            {/* Collaborator Avatar */}
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-rose-500 text-xs font-semibold text-primary-foreground shadow-2xs"
+              title="Workspace member"
+            >
+              Y
+            </div>
+
+            {/* Vibrant Toby-style Primary Accent CTA */}
+            <Button
+              onClick={onCreateCollection}
+              className="rounded-full bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 hover:from-rose-500 hover:to-pink-500 text-white font-semibold shadow-md shadow-rose-600/25 px-4 h-9 gap-1.5 text-xs transition-all active:scale-95 cursor-pointer"
+              title="Create new collection"
+            >
+              <Plus className="h-4 w-4" />
+              New Collection
+            </Button>
+          </div>
+        </div>
+
+        {/* 2. Toby-Style Space Toolbar */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/40">
           <div className="flex flex-wrap items-center gap-2">
+            {/* Sort / Custom Order Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground rounded-lg border-border/70 bg-card/60"
+                  title="Sort order"
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  <span>
+                    {sortMode === "custom" && "Custom order"}
+                    {sortMode === "name" && "Name (A-Z)"}
+                    {sortMode === "items" && "Most tabs"}
+                    {sortMode === "recent" && "Recently updated"}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-44">
+                <DropdownMenuItem onClick={() => setSortMode("custom")} className="cursor-pointer text-xs">
+                  Custom order
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortMode("name")} className="cursor-pointer text-xs">
+                  Name (A-Z)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortMode("items")} className="cursor-pointer text-xs">
+                  Most tabs
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortMode("recent")} className="cursor-pointer text-xs">
+                  Recently updated
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Filter Buttons */}
             <div className="inline-flex items-center rounded-lg border border-border/70 bg-card/60 p-0.5 shadow-2xs">
               <FilterButton
                 label="All"
@@ -144,32 +274,74 @@ export function DashboardBoard({
                 onClick={() => onFilterChange("recent")}
               />
             </div>
+
+            {/* View Mode Switcher */}
             <div className="flex rounded-lg border border-border/70 bg-card/60 p-0.5 shadow-2xs">
-              <ViewButton icon={List} mode="list" activeMode={viewMode} onClick={onViewModeChange} />
+              <ViewButton icon={Grid3X3} mode="grid" activeMode={viewMode} onClick={onViewModeChange} title="Grid view" />
+              <ViewButton icon={List} mode="list" activeMode={viewMode} onClick={onViewModeChange} title="List view" />
               <ViewButton
                 icon={Columns3}
                 mode="compact"
                 activeMode={viewMode}
                 onClick={onViewModeChange}
+                title="Compact view"
               />
-              <ViewButton icon={Grid3X3} mode="grid" activeMode={viewMode} onClick={onViewModeChange} />
+            </div>
+
+            {/* Divider */}
+            <div className="h-4 w-px bg-border/60 mx-1 hidden sm:block" />
+
+            {/* Zoom / Density Stepper (+ / -) */}
+            <div className="inline-flex items-center rounded-lg border border-border/70 bg-card/60 p-0.5 shadow-2xs">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                onClick={handleZoomOut}
+                disabled={cardDensity === "compact"}
+                title="Zoom out: smaller cards (-)"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </Button>
+              <span className="px-1.5 text-[10px] font-mono text-muted-foreground uppercase">
+                {cardDensity === "compact" ? "S" : cardDensity === "normal" ? "M" : "L"}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                onClick={handleZoomIn}
+                disabled={cardDensity === "comfortable"}
+                title="Zoom in: larger cards (+)"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
             </div>
           </div>
+
+          {/* Search query notice if active */}
+          {hasSearchQuery && onClearFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClearFilters}
+              className="h-7 text-xs text-muted-foreground hover:text-foreground gap-1"
+            >
+              <FilterX className="h-3.5 w-3.5 text-primary" />
+              Clear search filter
+            </Button>
+          )}
         </div>
       </div>
 
-      {collections.length ? (
-        <div
-          className={cn(
-            "grid gap-5 p-6",
-            viewMode === "grid" ? "grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3" : "grid-cols-1"
-          )}
-        >
-          {collections.map((collection) => (
+      {sortedCollections.length ? (
+        <div className="space-y-6 p-6">
+          {sortedCollections.map((collection) => (
             <CollectionCard
               key={collection.id}
               collection={collection}
               viewMode={viewMode}
+              cardDensity={cardDensity}
               shareSettings={shareSettings}
               openUrlSet={openUrlSet}
               duplicateUrlCounts={duplicateUrlCounts}
@@ -267,6 +439,7 @@ function ViewButton({
 function CollectionCard({
   collection,
   viewMode,
+  cardDensity,
   shareSettings,
   openUrlSet,
   duplicateUrlCounts,
@@ -292,6 +465,7 @@ function CollectionCard({
 }: {
   collection: Collection;
   viewMode: ViewMode;
+  cardDensity?: "compact" | "normal" | "comfortable";
   shareSettings?: ShareSettings[];
   openUrlSet?: Set<string>;
   duplicateUrlCounts?: Map<string, number>;
@@ -334,8 +508,8 @@ function CollectionCard({
   return (
     <article
       className={cn(
-        "rounded-xl border border-border/70 bg-card/40 backdrop-blur-xs transition",
-        isCardDragOver && "ring-2 ring-primary/40 border-primary/60 bg-primary/5"
+        "rounded-2xl border border-border/70 bg-card/40 backdrop-blur-xs transition-all duration-200 shadow-2xs overflow-hidden relative",
+        isCardDragOver && "ring-2 ring-primary border-primary bg-primary/10 shadow-lg scale-[1.01]"
       )}
       onDragOver={(event) => {
         event.preventDefault();
@@ -353,14 +527,22 @@ function CollectionCard({
         }
       }}
     >
-      <div className="flex flex-col gap-3 border-b border-border/50 p-4 sm:flex-row sm:items-start sm:justify-between">
+      {isCardDragOver && (
+        <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-center bg-primary/90 px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm animate-in fade-in duration-150">
+          Drop tab to add to &ldquo;{collection.name}&rdquo;
+        </div>
+      )}
+      <div className="flex flex-col gap-3 border-b border-border/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between bg-card/30">
         <div className="min-w-0 flex-1">
-          <div className="mb-1.5 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted/60 px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-              <span className={cn("h-1.5 w-1.5 rounded-full", colorDotClasses[collection.color])} />
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted/60 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+              <span className={cn("h-2 w-2 rounded-full", colorDotClasses[collection.color])} />
               <span className="capitalize">{collection.color !== "none" ? collection.color : "Default"}</span>
             </span>
-            <span className="text-xs text-muted-foreground font-mono">{itemCount} items</span>
+            <h3 className="truncate text-base font-bold text-foreground">{collection.name}</h3>
+            <span className="text-xs text-muted-foreground font-medium">
+              · {itemCount} {itemCount === 1 ? "tab" : "tabs"}
+            </span>
             {collectionShare && collectionShare.visibility !== "private" && (
               <span
                 className={cn(
@@ -376,22 +558,43 @@ function CollectionCard({
               </span>
             )}
           </div>
-          <h3 className="truncate text-base font-semibold">{collection.name}</h3>
           {collection.note && (
-            <p className="mt-1 line-clamp-2 text-xs leading-5 text-muted-foreground">
+            <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
               {collection.note}
             </p>
           )}
         </div>
-        <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-start">
+        <div className="flex items-center gap-1 shrink-0 self-end sm:self-center">
+          {onOpenAllUrls && allCollectionUrls.length > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+              onClick={() => onOpenAllUrls(allCollectionUrls, "tabs")}
+              title={`Open all ${allCollectionUrls.length} tabs`}
+            >
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          )}
+
           <Button
-            variant={collection.isStarred ? "default" : "outline"}
+            variant={collection.isStarred ? "default" : "ghost"}
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
             onClick={() => onToggleStar(collection.id)}
             title="Star collection"
           >
-            <Star className={cn("h-4 w-4", collection.isStarred && "fill-current")} />
+            <Star className={cn("h-4 w-4", collection.isStarred && "fill-current text-amber-400")} />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            onClick={() => onCreateItem(collection.id, collection.groups[0]?.id)}
+            title="Add item to collection"
+          >
+            <Plus className="h-4 w-4" />
           </Button>
 
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -509,18 +712,14 @@ function CollectionCard({
         </div>
       </div>
 
-      <div
-        className={cn(
-          "grid gap-5 p-4",
-          viewMode === "grid" ? "grid-cols-1" : "grid-cols-1 xl:grid-cols-2"
-        )}
-      >
+      <div className="p-4">
         {visibleGroups.map((group) => (
           <GroupPanel
             key={group.id}
             collectionId={collection.id}
             group={group}
             viewMode={viewMode}
+            cardDensity={cardDensity}
             isOnlyGroup={visibleGroups.length <= 1}
             shareSettings={shareSettings}
             openUrlSet={openUrlSet}
@@ -549,6 +748,7 @@ function GroupPanel({
   collectionId,
   group,
   viewMode,
+  cardDensity,
   isOnlyGroup,
   shareSettings,
   openUrlSet,
@@ -570,6 +770,7 @@ function GroupPanel({
   collectionId: string;
   group: Group;
   viewMode: ViewMode;
+  cardDensity?: "compact" | "normal" | "comfortable";
   isOnlyGroup: boolean;
   shareSettings?: ShareSettings[];
   openUrlSet?: Set<string>;
@@ -602,9 +803,9 @@ function GroupPanel({
   return (
     <section
       className={cn(
-        "rounded-xl transition-all",
+        "rounded-xl transition-all duration-200 relative",
         isDragOver
-          ? "border-2 border-dashed border-primary/60 bg-primary/5 p-2 ring-2 ring-primary/20"
+          ? "border-2 border-dashed border-primary bg-primary/10 p-2.5 ring-2 ring-primary/40 shadow-sm"
           : "bg-transparent"
       )}
       onDragOver={(event) => {
@@ -622,6 +823,11 @@ function GroupPanel({
         }
       }}
     >
+      {isDragOver && (
+        <div className="mb-2 rounded-lg bg-primary/20 border border-primary/40 px-3 py-1 text-center text-xs font-semibold text-primary animate-in fade-in duration-150">
+          Drop tab to add to &ldquo;{group.name}&rdquo;
+        </div>
+      )}
       <div className="mb-2 flex items-center justify-between px-1">
         <div className="flex min-w-0 items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary/70 shrink-0" />
@@ -751,12 +957,23 @@ function GroupPanel({
 
       {group.items.length ? (
         viewMode === "grid" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div
+            className={cn(
+              "grid gap-3.5",
+              cardDensity === "compact" &&
+                "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5",
+              cardDensity === "normal" &&
+                "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5",
+              cardDensity === "comfortable" &&
+                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            )}
+          >
             {group.items.map((item) => (
               <ItemRow
                 key={item.id}
                 item={item}
                 viewMode={viewMode}
+                cardDensity={cardDensity}
                 openUrlSet={openUrlSet}
                 duplicateUrlCounts={duplicateUrlCounts}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
@@ -773,12 +990,13 @@ function GroupPanel({
             ))}
           </div>
         ) : (
-          <div className="divide-y divide-border/40 rounded-lg border border-border/50 bg-background/50 overflow-hidden shadow-2xs">
+          <div className="divide-y divide-border/40 rounded-xl border border-border/50 bg-background/50 overflow-hidden shadow-2xs">
             {group.items.map((item) => (
               <ItemRow
                 key={item.id}
                 item={item}
                 viewMode={viewMode}
+                cardDensity={cardDensity}
                 openUrlSet={openUrlSet}
                 duplicateUrlCounts={duplicateUrlCounts}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
@@ -822,6 +1040,7 @@ function GroupPanel({
 function ItemRow({
   item,
   viewMode,
+  cardDensity = "normal",
   openUrlSet,
   duplicateUrlCounts,
   onEdit,
@@ -835,6 +1054,7 @@ function ItemRow({
 }: {
   item: SavedItem;
   viewMode: ViewMode;
+  cardDensity?: "compact" | "normal" | "comfortable";
   openUrlSet?: Set<string>;
   duplicateUrlCounts?: Map<string, number>;
   onEdit: () => void;
@@ -859,194 +1079,208 @@ function ItemRow({
   if (isGrid) {
     return (
       <div
-        className="group relative flex flex-col justify-between rounded-lg border border-border/60 bg-card/60 p-3.5 transition hover:border-primary/50 hover:bg-card hover:shadow-xs"
+        className={cn(
+          "group relative flex flex-col justify-between rounded-2xl border border-border/60 bg-card/75 hover:bg-card hover:border-border transition-all duration-150 shadow-2xs hover:shadow-md cursor-pointer select-none",
+          cardDensity === "compact"
+            ? "p-2.5 min-h-[64px]"
+            : cardDensity === "comfortable"
+            ? "p-4 min-h-[96px]"
+            : "p-3.5 min-h-[76px]",
+          isOpenNow && "ring-1 ring-emerald-500/30"
+        )}
         draggable
         onDragStart={(event) => {
           event.dataTransfer.setData("text/plain", onDragStart(item.id));
         }}
+        onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
       >
-        <div>
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex items-start gap-2.5 min-w-0">
-              <div
-                className="mt-0.5 flex h-4 w-4 shrink-0 cursor-grab active:cursor-grabbing items-center justify-center text-muted-foreground/40 transition hover:text-foreground opacity-40 group-hover:opacity-100"
-                title="Drag to reorder or move"
-              >
-                <GripVertical className="h-3 w-3" />
-              </div>
-              <Favicon url={item.url} size="md" className="mt-0.5" />
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <h5 className="truncate text-sm font-semibold text-foreground">{item.title}</h5>
-                  {isOpenNow && (
-                    <span
-                      className="inline-flex items-center gap-1 rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-400 shrink-0"
-                      title="This tab is currently open in your browser"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      Open now
-                    </span>
-                  )}
-                  {isDuplicate && (
-                    <span
-                      className="inline-flex items-center rounded bg-amber-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-amber-400 shrink-0"
-                      title={`This link is saved ${duplicateUrlCounts?.get(normUrl)} times across your workspace`}
-                    >
-                      Duplicate
-                    </span>
-                  )}
-                </div>
-                <p className="truncate text-xs text-muted-foreground">{getHost(item.url)}</p>
-              </div>
+        <div className="flex items-start gap-3 min-w-0">
+          <div
+            className={cn(
+              "flex shrink-0 items-center justify-center rounded-xl bg-muted/40 border border-border/30 overflow-hidden",
+              cardDensity === "compact" ? "h-7 w-7" : "h-9 w-9"
+            )}
+          >
+            <Favicon url={item.url} size={cardDensity === "compact" ? "sm" : "md"} />
+          </div>
+
+          <div className="min-w-0 flex-1 pr-6">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <h5 className="truncate text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                {item.title}
+              </h5>
+              {isOpenNow && (
+                <span
+                  className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-400 shrink-0"
+                  title="This tab is currently open in your browser"
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Open now
+                </span>
+              )}
+              {isDuplicate && (
+                <span
+                  className="inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-amber-400 shrink-0"
+                  title={`This link is saved ${duplicateUrlCounts?.get(normUrl)} times across your workspace`}
+                >
+                  Duplicate
+                </span>
+              )}
             </div>
 
-            <div className="flex shrink-0 items-center gap-0.5">
+            <p className="truncate text-xs text-muted-foreground mt-0.5 font-normal">
+              {getHost(item.url)}
+            </p>
+
+            {cardDensity === "comfortable" && item.description && (
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground/80">
+                {item.description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Hover-revealed micro-actions */}
+        <div
+          className="absolute top-2.5 right-2.5 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-card/90 backdrop-blur-xs rounded-lg p-0.5 border border-border/40 shadow-xs"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div
+            className="flex h-6 w-5 shrink-0 cursor-grab active:cursor-grabbing items-center justify-center text-muted-foreground/50 hover:text-foreground"
+            title="Drag to reorder or move"
+          >
+            <GripVertical className="h-3 w-3" />
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6 text-muted-foreground hover:text-foreground"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(item.url, "_blank", "noopener,noreferrer");
+            }}
+            title="Open item"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+          </Button>
+
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6 text-muted-foreground hover:text-foreground"
-                onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
-                title="Open item"
+                title="Item actions"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMenuOpen((prev) => !prev);
+                }}
               >
-                <ExternalLink className="h-3.5 w-3.5" />
+                <MoreHorizontal className="h-3.5 w-3.5" />
               </Button>
-              <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6 text-muted-foreground hover:text-foreground"
-                    title="Item actions"
-                    onClick={() => setIsMenuOpen((prev) => !prev)}
-                  >
-                    <MoreHorizontal className="h-3.5 w-3.5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem
-                    onClick={() => {
-                      window.open(item.url, "_blank", "noopener,noreferrer");
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Open original URL"
-                  >
-                    <ExternalLink className="mr-2 h-3.5 w-3.5" />
-                    Open original URL
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      if (onCopyItemLink) {
-                        onCopyItemLink(item.url);
-                      } else {
-                        navigator.clipboard?.writeText(item.url);
-                      }
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Copy URL"
-                  >
-                    <Link2 className="mr-2 h-3.5 w-3.5" />
-                    Copy URL
-                  </DropdownMenuItem>
-                  {onCopyItemShareLink && (
-                    <DropdownMenuItem
-                      onClick={() => {
-                        onCopyItemShareLink(item.id);
-                        setIsMenuOpen(false);
-                      }}
-                      className="cursor-pointer"
-                      title="Copy share link"
-                    >
-                      <Share2 className="mr-2 h-3.5 w-3.5" />
-                      Copy share link
-                    </DropdownMenuItem>
-                  )}
-                  {onShare && (
-                    <DropdownMenuItem
-                      onClick={() => {
-                        onShare();
-                        setIsMenuOpen(false);
-                      }}
-                      className="cursor-pointer"
-                      title="Share item"
-                    >
-                      <Share2 className="mr-2 h-3.5 w-3.5" />
-                      Share item
-                    </DropdownMenuItem>
-                  )}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      onEdit();
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Edit item"
-                  >
-                    <Pencil className="mr-2 h-3.5 w-3.5" />
-                    Edit item
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      onDuplicate();
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Duplicate item"
-                  >
-                    <Copy className="mr-2 h-3.5 w-3.5" />
-                    Duplicate item
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      onMove();
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Move item"
-                  >
-                    <ArchiveRestore className="mr-2 h-3.5 w-3.5" />
-                    Move item
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      onDelete();
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer text-destructive focus:text-destructive"
-                    title="Move to trash"
-                  >
-                    <Trash2 className="mr-2 h-3.5 w-3.5" />
-                    Move to trash
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
-          {item.description && (
-            <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-              {item.description}
-            </p>
-          )}
-        </div>
-
-        <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-border/30 pt-2.5">
-          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted-foreground">
-            <span className={cn("h-1.5 w-1.5 rounded-full", colorDotClasses[item.color])} />
-            <span className="capitalize">{item.color}</span>
-          </span>
-          {item.tags.map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center gap-1 rounded bg-muted/60 px-1.5 py-0.5 text-[10px] text-muted-foreground font-medium"
-            >
-              #{tag}
-            </span>
-          ))}
-          <span className="ml-auto text-[10px] text-muted-foreground/70">{item.addedAt}</span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48" onClick={(e) => e.stopPropagation()}>
+              <DropdownMenuItem
+                onClick={() => {
+                  window.open(item.url, "_blank", "noopener,noreferrer");
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Open original URL"
+              >
+                <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                Open original URL
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  if (onCopyItemLink) {
+                    onCopyItemLink(item.url);
+                  } else {
+                    navigator.clipboard?.writeText(item.url);
+                  }
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Copy URL"
+              >
+                <Link2 className="mr-2 h-3.5 w-3.5" />
+                Copy URL
+              </DropdownMenuItem>
+              {onCopyItemShareLink && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    onCopyItemShareLink(item.id);
+                    setIsMenuOpen(false);
+                  }}
+                  className="cursor-pointer"
+                  title="Copy share link"
+                >
+                  <Share2 className="mr-2 h-3.5 w-3.5" />
+                  Copy share link
+                </DropdownMenuItem>
+              )}
+              {onShare && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    onShare();
+                    setIsMenuOpen(false);
+                  }}
+                  className="cursor-pointer"
+                  title="Share item"
+                >
+                  <Share2 className="mr-2 h-3.5 w-3.5" />
+                  Share item
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  onEdit();
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Edit item"
+              >
+                <Pencil className="mr-2 h-3.5 w-3.5" />
+                Edit item
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  onDuplicate();
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Duplicate item"
+              >
+                <Copy className="mr-2 h-3.5 w-3.5" />
+                Duplicate item
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  onMove();
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Move item"
+              >
+                <ArchiveRestore className="mr-2 h-3.5 w-3.5" />
+                Move item
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  onDelete();
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer text-destructive focus:text-destructive"
+                title="Move to trash"
+              >
+                <Trash2 className="mr-2 h-3.5 w-3.5" />
+                Move to trash
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     );
@@ -1056,206 +1290,195 @@ function ItemRow({
   return (
     <div
       className={cn(
-        "group relative flex items-start gap-2.5 transition-colors hover:bg-muted/40",
-        isCompact ? "p-2.5 items-center" : "p-3.5"
+        "group relative flex items-center justify-between gap-3 transition-colors hover:bg-muted/40 cursor-pointer select-none",
+        isCompact ? "p-2.5" : "p-3.5"
       )}
       draggable
       onDragStart={(event) => {
         event.dataTransfer.setData("text/plain", onDragStart(item.id));
       }}
+      onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
     >
-      <div
-        className={cn(
-          "flex shrink-0 cursor-grab active:cursor-grabbing items-center justify-center text-muted-foreground/30 transition hover:text-foreground opacity-30 group-hover:opacity-100",
-          isCompact ? "h-4 w-4" : "mt-0.5 h-5 w-4"
-        )}
-        title="Drag to reorder or move"
-      >
-        <GripVertical className="h-3.5 w-3.5" />
+      <div className="flex items-center gap-3 min-w-0 flex-1">
+        <div
+          className="flex h-5 w-4 shrink-0 cursor-grab active:cursor-grabbing items-center justify-center text-muted-foreground/30 transition hover:text-foreground opacity-30 group-hover:opacity-100"
+          title="Drag to reorder or move"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <GripVertical className="h-3.5 w-3.5" />
+        </div>
+
+        <div className="flex shrink-0 items-center justify-center rounded-lg bg-muted/40 border border-border/30 overflow-hidden h-7 w-7">
+          <Favicon url={item.url} size={isCompact ? "sm" : "md"} />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h5 className="truncate text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+              {item.title}
+            </h5>
+            {isOpenNow && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-400 shrink-0"
+                title="This tab is currently open in your browser"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Open now
+              </span>
+            )}
+            {isDuplicate && (
+              <span
+                className="inline-flex items-center rounded-full bg-amber-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-amber-400 shrink-0"
+                title={`This link is saved ${duplicateUrlCounts?.get(normUrl)} times across your workspace`}
+              >
+                Duplicate
+              </span>
+            )}
+            <p className="truncate text-xs text-muted-foreground/80 font-mono">
+              {getHost(item.url)}
+            </p>
+          </div>
+          {!isCompact && item.description && (
+            <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+              {item.description}
+            </p>
+          )}
+        </div>
       </div>
 
-      <div className="min-w-0 flex-1">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-start gap-2.5 min-w-0 flex-1">
-            <Favicon
-              url={item.url}
-              size={isCompact ? "sm" : "md"}
-              className={isCompact ? "" : "mt-0.5"}
-            />
-            <div className="min-w-0 flex-1">
-              <div className={cn("flex items-baseline gap-2 flex-wrap")}>
-                <h5 className="truncate text-sm font-medium text-foreground">{item.title}</h5>
-                {isOpenNow && (
-                  <span
-                    className="inline-flex items-center gap-1 rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-400 shrink-0"
-                    title="This tab is currently open in your browser"
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    Open now
-                  </span>
-                )}
-                {isDuplicate && (
-                  <span
-                    className="inline-flex items-center rounded bg-amber-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-amber-400 shrink-0"
-                    title={`This link is saved ${duplicateUrlCounts?.get(normUrl)} times across your workspace`}
-                  >
-                    Duplicate
-                  </span>
-                )}
-                <p className="truncate text-xs text-muted-foreground/80 font-mono">{getHost(item.url)}</p>
-              </div>
-              {!isCompact && item.description && (
-                <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground">
-                  {item.description}
-                </p>
-              )}
-            </div>
-          </div>
+      <div
+        className="flex shrink-0 items-center gap-1 opacity-60 group-hover:opacity-100 transition"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 text-muted-foreground hover:text-foreground"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(item.url, "_blank", "noopener,noreferrer");
+          }}
+          title="Open item"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+        </Button>
 
-          <div className="flex shrink-0 items-center gap-1 opacity-80 group-hover:opacity-100 transition">
+        <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
               className="h-7 w-7 text-muted-foreground hover:text-foreground"
-              onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
-              title="Open item"
+              title="Item actions"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsMenuOpen((prev) => !prev);
+              }}
             >
-              <ExternalLink className="h-3.5 w-3.5" />
+              <MoreHorizontal className="h-3.5 w-3.5" />
             </Button>
-
-            <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 text-muted-foreground hover:text-foreground"
-                  title="Item actions"
-                  onClick={() => setIsMenuOpen((prev) => !prev)}
-                >
-                  <MoreHorizontal className="h-3.5 w-3.5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem
-                  onClick={() => {
-                    window.open(item.url, "_blank", "noopener,noreferrer");
-                    setIsMenuOpen(false);
-                  }}
-                  className="cursor-pointer"
-                  title="Open original URL"
-                >
-                  <ExternalLink className="mr-2 h-3.5 w-3.5" />
-                  Open original URL
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    if (onCopyItemLink) {
-                      onCopyItemLink(item.url);
-                    } else {
-                      navigator.clipboard?.writeText(item.url);
-                    }
-                    setIsMenuOpen(false);
-                  }}
-                  className="cursor-pointer"
-                  title="Copy URL"
-                >
-                  <Link2 className="mr-2 h-3.5 w-3.5" />
-                  Copy URL
-                </DropdownMenuItem>
-                {onCopyItemShareLink && (
-                  <DropdownMenuItem
-                    onClick={() => {
-                      onCopyItemShareLink(item.id);
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Copy share link"
-                  >
-                    <Share2 className="mr-2 h-3.5 w-3.5" />
-                    Copy share link
-                  </DropdownMenuItem>
-                )}
-                {onShare && (
-                  <DropdownMenuItem
-                    onClick={() => {
-                      onShare();
-                      setIsMenuOpen(false);
-                    }}
-                    className="cursor-pointer"
-                    title="Share item"
-                  >
-                    <Share2 className="mr-2 h-3.5 w-3.5" />
-                    Share item
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    onEdit();
-                    setIsMenuOpen(false);
-                  }}
-                  className="cursor-pointer"
-                  title="Edit item"
-                >
-                  <Pencil className="mr-2 h-3.5 w-3.5" />
-                  Edit item
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    onDuplicate();
-                    setIsMenuOpen(false);
-                  }}
-                  className="cursor-pointer"
-                  title="Duplicate item"
-                >
-                  <Copy className="mr-2 h-3.5 w-3.5" />
-                  Duplicate item
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    onMove();
-                    setIsMenuOpen(false);
-                  }}
-                  className="cursor-pointer"
-                  title="Move item"
-                >
-                  <ArchiveRestore className="mr-2 h-3.5 w-3.5" />
-                  Move item
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    onDelete();
-                    setIsMenuOpen(false);
-                  }}
-                  className="cursor-pointer text-destructive focus:text-destructive"
-                  title="Move to trash"
-                >
-                  <Trash2 className="mr-2 h-3.5 w-3.5" />
-                  Move to trash
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
-        {(!isCompact || item.tags.length > 0) && (
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
-              <span className={cn("h-1.5 w-1.5 rounded-full", colorDotClasses[item.color])} />
-              <span className="capitalize">{item.color}</span>
-            </span>
-            {item.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1 rounded bg-muted/60 px-1.5 py-0.5 text-[10px] text-muted-foreground font-medium"
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48" onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuItem
+              onClick={() => {
+                window.open(item.url, "_blank", "noopener,noreferrer");
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer"
+              title="Open original URL"
+            >
+              <ExternalLink className="mr-2 h-3.5 w-3.5" />
+              Open original URL
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                if (onCopyItemLink) {
+                  onCopyItemLink(item.url);
+                } else {
+                  navigator.clipboard?.writeText(item.url);
+                }
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer"
+              title="Copy URL"
+            >
+              <Link2 className="mr-2 h-3.5 w-3.5" />
+              Copy URL
+            </DropdownMenuItem>
+            {onCopyItemShareLink && (
+              <DropdownMenuItem
+                onClick={() => {
+                  onCopyItemShareLink(item.id);
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Copy share link"
               >
-                #{tag}
-              </span>
-            ))}
-            <span className="ml-auto text-[10px] text-muted-foreground/70">{item.addedAt}</span>
-          </div>
-        )}
+                <Share2 className="mr-2 h-3.5 w-3.5" />
+                Copy share link
+              </DropdownMenuItem>
+            )}
+            {onShare && (
+              <DropdownMenuItem
+                onClick={() => {
+                  onShare();
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Share item"
+              >
+                <Share2 className="mr-2 h-3.5 w-3.5" />
+                Share item
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                onEdit();
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer"
+              title="Edit item"
+            >
+              <Pencil className="mr-2 h-3.5 w-3.5" />
+              Edit item
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                onDuplicate();
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer"
+              title="Duplicate item"
+            >
+              <Copy className="mr-2 h-3.5 w-3.5" />
+              Duplicate item
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                onMove();
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer"
+              title="Move item"
+            >
+              <ArchiveRestore className="mr-2 h-3.5 w-3.5" />
+              Move item
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                onDelete();
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer text-destructive focus:text-destructive"
+              title="Move to trash"
+            >
+              <Trash2 className="mr-2 h-3.5 w-3.5" />
+              Move to trash
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

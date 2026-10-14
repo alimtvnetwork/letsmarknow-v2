@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ExternalLink,
   FolderPlus,
   Globe,
+  Inbox,
   Layers,
   LayoutDashboard,
+  PanelLeft,
   Plus,
   RefreshCw,
   Search,
@@ -14,6 +16,20 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+
+function getSpaceEmoji(name: string): string {
+  const lower = name.toLowerCase();
+  if (lower.includes("work") || lower.includes("office") || lower.includes("job") || lower.includes("corp")) return "💼";
+  if (lower.includes("dev") || lower.includes("engineer") || lower.includes("code") || lower.includes("tech") || lower.includes("system")) return "💻";
+  if (lower.includes("design") || lower.includes("ui") || lower.includes("ux") || lower.includes("creative") || lower.includes("art")) return "🎨";
+  if (lower.includes("market") || lower.includes("sales") || lower.includes("growth") || lower.includes("brand")) return "📣";
+  if (lower.includes("operation") || lower.includes("ops") || lower.includes("infra") || lower.includes("admin")) return "⚙️";
+  if (lower.includes("person") || lower.includes("home") || lower.includes("private") || lower.includes("me")) return "👤";
+  if (lower.includes("star") || lower.includes("fav") || lower.includes("priority")) return "⭐";
+  if (lower.includes("read") || lower.includes("book") || lower.includes("article") || lower.includes("learn")) return "📚";
+  if (lower.includes("research") || lower.includes("study") || lower.includes("lab") || lower.includes("science")) return "🔬";
+  return "🌐";
+}
 import type {
   AppData,
   BrowserTabSnapshot,
@@ -130,8 +146,10 @@ export function ExtensionTabApp() {
   const [activeOrgId, setActiveOrgId] = useState<string>("");
   const [activeSpaceId, setActiveSpaceId] = useState<string>("");
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeFilter, setActiveFilter] = useState<"all" | "starred" | "recent">("all");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Open Browser Tabs state
   const [openTabs, setOpenTabs] = useState<BrowserTabSnapshot[]>([]);
@@ -139,7 +157,7 @@ export function ExtensionTabApp() {
   const [isSavingTabs, setIsSavingTabs] = useState(false);
   const [isSessionDialogOpen, setIsSessionDialogOpen] = useState(false);
   const [sessionNameInput, setSessionNameInput] = useState(() => generateSessionName());
-  const [isOpenTabsPanelOpen, setIsOpenTabsPanelOpen] = useState(true);
+  const [isOpenTabsPanelOpen, setIsOpenTabsPanelOpen] = useState(false);
   const [sessionSaveScope, setSessionSaveScope] = useState<"all" | "selected">("all");
 
   // Destination for saving open tabs
@@ -176,6 +194,30 @@ export function ExtensionTabApp() {
   // Ensure dark mode class is applied
   useEffect(() => {
     document.documentElement.classList.add("dark");
+  }, []);
+
+  // Global shortcut: press '/' to focus search, 'Escape' to blur
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const activeTag = (document.activeElement?.tagName || "").toLowerCase();
+        const isEditable =
+          document.activeElement?.getAttribute("contenteditable") === "true";
+        if (
+          activeTag !== "input" &&
+          activeTag !== "textarea" &&
+          activeTag !== "select" &&
+          !isEditable
+        ) {
+          e.preventDefault();
+          searchInputRef.current?.focus();
+        }
+      } else if (e.key === "Escape" && document.activeElement === searchInputRef.current) {
+        searchInputRef.current?.blur();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   // Initial load
@@ -871,10 +913,25 @@ export function ExtensionTabApp() {
       className="flex h-screen w-screen overflow-hidden bg-background text-foreground antialiased selection:bg-primary/20 font-sans"
     >
       {/* 1. Left Rail */}
-      <aside className="flex w-[68px] shrink-0 flex-col items-center border-r border-border bg-card/80 py-4.5 gap-3.5 z-20">
+      <aside className="flex w-[68px] shrink-0 flex-col items-center border-r border-border bg-card/80 pt-5 pb-4 gap-3.5 z-20">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-base font-bold text-primary-foreground shadow-md shadow-primary/20">
           L
         </div>
+
+        {/* Toggle Sidebar Button */}
+        <Button
+          size="icon"
+          variant="ghost"
+          data-testid="rail-toggle-sidebar-button"
+          onClick={() => setIsSidebarOpen((prev) => !prev)}
+          className={cn(
+            "h-9 w-9 text-muted-foreground hover:text-foreground rounded-lg transition-colors",
+            isSidebarOpen && "bg-primary/10 text-primary"
+          )}
+          title={isSidebarOpen ? "Collapse sidebar" : "Open sidebar"}
+        >
+          <PanelLeft className="h-4 w-4" />
+        </Button>
 
         <div className="h-px w-8 bg-border/60 my-0.5" />
 
@@ -945,43 +1002,150 @@ export function ExtensionTabApp() {
       </aside>
 
       {/* 2. Sidebar */}
-      <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-card/40 z-10">
+      <aside
+        data-testid="extension-sidebar"
+        className={cn(
+          "flex flex-col border-r border-border bg-card/40 z-10 select-none transition-all duration-200 overflow-hidden shrink-0",
+          isSidebarOpen ? "w-64" : "w-0 border-r-0 opacity-0 pointer-events-none"
+        )}
+      >
         {/* Workspace info header */}
-        <div className="flex items-center justify-between border-b border-border/80 p-4">
-          <div className="min-w-0">
-            <h2 className="truncate text-sm font-semibold text-foreground">{activeOrg.name}</h2>
-            <p className="text-[11px] text-muted-foreground">{activeOrg.plan} Workspace</p>
+        <div className="flex items-center justify-between border-b border-border/80 px-4 py-3 bg-card/60 shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-primary/30 to-rose-500/20 border border-primary/30 font-bold text-xs text-primary shadow-2xs">
+              {activeOrg.initials || "LM"}
+            </div>
+            <div className="min-w-0">
+              <h2 className="truncate text-xs font-semibold text-foreground tracking-tight">{activeOrg.name}</h2>
+              <p className="text-[10px] text-muted-foreground font-medium">{activeOrg.plan} Workspace</p>
+            </div>
           </div>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => openEditWorkspace(activeOrg.id)}
-            className="h-7 text-xs px-2 text-muted-foreground"
-          >
-            Edit
-          </Button>
+          <div className="flex items-center gap-1 shrink-0">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => openEditWorkspace(activeOrg.id)}
+              className="h-6 text-[11px] px-1.5 text-muted-foreground hover:text-foreground"
+            >
+              Edit
+            </Button>
+            <Button
+              size="icon"
+              variant="ghost"
+              data-testid="collapse-sidebar-button"
+              onClick={() => setIsSidebarOpen(false)}
+              className="h-6 w-6 text-muted-foreground hover:text-foreground"
+              title="Close sidebar"
+            >
+              ✕
+            </Button>
+          </div>
+        </div>
+
+        {/* Sidebar Search Bar with / Shortcut */}
+        <div className="p-3 pb-1 border-b border-border/40">
+          <div className="relative flex items-center rounded-lg border border-border/80 bg-background/80 px-2.5 py-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/40 transition-all shadow-2xs">
+            <Search className="h-3.5 w-3.5 text-muted-foreground shrink-0 mr-2" />
+            <input
+              ref={searchInputRef}
+              data-dashboard-search
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (activePage !== "dashboard") setActivePage("dashboard");
+              }}
+              placeholder="Search links, spaces..."
+              className="h-5 w-full bg-transparent text-xs text-foreground placeholder:text-muted-foreground/70 outline-none"
+            />
+            <kbd className="pointer-events-none inline-flex h-4 items-center justify-center rounded border border-border/70 bg-muted/70 px-1 font-mono text-[9px] font-semibold text-muted-foreground shrink-0">
+              /
+            </kbd>
+          </div>
         </div>
 
         {/* Navigation Sections */}
         <div className="flex-1 overflow-y-auto p-3 space-y-4">
-          {/* Main Extension Views */}
+          {/* Quick Focus Queues: Next & Quick Inbox */}
           <div className="space-y-1">
+            <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+              Quick Focus
+            </div>
+
+            {/* Next queue */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveFilter(activeFilter === "starred" ? "all" : "starred");
+                if (activePage !== "dashboard") setActivePage("dashboard");
+              }}
+              className={cn(
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                activeFilter === "starred" && activePage === "dashboard"
+                  ? "bg-amber-500/15 text-amber-400 font-semibold border border-amber-500/20"
+                  : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+              )}
+              title="Focus priority items (Starred)"
+            >
+              <span className="flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                <span>Next</span>
+              </span>
+              <span className="rounded-full bg-amber-500/20 text-amber-400 px-1.5 py-0.2 text-[10px] font-semibold">
+                {data?.collections ? data.collections.filter((c) => c.isStarred).length : 0}
+              </span>
+            </button>
+
+            {/* Quick Inbox */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveFilter("all");
+                setQuery("");
+                if (activePage !== "dashboard") setActivePage("dashboard");
+              }}
+              className={cn(
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                activeFilter === "all" && activePage === "dashboard" && query === ""
+                  ? "bg-primary/10 text-primary font-semibold border border-primary/20"
+                  : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+              )}
+              title="Quick Inbox & Unsorted Links"
+            >
+              <span className="flex items-center gap-2">
+                <Inbox className="h-3.5 w-3.5 text-primary" />
+                <span>Quick Inbox</span>
+              </span>
+              <span className="rounded-full bg-primary/20 text-primary px-1.5 py-0.2 text-[10px] font-semibold">
+                {openTabs.length}
+              </span>
+            </button>
+          </div>
+
+          {/* Main Extension Views */}
+          <div className="space-y-1 pt-2 border-t border-border/40">
+            <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+              Workspace
+            </div>
+
             <button
               type="button"
               data-testid="nav-collections-button"
-              onClick={() => setActivePage("dashboard")}
+              onClick={() => {
+                setActivePage("dashboard");
+                setActiveFilter("all");
+              }}
               className={cn(
-                "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
-                activePage === "dashboard"
-                  ? "bg-primary text-primary-foreground"
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                activePage === "dashboard" && activeFilter !== "starred"
+                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               )}
             >
               <span className="flex items-center gap-2">
-                <LayoutDashboard className="h-3.5 w-3.5" />
+                <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
                 Collections
               </span>
-              <span className="text-[10px] opacity-80">{activeItemCount}</span>
+              <span className="text-[10px] font-semibold opacity-80">{activeItemCount}</span>
             </button>
 
             <button
@@ -992,17 +1156,17 @@ export function ExtensionTabApp() {
               }}
               data-testid="nav-open-tabs-button"
               className={cn(
-                "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
                 activePage === "open-tabs"
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               )}
             >
               <span className="flex items-center gap-2">
-                <Layers className="h-3.5 w-3.5" />
+                <Layers className="h-3.5 w-3.5 text-sky-400" />
                 Open Browser Tabs
               </span>
-              <span className="rounded-full bg-primary/20 px-1.5 py-0.2 text-[10px] font-semibold">
+              <span className="rounded-full bg-primary/20 text-primary px-1.5 py-0.2 text-[10px] font-semibold">
                 {openTabs.length}
               </span>
             </button>
@@ -1012,17 +1176,17 @@ export function ExtensionTabApp() {
               data-testid="nav-workspace-button"
               onClick={() => setActivePage("workspace")}
               className={cn(
-                "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
                 activePage === "workspace"
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               )}
             >
               <span className="flex items-center gap-2">
-                <Users className="h-3.5 w-3.5" />
+                <Users className="h-3.5 w-3.5 text-purple-400" />
                 Workspace & Members
               </span>
-              <span className="rounded-full bg-primary/20 px-1.5 py-0.2 text-[10px] font-semibold">
+              <span className="rounded-full bg-primary/20 text-primary px-1.5 py-0.2 text-[10px] font-semibold">
                 {(data?.members?.filter((m) => !m.organizationId || m.organizationId === activeOrgId) || []).length || 1}
               </span>
             </button>
@@ -1032,18 +1196,20 @@ export function ExtensionTabApp() {
               data-testid="nav-trash-button"
               onClick={() => setActivePage("trash")}
               className={cn(
-                "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
                 activePage === "trash"
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               )}
             >
               <span className="flex items-center gap-2">
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-3.5 w-3.5 text-rose-400" />
                 Trash
               </span>
               {deletedItems.length > 0 && (
-                <span className="text-[10px] opacity-80">{deletedItems.length}</span>
+                <span className="rounded-full bg-rose-500/20 text-rose-400 px-1.5 py-0.2 text-[10px] font-semibold">
+                  {deletedItems.length}
+                </span>
               )}
             </button>
 
@@ -1052,9 +1218,9 @@ export function ExtensionTabApp() {
               data-testid="nav-settings-button"
               onClick={() => setActivePage("settings")}
               className={cn(
-                "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
                 activePage === "settings"
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
                   : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               )}
             >
@@ -1065,28 +1231,30 @@ export function ExtensionTabApp() {
             </button>
           </div>
 
-          {/* Spaces Section */}
-          <div className="pt-2 border-t border-border/50">
+          {/* Spaces Section with Rich Icons/Emojis */}
+          <div className="pt-2 border-t border-border/40">
             <div className="flex items-center justify-between px-2 pb-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
                 Spaces ({organizationSpaces.length})
               </span>
               <button
                 type="button"
                 onClick={openCreateSpace}
-                className="text-muted-foreground hover:text-foreground text-[11px]"
+                className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted/60 transition"
                 title="Create Space"
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="h-3.5 w-3.5" />
               </button>
             </div>
 
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {organizationSpaces.map((space) => {
                 const isSelected = space.id === activeSpaceId;
                 const spaceItems = countActiveItems(
                   data.collections.filter((c) => c.spaceId === space.id)
                 );
+                const emoji = getSpaceEmoji(space.name);
+
                 return (
                   <button
                     key={space.id}
@@ -1096,17 +1264,19 @@ export function ExtensionTabApp() {
                       if (activePage !== "dashboard") setActivePage("dashboard");
                     }}
                     className={cn(
-                      "flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-xs transition-colors",
+                      "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition-all",
                       isSelected && activePage === "dashboard"
-                        ? "bg-muted font-medium text-foreground"
+                        ? "bg-card font-semibold text-foreground border border-border shadow-2xs"
                         : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
                     )}
                   >
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className={cn("h-2 w-2 rounded-full", space.accentClass || "bg-primary")} />
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-muted/60 border border-border/40 text-xs shadow-2xs">
+                        {emoji}
+                      </span>
                       <span className="truncate">{space.name}</span>
                     </div>
-                    <span className="text-[10px] text-muted-foreground">{spaceItems}</span>
+                    <span className="text-[10px] font-mono text-muted-foreground">{spaceItems}</span>
                   </button>
                 );
               })}
@@ -1114,11 +1284,31 @@ export function ExtensionTabApp() {
           </div>
         </div>
 
-        {/* Sidebar Footer */}
+        {/* Toby-Style User Profile Footer */}
         <div className="border-t border-border/80 p-3 bg-muted/20">
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-            <span>LetsMarkNow Extension</span>
-            <span>V1.0</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 font-semibold text-xs text-white shadow-xs">
+                YK
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-semibold text-foreground leading-tight">
+                  Sk. Yeasin Kabir Joy
+                </p>
+                <p className="truncate text-[10px] text-muted-foreground font-medium">
+                  <span>LetsMarkNow</span>
+                </p>
+              </div>
+            </div>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setActivePage("settings")}
+              className="h-7 w-7 text-muted-foreground hover:text-foreground"
+              title="Extension Settings"
+            >
+              <Settings className="h-3.5 w-3.5" />
+            </Button>
           </div>
         </div>
       </aside>
@@ -1136,6 +1326,7 @@ export function ExtensionTabApp() {
               onCreateCollection={openCreateCollection}
               onCreateItem={() => openCreateItem()}
               onOpenCommand={() => {}}
+              onToggleMobileMenu={() => setIsSidebarOpen((prev) => !prev)}
             >
               <Button
                 size="sm"

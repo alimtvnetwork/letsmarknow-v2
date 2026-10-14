@@ -16,6 +16,7 @@ describe("localWorkspaceStore", () => {
     const state = loadWorkspaceState();
     expect(state.data.organizations).toHaveLength(mockWorkspace.organizations.length);
     expect(state.data.spaces).toHaveLength(mockWorkspace.spaces.length);
+    expect(state.viewMode).toBe("grid");
   });
 
   it("saves and loads custom workspace state", () => {

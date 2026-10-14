@@ -49,6 +49,7 @@ export function OpenTabsList({
   isSaving = false,
 }: OpenTabsListProps) {
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [draggedTabId, setDraggedTabId] = useState<number | string | null>(null);
 
   const saveableTabs = tabs.filter((t) => isSaveableUrl(t.url));
   const allSaveableSelected =
@@ -119,44 +120,52 @@ export function OpenTabsList({
         </div>
       </div>
 
-      {/* Tabs list */}
-      <div className="space-y-1.5 divide-y divide-border/40 rounded-lg border border-border bg-card/40 overflow-hidden">
+      {/* Tabs list: Toby-style individual pill cards */}
+      <div className="space-y-2">
         {tabs.length === 0 ? (
-          <div className="p-6 text-center text-xs text-muted-foreground">
+          <div className="rounded-xl border border-dashed border-border/80 bg-card/20 p-6 text-center text-xs text-muted-foreground">
             No open tabs detected in current window
           </div>
         ) : (
           tabs.map((tab, idx) => {
             const domain = getDomainFromUrl(tab.url);
             const isValid = isSaveableUrl(tab.url);
+            const tabKey = tab.id ?? `tab-${idx}`;
             const isSelected = tab.id !== undefined && selectedTabIds.includes(tab.id);
+            const isDragging = draggedTabId === tabKey;
             const normUrl = normalizeUrl(tab.url);
             const isAlreadySaved = Boolean(savedUrlStats && normUrl && savedUrlStats.urlSet.has(normUrl));
             const savedInCol = normUrl && savedUrlStats ? savedUrlStats.urlToCollectionMap.get(normUrl) : null;
 
             return (
               <div
-                key={tab.id ?? `tab-${idx}`}
+                key={tabKey}
                 draggable={isValid}
                 onDragStart={(event) => {
                   if (!isValid) return;
+                  setDraggedTabId(tabKey);
                   event.dataTransfer.setData(
                     "application/json",
                     JSON.stringify({ type: "open-tab", tab })
                   );
                   event.dataTransfer.setData("text/plain", tab.url || "");
                 }}
-                className={`group/tab flex items-center gap-2.5 p-2.5 transition-colors ${
-                  isSelected ? "bg-primary/5" : "hover:bg-muted/30"
-                } ${!isValid ? "opacity-60" : "cursor-grab active:cursor-grabbing"}`}
+                onDragEnd={() => setDraggedTabId(null)}
+                className={`group/tab relative flex items-center gap-2.5 rounded-xl border p-2.5 transition-all duration-150 shadow-2xs select-none ${
+                  isSelected
+                    ? "border-primary/60 bg-primary/10 shadow-xs"
+                    : "border-border/60 bg-card/50 hover:bg-card/90 hover:border-border hover:shadow-xs"
+                } ${!isValid ? "opacity-60 bg-muted/20 border-border/40" : "cursor-grab active:cursor-grabbing"} ${
+                  isDragging ? "opacity-40 border-dashed border-primary ring-2 ring-primary/30 scale-[0.98]" : ""
+                }`}
               >
                 {/* Drag Handle */}
                 {isValid && (
                   <div
-                    className="flex h-4 w-3 shrink-0 items-center justify-center text-muted-foreground/30 opacity-40 group-hover/tab:opacity-100 transition"
+                    className="flex h-5 w-3.5 shrink-0 items-center justify-center text-muted-foreground/30 opacity-40 group-hover/tab:opacity-100 transition"
                     title="Drag tab into any collection or group"
                   >
-                    <GripVertical className="h-3 w-3" />
+                    <GripVertical className="h-3.5 w-3.5" />
                   </div>
                 )}
 
@@ -170,8 +179,8 @@ export function OpenTabsList({
                   className="h-4 w-4 rounded border-border text-primary focus:ring-primary disabled:opacity-40"
                 />
 
-                {/* Favicon */}
-                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-muted/40">
+                {/* Favicon Box */}
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border/50 bg-background/80 shadow-2xs">
                   {tab.favIconUrl ? (
                     <img
                       src={tab.favIconUrl}
@@ -179,17 +188,17 @@ export function OpenTabsList({
                       onError={(e) => {
                         (e.target as HTMLElement).style.display = "none";
                       }}
-                      className="h-3.5 w-3.5 object-contain"
+                      className="h-4 w-4 object-contain"
                     />
                   ) : (
-                    <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+                    <Globe className="h-4 w-4 text-muted-foreground" />
                   )}
                 </div>
 
                 {/* Title & Domain */}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <p className="truncate text-xs font-medium text-foreground leading-tight">
+                    <p className="truncate text-xs font-semibold text-foreground leading-tight">
                       {tab.title || domain || "Untitled Tab"}
                     </p>
                     {tab.pinned && (
@@ -198,31 +207,31 @@ export function OpenTabsList({
                       </span>
                     )}
                     {tab.active && (
-                      <span className="rounded bg-primary/20 px-1 py-0.2 text-[9px] font-semibold text-primary uppercase shrink-0">
+                      <span className="rounded-full bg-primary/15 text-primary text-[9px] font-bold px-2 py-0.2 uppercase tracking-wider shrink-0">
                         Active
                       </span>
                     )}
                     {isAlreadySaved && (
                       <span
-                        className="rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-500 shrink-0"
+                        className="rounded-full bg-emerald-500/15 text-emerald-400 text-[9px] font-semibold px-2 py-0.2 shrink-0"
                         title={savedInCol ? `Already saved in collection "${savedInCol}"` : "Already saved in workspace"}
                       >
                         Already saved
                       </span>
                     )}
                     {!isValid && (
-                      <span className="rounded bg-muted px-1 py-0.2 text-[9px] font-medium text-muted-foreground uppercase shrink-0">
+                      <span className="rounded-full bg-muted text-muted-foreground text-[9px] font-semibold px-2 py-0.2 uppercase tracking-wider shrink-0">
                         System
                       </span>
                     )}
                   </div>
-                  <p className="truncate text-[11px] text-muted-foreground font-mono mt-0.5">
+                  <p className="truncate text-[11px] text-muted-foreground font-mono mt-0.5" title={tab.url}>
                     {tab.url}
                   </p>
                 </div>
 
-                {/* Quick actions */}
-                <div className="flex items-center gap-1 shrink-0">
+                {/* Micro-actions on hover */}
+                <div className="flex items-center gap-1 shrink-0 opacity-70 group-hover/tab:opacity-100 transition-opacity">
                   <Button
                     size="icon"
                     variant="ghost"

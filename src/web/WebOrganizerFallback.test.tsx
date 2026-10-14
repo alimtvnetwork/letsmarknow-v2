@@ -343,7 +343,7 @@ describe("web dashboard UI", { timeout: 30000 }, () => {
     fireEvent.click(shareItem);
 
     expect(screen.getByText(/Share.*Design Systems/i)).toBeInTheDocument();
-    expect(screen.getByText("Public")).toBeInTheDocument();
+    expect(screen.getAllByText("Public")[0]).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Save Changes" }));
     expect(screen.queryByText(/Share.*Design Systems/i)).not.toBeInTheDocument();

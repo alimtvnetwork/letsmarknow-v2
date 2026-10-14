@@ -31,11 +31,12 @@ export function TopBar({
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden h-9 w-9 shrink-0 text-muted-foreground"
+          data-testid="toggle-sidebar-button"
+          className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
           onClick={onToggleMobileMenu}
-          title="Open navigation"
+          title="Toggle sidebar navigation"
         >
-          <PanelLeft className="h-5 w-5" />
+          <PanelLeft className="h-4 w-4" />
         </Button>
         <div className="min-w-0">
           <h2 className="truncate text-base font-semibold">{activeSpace.name}</h2>

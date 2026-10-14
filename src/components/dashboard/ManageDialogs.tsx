@@ -82,7 +82,7 @@ export function WorkspaceDialog({
             <DialogTitle>{mode === "edit" ? "Edit workspace" : "Create workspace"}</DialogTitle>
             <DialogDescription>
               {mode === "edit"
-                ? "Update your workspace name, initials, and plan."
+                ? "Update your workspace name and initials."
                 : "Workspaces separate personal, team, and client saved-link systems."}
             </DialogDescription>
           </DialogHeader>
@@ -102,17 +102,6 @@ export function WorkspaceDialog({
                 value={value.initials}
                 onChange={(event) => onValueChange({ ...value, initials: event.target.value.toUpperCase() })}
               />
-            </Field>
-            <Field label="Plan">
-              <select
-                className="h-10 rounded-md border border-input bg-background px-3 text-sm"
-                value={value.plan}
-                onChange={(event) => onValueChange({ ...value, plan: event.target.value })}
-              >
-                <option value="Free">Free</option>
-                <option value="Pro">Pro</option>
-                <option value="Team">Team</option>
-              </select>
             </Field>
           </div>
           <DialogFooter>

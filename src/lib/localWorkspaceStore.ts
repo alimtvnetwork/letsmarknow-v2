@@ -27,13 +27,13 @@ export function isValidAppData(value: unknown): value is AppData {
 
 export function loadWorkspaceState(): StoredWorkspaceState {
   if (typeof window === "undefined" || !window.localStorage) {
-    return { data: mockWorkspace };
+    return { data: mockWorkspace, viewMode: "grid" };
   }
 
   try {
     const raw = window.localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) {
-      return { data: mockWorkspace };
+      return { data: mockWorkspace, viewMode: "grid" };
     }
 
     const parsed = JSON.parse(raw);
@@ -53,7 +53,7 @@ export function loadWorkspaceState(): StoredWorkspaceState {
 
       const viewMode: ViewMode = ["list", "compact", "grid"].includes(parsed.viewMode)
         ? parsed.viewMode
-        : "list";
+        : "grid";
 
       const activeFilter: ActiveFilter = ["all", "starred", "recent"].includes(
         parsed.activeFilter

@@ -279,32 +279,32 @@ export function SpaceSidebar({
           icon={LayoutDashboard}
           label="Dashboard"
           isActive={activePage === "dashboard"}
-          onClick={() => handleNav("/dashboard")}
+          onClick={() => handleNav("/web/app")}
         />
         <SidebarButton
           icon={Trash2}
           label="Trash"
           count={deletedCount}
           isActive={activePage === "trash"}
-          onClick={() => handleNav("/trash")}
+          onClick={() => handleNav("/web/app?view=trash")}
         />
         <SidebarButton
           icon={Settings}
           label="Settings"
           isActive={activePage === "settings"}
-          onClick={() => handleNav("/settings")}
+          onClick={() => handleNav("/web/app?view=settings")}
         />
         <SidebarButton
           icon={History}
           label="Activity"
           isActive={activePage === "activity"}
-          onClick={() => handleNav("/activity")}
+          onClick={() => handleNav("/web/app?view=activity")}
         />
         <SidebarButton
           icon={Share2}
           label="Public share"
           isActive={activePage === "share"}
-          onClick={() => handleNav("/share")}
+          onClick={() => handleNav("/web/app?view=share")}
         />
       </nav>
 

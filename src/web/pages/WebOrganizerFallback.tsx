@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Chrome, Sparkles } from "lucide-react";
 
 import {
   MobileSidebarDrawer,
@@ -24,16 +25,14 @@ import { TopBar } from "@/components/dashboard/TopBar";
 import { useWorkspaceDashboard } from "@/hooks/useWorkspaceDashboard";
 import type { AppPage } from "@/types/lmn";
 
-const getPage = (pathname: string): AppPage =>
-  pathname.startsWith("/settings")
-    ? "settings"
-    : pathname.startsWith("/trash")
-      ? "trash"
-      : pathname.startsWith("/activity")
-        ? "activity"
-        : pathname.startsWith("/share")
-          ? "share"
-          : "dashboard";
+const getPage = (pathname: string, search: string = ""): AppPage => {
+  const query = new URLSearchParams(search).get("view");
+  if (query === "settings" || pathname.startsWith("/settings")) return "settings";
+  if (query === "trash" || pathname.startsWith("/trash")) return "trash";
+  if (query === "activity" || pathname.startsWith("/activity")) return "activity";
+  if (query === "share" || pathname.startsWith("/share")) return "share";
+  return "dashboard";
+};
 
 export default function Index() {
   const navigate = useNavigate();
@@ -146,7 +145,7 @@ export default function Index() {
     openShareDialog,
   } = useWorkspaceDashboard();
 
-  const activePage = getPage(location.pathname);
+  const activePage = getPage(location.pathname, location.search);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -181,7 +180,7 @@ export default function Index() {
           activeOrgId={activeOrganization.id}
           onSelect={(organizationId) => {
             setActiveOrganizationId(organizationId);
-            navigate("/dashboard");
+            navigate("/web/app");
           }}
           onCreateWorkspace={openCreateWorkspace}
           className="hidden md:flex"
@@ -197,11 +196,11 @@ export default function Index() {
           deletedCount={deletedItems.length}
           onSelectSpace={(spaceId) => {
             setActiveSpaceId(spaceId);
-            navigate(`/spaces/${spaceId}`);
+            navigate(`/web/app?spaceId=${spaceId}`);
           }}
           onSelectOrganization={(orgId) => {
             setActiveOrganizationId(orgId);
-            navigate("/dashboard");
+            navigate("/web/app");
           }}
           onCreateWorkspace={openCreateWorkspace}
           onEditWorkspace={openEditWorkspace}
@@ -227,6 +226,23 @@ export default function Index() {
             onOpenCommand={() => setIsCommandOpen(true)}
             onToggleMobileMenu={() => setIsMobileMenuOpen(true)}
           />
+
+          {/* Web Fallback Notice */}
+          <div className="bg-primary/10 border-b border-primary/20 px-4 py-1.5 text-xs flex flex-wrap items-center justify-between text-muted-foreground gap-2">
+            <span className="flex items-center gap-1.5 text-foreground font-medium text-[11px]">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              Web Fallback View &bull; The LetsMarkNow browser extension is the primary daily app.
+            </span>
+            <div className="flex items-center gap-2 text-[11px]">
+              <Link to="/web/download" className="text-primary hover:underline font-semibold flex items-center gap-1">
+                <Chrome className="h-3 w-3" /> Add to Chrome
+              </Link>
+              <span className="text-muted-foreground/40">|</span>
+              <Link to="/" className="text-foreground hover:underline">
+                Open Extension Workspace
+              </Link>
+            </div>
+          </div>
 
           {activePage === "settings" ? (
             <SettingsPage
@@ -260,7 +276,7 @@ export default function Index() {
               targetType={routeTargetType}
               slug={routeSlug}
               shareId={routeShareId}
-              onNavigateDashboard={() => navigate("/dashboard")}
+              onNavigateDashboard={() => navigate("/web/app")}
             />
           ) : (
             <DashboardBoard
@@ -313,14 +329,14 @@ export default function Index() {
         activePage={activePage}
         onSelectOrganization={(orgId) => {
           setActiveOrganizationId(orgId);
-          navigate("/dashboard");
+          navigate("/web/app");
         }}
         onCreateWorkspace={openCreateWorkspace}
         onEditWorkspace={openEditWorkspace}
         onDeleteWorkspace={requestDeleteWorkspace}
         onSelectSpace={(spaceId) => {
           setActiveSpaceId(spaceId);
-          navigate(`/spaces/${spaceId}`);
+          navigate(`/web/app?spaceId=${spaceId}`);
         }}
         onCreateSpace={openCreateSpace}
         onEditSpace={openEditSpace}

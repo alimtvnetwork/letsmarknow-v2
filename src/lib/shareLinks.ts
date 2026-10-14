@@ -25,7 +25,7 @@ export function generateShareSlug(targetName: string, targetId: string): string 
 }
 
 export function getSharePath(targetType: ShareTargetType, slug: string): string {
-  return `/share/${targetType}/${slug}`;
+  return `/web/share/${slug}`;
 }
 
 export function getShareUrl(targetType: ShareTargetType, slug: string): string {
@@ -94,7 +94,7 @@ export function resolveShare(
   const allShares = data.shareSettings || [];
   const matchedShare = allShares.find((s) => {
     if (paramTargetType && s.targetType !== paramTargetType) {
-      // If only one param was passed (e.g. /share/:shareId), paramTargetType might be the slug or shareId
+      // If only one param was passed (e.g. /web/share/:shareId), paramTargetType might be the slug or shareId
       if (s.publicSlug === paramTargetType || s.targetId === paramTargetType || s.id === paramTargetType) {
         return true;
       }
@@ -117,12 +117,29 @@ export function resolveShare(
     };
   }
 
+  let detectedType: ShareTargetType | undefined;
+  const probe = paramSlugOrId || paramTargetType || "";
+  if (!paramTargetType || !["workspace", "space", "collection", "group", "item"].includes(paramTargetType)) {
+    if (data.organizations.some((o) => o.id === probe || slugify(o.name) === probe)) {
+      detectedType = "workspace";
+    } else if (data.spaces.some((s) => s.id === probe || slugify(s.name) === probe)) {
+      detectedType = "space";
+    } else if (data.collections.some((c) => c.id === probe || slugify(c.name) === probe)) {
+      detectedType = "collection";
+    } else if (data.collections.some((c) => c.groups.some((g) => g.id === probe || slugify(g.name) === probe))) {
+      detectedType = "group";
+    } else if (data.collections.some((c) => c.groups.some((g) => g.items.some((i) => i.id === probe || slugify(i.title) === probe)))) {
+      detectedType = "item";
+    }
+  }
+
   const effectiveTargetType: ShareTargetType = (matchedShare?.targetType ||
+    detectedType ||
     (["workspace", "space", "collection", "group", "item"].includes(paramTargetType || "")
       ? paramTargetType
       : "collection")) as ShareTargetType;
 
-  const targetId = matchedShare?.targetId || paramSlugOrId || paramTargetType || "";
+  const targetId = matchedShare?.targetId || probe;
 
   // 1. Target: WORKSPACE
   if (effectiveTargetType === "workspace") {

@@ -126,19 +126,19 @@ export function CommandPalette({
               Clear search & filters
             </CommandItem>
           )}
-          <CommandItem onSelect={() => run(() => onNavigate("/share"))}>
+          <CommandItem onSelect={() => run(() => onNavigate("/web/app?view=share"))}>
             <Globe2 className="mr-2 h-4 w-4" />
             Open public share
           </CommandItem>
-          <CommandItem onSelect={() => run(() => onNavigate("/settings"))}>
+          <CommandItem onSelect={() => run(() => onNavigate("/web/app?view=settings"))}>
             <Settings className="mr-2 h-4 w-4" />
             Open settings
           </CommandItem>
-          <CommandItem onSelect={() => run(() => onNavigate("/activity"))}>
+          <CommandItem onSelect={() => run(() => onNavigate("/web/app?view=activity"))}>
             <History className="mr-2 h-4 w-4" />
             Open activity
           </CommandItem>
-          <CommandItem onSelect={() => run(() => onNavigate("/trash"))}>
+          <CommandItem onSelect={() => run(() => onNavigate("/web/app?view=trash"))}>
             <Trash2 className="mr-2 h-4 w-4" />
             Open trash
           </CommandItem>

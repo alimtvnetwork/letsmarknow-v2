@@ -3,8 +3,28 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+
+// Extension App Surfaces (Primary daily application mounted at "/")
+import { ExtensionTabApp } from "./extension/tab/ExtensionTabApp";
+import { PopupApp } from "./extension/popup/PopupApp";
+import { SidePanelApp } from "./extension/sidepanel/SidePanelApp";
+import { OptionsApp } from "./extension/options/OptionsApp";
+
+// Web App Surfaces (Secondary: portal, billing, public sharing, fallback mounted at "/web")
+import LandingPage from "./web/pages/LandingPage";
+import DownloadPage from "./web/pages/DownloadPage";
+import LoginPage from "./web/pages/LoginPage";
+import SignupPage from "./web/pages/SignupPage";
+import AccountPage from "./web/pages/AccountPage";
+import BillingPage from "./web/pages/BillingPage";
+import TeamPage from "./web/pages/TeamPage";
+import WebSettingsPage from "./web/pages/WebSettingsPage";
+import ImportExportPage from "./web/pages/ImportExportPage";
+import PublicShareViewerPage from "./web/pages/PublicShareViewerPage";
+import InviteAcceptancePage from "./web/pages/InviteAcceptancePage";
+import HelpPage from "./web/pages/HelpPage";
+import WebOrganizerFallback from "./web/pages/WebOrganizerFallback";
+import NotFound from "./web/pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -15,16 +35,30 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Index />} />
-          <Route path="/spaces/:spaceId" element={<Index />} />
-          <Route path="/settings" element={<Index />} />
-          <Route path="/trash" element={<Index />} />
-          <Route path="/activity" element={<Index />} />
-          <Route path="/share" element={<Index />} />
-          <Route path="/share/:shareId" element={<Index />} />
-          <Route path="/share/:targetType/:slug" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          {/* Extension Primary Surfaces mounted at root "/" */}
+          <Route path="/" element={<ExtensionTabApp />} />
+          <Route path="/popup" element={<PopupApp />} />
+          <Route path="/sidepanel" element={<SidePanelApp />} />
+          <Route path="/options" element={<OptionsApp />} />
+
+          {/* Web App Portal & Account Routes mounted at "/web" */}
+          <Route path="/web" element={<LandingPage />} />
+          <Route path="/web/download" element={<DownloadPage />} />
+          <Route path="/web/login" element={<LoginPage />} />
+          <Route path="/web/signup" element={<SignupPage />} />
+          <Route path="/web/account" element={<AccountPage />} />
+          <Route path="/web/billing" element={<BillingPage />} />
+          <Route path="/web/team" element={<TeamPage />} />
+          <Route path="/web/settings" element={<WebSettingsPage />} />
+          <Route path="/web/import-export" element={<ImportExportPage />} />
+          <Route path="/web/share/:shareId" element={<PublicShareViewerPage />} />
+          <Route path="/web/invite/:inviteId" element={<InviteAcceptancePage />} />
+          <Route path="/web/help" element={<HelpPage />} />
+
+          {/* Web Organizer Fallback Single Route */}
+          <Route path="/web/app" element={<WebOrganizerFallback />} />
+
+          {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

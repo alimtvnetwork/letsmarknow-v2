@@ -48,8 +48,36 @@ export interface SavedItem {
   tags: string[];
   color: ColorLabel;
   addedAt: string;
+  faviconUrl?: string;
+  source?: "manual" | "current-tab" | "session";
   isDeleted?: boolean;
 }
+
+export interface BrowserTabSnapshot {
+  id?: number;
+  title: string;
+  url: string;
+  favIconUrl?: string;
+  windowId?: number;
+  active?: boolean;
+  pinned?: boolean;
+}
+
+export interface ExtensionPreferences {
+  defaultWorkspaceId?: string;
+  defaultOrganizationId?: string;
+  defaultSpaceId?: string;
+  defaultCollectionId?: string;
+  defaultGroupId?: string;
+  closeTabsAfterSave?: boolean;
+  openMainAfterSave?: boolean;
+  openFullTabAfterSave?: boolean;
+  preferredQuickSurface?: "popup" | "side-panel";
+  showSuccessNotification?: boolean;
+  theme?: "system" | "dark" | "light";
+  webDashboardUrl?: string;
+}
+
 
 export interface Group {
   id: string;
@@ -67,11 +95,33 @@ export interface Collection {
   groups: Group[];
 }
 
+export interface TeamMember {
+  id: string;
+  organizationId?: string;
+  name: string;
+  email: string;
+  role: "Owner" | "Admin" | "Member" | "Viewer";
+  status: "Active" | "Pending";
+  invitedAt?: string;
+}
+
+export interface PendingInvite {
+  id: string;
+  organizationId: string;
+  email: string;
+  role: "Admin" | "Member" | "Viewer";
+  token: string;
+  createdAt: string;
+  expiresAt?: string;
+}
+
 export interface AppData {
   organizations: Organization[];
   spaces: Space[];
   collections: Collection[];
   shareSettings?: ShareSettings[];
+  members?: TeamMember[];
+  pendingInvites?: PendingInvite[];
 }
 
 export type ShareTargetType = "workspace" | "space" | "collection" | "group" | "item";

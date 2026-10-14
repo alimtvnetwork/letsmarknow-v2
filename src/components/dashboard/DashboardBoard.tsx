@@ -11,6 +11,7 @@ import {
   FilterX,
   Grid3X3,
   GripVertical,
+  Layers,
   Link2,
   List,
   MoreHorizontal,
@@ -36,6 +37,7 @@ import { cn } from "@/lib/utils";
 import type { Collection, Group, SavedItem, ShareSettings, Space, ViewMode } from "@/types/lmn";
 import { colorDotClasses, colorLabelClasses, getHost } from "./helpers";
 import { Favicon } from "./Favicon";
+import { normalizeUrl } from "@/extension/lib/tabCapture";
 
 interface DashboardBoardProps {
   activeSpace: Space;
@@ -44,6 +46,8 @@ interface DashboardBoardProps {
   activeFilter: "all" | "starred" | "recent";
   hasSearchQuery?: boolean;
   shareSettings?: ShareSettings[];
+  openUrlSet?: Set<string>;
+  duplicateUrlCounts?: Map<string, number>;
   onClearFilters?: () => void;
   onViewModeChange: (mode: ViewMode) => void;
   onFilterChange: (filter: "all" | "starred" | "recent") => void;
@@ -64,6 +68,7 @@ interface DashboardBoardProps {
   onCopyItemLink?: (url: string) => void;
   onCopyItemShareLink?: (itemId: string) => void;
   onDropItem: (payload: string, targetCollectionId: string, targetGroupId: string) => void;
+  onOpenAllUrls?: (urls: string[], mode: "tabs" | "window" | "replace") => void;
   onCreateCollection: () => void;
   onCreateItem: (collectionId?: string, groupId?: string) => void;
   onRestoreDemoData?: () => void;
@@ -76,6 +81,8 @@ export function DashboardBoard({
   activeFilter,
   hasSearchQuery,
   shareSettings,
+  openUrlSet,
+  duplicateUrlCounts,
   onClearFilters,
   onViewModeChange,
   onFilterChange,
@@ -96,6 +103,7 @@ export function DashboardBoard({
   onCopyItemLink,
   onCopyItemShareLink,
   onDropItem,
+  onOpenAllUrls,
   onCreateCollection,
   onCreateItem,
   onRestoreDemoData,
@@ -163,6 +171,8 @@ export function DashboardBoard({
               collection={collection}
               viewMode={viewMode}
               shareSettings={shareSettings}
+              openUrlSet={openUrlSet}
+              duplicateUrlCounts={duplicateUrlCounts}
               onToggleStar={onToggleStar}
               onDuplicateCollection={onDuplicateCollection}
               onEditCollection={onEditCollection}
@@ -180,6 +190,7 @@ export function DashboardBoard({
               onCopyItemLink={onCopyItemLink}
               onCopyItemShareLink={onCopyItemShareLink}
               onDropItem={onDropItem}
+              onOpenAllUrls={onOpenAllUrls}
               onCreateItem={onCreateItem}
             />
           ))}
@@ -257,6 +268,8 @@ function CollectionCard({
   collection,
   viewMode,
   shareSettings,
+  openUrlSet,
+  duplicateUrlCounts,
   onToggleStar,
   onDuplicateCollection,
   onEditCollection,
@@ -274,11 +287,14 @@ function CollectionCard({
   onCopyItemLink,
   onCopyItemShareLink,
   onDropItem,
+  onOpenAllUrls,
   onCreateItem,
 }: {
   collection: Collection;
   viewMode: ViewMode;
   shareSettings?: ShareSettings[];
+  openUrlSet?: Set<string>;
+  duplicateUrlCounts?: Map<string, number>;
   onToggleStar: (collectionId: string) => void;
   onDuplicateCollection: (collectionId: string) => void;
   onEditCollection: (collectionId: string) => void;
@@ -296,9 +312,11 @@ function CollectionCard({
   onCopyItemLink?: (url: string) => void;
   onCopyItemShareLink?: (itemId: string, itemTitle: string) => void;
   onDropItem: (payload: string, targetCollectionId: string, targetGroupId: string) => void;
+  onOpenAllUrls?: (urls: string[], mode: "tabs" | "window" | "replace") => void;
   onCreateItem: (collectionId?: string, groupId?: string) => void;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCardDragOver, setIsCardDragOver] = useState(false);
 
   const collectionShare = shareSettings?.find(
     (s) => s.targetType === "collection" && s.targetId === collection.id
@@ -309,9 +327,32 @@ function CollectionCard({
     items: group.items.filter((item) => !item.isDeleted),
   }));
   const itemCount = visibleGroups.reduce((total, group) => total + group.items.length, 0);
+  const allCollectionUrls = visibleGroups.flatMap((g) =>
+    g.items.map((i) => i.url).filter(Boolean)
+  );
 
   return (
-    <article className="rounded-xl border border-border/70 bg-card/40 backdrop-blur-xs transition">
+    <article
+      className={cn(
+        "rounded-xl border border-border/70 bg-card/40 backdrop-blur-xs transition",
+        isCardDragOver && "ring-2 ring-primary/40 border-primary/60 bg-primary/5"
+      )}
+      onDragOver={(event) => {
+        event.preventDefault();
+        setIsCardDragOver(true);
+      }}
+      onDragLeave={() => setIsCardDragOver(false)}
+      onDrop={(event) => {
+        event.preventDefault();
+        setIsCardDragOver(false);
+        const json = event.dataTransfer.getData("application/json");
+        const payload = json || event.dataTransfer.getData("text/plain");
+        const firstGroup = collection.groups[0];
+        if (payload && firstGroup) {
+          onDropItem(payload, collection.id, firstGroup.id);
+        }
+      }}
+    >
       <div className="flex flex-col gap-3 border-b border-border/50 p-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
           <div className="mb-1.5 flex flex-wrap items-center gap-2">
@@ -365,7 +406,46 @@ function CollectionCard({
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuContent align="end" className="w-52">
+              {onOpenAllUrls && allCollectionUrls.length > 0 && (
+                <>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpenAllUrls(allCollectionUrls, "tabs");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer"
+                    title="Open all items in new tabs"
+                  >
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Open all in new tabs ({allCollectionUrls.length})
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpenAllUrls(allCollectionUrls, "window");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer"
+                    title="Open all items in new window"
+                  >
+                    <Layers className="mr-2 h-4 w-4" />
+                    Open in new window
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpenAllUrls(allCollectionUrls, "replace");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer"
+                    title="Replace current window with items"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    Replace current window
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
               <DropdownMenuItem
                 onClick={() => {
                   onAddGroup(collection.id);
@@ -443,6 +523,8 @@ function CollectionCard({
             viewMode={viewMode}
             isOnlyGroup={visibleGroups.length <= 1}
             shareSettings={shareSettings}
+            openUrlSet={openUrlSet}
+            duplicateUrlCounts={duplicateUrlCounts}
             onEditGroup={onEditGroup}
             onDeleteGroup={onDeleteGroup}
             onShareGroup={onShareGroup}
@@ -454,6 +536,7 @@ function CollectionCard({
             onCopyItemLink={onCopyItemLink}
             onCopyItemShareLink={onCopyItemShareLink}
             onDropItem={onDropItem}
+            onOpenAllUrls={onOpenAllUrls}
             onCreateItem={onCreateItem}
           />
         ))}
@@ -468,6 +551,8 @@ function GroupPanel({
   viewMode,
   isOnlyGroup,
   shareSettings,
+  openUrlSet,
+  duplicateUrlCounts,
   onEditGroup,
   onDeleteGroup,
   onShareGroup,
@@ -479,6 +564,7 @@ function GroupPanel({
   onCopyItemLink,
   onCopyItemShareLink,
   onDropItem,
+  onOpenAllUrls,
   onCreateItem,
 }: {
   collectionId: string;
@@ -486,6 +572,8 @@ function GroupPanel({
   viewMode: ViewMode;
   isOnlyGroup: boolean;
   shareSettings?: ShareSettings[];
+  openUrlSet?: Set<string>;
+  duplicateUrlCounts?: Map<string, number>;
   onEditGroup: (collectionId: string, groupId: string) => void;
   onDeleteGroup: (collectionId: string, groupId: string) => void;
   onShareGroup?: (collectionId: string, groupId: string) => void;
@@ -497,6 +585,7 @@ function GroupPanel({
   onCopyItemLink?: (url: string) => void;
   onCopyItemShareLink?: (itemId: string, itemTitle: string) => void;
   onDropItem: (payload: string, targetCollectionId: string, targetGroupId: string) => void;
+  onOpenAllUrls?: (urls: string[], mode: "tabs" | "window" | "replace") => void;
   onCreateItem: (collectionId?: string, groupId?: string) => void;
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -505,6 +594,10 @@ function GroupPanel({
   const groupShare = shareSettings?.find(
     (s) => s.targetType === "group" && s.targetId === group.id
   );
+
+  const validGroupUrls = group.items
+    .filter((item) => !item.isDeleted && item.url)
+    .map((item) => item.url);
 
   return (
     <section
@@ -522,7 +615,8 @@ function GroupPanel({
       onDrop={(event) => {
         event.preventDefault();
         setIsDragOver(false);
-        const payload = event.dataTransfer.getData("text/plain");
+        const json = event.dataTransfer.getData("application/json");
+        const payload = json || event.dataTransfer.getData("text/plain");
         if (payload) {
           onDropItem(payload, collectionId, group.id);
         }
@@ -573,7 +667,46 @@ function GroupPanel({
                 <MoreHorizontal className="h-3.5 w-3.5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuContent align="end" className="w-48">
+              {onOpenAllUrls && validGroupUrls.length > 0 && (
+                <>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpenAllUrls(validGroupUrls, "tabs");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer"
+                    title="Open all items in new tabs"
+                  >
+                    <ExternalLink className="mr-2 h-3.5 w-3.5" />
+                    Open all in tabs ({validGroupUrls.length})
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpenAllUrls(validGroupUrls, "window");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer"
+                    title="Open in new window"
+                  >
+                    <Layers className="mr-2 h-3.5 w-3.5" />
+                    Open in new window
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onOpenAllUrls(validGroupUrls, "replace");
+                      setIsMenuOpen(false);
+                    }}
+                    className="cursor-pointer"
+                    title="Replace current window"
+                  >
+                    <RotateCcw className="mr-2 h-3.5 w-3.5" />
+                    Replace current window
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+
               <DropdownMenuItem
                 onClick={() => {
                   onEditGroup(collectionId, group.id);
@@ -624,6 +757,8 @@ function GroupPanel({
                 key={item.id}
                 item={item}
                 viewMode={viewMode}
+                openUrlSet={openUrlSet}
+                duplicateUrlCounts={duplicateUrlCounts}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
                 onDuplicate={() => onDuplicateItem(collectionId, group.id, item.id)}
                 onDelete={() => onDeleteItem(collectionId, group.id, item.id)}
@@ -644,6 +779,8 @@ function GroupPanel({
                 key={item.id}
                 item={item}
                 viewMode={viewMode}
+                openUrlSet={openUrlSet}
+                duplicateUrlCounts={duplicateUrlCounts}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
                 onDuplicate={() => onDuplicateItem(collectionId, group.id, item.id)}
                 onDelete={() => onDeleteItem(collectionId, group.id, item.id)}
@@ -685,6 +822,8 @@ function GroupPanel({
 function ItemRow({
   item,
   viewMode,
+  openUrlSet,
+  duplicateUrlCounts,
   onEdit,
   onDuplicate,
   onDelete,
@@ -696,6 +835,8 @@ function ItemRow({
 }: {
   item: SavedItem;
   viewMode: ViewMode;
+  openUrlSet?: Set<string>;
+  duplicateUrlCounts?: Map<string, number>;
   onEdit: () => void;
   onDuplicate: () => void;
   onDelete: () => void;
@@ -708,6 +849,12 @@ function ItemRow({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isCompact = viewMode === "compact";
   const isGrid = viewMode === "grid";
+
+  const normUrl = normalizeUrl(item.url);
+  const isOpenNow = Boolean(openUrlSet && normUrl && openUrlSet.has(normUrl));
+  const isDuplicate = Boolean(
+    duplicateUrlCounts && normUrl && (duplicateUrlCounts.get(normUrl) ?? 0) > 1
+  );
 
   if (isGrid) {
     return (
@@ -729,7 +876,26 @@ function ItemRow({
               </div>
               <Favicon url={item.url} size="md" className="mt-0.5" />
               <div className="min-w-0">
-                <h5 className="truncate text-sm font-semibold text-foreground">{item.title}</h5>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h5 className="truncate text-sm font-semibold text-foreground">{item.title}</h5>
+                  {isOpenNow && (
+                    <span
+                      className="inline-flex items-center gap-1 rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-400 shrink-0"
+                      title="This tab is currently open in your browser"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Open now
+                    </span>
+                  )}
+                  {isDuplicate && (
+                    <span
+                      className="inline-flex items-center rounded bg-amber-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-amber-400 shrink-0"
+                      title={`This link is saved ${duplicateUrlCounts?.get(normUrl)} times across your workspace`}
+                    >
+                      Duplicate
+                    </span>
+                  )}
+                </div>
                 <p className="truncate text-xs text-muted-foreground">{getHost(item.url)}</p>
               </div>
             </div>
@@ -917,8 +1083,25 @@ function ItemRow({
               className={isCompact ? "" : "mt-0.5"}
             />
             <div className="min-w-0 flex-1">
-              <div className={cn("flex items-baseline gap-2", isCompact && "flex-wrap")}>
+              <div className={cn("flex items-baseline gap-2 flex-wrap")}>
                 <h5 className="truncate text-sm font-medium text-foreground">{item.title}</h5>
+                {isOpenNow && (
+                  <span
+                    className="inline-flex items-center gap-1 rounded bg-emerald-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-emerald-400 shrink-0"
+                    title="This tab is currently open in your browser"
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Open now
+                  </span>
+                )}
+                {isDuplicate && (
+                  <span
+                    className="inline-flex items-center rounded bg-amber-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-amber-400 shrink-0"
+                    title={`This link is saved ${duplicateUrlCounts?.get(normUrl)} times across your workspace`}
+                  >
+                    Duplicate
+                  </span>
+                )}
                 <p className="truncate text-xs text-muted-foreground/80 font-mono">{getHost(item.url)}</p>
               </div>
               {!isCompact && item.description && (

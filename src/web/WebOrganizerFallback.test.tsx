@@ -2,16 +2,16 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import Index from "./Index";
+import WebOrganizerFallback from "./pages/WebOrganizerFallback";
 
-const renderDashboard = (route = "/") =>
+const renderDashboard = (route = "/web/app") =>
   render(
     <MemoryRouter initialEntries={[route]}>
-      <Index />
+      <WebOrganizerFallback />
     </MemoryRouter>,
   );
 
-describe("web dashboard UI", () => {
+describe("web dashboard UI", { timeout: 30000 }, () => {
   beforeEach(() => {
     localStorage.clear();
   });

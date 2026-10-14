@@ -12,6 +12,7 @@ interface TopBarProps {
   onCreateItem?: () => void;
   onOpenCommand: () => void;
   onToggleMobileMenu?: () => void;
+  children?: React.ReactNode;
 }
 
 export function TopBar({
@@ -22,6 +23,7 @@ export function TopBar({
   onCreateCollection,
   onOpenCommand,
   onToggleMobileMenu,
+  children,
 }: TopBarProps) {
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-border bg-background/90 px-4 md:px-5 backdrop-blur">
@@ -61,6 +63,7 @@ export function TopBar({
       </div>
 
       <div className="flex items-center gap-2">
+        {children}
         <Button size="sm" onClick={onCreateCollection}>
           <Plus className="h-4 w-4" />
           Collection

@@ -269,7 +269,7 @@ export function useWorkspaceDashboard() {
       setActiveOrganizationId(newOrg.id);
       setActiveSpaceId(newSpace.id);
       setWorkspaceMode(null);
-      navigate(`/spaces/${newSpace.id}`);
+      navigate(`/web/app?spaceId=${newSpace.id}`);
       toast.success("Workspace created");
     } else if (dialogTarget.orgId) {
       const nextData = updateWorkspaceMutation(
@@ -332,7 +332,7 @@ export function useWorkspaceDashboard() {
       );
       setData(nextData);
       setActiveSpaceId(newSpace.id);
-      navigate(`/spaces/${newSpace.id}`);
+      navigate(`/web/app?spaceId=${newSpace.id}`);
       toast.success("Space created");
     } else if (dialogTarget.spaceId) {
       const nextData = updateSpaceMutation(
@@ -685,7 +685,7 @@ export function useWorkspaceDashboard() {
         setData(result.nextData);
         setActiveOrganizationId(result.nextOrgId);
         setActiveSpaceId(result.nextSpaceId);
-        navigate("/dashboard");
+        navigate("/web/app");
         toast.success("Workspace deleted");
       }
     }
@@ -695,7 +695,7 @@ export function useWorkspaceDashboard() {
       if (result) {
         setData(result.nextData);
         setActiveSpaceId(result.nextSpaceId);
-        navigate(`/spaces/${result.nextSpaceId}`);
+        navigate(`/web/app?spaceId=${result.nextSpaceId}`);
         toast.success("Space deleted");
       }
     }
@@ -720,7 +720,7 @@ export function useWorkspaceDashboard() {
   const jumpToCollection = (spaceId: string, collectionId: string) => {
     setActiveSpaceId(spaceId);
     setQuery(data.collections.find((col) => col.id === collectionId)?.name ?? "");
-    navigate(`/spaces/${spaceId}`);
+    navigate(`/web/app?spaceId=${spaceId}`);
   };
 
   const handleResetData = () => {
@@ -730,7 +730,7 @@ export function useWorkspaceDashboard() {
     setActiveSpaceId(mockWorkspace.spaces[0].id);
     setViewMode("list");
     setActiveFilter("all");
-    navigate("/dashboard");
+    navigate("/web/app");
     toast.success("Demo data restored");
   };
 

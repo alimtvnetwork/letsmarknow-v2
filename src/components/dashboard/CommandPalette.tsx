@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   ExternalLink,
   FilterX,
@@ -11,6 +12,7 @@ import {
   Search,
   Settings,
   Share2,
+  Sparkles,
   SquareArrowOutUpRight,
   Trash2,
 } from "lucide-react";
@@ -25,6 +27,7 @@ import {
 } from "@/components/ui/command";
 import type { Collection, Space } from "@/types/lmn";
 import { Favicon } from "./Favicon";
+import { searchQuick, type QuickSearchResultItem } from "@/lib/workspaceApiClient";
 
 export function CommandPalette({
   isOpen,
@@ -63,6 +66,27 @@ export function CommandPalette({
   onShareSpace?: () => void;
   onClearFilters?: () => void;
 }) {
+  const [query, setQuery] = useState("");
+  const [remoteResults, setRemoteResults] = useState<QuickSearchResultItem[]>([]);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setRemoteResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        const results = await searchQuick(query.trim(), 8);
+        setRemoteResults(results);
+      } catch {
+        // Fallback to local
+      }
+    }, 120);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
   const run = (action: () => void) => {
     action();
     onOpenChange(false);
@@ -81,9 +105,38 @@ export function CommandPalette({
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onOpenChange}>
-      <CommandInput placeholder="Search commands, spaces, collections, or links..." />
+      <CommandInput
+        value={query}
+        onValueChange={setQuery}
+        placeholder="Search commands, spaces, collections, or links..."
+      />
       <CommandList>
         <CommandEmpty>No command or items found.</CommandEmpty>
+
+        {remoteResults.length > 0 && (
+          <CommandGroup heading="Live Search Results">
+            {remoteResults.map((result) => (
+              <CommandItem
+                key={result.id}
+                onSelect={() =>
+                  run(() => {
+                    if (onOpenItem) {
+                      onOpenItem(result.url);
+                    } else {
+                      window.open(result.url, "_blank", "noopener,noreferrer");
+                    }
+                  })
+                }
+              >
+                <Favicon url={result.url} size="sm" className="mr-2" />
+                <span className="truncate">{result.title}</span>
+                <span className="ml-auto text-[11px] text-muted-foreground truncate max-w-[120px]">
+                  {result.collection_name}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        )}
 
         <CommandGroup heading="Actions">
           <CommandItem onSelect={() => run(onCreateCollection)}>

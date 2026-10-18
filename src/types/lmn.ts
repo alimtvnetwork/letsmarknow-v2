@@ -1,4 +1,4 @@
-export type ViewMode = "list" | "compact" | "grid";
+export type ViewMode = "list" | "compact" | "grid" | "mindmap";
 
 export type AppPage = "dashboard" | "settings" | "trash" | "activity" | "share";
 

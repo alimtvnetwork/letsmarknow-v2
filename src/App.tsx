@@ -37,7 +37,14 @@ const App = () => (
         <Routes>
           {/* Extension Primary Surfaces mounted at root "/" */}
           <Route path="/" element={<ExtensionTabApp />} />
-          <Route path="/popup" element={<PopupApp />} />
+          <Route
+            path="/popup"
+            element={
+              <div className="min-h-screen w-full flex items-center justify-center bg-muted/20 p-4">
+                <PopupApp />
+              </div>
+            }
+          />
           <Route path="/sidepanel" element={<SidePanelApp />} />
           <Route path="/options" element={<OptionsApp />} />
 

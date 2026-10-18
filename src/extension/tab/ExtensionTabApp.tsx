@@ -48,6 +48,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { isValidAppData } from "@/lib/localWorkspaceStore";
 import {
   createCollectionMutation,
   createGroupMutation,
@@ -267,7 +268,8 @@ export function ExtensionTabApp() {
   };
 
   // Helper to persist data changes
-  const updateData = async (nextData: AppData) => {
+  const updateData = async (nextData: AppData | null | undefined) => {
+    if (!nextData || !isValidAppData(nextData)) return;
     setData(nextData);
     await saveWorkspaceData(nextData);
   };
@@ -499,7 +501,7 @@ export function ExtensionTabApp() {
     }
   };
 
-  // Handle dropped items (open tabs, existing items, or raw URLs)
+  // Handle dropped items (open tabs, existing items, desk items, or raw URLs)
   const handleDropItem = async (
     payload: string,
     targetCollectionId: string,
@@ -507,58 +509,117 @@ export function ExtensionTabApp() {
   ) => {
     if (!data) return;
 
-    // 1. Open tab JSON drop
     try {
-      if (payload.startsWith("{") && payload.includes("open-tab")) {
-        const parsed = JSON.parse(payload);
-        if (parsed.type === "open-tab" && parsed.tab) {
-          const tab: BrowserTabSnapshot = parsed.tab;
-          const itemPayload = tabToSavedItem(tab, { source: "current-tab" });
-          const nextData = createItemMutation(
-            data,
-            targetCollectionId,
-            targetGroupId,
-            itemPayload
-          );
+      // Helper: safely move an item by ID from its current location to target collection/group
+      const moveItemById = async (itemId: string, sourceColId?: string, sourceGrpId?: string) => {
+        let resolvedSrcCol = sourceColId;
+        let resolvedSrcGrp = sourceGrpId;
+
+        if (!resolvedSrcCol || !resolvedSrcGrp) {
+          for (const col of data.collections) {
+            for (const grp of col.groups) {
+              if (grp.items.some((i) => i.id === itemId && !i.isDeleted)) {
+                resolvedSrcCol = col.id;
+                resolvedSrcGrp = grp.id;
+                break;
+              }
+            }
+            if (resolvedSrcCol) break;
+          }
+        }
+
+        if (!resolvedSrcCol || !resolvedSrcGrp) return;
+        if (resolvedSrcCol === targetCollectionId && resolvedSrcGrp === targetGroupId) {
+          return; // Dropped in the same group, no-op safely
+        }
+
+        const nextData = moveItemMutation(
+          data,
+          resolvedSrcCol,
+          resolvedSrcGrp,
+          itemId,
+          targetCollectionId,
+          targetGroupId
+        );
+        if (nextData) {
           await updateData(nextData);
-          toast.success(`Saved "${itemPayload.title}" to collection`);
-          return;
+          toast.success("Item moved");
+        }
+      };
+
+      // 1. JSON payload handling
+      if (payload.startsWith("{")) {
+        try {
+          const parsed = JSON.parse(payload);
+          // Open tab drop
+          if (parsed.type === "open-tab" && parsed.tab) {
+            const tab: BrowserTabSnapshot = parsed.tab;
+            const itemPayload = tabToSavedItem(tab, { source: "current-tab" });
+            const nextData = createItemMutation(
+              data,
+              targetCollectionId,
+              targetGroupId,
+              itemPayload
+            );
+            if (nextData) {
+              await updateData(nextData);
+              toast.success(`Saved "${itemPayload.title}" to collection`);
+            }
+            return;
+          }
+
+          // Saved item or desk item
+          if ((parsed.type === "saved-item" || parsed.type === "desk-item") && parsed.itemId) {
+            await moveItemById(parsed.itemId, parsed.collectionId, parsed.groupId);
+            return;
+          }
+        } catch {
+          // not valid JSON, proceed to other formats
         }
       }
-    } catch {
-      // not JSON, proceed
-    }
 
-    // 2. Existing bookmark reorder / move
-    const parts = payload.split(":");
-    if (parts.length === 3) {
-      const [srcColId, srcGrpId, itemId] = parts;
-      const nextData = moveItemMutation(
-        data,
-        srcColId,
-        srcGrpId,
-        itemId,
-        targetCollectionId,
-        targetGroupId
-      );
-      await updateData(nextData);
-      toast.success("Item moved");
-      return;
-    }
+      // 2. Desk item prefix: "desk:itemId"
+      if (payload.startsWith("desk:")) {
+        const deskItemId = payload.replace("desk:", "");
+        await moveItemById(deskItemId);
+        return;
+      }
 
-    // 3. Raw URL drop
-    if (isSaveableUrl(payload)) {
-      const domain = getDomainFromUrl(payload);
-      const nextData = createItemMutation(data, targetCollectionId, targetGroupId, {
-        title: domain || payload,
-        url: payload,
-        description: `Saved from browser tab`,
-        tags: domain && domain !== "unknown" ? [domain] : [],
-        color: "pink",
-        source: "current-tab",
-      });
-      await updateData(nextData);
-      toast.success("Saved tab link to collection");
+      // 3. Existing bookmark format: "srcColId:srcGrpId:itemId"
+      const parts = payload.split(":");
+      if (parts.length === 3) {
+        const [srcColId, srcGrpId, itemId] = parts;
+        await moveItemById(itemId, srcColId, srcGrpId);
+        return;
+      }
+
+      // 4. Raw item ID (if plain itemId was passed)
+      const matchedItem = data.collections
+        .flatMap((c) => c.groups.flatMap((g) => g.items))
+        .find((i) => i.id === payload && !i.isDeleted);
+      if (matchedItem) {
+        await moveItemById(matchedItem.id);
+        return;
+      }
+
+      // 5. Raw URL drop
+      if (isSaveableUrl(payload)) {
+        const domain = getDomainFromUrl(payload);
+        const nextData = createItemMutation(data, targetCollectionId, targetGroupId, {
+          title: domain || payload,
+          url: payload,
+          description: `Saved from browser tab`,
+          tags: domain && domain !== "unknown" ? [domain] : [],
+          color: "pink",
+          source: "current-tab",
+        });
+        if (nextData) {
+          await updateData(nextData);
+          toast.success("Saved tab link to collection");
+        }
+      }
+    } catch (err) {
+      console.warn("handleDropItem error:", err);
     }
   };
 
@@ -861,7 +922,10 @@ export function ExtensionTabApp() {
       targetColId,
       targetGrpId
     );
-    await updateData(nextData);
+    if (nextData) {
+      await updateData(nextData);
+      toast.success("Item moved");
+    }
     setMoveTarget(null);
   };
 

@@ -1,3 +1,4 @@
+
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -670,9 +671,61 @@ export function useWorkspaceDashboard() {
   };
 
   const handleDropItem = (payload: string, targetCollectionId: string, targetGroupId: string) => {
-    const [sourceCollectionId, sourceGroupId, itemId] = payload.split(":");
-    if (!sourceCollectionId || !sourceGroupId || !itemId) return;
-    moveItem(sourceCollectionId, sourceGroupId, itemId, targetCollectionId, targetGroupId);
+    // 1. JSON payload
+    if (payload.startsWith("{")) {
+      try {
+        const parsed = JSON.parse(payload);
+        if ((parsed.type === "saved-item" || parsed.type === "desk-item") && parsed.itemId) {
+          const originCol = parsed.collectionId;
+          const originGrp = parsed.groupId;
+          if (originCol && originGrp) {
+            moveItem(originCol, originGrp, parsed.itemId, targetCollectionId, targetGroupId);
+            return;
+          }
+          for (const col of data.collections) {
+            for (const grp of col.groups) {
+              if (grp.items.some((i) => i.id === parsed.itemId && !i.isDeleted)) {
+                moveItem(col.id, grp.id, parsed.itemId, targetCollectionId, targetGroupId);
+                return;
+              }
+            }
+          }
+        }
+      } catch {}
+    }
+
+    // 2. Desk item prefix: "desk:itemId"
+    if (payload.startsWith("desk:")) {
+      const rawId = payload.replace("desk:", "");
+      for (const col of data.collections) {
+        for (const grp of col.groups) {
+          if (grp.items.some((i) => i.id === rawId && !i.isDeleted)) {
+            moveItem(col.id, grp.id, rawId, targetCollectionId, targetGroupId);
+            return;
+          }
+        }
+      }
+      return;
+    }
+
+    // 3. Colon-separated format: "colId:grpId:itemId"
+    const parts = payload.split(":");
+    if (parts.length === 3) {
+      const [sourceCollectionId, sourceGroupId, itemId] = parts;
+      if (!sourceCollectionId || !sourceGroupId || !itemId) return;
+      moveItem(sourceCollectionId, sourceGroupId, itemId, targetCollectionId, targetGroupId);
+      return;
+    }
+
+    // 4. Raw item ID
+    for (const col of data.collections) {
+      for (const grp of col.groups) {
+        if (grp.items.some((i) => i.id === payload && !i.isDeleted)) {
+          moveItem(col.id, grp.id, payload, targetCollectionId, targetGroupId);
+          return;
+        }
+      }
+    }
   };
 
   // ================= Deletion Confirmation =================

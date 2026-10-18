@@ -5,17 +5,32 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signupUser } from "@/lib/authStore";
+import { ApiError } from "@/lib/apiClient";
 
 export default function SignupPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Account created successfully! Welcome to LetsMarkNow.");
-    navigate("/web/account");
+    setIsLoading(true);
+    try {
+      await signupUser({ name, email, password });
+      toast.success("Account created successfully! Welcome to LetsMarkNow.");
+      navigate("/web/account");
+    } catch (err: unknown) {
+      const message =
+        err instanceof ApiError
+          ? err.message
+          : "Failed to create account. Please try again.";
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -70,8 +85,8 @@ export default function SignupPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full text-xs font-semibold h-9">
-            Create Account
+          <Button type="submit" disabled={isLoading} className="w-full text-xs font-semibold h-9">
+            {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
 
           <p className="text-[11px] text-muted-foreground text-center">

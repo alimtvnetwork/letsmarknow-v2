@@ -323,11 +323,37 @@ export function PopupApp() {
     }
   };
 
+
+  // Global keyboard shortcut to save current tab (Enter) or all tabs (Shift+Enter)
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      const target = e.target as HTMLElement;
+      if (
+        target &&
+        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT")
+      ) {
+        return;
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (e.shiftKey) {
+          handleSaveAllTabs();
+        } else {
+          handleSaveCurrentTab();
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleSaveCurrentTab, handleSaveAllTabs]);
+
   if (isLoading || !data) {
     return (
-      <div className="flex h-[420px] w-[380px] items-center justify-center bg-background text-foreground">
-        <div className="flex flex-col items-center gap-2">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+      <div className="flex h-[580px] w-[440px] items-center justify-center bg-background text-foreground">
+        <div className="flex flex-col items-center gap-2.5">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
           <span className="text-xs text-muted-foreground font-medium">Loading LetsMarkNow...</span>
         </div>
       </div>
@@ -340,8 +366,7 @@ export function PopupApp() {
   return (
     <div
       data-testid="extension-popup-app"
-      className="flex flex-col w-[380px] max-h-[600px] overflow-y-auto bg-background text-foreground antialiased selection:bg-primary/20"
-      style={{ minHeight: "480px" }}
+      className="flex flex-col w-[440px] min-h-[580px] max-w-[440px] bg-background text-foreground antialiased selection:bg-primary/20 mx-auto overflow-hidden"
     >
       {/* Header */}
       <ExtensionHeader
@@ -353,7 +378,7 @@ export function PopupApp() {
       />
 
       {/* Main Body */}
-      <div className="p-3.5 space-y-3 flex-1">
+      <div className="p-2.5 space-y-2 flex-1 overflow-y-auto">
         {/* Onboarding hint if no collections exist */}
         {collectionsInSpace.length === 0 && (
           <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-xs space-y-2">
@@ -502,6 +527,7 @@ export function PopupApp() {
         <SaveAllTabsCard
           tabCount={windowTabs.length}
           validTabCount={saveableTabs.length}
+          tabs={windowTabs}
           status={saveAllStatus}
           onSaveAll={handleSaveAllTabs}
           onSaveSession={handleSaveSession}
@@ -509,7 +535,7 @@ export function PopupApp() {
       </div>
 
       {/* Footer */}
-      <footer className="flex items-center justify-between border-t border-border/80 bg-card/60 px-3.5 py-2 text-[11px] text-muted-foreground mt-auto shrink-0">
+      <footer className="flex items-center justify-between border-t border-border/80 bg-card/60 px-3 py-1.5 text-[11px] text-muted-foreground mt-auto shrink-0">
         <button
           type="button"
           onClick={() => openExtensionTab()}

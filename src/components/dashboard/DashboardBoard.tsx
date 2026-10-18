@@ -3,6 +3,8 @@ import {
   ArchiveRestore,
   Boxes,
   Check,
+  ChevronDown,
+  ChevronUp,
   Circle,
   Clock3,
   Columns3,
@@ -17,7 +19,10 @@ import {
   List,
   Minus,
   MoreHorizontal,
+  Network,
   Pencil,
+  Pin,
+  PinOff,
   Plus,
   RotateCcw,
   Share2,
@@ -26,8 +31,10 @@ import {
   Star,
   Tag,
   Trash2,
+  Zap,
 } from "lucide-react";
 
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,9 +45,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { Collection, Group, SavedItem, ShareSettings, Space, ViewMode } from "@/types/lmn";
-import { colorDotClasses, colorLabelClasses, getHost } from "./helpers";
+import { colorDotClasses, colorLabelClasses, getDomainBadgeStyle, getHost } from "./helpers";
 import { Favicon } from "./Favicon";
 import { normalizeUrl } from "@/extension/lib/tabCapture";
+import { MindmapView } from "./MindmapView";
 
 interface DashboardBoardProps {
   activeSpace: Space;
@@ -149,6 +157,193 @@ export function DashboardBoard({
   const handleZoomIn = () => {
     if (cardDensity === "compact") setCardDensity("normal");
     else if (cardDensity === "normal") setCardDensity("comfortable");
+  };
+
+  // Today's Desk State
+  const TODAYS_DESK_STORAGE_KEY = "lmn_todays_desk_pinned_ids_v1";
+
+  const allActiveItems = useMemo(() => {
+    return collections.flatMap((c) =>
+      c.groups.flatMap((g) => g.items.filter((i) => !i.isDeleted))
+    );
+  }, [collections]);
+
+  const [pinnedDeskIds, setPinnedDeskIds] = useState<string[]>(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        const saved = window.localStorage.getItem(TODAYS_DESK_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch {}
+    }
+    return [];
+  });
+
+  const [isDeskCollapsed, setIsDeskCollapsed] = useState(false);
+  const [isDeskDragOver, setIsDeskDragOver] = useState(false);
+  const [dragOverDeskItemId, setDragOverDeskItemId] = useState<string | null>(null);
+  const [isDraggingDeskCard, setIsDraggingDeskCard] = useState(false);
+
+  const deskItems = useMemo(() => {
+    if (pinnedDeskIds.length > 0) {
+      const itemMap = new Map(allActiveItems.map((i) => [i.id, i]));
+      return pinnedDeskIds
+        .map((id) => itemMap.get(id))
+        .filter((i): i is SavedItem => Boolean(i));
+    }
+    return [];
+  }, [allActiveItems, pinnedDeskIds]);
+
+  const handleTogglePinDesk = (itemId: string) => {
+    const isCurrentlyPinned = pinnedDeskIds.includes(itemId);
+    let nextIds: string[];
+    if (isCurrentlyPinned) {
+      nextIds = pinnedDeskIds.filter((id) => id !== itemId);
+      toast.info("Unpinned from Today's Desk");
+    } else {
+      nextIds = [itemId, ...pinnedDeskIds.filter((id) => id !== itemId)].slice(0, 8);
+      toast.success("Pinned to Today's Desk");
+    }
+    setPinnedDeskIds(nextIds);
+    try {
+      localStorage.setItem(TODAYS_DESK_STORAGE_KEY, JSON.stringify(nextIds));
+    } catch {}
+  };
+
+  const handleDeskDrop = (event: React.DragEvent, targetItemId?: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDeskDragOver(false);
+    setDragOverDeskItemId(null);
+
+    const jsonStr = event.dataTransfer.getData("application/json");
+    let droppedType = "";
+    let droppedId = "";
+    let droppedTabUrl = "";
+    let droppedTabTitle = "";
+
+    if (jsonStr) {
+      try {
+        const parsed = JSON.parse(jsonStr);
+        if (parsed.type === "desk-item" && parsed.itemId) {
+          droppedType = "desk-item";
+          droppedId = parsed.itemId;
+        } else if (parsed.type === "saved-item" && parsed.itemId) {
+          droppedType = "saved-item";
+          droppedId = parsed.itemId;
+        } else if (parsed.type === "open-tab" && parsed.tab) {
+          droppedType = "open-tab";
+          droppedTabUrl = parsed.tab.url || "";
+          droppedTabTitle = parsed.tab.title || "";
+        }
+      } catch {}
+    }
+
+    if (!droppedType) {
+      const text = event.dataTransfer.getData("text/plain");
+      if (text) {
+        if (text.startsWith("desk:")) {
+          droppedType = "desk-item";
+          droppedId = text.replace("desk:", "");
+        } else if (text.includes(":")) {
+          const parts = text.split(":");
+          droppedType = "saved-item";
+          droppedId = parts[parts.length - 1];
+        } else if (allActiveItems.some((i) => i.id === text)) {
+          droppedType = "saved-item";
+          droppedId = text;
+        } else if (text.startsWith("http://") || text.startsWith("https://")) {
+          droppedType = "open-tab";
+          droppedTabUrl = text;
+        }
+      }
+    }
+
+    // 1. Reordering items within Today's Desk
+    if (droppedType === "desk-item" && droppedId) {
+      if (targetItemId && targetItemId !== droppedId) {
+        const current = [...pinnedDeskIds];
+        const sourceIdx = current.indexOf(droppedId);
+        const targetIdx = current.indexOf(targetItemId);
+        if (sourceIdx !== -1 && targetIdx !== -1) {
+          current.splice(sourceIdx, 1);
+          current.splice(targetIdx, 0, droppedId);
+          setPinnedDeskIds(current);
+          try {
+            localStorage.setItem(TODAYS_DESK_STORAGE_KEY, JSON.stringify(current));
+          } catch {}
+          toast.success("Reordered Today's Desk");
+        }
+      }
+      return;
+    }
+
+    // 2. Dragged item from collection cards
+    if (droppedType === "saved-item" && droppedId) {
+      const item = allActiveItems.find((i) => i.id === droppedId);
+      if (!item) return;
+
+      if (pinnedDeskIds.includes(droppedId)) {
+        toast.info(`"${item.title}" is already on Today's Desk`);
+        return;
+      }
+
+      let nextIds: string[];
+      if (targetItemId && pinnedDeskIds.includes(targetItemId)) {
+        const targetIdx = pinnedDeskIds.indexOf(targetItemId);
+        nextIds = [...pinnedDeskIds];
+        nextIds.splice(targetIdx, 0, droppedId);
+      } else {
+        nextIds = [droppedId, ...pinnedDeskIds].slice(0, 8);
+      }
+
+      setPinnedDeskIds(nextIds);
+      try {
+        localStorage.setItem(TODAYS_DESK_STORAGE_KEY, JSON.stringify(nextIds));
+      } catch {}
+      toast.success(`Pinned "${item.title}" to Today's Desk 📌`);
+      return;
+    }
+
+    // 3. Dragged open tab from right dock
+    if (droppedType === "open-tab" && droppedTabUrl) {
+      const normTabUrl = normalizeUrl(droppedTabUrl);
+      const matched = allActiveItems.find((i) => normalizeUrl(i.url) === normTabUrl);
+
+      if (matched) {
+        if (pinnedDeskIds.includes(matched.id)) {
+          toast.info(`"${matched.title}" is already on Today's Desk`);
+          return;
+        }
+        const nextIds = [matched.id, ...pinnedDeskIds].slice(0, 8);
+        setPinnedDeskIds(nextIds);
+        try {
+          localStorage.setItem(TODAYS_DESK_STORAGE_KEY, JSON.stringify(nextIds));
+        } catch {}
+        toast.success(`Pinned "${matched.title}" to Today's Desk 📌`);
+        return;
+      }
+
+      if (collections.length > 0 && collections[0].groups.length > 0 && onDropItem) {
+        const targetCol = collections[0];
+        const targetGrp = targetCol.groups[0];
+        onDropItem(jsonStr || droppedTabUrl, targetCol.id, targetGrp.id);
+        toast.success(`Saved and pinned "${droppedTabTitle || "tab"}" to Today's Desk 📌`);
+      }
+    }
+  };
+
+  const handleLaunchDesk = () => {
+    const urls = deskItems.map((i) => i.url).filter(Boolean);
+    if (!urls.length) return;
+    if (onOpenAllUrls) {
+      onOpenAllUrls(urls, "tabs");
+    } else {
+      urls.forEach((url) => window.open(url, "_blank", "noopener,noreferrer"));
+    }
+    toast.success(`Launched ${urls.length} tabs from Today's Desk 🚀`);
   };
 
   return (
@@ -286,6 +481,13 @@ export function DashboardBoard({
                 onClick={onViewModeChange}
                 title="Compact view"
               />
+              <ViewButton
+                icon={Network}
+                mode="mindmap"
+                activeMode={viewMode}
+                onClick={onViewModeChange}
+                title="Mindmap view"
+              />
             </div>
 
             {/* Divider */}
@@ -334,39 +536,283 @@ export function DashboardBoard({
         </div>
       </div>
 
-      {sortedCollections.length ? (
-        <div className="space-y-6 p-6">
-          {sortedCollections.map((collection) => (
-            <CollectionCard
-              key={collection.id}
-              collection={collection}
-              viewMode={viewMode}
-              cardDensity={cardDensity}
-              shareSettings={shareSettings}
-              openUrlSet={openUrlSet}
-              duplicateUrlCounts={duplicateUrlCounts}
-              onToggleStar={onToggleStar}
-              onDuplicateCollection={onDuplicateCollection}
-              onEditCollection={onEditCollection}
-              onDeleteCollection={onDeleteCollection}
-              onShareCollection={onShareCollection}
-              onAddGroup={onAddGroup}
-              onEditGroup={onEditGroup}
-              onDeleteGroup={onDeleteGroup}
-              onShareGroup={onShareGroup}
-              onEditItem={onEditItem}
-              onDuplicateItem={onDuplicateItem}
-              onDeleteItem={onDeleteItem}
-              onMoveItem={onMoveItem}
-              onShareItem={onShareItem}
-              onCopyItemLink={onCopyItemLink}
-              onCopyItemShareLink={onCopyItemShareLink}
-              onDropItem={onDropItem}
-              onOpenAllUrls={onOpenAllUrls}
-              onCreateItem={onCreateItem}
-            />
-          ))}
+      {/* Today's Desk Hero Shelf */}
+      {collections.length > 0 && !hasSearchQuery && activeFilter === "all" && (
+        <div className="px-6 pt-5 pb-0">
+          <div
+            data-testid="todays-desk-shelf"
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDeskDragOver(true);
+            }}
+            onDragLeave={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setIsDeskDragOver(false);
+              }
+            }}
+            onDrop={(e) => {
+              setIsDeskDragOver(false);
+              handleDeskDrop(e);
+            }}
+            className={cn(
+              "rounded-2xl border p-4 shadow-sm backdrop-blur-md transition-all duration-150",
+              isDeskDragOver
+                ? "border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/50 shadow-md"
+                : "border-amber-500/25 bg-gradient-to-br from-amber-500/10 via-card/85 to-card/60"
+            )}
+          >
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-2xs">
+                  <Sparkles className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-bold tracking-tight text-foreground">Today's Desk</h3>
+                    <span className="rounded-full bg-amber-500/15 border border-amber-500/30 px-2 py-0.2 text-[10px] font-semibold text-amber-400">
+                      {deskItems.length} focus {deskItems.length === 1 ? "tab" : "tabs"}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground hidden sm:block">
+                    Your active focus shelf &bull; Drag &amp; drop bookmarks or open tabs here
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0">
+                <Button
+                  size="sm"
+                  onClick={handleLaunchDesk}
+                  disabled={deskItems.length === 0}
+                  data-testid="launch-todays-desk-button"
+                  className="h-8 gap-1.5 bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-semibold text-xs shadow-xs"
+                >
+                  <Zap className="h-3.5 w-3.5 fill-current" />
+                  Launch Desk ({deskItems.length})
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => setIsDeskCollapsed((prev) => !prev)}
+                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  title={isDeskCollapsed ? "Expand Today's Desk" : "Collapse Today's Desk"}
+                >
+                  {isDeskCollapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+
+            {!isDeskCollapsed && (
+              deskItems.length === 0 ? (
+                <div
+                  data-testid="todays-desk-dropzone"
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDeskDragOver(true);
+                  }}
+                  onDragLeave={() => setIsDeskDragOver(false)}
+                  onDrop={(e) => handleDeskDrop(e)}
+                  className={cn(
+                    "flex flex-col sm:flex-row items-center justify-center gap-3.5 p-5 rounded-xl border-2 border-dashed transition-all duration-150 text-center select-none cursor-default",
+                    isDeskDragOver
+                      ? "border-amber-400 bg-amber-500/20 ring-2 ring-amber-400/50 scale-[1.01]"
+                      : "border-amber-500/35 bg-amber-500/5 hover:border-amber-500/60 hover:bg-amber-500/10"
+                  )}
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-2xs">
+                    <Pin className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col items-center sm:items-start text-left">
+                    <p className="text-xs font-semibold text-foreground">
+                      Drag and drop items here
+                    </p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      Drop bookmarks from your collections or open tabs from the right dock to pin them to Today&apos;s Desk
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 pt-1">
+                  {deskItems.map((item) => {
+                    const normUrl = normalizeUrl(item.url);
+                    const isOpenNow = Boolean(openUrlSet && normUrl && openUrlSet.has(normUrl));
+                    const host = getHost(item.url);
+                    const isTarget = dragOverDeskItemId === item.id;
+                    return (
+                      <div
+                        key={item.id}
+                        data-testid={`desk-item-${item.id}`}
+                        draggable
+                        onDragStart={(e) => {
+                          setIsDraggingDeskCard(true);
+                          let originColId = "";
+                          let originGrpId = "";
+                          for (const c of collections) {
+                            for (const g of c.groups) {
+                              if (g.items.some((i) => i.id === item.id && !i.isDeleted)) {
+                                originColId = c.id;
+                                originGrpId = g.id;
+                                break;
+                              }
+                            }
+                            if (originColId) break;
+                          }
+
+                          e.dataTransfer.setData(
+                            "application/json",
+                            JSON.stringify({
+                              type: "desk-item",
+                              itemId: item.id,
+                              collectionId: originColId,
+                              groupId: originGrpId,
+                            })
+                          );
+                          if (originColId && originGrpId) {
+                            e.dataTransfer.setData("text/plain", `${originColId}:${originGrpId}:${item.id}`);
+                          } else {
+                            e.dataTransfer.setData("text/plain", `desk:${item.id}`);
+                          }
+                        }}
+                        onDragEnd={() => {
+                          setTimeout(() => setIsDraggingDeskCard(false), 120);
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setDragOverDeskItemId(item.id);
+                        }}
+                        onDragLeave={() => {
+                          if (dragOverDeskItemId === item.id) setDragOverDeskItemId(null);
+                        }}
+                        onDrop={(e) => {
+                          e.stopPropagation();
+                          handleDeskDrop(e, item.id);
+                        }}
+                        onClick={() => {
+                          if (isDraggingDeskCard) return;
+                          window.open(item.url, "_blank", "noopener,noreferrer");
+                        }}
+                        className={cn(
+                          "group relative flex items-center justify-between gap-2.5 rounded-xl border p-2.5 transition-all duration-150 select-none cursor-grab active:cursor-grabbing",
+                          isTarget
+                            ? "border-amber-400 bg-amber-500/25 ring-2 ring-amber-400/50 scale-[1.02]"
+                            : "border-border/80 bg-card/80 hover:border-amber-500/50 hover:bg-card hover:shadow-md"
+                        )}
+                      >
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <div
+                            className="flex h-5 w-3.5 shrink-0 items-center justify-center text-muted-foreground/40 group-hover:text-amber-400 transition"
+                            title="Drag to reorder"
+                          >
+                            <GripVertical className="h-3.5 w-3.5" />
+                          </div>
+                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted/60 border border-border/40 overflow-hidden shadow-2xs">
+                            <Favicon url={item.url} size="sm" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h4 className="truncate text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                              {item.title}
+                            </h4>
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <DomainBadge host={host} />
+                              {isOpenNow ? (
+                                <span
+                                  className="inline-flex items-center gap-1 text-[9px] font-semibold text-emerald-400 shrink-0"
+                                  title="Currently open in browser"
+                                >
+                                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  Live
+                                </span>
+                              ) : (
+                                <span className="text-[9px] text-muted-foreground/60 shrink-0">Queued</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleTogglePinDesk(item.id);
+                          }}
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0"
+                          title="Unpin from Today's Desk"
+                        >
+                          ✕
+                        </Button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )
+            )}
+          </div>
         </div>
+      )}
+
+      {sortedCollections.length ? (
+        viewMode === "mindmap" ? (
+          <div className="space-y-8 p-6">
+            {sortedCollections.map((collection) => {
+              const allItems = collection.groups.flatMap((g) => g.items);
+              return (
+                <div key={collection.id} className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
+                      <Network className="h-4 w-4 text-indigo-500" />
+                      <span>{collection.name}</span>
+                      <span className="text-xs text-muted-foreground font-normal">
+                        ({allItems.length} items, {collection.groups.length} groups)
+                      </span>
+                    </h3>
+                  </div>
+                  <MindmapView
+                    collection={collection}
+                    groups={collection.groups}
+                    items={allItems}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="space-y-6 p-6">
+            {sortedCollections.map((collection) => (
+              <CollectionCard
+                key={collection.id}
+                collection={collection}
+                viewMode={viewMode}
+                cardDensity={cardDensity}
+                shareSettings={shareSettings}
+                openUrlSet={openUrlSet}
+                duplicateUrlCounts={duplicateUrlCounts}
+                isPinnedToDesk={(id) => pinnedDeskIds.includes(id)}
+                onTogglePinDesk={handleTogglePinDesk}
+                onToggleStar={onToggleStar}
+                onDuplicateCollection={onDuplicateCollection}
+                onEditCollection={onEditCollection}
+                onDeleteCollection={onDeleteCollection}
+                onShareCollection={onShareCollection}
+                onAddGroup={onAddGroup}
+                onEditGroup={onEditGroup}
+                onDeleteGroup={onDeleteGroup}
+                onShareGroup={onShareGroup}
+                onEditItem={onEditItem}
+                onDuplicateItem={onDuplicateItem}
+                onDeleteItem={onDeleteItem}
+                onMoveItem={onMoveItem}
+                onShareItem={onShareItem}
+                onCopyItemLink={onCopyItemLink}
+                onCopyItemShareLink={onCopyItemShareLink}
+                onDropItem={onDropItem}
+                onOpenAllUrls={onOpenAllUrls}
+                onCreateItem={onCreateItem}
+              />
+            ))}
+          </div>
+        )
       ) : isFiltered ? (
         <EmptyFilteredDashboard onClear={onClearFilters} />
       ) : (
@@ -436,6 +882,24 @@ function ViewButton({
   );
 }
 
+export function DomainBadge({ host }: { host: string }) {
+  const style = getDomainBadgeStyle(host);
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium tracking-tight border select-none transition-colors",
+        style.bg,
+        style.text,
+        style.border
+      )}
+      title={host}
+    >
+      <Globe className="h-2.5 w-2.5 opacity-60 shrink-0" />
+      <span className="truncate max-w-[120px]">{host}</span>
+    </span>
+  );
+}
+
 function CollectionCard({
   collection,
   viewMode,
@@ -443,6 +907,8 @@ function CollectionCard({
   shareSettings,
   openUrlSet,
   duplicateUrlCounts,
+  isPinnedToDesk,
+  onTogglePinDesk,
   onToggleStar,
   onDuplicateCollection,
   onEditCollection,
@@ -469,6 +935,8 @@ function CollectionCard({
   shareSettings?: ShareSettings[];
   openUrlSet?: Set<string>;
   duplicateUrlCounts?: Map<string, number>;
+  isPinnedToDesk?: (itemId: string) => boolean;
+  onTogglePinDesk?: (itemId: string) => void;
   onToggleStar: (collectionId: string) => void;
   onDuplicateCollection: (collectionId: string) => void;
   onEditCollection: (collectionId: string) => void;
@@ -519,8 +987,9 @@ function CollectionCard({
       onDrop={(event) => {
         event.preventDefault();
         setIsCardDragOver(false);
+        const plain = event.dataTransfer.getData("text/plain");
         const json = event.dataTransfer.getData("application/json");
-        const payload = json || event.dataTransfer.getData("text/plain");
+        const payload = (plain && plain.split(":").length === 3 && !plain.startsWith("{")) ? plain : (json || plain);
         const firstGroup = collection.groups[0];
         if (payload && firstGroup) {
           onDropItem(payload, collection.id, firstGroup.id);
@@ -724,6 +1193,8 @@ function CollectionCard({
             shareSettings={shareSettings}
             openUrlSet={openUrlSet}
             duplicateUrlCounts={duplicateUrlCounts}
+            isPinnedToDesk={isPinnedToDesk}
+            onTogglePinDesk={onTogglePinDesk}
             onEditGroup={onEditGroup}
             onDeleteGroup={onDeleteGroup}
             onShareGroup={onShareGroup}
@@ -753,6 +1224,8 @@ function GroupPanel({
   shareSettings,
   openUrlSet,
   duplicateUrlCounts,
+  isPinnedToDesk,
+  onTogglePinDesk,
   onEditGroup,
   onDeleteGroup,
   onShareGroup,
@@ -775,6 +1248,8 @@ function GroupPanel({
   shareSettings?: ShareSettings[];
   openUrlSet?: Set<string>;
   duplicateUrlCounts?: Map<string, number>;
+  isPinnedToDesk?: (itemId: string) => boolean;
+  onTogglePinDesk?: (itemId: string) => void;
   onEditGroup: (collectionId: string, groupId: string) => void;
   onDeleteGroup: (collectionId: string, groupId: string) => void;
   onShareGroup?: (collectionId: string, groupId: string) => void;
@@ -816,8 +1291,9 @@ function GroupPanel({
       onDrop={(event) => {
         event.preventDefault();
         setIsDragOver(false);
+        const plain = event.dataTransfer.getData("text/plain");
         const json = event.dataTransfer.getData("application/json");
-        const payload = json || event.dataTransfer.getData("text/plain");
+        const payload = (plain && plain.split(":").length === 3 && !plain.startsWith("{")) ? plain : (json || plain);
         if (payload) {
           onDropItem(payload, collectionId, group.id);
         }
@@ -976,6 +1452,8 @@ function GroupPanel({
                 cardDensity={cardDensity}
                 openUrlSet={openUrlSet}
                 duplicateUrlCounts={duplicateUrlCounts}
+                isPinnedToDesk={isPinnedToDesk ? isPinnedToDesk(item.id) : false}
+                onTogglePinDesk={onTogglePinDesk ? () => onTogglePinDesk(item.id) : undefined}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
                 onDuplicate={() => onDuplicateItem(collectionId, group.id, item.id)}
                 onDelete={() => onDeleteItem(collectionId, group.id, item.id)}
@@ -999,6 +1477,8 @@ function GroupPanel({
                 cardDensity={cardDensity}
                 openUrlSet={openUrlSet}
                 duplicateUrlCounts={duplicateUrlCounts}
+                isPinnedToDesk={isPinnedToDesk ? isPinnedToDesk(item.id) : false}
+                onTogglePinDesk={onTogglePinDesk ? () => onTogglePinDesk(item.id) : undefined}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
                 onDuplicate={() => onDuplicateItem(collectionId, group.id, item.id)}
                 onDelete={() => onDeleteItem(collectionId, group.id, item.id)}
@@ -1043,6 +1523,8 @@ function ItemRow({
   cardDensity = "normal",
   openUrlSet,
   duplicateUrlCounts,
+  isPinnedToDesk,
+  onTogglePinDesk,
   onEdit,
   onDuplicate,
   onDelete,
@@ -1057,6 +1539,8 @@ function ItemRow({
   cardDensity?: "compact" | "normal" | "comfortable";
   openUrlSet?: Set<string>;
   duplicateUrlCounts?: Map<string, number>;
+  isPinnedToDesk?: boolean;
+  onTogglePinDesk?: () => void;
   onEdit: () => void;
   onDuplicate: () => void;
   onDelete: () => void;
@@ -1080,7 +1564,7 @@ function ItemRow({
     return (
       <div
         className={cn(
-          "group relative flex flex-col justify-between rounded-2xl border border-border/60 bg-card/75 hover:bg-card hover:border-border transition-all duration-150 shadow-2xs hover:shadow-md cursor-pointer select-none",
+          "group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card/75 hover:bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer select-none",
           cardDensity === "compact"
             ? "p-2.5 min-h-[64px]"
             : cardDensity === "comfortable"
@@ -1090,14 +1574,21 @@ function ItemRow({
         )}
         draggable
         onDragStart={(event) => {
-          event.dataTransfer.setData("text/plain", onDragStart(item.id));
+          const payload = onDragStart(item.id);
+          event.dataTransfer.setData("text/plain", payload);
+          try {
+            event.dataTransfer.setData(
+              "application/json",
+              JSON.stringify({ type: "saved-item", itemId: item.id })
+            );
+          } catch {}
         }}
         onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
       >
         <div className="flex items-start gap-3 min-w-0">
           <div
             className={cn(
-              "flex shrink-0 items-center justify-center rounded-xl bg-muted/40 border border-border/30 overflow-hidden",
+              "flex shrink-0 items-center justify-center rounded-xl bg-muted/40 border border-border/30 overflow-hidden shadow-2xs",
               cardDensity === "compact" ? "h-7 w-7" : "h-9 w-9"
             )}
           >
@@ -1128,9 +1619,17 @@ function ItemRow({
               )}
             </div>
 
-            <p className="truncate text-xs text-muted-foreground mt-0.5 font-normal">
-              {getHost(item.url)}
-            </p>
+            <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+              <DomainBadge host={getHost(item.url)} />
+              {item.tags?.slice(0, 2).map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-md bg-muted/60 border border-border/40 px-1.5 py-0.2 text-[9px] font-medium text-muted-foreground"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
 
             {cardDensity === "comfortable" && item.description && (
               <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted-foreground/80">
@@ -1145,6 +1644,26 @@ function ItemRow({
           className="absolute top-2.5 right-2.5 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-card/90 backdrop-blur-xs rounded-lg p-0.5 border border-border/40 shadow-xs"
           onClick={(e) => e.stopPropagation()}
         >
+          {onTogglePinDesk && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "h-6 w-6 transition-colors",
+                isPinnedToDesk
+                  ? "text-amber-400 hover:text-amber-500 hover:bg-amber-500/10"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+              onClick={(e) => {
+                e.stopPropagation();
+                onTogglePinDesk();
+              }}
+              title={isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
+            >
+              <Pin className={cn("h-3.5 w-3.5", isPinnedToDesk && "fill-current")} />
+            </Button>
+          )}
+
           <div
             className="flex h-6 w-5 shrink-0 cursor-grab active:cursor-grabbing items-center justify-center text-muted-foreground/50 hover:text-foreground"
             title="Drag to reorder or move"
@@ -1192,6 +1711,19 @@ function ItemRow({
                 <ExternalLink className="mr-2 h-3.5 w-3.5" />
                 Open original URL
               </DropdownMenuItem>
+              {onTogglePinDesk && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    onTogglePinDesk();
+                    setIsMenuOpen(false);
+                  }}
+                  className="cursor-pointer"
+                  title={isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
+                >
+                  <Pin className="mr-2 h-3.5 w-3.5" />
+                  {isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 onClick={() => {
                   if (onCopyItemLink) {
@@ -1295,7 +1827,14 @@ function ItemRow({
       )}
       draggable
       onDragStart={(event) => {
-        event.dataTransfer.setData("text/plain", onDragStart(item.id));
+        const payload = onDragStart(item.id);
+        event.dataTransfer.setData("text/plain", payload);
+        try {
+          event.dataTransfer.setData(
+            "application/json",
+            JSON.stringify({ type: "saved-item", itemId: item.id })
+          );
+        } catch {}
       }}
       onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
     >
@@ -1334,9 +1873,19 @@ function ItemRow({
                 Duplicate
               </span>
             )}
-            <p className="truncate text-xs text-muted-foreground/80 font-mono">
-              {getHost(item.url)}
-            </p>
+            <DomainBadge host={getHost(item.url)} />
+            {item.tags && item.tags.length > 0 && !isCompact && (
+              <div className="flex items-center gap-1">
+                {item.tags.slice(0, 2).map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded bg-secondary/60 px-1.5 py-0.2 text-[9px] text-muted-foreground"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
           {!isCompact && item.description && (
             <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
@@ -1350,6 +1899,26 @@ function ItemRow({
         className="flex shrink-0 items-center gap-1 opacity-60 group-hover:opacity-100 transition"
         onClick={(e) => e.stopPropagation()}
       >
+        {onTogglePinDesk && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "h-7 w-7 transition-colors",
+              isPinnedToDesk
+                ? "text-amber-400 hover:text-amber-500 hover:bg-amber-500/10"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              onTogglePinDesk();
+            }}
+            title={isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
+          >
+            <Pin className={cn("h-3.5 w-3.5", isPinnedToDesk && "fill-current")} />
+          </Button>
+        )}
+
         <Button
           variant="ghost"
           size="icon"
@@ -1390,6 +1959,19 @@ function ItemRow({
               <ExternalLink className="mr-2 h-3.5 w-3.5" />
               Open original URL
             </DropdownMenuItem>
+            {onTogglePinDesk && (
+              <DropdownMenuItem
+                onClick={() => {
+                  onTogglePinDesk();
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title={isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
+              >
+                <Pin className="mr-2 h-3.5 w-3.5" />
+                {isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               onClick={() => {
                 if (onCopyItemLink) {

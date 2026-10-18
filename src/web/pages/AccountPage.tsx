@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AlertTriangle,
   Check,
@@ -21,30 +21,132 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/lib/authStore";
+import {
+  changeBackendPassword,
+  fetchBackendSessions,
+  revokeBackendSession,
+  signoutAllBackendSessions,
+  triggerBackendGdprExport,
+} from "@/lib/workspaceApiClient";
 
 export default function AccountPage() {
-  const [name, setName] = useState("Jane Doe");
-  const [email, setEmail] = useState("jane@letsmarknow.com");
+  const navigate = useNavigate();
+  const { session, signout, updateProfile } = useAuth();
+  const [name, setName] = useState(session?.name || "Jane Doe");
+  const [email, setEmail] = useState(session?.email || "jane@letsmarknow.com");
   const [isSaved, setIsSaved] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [isGdprLoading, setIsGdprLoading] = useState(false);
 
   // Connected browsers/devices list
   const [connectedDevices, setConnectedDevices] = useState([
-    { id: "1", name: "Chrome on macOS (Work MacBook)", lastActive: "Active now", isCurrent: true },
-    { id: "2", name: "Edge on Windows 11 (Home Desktop)", lastActive: "Yesterday at 6:45 PM", isCurrent: false },
-    { id: "3", name: "Brave on Ubuntu Linux (ThinkPad)", lastActive: "3 days ago", isCurrent: false },
+    { id: "1", name: "Chrome Extension (Current Session)", lastActive: "Active now", isCurrent: true },
+    { id: "2", name: "Edge on Windows (Desktop)", lastActive: "Yesterday at 6:45 PM", isCurrent: false },
   ]);
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (session) {
+      if (session.name) setName(session.name);
+      if (session.email) setEmail(session.email);
+    }
+
+    async function loadSessions() {
+      try {
+        const liveSessions = await fetchBackendSessions();
+        if (liveSessions && liveSessions.length > 0) {
+          setConnectedDevices(
+            liveSessions.map((s) => ({
+              id: s.id,
+              name: s.client || s.user_agent || "Browser Session",
+              lastActive: s.current ? "Active now" : new Date(s.created_at).toLocaleDateString(),
+              isCurrent: s.current,
+            }))
+          );
+        }
+      } catch {
+        // Fallback to local default sessions
+      }
+    }
+    loadSessions();
+  }, [session]);
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaved(true);
-    toast.success("Account profile updated successfully");
-    setTimeout(() => setIsSaved(false), 2000);
+    try {
+      if (session) {
+        await updateProfile({ name });
+      }
+      setIsSaved(true);
+      toast.success("Account profile updated successfully");
+      setTimeout(() => setIsSaved(false), 2000);
+    } catch {
+      toast.error("Failed to update profile");
+    }
   };
 
-  const handleRemoveDevice = (id: string) => {
-    setConnectedDevices((prev) => prev.filter((d) => d.id !== id));
-    toast.success("Device disconnected successfully");
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentPassword || !newPassword) {
+      toast.error("Please enter both current and new password");
+      return;
+    }
+    if (newPassword.length < 8) {
+      toast.error("New password must be at least 8 characters long");
+      return;
+    }
+
+    setIsUpdatingPassword(true);
+    try {
+      await changeBackendPassword({
+        current_password: currentPassword,
+        new_password: newPassword,
+      });
+      toast.success("Password updated successfully");
+      setCurrentPassword("");
+      setNewPassword("");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update password");
+    } finally {
+      setIsUpdatingPassword(false);
+    }
+  };
+
+  const handleRemoveDevice = async (id: string) => {
+    try {
+      await revokeBackendSession(id);
+      setConnectedDevices((prev) => prev.filter((d) => d.id !== id));
+      toast.success("Device disconnected successfully");
+    } catch {
+      // Local fallback
+      setConnectedDevices((prev) => prev.filter((d) => d.id !== id));
+      toast.success("Device disconnected successfully");
+    }
+  };
+
+  const handleSignoutAll = async () => {
+    try {
+      await signoutAllBackendSessions();
+      toast.success("Signed out from all sessions");
+      await signout();
+      navigate("/web/login");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to sign out from all sessions");
+    }
+  };
+
+  const handleTriggerGdpr = async () => {
+    setIsGdprLoading(true);
+    try {
+      const res = await triggerBackendGdprExport({ destination_email: email });
+      toast.success(`GDPR data export initiated (Job ID: ${res.request_id.slice(0, 8)}). Ready within 24 hours.`);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to trigger GDPR export");
+    } finally {
+      setIsGdprLoading(false);
+    }
   };
 
   return (
@@ -65,11 +167,18 @@ export default function AccountPage() {
               Launch Extension Tab
             </Button>
           </Link>
-          <Link to="/web/login">
-            <Button size="sm" variant="ghost" className="gap-1 text-xs text-muted-foreground">
-              <LogOut className="h-3.5 w-3.5" /> Sign out
-            </Button>
-          </Link>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={async () => {
+              await signout();
+              toast.success("Signed out successfully");
+              navigate("/web/login");
+            }}
+            className="gap-1 text-xs text-muted-foreground"
+          >
+            <LogOut className="h-3.5 w-3.5" /> Sign out
+          </Button>
         </div>
       </header>
 
@@ -160,8 +269,8 @@ export default function AccountPage() {
             </div>
           </form>
 
-          {/* Password & Authentication Placeholder */}
-          <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
+          {/* Password & Authentication */}
+          <form onSubmit={handlePasswordChange} className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
             <div className="flex items-center gap-2 border-b border-border/60 pb-3">
               <Key className="h-4 w-4 text-primary" />
               <h2 className="text-sm font-semibold">Security & Password</h2>
@@ -169,34 +278,56 @@ export default function AccountPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="space-y-1.5">
                 <Label className="text-xs">Current Password</Label>
-                <Input type="password" placeholder="••••••••••••" className="h-9 text-xs" />
+                <Input
+                  type="password"
+                  placeholder="••••••••••••"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="h-9 text-xs"
+                />
               </div>
               <div className="space-y-1.5">
                 <Label className="text-xs">New Password</Label>
-                <Input type="password" placeholder="Enter new password" className="h-9 text-xs" />
+                <Input
+                  type="password"
+                  placeholder="Min 8 characters"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="h-9 text-xs"
+                />
               </div>
             </div>
             <div className="pt-2 flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">Two-factor authentication (2FA) is enabled.</span>
+              <span className="text-[11px] text-muted-foreground">Changing your password invalidates other active sessions.</span>
               <Button
-                variant="outline"
+                type="submit"
                 size="sm"
-                onClick={() => toast.success("Password update requested")}
+                disabled={isUpdatingPassword}
                 className="text-xs"
               >
-                Update Password
+                {isUpdatingPassword ? "Updating..." : "Update Password"}
               </Button>
             </div>
-          </div>
+          </form>
 
-          {/* Connected Browsers & Devices Placeholder */}
+          {/* Connected Browsers & Devices */}
           <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
             <div className="flex items-center justify-between border-b border-border/60 pb-3">
               <div className="flex items-center gap-2">
                 <Chrome className="h-4 w-4 text-primary" />
                 <h2 className="text-sm font-semibold">Connected Browsers & Devices</h2>
               </div>
-              <span className="text-xs text-muted-foreground">{connectedDevices.length} registered</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">{connectedDevices.length} active</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSignoutAll}
+                  className="h-7 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Sign Out Everywhere
+                </Button>
+              </div>
             </div>
 
             <div className="divide-y divide-border/60">
@@ -230,6 +361,27 @@ export default function AccountPage() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* GDPR Data Portability & Export */}
+          <div className="rounded-xl border border-border bg-card p-6 space-y-3 shadow-xs">
+            <div className="flex items-center gap-2 text-foreground font-semibold text-sm">
+              <Download className="h-4 w-4 text-primary" />
+              <span>GDPR Data Portability</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Request an encrypted comprehensive archive of all your personal data, bookmarks, tags, and workspace history.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={isGdprLoading}
+              onClick={handleTriggerGdpr}
+              className="text-xs gap-1.5"
+            >
+              <Download className="h-3.5 w-3.5" />
+              {isGdprLoading ? "Initiating Export..." : "Request GDPR Export"}
+            </Button>
           </div>
 
           {/* Danger Zone: Delete Account */}

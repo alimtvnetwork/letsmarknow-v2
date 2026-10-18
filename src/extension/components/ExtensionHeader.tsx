@@ -22,27 +22,27 @@ export function ExtensionHeader({
   const activeOrg = organizations?.find((o) => o.id === activeOrganizationId);
 
   return (
-    <header className="flex items-center justify-between border-b border-border/80 bg-card/90 px-3.5 py-2.5 backdrop-blur shrink-0">
-      <div className="flex items-center gap-2 min-w-0">
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-xs">
-          <Bookmark className="h-3.5 w-3.5" />
+    <header className="flex items-center justify-between border-b border-border/80 bg-card/90 px-3.5 py-2.5 backdrop-blur-md shrink-0">
+      <div className="flex items-center gap-2.5 min-w-0">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm shadow-primary/30">
+          <Bookmark className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex items-center gap-1.5">
           <span className="text-xs font-bold tracking-tight text-foreground">
             LetsMarkNow
           </span>
-          <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[9px] font-semibold text-primary uppercase">
+          <span className="rounded-full bg-primary/10 px-1.5 py-0.2 text-[9px] font-bold text-primary uppercase border border-primary/20">
             v1
           </span>
         </div>
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1.5">
         {organizations && organizations.length > 1 && onSelectOrganization && (
           <select
             value={activeOrganizationId}
             onChange={(e) => onSelectOrganization(e.target.value)}
-            className="h-6 rounded border border-input bg-background/90 px-1.5 text-[11px] text-muted-foreground focus:outline-none"
+            className="h-7 rounded-lg border border-border/80 bg-background/80 px-2 text-[11px] font-medium text-foreground hover:border-primary/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
             title="Switch Workspace"
           >
             {organizations.map((org) => (
@@ -54,20 +54,21 @@ export function ExtensionHeader({
         )}
 
         {organizations && organizations.length === 1 && activeOrg && (
-          <span className="hidden sm:inline-block text-[11px] text-muted-foreground truncate max-w-[100px]">
+          <span className="hidden sm:inline-block text-[11px] font-medium text-muted-foreground truncate max-w-[110px]">
             {activeOrg.name}
           </span>
         )}
 
         <Button
-          size="icon"
-          variant="ghost"
+          size="sm"
+          variant="outline"
           onClick={onOpenFullTab}
           data-testid="open-full-tab-button"
-          className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted"
-          title="Open Full Extension Tab"
+          className="h-7 px-2.5 gap-1.5 rounded-lg text-xs font-semibold border-primary/40 bg-primary/10 hover:bg-primary/20 text-foreground transition-colors shadow-2xs"
+          title="Open Full Extension Dashboard"
         >
-          <Maximize2 className="h-3.5 w-3.5" />
+          <Maximize2 className="h-3.5 w-3.5 text-primary" />
+          <span>Dashboard</span>
         </Button>
 
         {onOpenSettings && (
@@ -76,7 +77,7 @@ export function ExtensionHeader({
             variant="ghost"
             onClick={onOpenSettings}
             data-testid="open-settings-button"
-            className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted"
+            className="h-7 w-7 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
             title="Extension Settings"
           >
             <Settings className="h-3.5 w-3.5" />

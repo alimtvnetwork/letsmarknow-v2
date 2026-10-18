@@ -5,16 +5,31 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signinUser } from "@/lib/authStore";
+import { ApiError } from "@/lib/apiClient";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Signed in successfully");
-    navigate("/web/account");
+    setIsLoading(true);
+    try {
+      await signinUser({ email, password });
+      toast.success("Signed in successfully");
+      navigate("/web/account");
+    } catch (err: unknown) {
+      const message =
+        err instanceof ApiError
+          ? err.message
+          : "Failed to sign in. Please verify your email and password.";
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -62,8 +77,8 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full text-xs font-semibold h-9">
-            Sign In
+          <Button type="submit" disabled={isLoading} className="w-full text-xs font-semibold h-9">
+            {isLoading ? "Signing In..." : "Sign In"}
           </Button>
 
           <div className="relative py-2 text-center text-[11px] text-muted-foreground">

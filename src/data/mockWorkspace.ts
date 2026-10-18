@@ -1,5 +1,22 @@
 import type { AppData } from "@/types/lmn";
 
+export const cleanWorkspace: AppData = {
+  organizations: [
+    { id: "org-personal", name: "Personal Engine", initials: "PE", plan: "Pro" },
+  ],
+  spaces: [
+    {
+      id: "space-home",
+      organizationId: "org-personal",
+      name: "My Collections",
+      description: "Daily research, useful tools, and saved reading.",
+      accentClass: "bg-primary",
+    },
+  ],
+  collections: [],
+  shareSettings: [],
+};
+
 export const mockWorkspace: AppData = {
   organizations: [
     { id: "org-personal", name: "Personal Engine", initials: "PE", plan: "Pro" },

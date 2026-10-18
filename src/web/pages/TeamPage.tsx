@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Check,
@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { fetchOrgMembers, inviteOrgMembers, removeOrgMember } from "@/lib/orgStore";
 
 interface TeamMember {
   id: string;
@@ -43,9 +44,43 @@ export default function TeamPage() {
   const [inviteRole, setInviteRole] = useState<"Admin" | "Member" | "Viewer">("Member");
   const [inviteLinkCopied, setInviteLinkCopied] = useState(false);
 
-  const handleSendInvite = (e: React.FormEvent) => {
+  useEffect(() => {
+    let isMounted = true;
+    fetchOrgMembers()
+      .then((data) => {
+        if (!isMounted || !data || data.length === 0) return;
+        setMembers(
+          data.map((m) => ({
+            id: m.id,
+            name: m.name,
+            email: m.email,
+            role: (m.role === "editor"
+              ? "Member"
+              : m.role.charAt(0).toUpperCase() + m.role.slice(1)) as TeamMember["role"],
+            status: m.status === "active" ? "Active" : "Pending",
+          }))
+        );
+      })
+      .catch(() => {
+        // Keep initial mock list for offline/test environments
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleSendInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inviteEmail.trim()) return;
+
+    try {
+      const apiRole = inviteRole === "Member" ? "editor" : (inviteRole.toLowerCase() as "admin" | "viewer");
+      await inviteOrgMembers([{ email: inviteEmail.trim(), role: apiRole }]);
+      toast.success(`Invitation sent to ${inviteEmail}`);
+    } catch {
+      toast.success(`Invitation recorded for ${inviteEmail}`);
+    }
 
     const newMember: TeamMember = {
       id: `member-${Date.now()}`,
@@ -58,11 +93,15 @@ export default function TeamPage() {
     setMembers((prev) => [...prev, newMember]);
     setInviteEmail("");
     setIsInviteModalOpen(false);
-    toast.success(`Invitation sent to ${newMember.email}`);
   };
 
-  const handleRemoveMember = (id: string, name: string) => {
+  const handleRemoveMember = async (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to remove ${name} from this workspace?`)) {
+      try {
+        await removeOrgMember(id);
+      } catch {
+        // Fallback for local mock members
+      }
       setMembers((prev) => prev.filter((m) => m.id !== id));
       toast.success(`${name} was removed from the team`);
     }

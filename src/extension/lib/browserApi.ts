@@ -72,7 +72,11 @@ export async function getActiveTab(): Promise<BrowserTabSnapshot | null> {
     typeof chrome.tabs.query === "function"
   ) {
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      // In extension popups, lastFocusedWindow targets the browser window behind the popup
+      let [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+      if (!tab) {
+        [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      }
       if (tab) {
         return {
           id: tab.id,
@@ -120,16 +124,21 @@ export async function getCurrentWindowTabs(): Promise<BrowserTabSnapshot[]> {
     typeof chrome.tabs.query === "function"
   ) {
     try {
-      const tabs = await chrome.tabs.query({ currentWindow: true });
-      return tabs.map((t) => ({
-        id: t.id,
-        title: t.title ?? "Untitled Tab",
-        url: t.url ?? "",
-        favIconUrl: t.favIconUrl,
-        windowId: t.windowId,
-        active: t.active,
-        pinned: t.pinned,
-      }));
+      let tabs = await chrome.tabs.query({ lastFocusedWindow: true });
+      if (!tabs || tabs.length === 0) {
+        tabs = await chrome.tabs.query({ currentWindow: true });
+      }
+      if (tabs && tabs.length > 0) {
+        return tabs.map((t) => ({
+          id: t.id,
+          title: t.title ?? "Untitled Tab",
+          url: t.url ?? "",
+          favIconUrl: t.favIconUrl,
+          windowId: t.windowId,
+          active: t.active,
+          pinned: t.pinned,
+        }));
+      }
     } catch (err) {
       console.warn("Failed to query current window chrome tabs:", err);
     }

@@ -51,7 +51,7 @@ export function loadWorkspaceState(): StoredWorkspaceState {
         (space) => space.id === parsed.activeSpaceId
       );
 
-      const viewMode: ViewMode = ["list", "compact", "grid"].includes(parsed.viewMode)
+      const viewMode: ViewMode = ["list", "compact", "grid", "mindmap"].includes(parsed.viewMode)
         ? parsed.viewMode
         : "grid";
 

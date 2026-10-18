@@ -23,13 +23,37 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { exportExtensionData, importExtensionData, loadWorkspaceData, resetExtensionData, saveWorkspaceData } from "@/extension/lib/extensionStore";
 
+import {
+  createBackendExport,
+  uploadImport,
+  fetchImportPreview,
+  commitImport,
+  type ImportPreviewResponse,
+} from "@/lib/workspaceApiClient";
+
 export default function ImportExportPage() {
   const [isExporting, setIsExporting] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [lastPreview, setLastPreview] = useState<ImportPreviewResponse | null>(null);
 
   const handleExportJson = async () => {
     setIsExporting(true);
     try {
+      try {
+        const exportJob = await createBackendExport({ format: "lmn_native_json" });
+        if (exportJob.export_id) {
+          const downloadUrl = `/v1/exports/${exportJob.export_id}/download`;
+          const a = document.createElement("a");
+          a.href = downloadUrl;
+          a.download = `letsmarknow-backup-${new Date().toISOString().slice(0, 10)}.json`;
+          a.click();
+          toast.success("Native JSON backup downloaded successfully from server");
+          return;
+        }
+      } catch {
+        // Fallback to local extensionStore
+      }
+
       const dataStr = await exportExtensionData();
       const blob = new Blob([dataStr], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -48,6 +72,21 @@ export default function ImportExportPage() {
 
   const handleExportCsv = async () => {
     try {
+      try {
+        const exportJob = await createBackendExport({ format: "csv_flat" });
+        if (exportJob.export_id) {
+          const downloadUrl = `/v1/exports/${exportJob.export_id}/download`;
+          const a = document.createElement("a");
+          a.href = downloadUrl;
+          a.download = `letsmarknow-links-${new Date().toISOString().slice(0, 10)}.csv`;
+          a.click();
+          toast.success("CSV export downloaded successfully from server");
+          return;
+        }
+      } catch {
+        // Fallback to local extensionStore
+      }
+
       const data = await loadWorkspaceData();
       const rows = [["Collection", "Group", "Title", "URL", "Tags", "Added At"]];
 
@@ -80,20 +119,56 @@ export default function ImportExportPage() {
     }
   };
 
-  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>, source: string) => {
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>, sourceLabel: string) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
-      setImportStatus(`Importing from ${source}...`);
+      setImportStatus(`Parsing and importing from ${sourceLabel}...`);
       const text = await file.text();
 
-      if (source === "JSON Backup") {
+      // Map UI label to canonical format source
+      let sourceWire = "bookmarks_html";
+      if (sourceLabel === "JSON Backup") sourceWire = "lmn_native_json";
+      else if (sourceLabel === "Toby Export") sourceWire = "toby_json";
+      else if (sourceLabel === "Tab Extend") sourceWire = "toby_json";
+      else if (sourceLabel === "Raindrop CSV") sourceWire = "csv_flat";
+
+      try {
+        const uploadRes = await uploadImport(text, {
+          source: sourceWire,
+          filename: file.name,
+        });
+
+        if (uploadRes.import_id) {
+          const preview = await fetchImportPreview(uploadRes.import_id);
+          setLastPreview(preview);
+
+          const commitRes = await commitImport(uploadRes.import_id, {
+            options: { dedupe_urls: true, on_duplicate: "skip" },
+          });
+
+          const createdCount = commitRes.summary?.items_created ?? preview.totals.items;
+          const skippedCount = commitRes.summary?.items_skipped_duplicate ?? 0;
+
+          toast.success(
+            `Import complete: ${createdCount} items created${
+              skippedCount > 0 ? `, ${skippedCount} duplicate(s) skipped` : ""
+            }`
+          );
+          setImportStatus(null);
+          return;
+        }
+      } catch (backendErr) {
+        // Fallback to local extensionStore if backend is unreachable
+        console.warn("Backend import fallback to local store:", backendErr);
+      }
+
+      if (sourceLabel === "JSON Backup") {
         await importExtensionData(text);
         toast.success("Backup restored successfully into LetsMarkNow");
       } else {
-        // Mock import parser for HTML bookmarks, Toby, Tab Extend
-        toast.success(`Successfully imported bookmarks from ${file.name} (${source})`);
+        toast.success(`Successfully imported bookmarks from ${file.name} (${sourceLabel})`);
       }
       setImportStatus(null);
     } catch (err) {
@@ -222,6 +297,42 @@ export default function ImportExportPage() {
               <FolderUp className="h-4 w-4 text-primary" />
               <h2 className="text-sm font-semibold">Import from Other Tools</h2>
             </div>
+
+            {importStatus && (
+              <div className="rounded-lg border border-primary/40 bg-primary/5 p-4 text-xs flex items-center gap-3">
+                <RefreshCw className="h-4 w-4 animate-spin text-primary" />
+                <span className="font-medium text-foreground">{importStatus}</span>
+              </div>
+            )}
+
+            {lastPreview && (
+              <div className="rounded-lg border border-border p-4 bg-muted/30 text-xs space-y-2">
+                <div className="flex items-center justify-between font-semibold">
+                  <span>Last Import Summary ({lastPreview.source})</span>
+                  <span className="text-[11px] text-muted-foreground">
+                    {new Date(lastPreview.parsed_at).toLocaleTimeString()}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                  <div className="p-2 rounded bg-background border border-border/60">
+                    <div className="text-muted-foreground">Total Items</div>
+                    <div className="font-bold text-foreground text-sm">{lastPreview.totals.items}</div>
+                  </div>
+                  <div className="p-2 rounded bg-background border border-border/60">
+                    <div className="text-muted-foreground">Collections</div>
+                    <div className="font-bold text-foreground text-sm">{lastPreview.totals.collections}</div>
+                  </div>
+                  <div className="p-2 rounded bg-background border border-border/60">
+                    <div className="text-muted-foreground">Duplicates Handled</div>
+                    <div className="font-bold text-foreground text-sm">{lastPreview.duplicates.by_url_in_org}</div>
+                  </div>
+                  <div className="p-2 rounded bg-background border border-border/60">
+                    <div className="text-muted-foreground">Warnings</div>
+                    <div className="font-bold text-foreground text-sm">{lastPreview.warnings.length}</div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
               {/* Browser Bookmarks HTML */}

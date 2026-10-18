@@ -1,4 +1,4 @@
-import { mockWorkspace } from "@/data/mockWorkspace";
+import { cleanWorkspace, mockWorkspace } from "@/data/mockWorkspace";
 import { isValidAppData, LOCAL_STORAGE_KEY, type StoredWorkspaceState } from "@/lib/localWorkspaceStore";
 import {
   createCollectionMutation,
@@ -17,6 +17,8 @@ import type {
 } from "@/types/lmn";
 import { closeTab, getStorage, removeStorage, setStorage } from "./browserApi";
 import { filterSaveableTabs, generateSessionName, tabToSavedItem } from "./tabCapture";
+import { getStoredAuth } from "@/lib/authStore";
+import { createBackendItem, saveSessionToBackend } from "@/lib/workspaceApiClient";
 
 export const EXTENSION_STORAGE_KEY = LOCAL_STORAGE_KEY;
 export const EXTENSION_PREFERENCES_KEY = "lmn_extension_prefs_v1";
@@ -33,32 +35,51 @@ export const DEFAULT_EXTENSION_PREFERENCES: ExtensionPreferences = {
 
 /**
  * Loads the current AppData workspace models from extension or local storage.
+ * Defaults to clean single "PE" workspace with no collections/items in production/browser.
  */
 export async function loadWorkspaceData(): Promise<AppData> {
+  const isTestEnv = typeof process !== "undefined" && process.env?.NODE_ENV === "test";
+
   try {
     const rawState = await getStorage<StoredWorkspaceState | AppData>(EXTENSION_STORAGE_KEY);
     if (!rawState) {
-      return mockWorkspace;
+      const defaultData = isTestEnv ? mockWorkspace : cleanWorkspace;
+      await saveWorkspaceData(defaultData);
+      return defaultData;
     }
 
+    let loaded: AppData | null = null;
     if ("data" in rawState && isValidAppData(rawState.data)) {
-      return rawState.data;
+      loaded = rawState.data;
+    } else if (isValidAppData(rawState)) {
+      loaded = rawState;
     }
 
-    if (isValidAppData(rawState)) {
-      return rawState;
+    if (loaded) {
+      if (!isTestEnv) {
+        // Auto-migrate if stored data in browser is the old multi-org demo data
+        const isLegacyDemo =
+          loaded.organizations.length > 1 ||
+          loaded.collections.some((c) => c.id === "collection-design");
+        if (isLegacyDemo) {
+          await saveWorkspaceData(cleanWorkspace);
+          return cleanWorkspace;
+        }
+      }
+      return loaded;
     }
   } catch (err) {
     console.warn("Failed to load workspace data for extension:", err);
   }
 
-  return mockWorkspace;
+  return isTestEnv ? mockWorkspace : cleanWorkspace;
 }
 
 /**
  * Persists the AppData models to storage.
  */
 export async function saveWorkspaceData(data: AppData): Promise<void> {
+  if (!data || !isValidAppData(data)) return;
   const existing = await getStorage<StoredWorkspaceState>(EXTENSION_STORAGE_KEY);
   const nextState: StoredWorkspaceState = {
     ...(existing ?? {}),
@@ -141,6 +162,24 @@ export async function saveItemToDestination(input: {
   const nextData = createItemMutation(currentData, collectionId, groupId, payload);
   await saveWorkspaceData(nextData);
 
+  // Sync item to backend if authenticated
+  try {
+    const auth = getStoredAuth();
+    if (auth?.access_token) {
+      await createBackendItem({
+        collectionId,
+        groupId,
+        url: tab.url,
+        title: tab.title,
+        description,
+        color,
+        source: "extension",
+      });
+    }
+  } catch (backendErr) {
+    console.warn("Backend item sync skipped (offline or fallback):", backendErr);
+  }
+
   // Retrieve newly created item from top of destination group
   const targetCollection = nextData.collections.find((c) => c.id === collectionId);
   const targetGroup = targetCollection?.groups.find((g) => g.id === groupId);
@@ -177,6 +216,35 @@ export async function saveTabsToDestination(input: {
   }
 
   await saveWorkspaceData(currentData);
+
+  // Sync to backend if authenticated
+  try {
+    const auth = getStoredAuth();
+    if (auth?.access_token) {
+      await saveSessionToBackend({
+        destination: {
+          kind: "existing_group",
+          collection_id: input.collectionId,
+          group_id: input.groupId,
+        },
+        tabs: validTabs.map((t, idx) => ({
+          url: t.url,
+          title: t.title,
+          favicon_data_url: t.favIconUrl,
+          pinned: t.pinned,
+          active: t.active,
+          window_position: idx,
+        })),
+        options: {
+          close_tabs_after_save: input.closeAfterSave,
+          exclude_chrome_internal: true,
+          dedupe_within_session: true,
+        },
+      });
+    }
+  } catch (backendErr) {
+    console.warn("Backend tabs save skipped (offline or fallback):", backendErr);
+  }
 
   if (input.closeAfterSave) {
     for (const tab of validTabs) {
@@ -221,6 +289,36 @@ export async function saveSessionAsCollection(input: {
   }
 
   await saveWorkspaceData(finalData);
+
+  // Sync to backend session saver if authenticated
+  try {
+    const auth = getStoredAuth();
+    if (auth?.access_token) {
+      await saveSessionToBackend({
+        destination: {
+          kind: "new_collection",
+          space_id: input.spaceId,
+          name,
+          color: "pink",
+        },
+        tabs: validTabs.map((t, idx) => ({
+          url: t.url,
+          title: t.title,
+          favicon_data_url: t.favIconUrl,
+          pinned: t.pinned,
+          active: t.active,
+          window_position: idx,
+        })),
+        options: {
+          close_tabs_after_save: input.closeAfterSave,
+          exclude_chrome_internal: true,
+          dedupe_within_session: true,
+        },
+      });
+    }
+  } catch (backendErr) {
+    console.warn("Backend session collection save skipped (offline or fallback):", backendErr);
+  }
 
   if (input.closeAfterSave) {
     for (const tab of validTabs) {
@@ -276,12 +374,14 @@ export async function quickCreateGroup(input: {
 }
 
 /**
- * Resets extension data back to default demo workspace.
+ * Resets extension data back to clean single PE workspace (or mockWorkspace in test mode).
  */
 export async function resetExtensionData(): Promise<AppData> {
+  const isTestEnv = typeof process !== "undefined" && process.env?.NODE_ENV === "test";
+  const target = isTestEnv ? mockWorkspace : cleanWorkspace;
   await removeStorage(EXTENSION_STORAGE_KEY);
-  await setStorage(EXTENSION_STORAGE_KEY, { data: mockWorkspace });
-  return mockWorkspace;
+  await setStorage(EXTENSION_STORAGE_KEY, { data: target });
+  return target;
 }
 
 /**

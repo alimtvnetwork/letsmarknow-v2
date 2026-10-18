@@ -12,13 +12,27 @@ import {
   Sparkles,
   User,
   Users,
+  KeyRound,
+  Award,
+  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  redeemLifetimeLicense,
+  stackLifetimeLicense,
+} from "@/lib/workspaceApiClient";
 
 export default function BillingPage() {
   const [currentPlan, setCurrentPlan] = useState<"Starter" | "Pro" | "Team">("Pro");
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("annually");
+  const [licenseCode, setLicenseCode] = useState("");
+  const [isRedeeming, setIsRedeeming] = useState(false);
+  const [lifetimeDeal, setLifetimeDeal] = useState<{
+    code_masked: string;
+    stacked_seats: number;
+  } | null>(null);
 
   const [invoices, setInvoices] = useState([
     { id: "INV-2026-001", date: "Oct 01, 2026", amount: "$72.00", status: "Paid" },
@@ -28,6 +42,40 @@ export default function BillingPage() {
   const handleSelectPlan = (plan: "Starter" | "Pro" | "Team") => {
     setCurrentPlan(plan);
     toast.success(`Plan updated to ${plan}`);
+  };
+
+  const handleRedeemCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const code = licenseCode.trim().toUpperCase();
+    if (!code) {
+      toast.error("Please enter a license code");
+      return;
+    }
+    if (!code.startsWith("LMNL-")) {
+      toast.error("License code must start with LMNL-");
+      return;
+    }
+
+    setIsRedeeming(true);
+    try {
+      if (lifetimeDeal) {
+        // Stack seats
+        const res = await stackLifetimeLicense("current", code);
+        setLifetimeDeal(res.lifetime_license);
+        toast.success(`Code stacked successfully! Total seats: ${res.lifetime_license.stacked_seats}`);
+      } else {
+        const res = await redeemLifetimeLicense("current", code);
+        setLifetimeDeal(res.lifetime_license);
+        setCurrentPlan("Pro");
+        toast.success(`Lifetime Pro plan activated with code ${res.lifetime_license.code_masked}`);
+      }
+      setLicenseCode("");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to redeem code";
+      toast.error(msg);
+    } finally {
+      setIsRedeeming(false);
+    }
   };
 
   return (
@@ -253,6 +301,52 @@ export default function BillingPage() {
                 <ShieldCheck className="h-3.5 w-3.5" /> Verified
               </span>
             </div>
+          </div>
+
+          {/* Lifetime License & Deal Redemption (Step 16) */}
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-border/60 pb-3">
+              <div className="flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-primary" />
+                <h2 className="text-sm font-semibold">Lifetime License & Deal Redemption</h2>
+              </div>
+              {lifetimeDeal && (
+                <span className="flex items-center gap-1.5 text-xs text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Lifetime Pro Active ({lifetimeDeal.stacked_seats} seat{lifetimeDeal.stacked_seats > 1 ? "s" : ""})
+                </span>
+              )}
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Have an AppSumo, Founder, or promotional license code? Enter your code below to activate your lifetime Pro plan or stack additional member seats.
+            </p>
+
+            <form onSubmit={handleRedeemCode} className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="relative flex-1 w-full">
+                <Input
+                  value={licenseCode}
+                  onChange={(e) => setLicenseCode(e.target.value)}
+                  placeholder="LMNL-XXXX-XXXX-XXXX"
+                  className="font-mono text-xs uppercase"
+                  maxLength={25}
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={isRedeeming || !licenseCode.trim()}
+                size="sm"
+                className="text-xs gap-1.5 shrink-0 w-full sm:w-auto"
+              >
+                <Award className="h-3.5 w-3.5" />
+                {lifetimeDeal ? "Stack Code" : "Redeem Code"}
+              </Button>
+            </form>
+
+            {lifetimeDeal && (
+              <p className="text-[11px] text-muted-foreground bg-muted/30 border border-border/60 rounded-md p-2">
+                Active License Key: <code className="font-mono text-foreground font-semibold">{lifetimeDeal.code_masked}</code> &bull; Lifetime updates enabled.
+              </p>
+            )}
           </div>
 
           {/* Invoices History Placeholder */}

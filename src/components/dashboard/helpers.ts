@@ -71,3 +71,36 @@ export const getCollectionSearchText = (collection: Collection) =>
   ]
     .join(" ")
     .toLowerCase();
+
+export interface DomainBadgeStyle {
+  bg: string;
+  text: string;
+  border: string;
+}
+
+export function getDomainBadgeStyle(host: string): DomainBadgeStyle {
+  const h = host.toLowerCase();
+  if (h.includes("github")) {
+    return { bg: "bg-slate-800/80", text: "text-slate-200", border: "border-slate-700/80" };
+  }
+  if (h.includes("figma")) {
+    return { bg: "bg-purple-950/60", text: "text-purple-300", border: "border-purple-800/60" };
+  }
+  if (h.includes("linear")) {
+    return { bg: "bg-indigo-950/60", text: "text-indigo-300", border: "border-indigo-800/60" };
+  }
+  if (h.includes("youtube") || h.includes("youtu.be")) {
+    return { bg: "bg-rose-950/60", text: "text-rose-300", border: "border-rose-800/60" };
+  }
+  if (h.includes("google") || h.includes("notion")) {
+    return { bg: "bg-sky-950/60", text: "text-sky-300", border: "border-sky-800/60" };
+  }
+  if (h.includes("twitter") || h.includes("x.com")) {
+    return { bg: "bg-zinc-800/80", text: "text-zinc-200", border: "border-zinc-700/80" };
+  }
+  if (h.includes("tailwindcss") || h.includes("tailwind")) {
+    return { bg: "bg-cyan-950/60", text: "text-cyan-300", border: "border-cyan-800/60" };
+  }
+  return { bg: "bg-muted/70", text: "text-muted-foreground", border: "border-border/60" };
+}
+

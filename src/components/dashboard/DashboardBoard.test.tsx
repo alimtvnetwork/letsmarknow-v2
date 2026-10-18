@@ -211,4 +211,142 @@ describe("DashboardBoard Top 5 Extension Native Capabilities", () => {
 
     expect(onDropItem).toHaveBeenCalledWith(mockTabPayload, "col-1", "grp-1");
   });
+
+  it("renders Today's Desk hero shelf and handles pin/unpin and launching desk", () => {
+    localStorage.clear();
+    localStorage.setItem("lmn_todays_desk_pinned_ids_v1", JSON.stringify(["item-1"]));
+
+    const onOpenAllUrls = vi.fn();
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="grid"
+        activeFilter="all"
+        onOpenAllUrls={onOpenAllUrls}
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    // Shelf should be present with test ID
+    const deskShelf = screen.getByTestId("todays-desk-shelf");
+    expect(deskShelf).toBeInTheDocument();
+    expect(screen.getByText("Today's Desk")).toBeInTheDocument();
+
+    // Domain badges should be displayed for react.dev and github.com
+    expect(screen.getAllByText("react.dev").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("github.com").length).toBeGreaterThan(0);
+
+    // Launch desk button should be present with count 1
+    const launchButton = screen.getByRole("button", { name: /launch desk \(1\)/i });
+    expect(launchButton).toBeInTheDocument();
+
+    fireEvent.click(launchButton);
+    expect(onOpenAllUrls).toHaveBeenCalledWith(["https://react.dev"], "tabs");
+
+    // Desk item should be draggable and have drag handle
+    const deskCard = screen.getByTestId("desk-item-item-1");
+    expect(deskCard).toHaveAttribute("draggable", "true");
+    expect(deskCard.querySelector("svg.lucide-grip-vertical")).toBeInTheDocument();
+  });
+
+  it("renders Today's Desk dropzone with drag-and-drop prompt and pins item when dropped", () => {
+    localStorage.clear();
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="grid"
+        activeFilter="all"
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    // Dropzone should be present with drag and drop suggestion text
+    const dropzone = screen.getByTestId("todays-desk-dropzone");
+    expect(dropzone).toBeInTheDocument();
+    expect(screen.getByText("Drag and drop items here")).toBeInTheDocument();
+    // Must NOT have "Pin top 3" button
+    expect(screen.queryByText(/pin top 3/i)).not.toBeInTheDocument();
+
+    // Drop item-2 onto the dropzone
+    fireEvent.drop(dropzone, {
+      dataTransfer: {
+        getData: (type: string) => {
+          if (type === "application/json") {
+            return JSON.stringify({ type: "saved-item", itemId: "item-2" });
+          }
+          return "col-1:grp-1:item-2";
+        },
+      },
+    });
+
+    // Item-2 (GitHub Repository) should now be pinned on Today's Desk
+    expect(screen.getByTestId("desk-item-item-2")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /launch desk \(1\)/i })).toBeInTheDocument();
+  });
+
+  it("renders Mindmap canvas when viewMode is mindmap", () => {
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="mindmap"
+        activeFilter="all"
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("Auto Layout")).toBeInTheDocument();
+    expect(screen.getByText("Save View")).toBeInTheDocument();
+  });
 });
+
+

@@ -202,4 +202,48 @@ describe("ExtensionTabApp", () => {
     // Open again: has w-64
     expect(sidebar.className).toContain("w-64");
   });
+
+  it("handles dropping desk-item or same-group item safely without crashing to loading screen", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Find first group drop container
+    const groupHeadings = screen.getAllByRole("heading", { level: 4 });
+    const firstGroupHeading = groupHeadings.find((h) => h.textContent?.includes("Reference"));
+    expect(firstGroupHeading).toBeDefined();
+
+    const groupSection = firstGroupHeading!.closest("section");
+    expect(groupSection).toBeInTheDocument();
+
+    // 1. Drop a desk-item payload onto the group
+    fireEvent.drop(groupSection!, {
+      dataTransfer: {
+        getData: (type: string) => {
+          if (type === "application/json") {
+            return JSON.stringify({ type: "desk-item", itemId: "item-1" });
+          }
+          return "desk:item-1";
+        },
+      },
+    });
+
+    // Verify it did NOT crash to the loading screen
+    expect(screen.queryByText("Loading LetsMarkNow Tab...")).not.toBeInTheDocument();
+    expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+
+    // 2. Drop same-group colon payload
+    fireEvent.drop(groupSection!, {
+      dataTransfer: {
+        getData: (type: string) => (type === "text/plain" ? "col-1:grp-1:item-1" : ""),
+      },
+    });
+
+    // Verify still not crashed to loading screen
+    expect(screen.queryByText("Loading LetsMarkNow Tab...")).not.toBeInTheDocument();
+    expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+  });
 });
+

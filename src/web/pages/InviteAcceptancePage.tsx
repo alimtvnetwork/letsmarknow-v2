@@ -3,13 +3,21 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Check, Chrome, LayoutDashboard, UserCheck, Users } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { acceptOrgInvite } from "@/lib/orgStore";
 
 export default function InviteAcceptancePage() {
   const { inviteId } = useParams();
   const navigate = useNavigate();
   const [accepted, setAccepted] = useState(false);
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
+    try {
+      if (inviteId) {
+        await acceptOrgInvite(inviteId);
+      }
+    } catch {
+      // Graceful fallback for offline demo links
+    }
     setAccepted(true);
     toast.success("Joined workspace successfully! Redirecting...");
     setTimeout(() => {

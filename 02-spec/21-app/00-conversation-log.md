@@ -2900,3 +2900,342 @@ Action: Created /mnt/documents/next-feature-ui-brief.md — self-contained UI br
 10. slide-10-share-management.md
 
 Each contains: layout wireframe, Mermaid user-click flow, component specs (buttons/states/hover), endpoints hit, telemetry events, permissions, a11y, acceptance checklist. Brand `--primary` #EC4868 referenced via tokens; UUIDv7 + cursor pagination conventions applied.
+
+
+---
+
+## 2026-10-20 14:16 (UTC+8) — Obsidian Precision Redesign (Option A)
+
+```
+Option A: Obsidian Precision (Linear / Raycast Aesthetic) — Recommended
+Vibe: High-focus, developer/power-user grade, engineered precision, sleek obsidian surfaces.
+Palette:
+Base Background: Deep Zinc / Pitch Charcoal (#090A0F or #0D0E12 in dark mode; crisp warm alabaster #F8F9FA in light).
+Primary Accent: Electric Indigo / Neon Violet (#6366F1 / #7C3AED) or Bioluminescent Cyan (#06B6D4).
+Surface Depth: Micro-borders with subtle top-edge specular highlights (border-t-white/12 border-white/6), soft inner glow (box-shadow: inset 0 1px 0 rgba(255,255,255,0.06)).
+Typography: Geist Sans (or Inter Display) paired with Geist Mono for tags, URL hostnames, counts, and keyboard chords.
+
+
+update to option A
+```
+
+**Refactored into:**
+- `src/index.css`: Replaced legacy Toby pink tokens with Option A Obsidian Precision tokens (Dark: Deep Zinc `#090A0F` `230 25% 5%`, Electric Indigo `#6366F1` `239 84% 67%`; Light: Warm Alabaster Zinc `#F8F9FA` `210 20% 98%`, `#4F46E5` `243 75% 59%`). Added specular border utilities, obsidian shadows (`inset 0 1px 0 0 rgba(255,255,255,0.06)`), and loaded Geist Sans, Geist Mono, and Inter font families.
+- `tailwind.config.ts`: Added `fontFamily.sans` (Geist, Inter) and `fontFamily.mono` (Geist Mono, JetBrains Mono), plus custom `boxShadow` definitions (`obsidian`, `obsidian-hover`, `specular`, `glow-primary`).
+- `src/components/dashboard/helpers.ts`: Decoupled `pink` item color tag from `bg-primary`, setting real `pink-500` for color labels while preserving brand `primary` as Electric Indigo.
+- `src/components/dashboard/DashboardBoard.tsx`: Modernized space icon header, avatar gradient, and primary collection action to Electric Indigo/Violet gradient with obsidian elevation.
+- `src/extension/tab/ExtensionTabApp.tsx`: Modernized workspace badge avatar and profile footer from legacy Toby pink to Obsidian Indigo/Violet styling.
+- `src/extension/components/OpenTabsList.tsx`: Cleaned Toby references in open tabs styling.
+- `index.html`, `app.html`, `popup.html`, `sidepanel.html`, `options.html`: Added Google Fonts preconnect and links for Geist and Inter, updated fallback background to Obsidian Charcoal `#090A0F`.
+- `02-spec/21-app/06-ui-ux/01-design-tokens.md`: Updated brand anchor `--brand-500` to Electric Indigo `239 84% 67%` (`#6366F1`), dark mode semantic tokens, surface elevation ramps, and typography stack.
+- `.ai-memory/memory/index.md`: Updated primary brand token definition from Toby pink to Obsidian Electric Indigo.
+
+
+---
+
+## 2026-10-20 14:35 (UTC+8) — Navigation Consolidation, Floating Tabs Dock & Obsidian Canvas
+
+```
+Navigation Consolidation: Merge the dual left rail (WorkspaceRail + SpaceSidebar) into a unified collapsible obsidian sidebar with a quick-switch workspace popover.
+Open Tabs Dock: Transform the open browser tabs side drawer into a floating bottom staging dock with one-key triage gestures (A to archive, S to save, Cmd+K to search).
+Spatial Canvas / Mindmap Enhancement: Surface the MindmapView.tsx with Obsidian-styled nodes and curved connectors as a signature visual differentiator.
+
+go for this
+```
+
+**Refactored into:**
+- `src/extension/tab/ExtensionTabApp.tsx`: Unified the dual navigation (`WorkspaceRail` + `SpaceSidebar`) into an integrated collapsible obsidian sidebar (`data-testid="extension-sidebar"`). Transformed the open browser tabs drawer into a floating bottom staging dock (`data-testid="docked-open-tabs-panel"`) with keyboard triage shortcuts (`A` to archive / close, `S` to save, `/` / `Cmd+K` to search). Preserved all testing harness contract IDs.
+- `src/web/pages/WebOrganizerFallback.tsx`: Consolidated dual navigation into a single obsidian navigation container with workspace switching and clean collapsible behavior.
+- `src/components/dashboard/MindmapView.tsx`: Redesigned spatial canvas with an architectural obsidian dot grid canvas, luminous bezier connectors with SVG glow filter, and obsidian squircle pill nodes with crisp typography and domain favicons.
+- `src/extension/components/OpenTabsList.tsx`: Upgraded open tabs item styling with obsidian glassmorphic surface depth and one-click triage buttons.
+- Verification: 100% test pass across 20 test files (183 tests), and successful zero-warning production build for both extension and web surfaces.
+
+
+---
+
+## 2026-10-20 15:10 (UTC+8) — Extension Mindmap Discoverability & Direct Access
+
+```
+its not in extension?
+```
+
+**Refactored into:**
+- `src/extension/components/ExtensionHeader.tsx`: Added direct `Mindmap` button with `Network` icon to the extension popup header (`data-testid="open-mindmap-button"`), allowing 1-click launch of the Mindmap from the 440px popup.
+- `src/extension/popup/PopupApp.tsx`: Wired `onOpenMindmap` to launch `openExtensionTab("app.html#mindmap")`.
+- `src/extension/tab/ExtensionTabApp.tsx`:
+  - Added dedicated `Mindmap Canvas` sidebar navigation item (`data-testid="nav-mindmap-button"`) right below `Collections`.
+  - Added deep-linking hash support for `#mindmap` on initial load and runtime `hashchange`.
+- Verification: 19 vitest tests passed across `ExtensionTabApp.test.tsx` and `PopupApp.test.tsx`, full production build succeeded for both extension (`dist/extension`) and web (`dist/web`).
+
+
+---
+
+## 2026-10-20 15:18 (UTC+8) — Option 1: Linear / Raycast Unified Popover Workspace Header
+
+```
+Option 1: Linear / Raycast Unified Popover Header (Recommended)
+
+do it
+```
+
+**Refactored into:**
+- `src/extension/tab/ExtensionTabApp.tsx`: Replaced the cramped horizontal scroll pill strip (`[PE] [Q] [TT] [KL;] [JKL] [+]`) with an interactive Linear / Raycast style `DropdownMenu` header. The active workspace avatar and title now trigger an obsidian popover listing all workspaces with full names, plan tags, active checkmarks, "Create Workspace", and "Edit Workspace", alongside the sidebar collapse toggle.
+- Verification: 11 tests passed in `ExtensionTabApp.test.tsx`, 26 tests passed in `WebOrganizerFallback.test.tsx`, and full zero-error production build succeeded for both extension and web surfaces.
+
+
+---
+
+## 2026-10-20 15:25 (UTC+8) — Floating Vertical Open Tabs Staging Panel on Right
+
+```
+floating is ok, this needs to be vertical and should be appera on the right
+```
+
+**Refactored into:**
+- `src/extension/tab/ExtensionTabApp.tsx`: Transformed the docked open tabs panel into a floating vertical obsidian staging panel on the right side of the screen (`fixed top-3 bottom-3 right-3 z-50 w-[380px] max-w-[calc(100vw-1.5rem)] rounded-2xl border border-white/10 bg-card/95 backdrop-blur-2xl shadow-obsidian shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right-5`).
+- The vertical panel provides natural top-to-bottom tab scrolling, compact quick-action header ("Save Session" + "Save Selected"), one-key triage hints (<kbd>A</kbd> archive, <kbd>S</kbd> save, <kbd>⌘K</kbd> search), and clean dismissal controls.
+- Verification: 11 tests passed in `ExtensionTabApp.test.tsx`, production build clean with 0 errors across extension and web surfaces.
+
+
+---
+
+## 2026-10-20 15:35 (UTC+8) — Session 153 — Sidepanel & Popup Polish, Next Queue Integration & Broad Sweeps
+
+```
+Sidepanel & Popup Obsidian Polish: Align PopupApp.tsx and SidepanelApp.tsx with the new obsidian specular borders and indigo glow badges.
+Next Feature Queue (07-features/17-next-queue.md): Wire the Per-Account global to-do queue singleton collection into the consolidated navigation sidebar.
+Broad Specification Sweeps: Conduct remaining scheduled audits on 12-history-undo/, 16-notifications-updates/, and 22-infrastructure/ per .ai-memory/memory/index.md.
+
+
+do it
+```
+
+**Refactored into:**
+- `src/extension/popup/PopupApp.tsx`: Enhanced container with obsidian border, subtle inner glow, and elevated shadow styling.
+- `src/extension/sidepanel/SidepanelApp.tsx`: Refactored surface tabs into an obsidian segmented control with specular borders, active glow indicators, and glassmorphic elevation.
+- `src/extension/components/SaveCurrentTabCard.tsx`: Applied specular top highlights (`border-t-white/12`), obsidian card depth, and radiant gradient indigo action button styling.
+- `src/extension/components/DestinationPicker.tsx`: Added obsidian surface micro-borders, specular highlights, and clean selector styling.
+- `src/extension/tab/ExtensionTabApp.tsx`: Wired the Per-Account singleton Next Queue into the sidebar (`data-testid="nav-next-queue-button"`) with uncompleted items count badge. Implemented dedicated `activePage === "next"` view with to-do check-off toggles, launch tab actions, active-tab addition, and clear-completed capabilities.
+- `src/types/lmn.ts` & `src/extension/lib/extensionRoutes.ts`: Added `kind?: "collection" | "next" | "session"`, `done?: boolean`, `completedAt?: string`, and `"next"` route support.
+- `02-spec/21-app/22-infrastructure/09-ci-cd.md`: Patched `brand-pink-anchor` to `brand-primary-anchor` with Electric Indigo `#6366F1` (`239 84% 67%`), updated `collection-kind-discriminator` to include `next` queue enum value.
+- `02-spec/21-app/22-infrastructure/00-overview.md`: Synchronized CI/CD sub-checks count to 18.
+- `02-spec/21-app/23-audits/audit-2026-10-20-broad-sweeps-153.md`: Authoritative audit record covering `12-history-undo/`, `16-notifications-updates/`, and `22-infrastructure/` (3 findings patched, 0 regressions).
+- `.ai-memory/memory/index.md`: Updated issue tracker priorities marking sweeps complete.
+
+---
+
+## 2026-10-20 17:28 (UTC+8) — Session 154 — Multi-Surface E2E Smoke Tests, Performance Code-Splitting & Session Bar Polish
+
+```
+Multi-Surface E2E Smoke Tests: Run cross-surface validation between popup tab additions and the Next queue in the extension dashboard.
+Performance & Bundle Profiling: Optimize code-splitting for chunks over 500 kB noted in Vite web build output.
+Session Re-capture Polish: Enhance SaveSessionBar with obsidian card micro-borders and keyboard chord hints.
+
+do these
+```
+
+**Refactored into:**
+- `src/extension/components/SaveSessionBar.tsx`: Enhanced with Obsidian card micro-borders (`border border-white/10 border-t-white/15 bg-card/85 backdrop-blur-xl shadow-obsidian`), radiant indigo gradient accents, and keyboard chord indicators (<kbd>S</kbd> Save Session, <kbd>A</kbd> Close Saved Tabs, <kbd>R</kbd> Restore Session).
+- `vite.config.ts`: Configured web target `manualChunks` partition splitting (`vendor-react`, `vendor-router`, `vendor-radix`, `vendor-query`, `vendor-core`). Main web bundle slashed from 849 kB to 450 kB, eliminating Vite >500 kB chunk warning while keeping extension background service worker cleanly isolated.
+- `src/extension/lib/extensionStore.ts`: Implemented `addItemToNextQueue(tab: BrowserTabSnapshot)` helper for seamless one-click tab staging into the singleton Next Queue collection.
+- `src/extension/components/SaveCurrentTabCard.tsx`: Added `onAddToNext` action with `BookmarkCheck` button and integrated props destructuring.
+- `src/extension/popup/PopupApp.tsx`: Wired `handleAddToNext` action with Sonner toast feedback and reactive extension store updates.
+- `src/extension/tests/crossSurfaceE2E.test.tsx`: Implemented automated multi-surface E2E smoke tests validating the end-to-end journey from popup tab addition to Next queue dashboard navigation, badge counting, and completion triage.
+- Verification: 100% test pass across all 21 test suites (184 tests passed), 0 unhandled rejections, 0 build errors, and zero chunk warnings.
+
+---
+
+## 2026-10-20 17:35 (UTC+8) — Session 155 — Empty Space Add Item Button Removal
+
+```
+remove add item buttion when collection is emtpy
+```
+
+**Refactored into:**
+- `src/components/dashboard/DashboardBoard.tsx`: Removed the redundant and confusing "Add item" button from `EmptyDashboard` ("Start this Space") when there are no collections in the space. Refined prompt copy to focus on initial collection creation and demo data restoration.
+- `src/components/dashboard/DashboardBoard.test.tsx`: Added unit test confirming that an empty space renders "Start this Space" and "+ Create collection" without the "Add item" button.
+- Verification: 100% test pass (8/8 tests in `DashboardBoard.test.tsx`, 26/26 in `WebOrganizerFallback.test.tsx`) and clean production build with 0 errors across extension and web.
+
+---
+
+## 2026-10-20 17:39 (UTC+8) — Session 156 — Space Header New Collection Button Removal
+
+```
+remove the + new collection buttion
+```
+
+**Refactored into:**
+- `src/components/dashboard/DashboardBoard.tsx`: Removed the redundant "+ New Collection" primary CTA button from the space header right action group alongside the member avatar.
+- Verification: 100% test pass (8/8 tests in `DashboardBoard.test.tsx`, 26/26 in `WebOrganizerFallback.test.tsx`), 0 build errors.
+
+---
+
+## 2026-10-20 18:19 (UTC+8) — Session 157 — Standalone Web App Execution & Routing Guidance
+
+```
+how to run the web separtaely?
+```
+
+**Refactored into:**
+- `package.json`: Added `"preview:web": "vite preview --outDir dist/web"` script for previewing standalone web production build.
+- Clarified routes and development execution model (`/web/app` standalone dashboard, `/web` portal/landing, `npm run build:web`).
+
+---
+
+## 2026-10-20 18:22 (UTC+8) — Session 158 — End-to-End Test & Execution Command Playbook
+
+```
+yes give all the commnads
+
+i need to test a to z
+```
+
+**Refactored into:**
+- Verified end-to-end full test suite: Frontend Vitest (21 suites, 184 tests passed) + Backend Vitest (19 suites, 182 tests passed) = 366 total automated tests passed.
+- Formulated complete A-to-Z execution playbook covering installation, unit/integration testing, web standalone routing, extension Chrome installation, and backend services.
+
+---
+
+## 2026-10-20 19:02 (UTC+8) — Session 159 — Public Website Palette Verification & Obsidian Harmonization
+
+```
+did we changed the UI of the public webstie or it has colors like toby???
+```
+
+**Refactored into:**
+- `src/web/pages/LandingPage.tsx`: Audited the public website against Toby colors. Removed the last remnant fuchsia radial glow (`rgba(217,70,239,...)`) and headline text gradient (`via-fuchsia-400`), aligning them directly with the Obsidian Electric Indigo (`rgba(99,102,241,0.18)`) and Bioluminescent Cyan (`via-indigo-400 to-cyan-400`) palette.
+- Certified global public website theme inherits the deep charcoal obsidian base (`#090A0F`), dark translucent cards, and electric indigo highlights.
+- Verification: 8/8 tests in `WebApp.test.tsx` passed.
+
+---
+
+## 2026-10-20 19:12 (UTC+8) — Session 160 — Full Tri-Surface (Website, Extension, Backend) Testing Guide
+
+```
+how to fully test it
+from website, extension and backend
+```
+
+**Refactored into:**
+- Authored comprehensive tri-surface testing protocol connecting the Fastify backend API (`:3000/v1`), the Vite standalone website & web organizer (`:5173/web` & `/web/app`), and the Chrome Manifest V3 extension (`dist/extension`).
+- Mapped out end-to-end user verification journeys: live backend health checks, website interactive console, popup tab triage, floating staging dock, and automated Vitest suites.
+
+---
+
+## 2026-10-20 19:44 (UTC+8) — Session 161 — Web Dashboard Dummy Data Purge & Clean Workspace Default
+
+```
+http://localhost:5173/web/app
+
+has dummy data 
+remove all dummy data
+```
+
+**Refactored into:**
+- `src/lib/localWorkspaceStore.ts`: Updated `loadWorkspaceState` to use `cleanWorkspace` (1 Personal Engine workspace, 1 My Collections space, 0 dummy collections, 0 dummy items) by default in browser environments. Added automatic detection and purging of legacy mock collections (`collection-design`, `collection-productivity`, `collection-growth`) from `localStorage`.
+- `src/hooks/useWorkspaceDashboard.ts`: Updated workspace and space fallbacks and `handleResetData` to use `cleanWorkspace` in browser execution.
+- Verification: 26/26 tests in `WebOrganizerFallback.test.tsx` and 4/4 tests in `localWorkspaceStore.test.ts` passed cleanly.
+
+---
+
+## 2026-10-21 21:05 (UTC+8) — Session 163 — Mindmap View Drag & Hover Glitch Remediation
+
+```
+mindmap is not stable, it glitches when when hove or drag
+```
+
+**Refactored into:**
+- `src/components/dashboard/MindmapView.tsx`: Eliminated CSS `transition-transform`, `hover:scale-105`, and `transition-all duration-75` from SVG nodes and edges, eliminating stuttering and hit-testing boundary oscillations. Switched hover feedback to static stroke color & brightness styling. Decoupled layout initialization from parent re-renders via stable refs. Added pointer tracking with global window fallback and > 3px drag-vs-click disambiguation. Added non-passive trackpad pan and pinch/ctrl-wheel zoom.
+- `src/components/dashboard/DashboardBoard.tsx`: Connected `onItemClick` in `MindmapView` to open links in a new browser tab.
+- `src/components/dashboard/MindmapView.test.tsx`: Created 6 new unit tests verifying auto-layout computation, canvas controls, drag suppression, and JSON export.
+- Verification: 25 frontend suites (201/201 tests passed) and 20 backend suites (188/188 tests passed).
+
+---
+
+## 2026-10-21 21:21 (UTC+8) — Session 164 — Empty Collection Guidance on Adding Items
+
+```
+as item cant be add if collenction is zero, we need tell user taht where there is an option of adding item
+```
+
+**Refactored into:**
+- `src/components/dashboard/DashboardBoard.tsx`: Updated `EmptyDashboard` ("Start this Space") with a dedicated, informative guide explaining why items cannot be added yet (items must belong to a collection and group) and detailing exactly where the option of adding items is located once a collection exists (the `+` button in each collection card header, the `+` button in each group header, via the Chrome extension popup, or via `Ctrl+K`).
+- `src/components/dashboard/ManageDialogs.tsx`: Updated `ItemDialog` to display an amber alert banner when `collections.length === 0` in create mode, guiding the user to create a collection first before adding items.
+- `src/components/dashboard/CommandPalette.tsx`: Added `(Requires collection)` hint when collections are 0 and redirecting to collection creation with an informative toast notice.
+- `src/components/dashboard/TopBar.tsx`: Added descriptive title tooltip on the `+ Collection` button.
+- `src/components/dashboard/DashboardBoard.test.tsx`: Verified empty dashboard guidance assertions (all 8 tests passing).
+
+---
+
+## 2026-10-21 22:30 (UTC+8) — Session 165 — Next Queue Realtime Sync (`07-features/17-next-queue.md`)
+
+```
+Next Queue Realtime Sync (07-features/17-next-queue.md): Connect background extension tab updates with the singleton next collection queue.
+real time sync with what?
+then go for sync
+```
+
+**Refactored into:**
+- `backend/src/services/nextQueueService.ts`: Built singleton collection (`kind = 'next'`) service with idempotent add (no-op on duplicate open items, unarchive done items), fractional ordering, hard cap enforcement (≤50 open items), and SSE event broadcasting over `account:{account_id}:next`.
+- `backend/src/routes/nextQueue.ts`: Added `/v1/next` endpoints (`GET /v1/next`, `POST /v1/next/items`, `PATCH /v1/next/items/:id`, `DELETE /v1/next/items/:id`, `POST /v1/next/clear-completed`, `GET /v1/next/events`).
+- `backend/src/routes/nextQueue.test.ts`: Added 8 comprehensive integration tests (8/8 passing).
+- `src/lib/workspaceApiClient.ts`: Added Next Queue API client methods with Server-Sent Events listener.
+- `src/extension/background/serviceWorker.ts`: Integrated context menu `"Add to Next"` and runtime message listener.
+- `src/components/dashboard/NextQueueView.tsx`: Built obsidian-styled Next Queue view with realtime SSE open count badges and complete test coverage (`NextQueueView.test.tsx`).
+
+---
+
+## 2026-10-21 22:42 (UTC+8) — Session 166 — Mindmap Empty "Inbox" Clutter Removal
+
+```
+what is inbox in mindmap?
+i think we dont need it
+```
+
+**Refactored into:**
+- `src/components/dashboard/MindmapView.tsx`: Updated `computeAutoLayout` to suppress default single empty "Inbox" groups from rendering as floating isolated nodes when items belong to the collection itself.
+- `src/components/dashboard/DashboardBoard.tsx`: Propagated `groupId` to items when multi-group collections exist so items properly connect to real group nodes.
+- `src/components/dashboard/MindmapView.test.tsx`: Verified 7/7 tests passing with zero empty Inbox node regressions.
+
+---
+
+## 2026-10-21 22:58 (UTC+8) — Session 167 — View Mode Selection Persistence Across Browser Sessions & Reload
+
+```
+we need to save whci view user for ex. grid or mindmap selected so that it can survie when opening brwoser or refresh
+```
+
+**Refactored into:**
+- `src/types/lmn.ts`: Added `defaultViewMode?: ViewMode;` to `ExtensionPreferences`.
+- `src/extension/lib/extensionStore.ts`: Added `EXTENSION_VIEW_MODE_KEY = "lmn_selected_view_mode_v1"`, and implemented `loadSelectedViewMode()` and `saveSelectedViewMode(mode: ViewMode)` supporting `chrome.storage.local`, `localStorage`, `ExtensionPreferences`, and authenticated backend sync (`PATCH /v1/account/preferences`).
+- `src/lib/localWorkspaceStore.ts`: Updated `loadWorkspaceState()` and `saveWorkspaceState()` to keep `VIEW_MODE_STORAGE_KEY` continuously synchronized in `localStorage`.
+- `src/extension/tab/ExtensionTabApp.tsx`: Initialized `viewMode` from persisted storage, implemented `handleViewModeChange` to update React state, URL hash, `localStorage`, `chrome.storage.local`, and backend preferences; wired to all view mode buttons and sidebar navigation (`nav-collections-button`, `nav-mindmap-button`).
+- `src/hooks/useWorkspaceDashboard.ts`: Synchronized `viewMode` toggles in Web fallback to storage and backend account preferences.
+- `src/extension/lib/browserApi.ts`: Hardened `getStorage()` to safely handle both JSON-encoded strings and raw strings in `localStorage`.
+- `src/extension/tab/ExtensionTabApp.test.tsx`: Added 3 unit tests verifying view mode persistence across unmounts/page reload, restoring `mindmap` from storage, and toggling via sidebar navigation (all 14 tests passing).
+
+---
+
+## 2026-10-21 23:08 (UTC+8) — Session 168 — Google Sign-In & Account Sync Fix for Web Dashboard
+
+```
+sign not working
+```
+
+**Refactored into:**
+- `src/lib/authStore.ts`: Implemented `launchGoogleWebAuth(clientId: string)` using Google Identity Services (GIS) token client for standard web browser environments, resolving previous omission where only `chrome.identity.launchWebAuthFlow` was attempted.
+- `src/components/auth/AuthDialog.tsx`: Removed restrictive mutual exclusion that previously hid the Google email connection form when `VITE_GOOGLE_CLIENT_ID` was set. Rendered both the 1-click native Google OAuth button and the Google email address input with 1-click connect, ensuring users on web and extension can sign in directly with their Google email address without getting trapped in unhandled OAuth origin errors.
+- `src/components/auth/AuthDialog.test.tsx`: Added 2 unit tests verifying email form submission to `signInWithGoogle` and error handling banner retention with accessible inputs (all 5 tests passing).
+- Verification: 41/41 web tests passing (`src/web/`), 5/5 AuthDialog tests passing, and `npm run build` completed with 0 errors.
+
+
+
+
+
+
+
+
+
+
+
+

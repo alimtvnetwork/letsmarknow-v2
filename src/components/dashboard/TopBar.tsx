@@ -65,7 +65,7 @@ export function TopBar({
 
       <div className="flex items-center gap-2">
         {children}
-        <Button size="sm" onClick={onCreateCollection}>
+        <Button size="sm" onClick={onCreateCollection} title="Create collection (required before adding items)">
           <Plus className="h-4 w-4" />
           Collection
         </Button>

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
   ExternalLink,
   FolderPlus,
@@ -27,6 +28,7 @@ import {
 } from "../lib/browserApi";
 import {
   loadPreferences,
+  addItemToNextQueue,
   loadWorkspaceData,
   quickCreateCollection,
   quickCreateGroup,
@@ -39,6 +41,7 @@ import { DestinationPicker } from "../components/DestinationPicker";
 import { ExtensionHeader } from "../components/ExtensionHeader";
 import { SaveAllTabsCard } from "../components/SaveAllTabsCard";
 import { SaveCurrentTabCard } from "../components/SaveCurrentTabCard";
+import { AuthDialog } from "@/components/auth/AuthDialog";
 
 export function PopupApp() {
   const [data, setData] = useState<AppData | null>(null);
@@ -66,6 +69,7 @@ export function PopupApp() {
 
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
 
   // Ensure dark mode class is applied
   useEffect(() => {
@@ -190,6 +194,17 @@ export function PopupApp() {
   }, [data, activeTab, selectedCollectionId]);
 
   // Save current active tab
+  const handleAddToNext = async () => {
+    if (!activeTab || !activeTab.url || !isSaveableUrl(activeTab.url)) return;
+    try {
+      const updated = await addItemToNextQueue(activeTab);
+      setData(updated);
+      toast.success("Added to Next queue");
+    } catch {
+      toast.error("Failed to add to Next queue");
+    }
+  };
+
   const handleSaveCurrentTab = async () => {
     if (!activeTab || !selectedCollectionId || !selectedGroupId) return;
     setSaveCurrentStatus("loading");
@@ -366,7 +381,7 @@ export function PopupApp() {
   return (
     <div
       data-testid="extension-popup-app"
-      className="flex flex-col w-[440px] min-h-[580px] max-w-[440px] bg-background text-foreground antialiased selection:bg-primary/20 mx-auto overflow-hidden"
+      className="flex flex-col w-[440px] min-h-[580px] max-w-[440px] bg-background text-foreground antialiased selection:bg-primary/20 mx-auto overflow-hidden border border-white/10 rounded-2xl shadow-obsidian shadow-2xl"
     >
       {/* Header */}
       <ExtensionHeader
@@ -374,7 +389,9 @@ export function PopupApp() {
         activeOrganizationId={selectedOrgId}
         onSelectOrganization={handleSelectOrg}
         onOpenFullTab={() => openExtensionTab()}
+        onOpenMindmap={() => openExtensionTab("app.html#mindmap")}
         onOpenSettings={() => openExtensionTab("settings")}
+        onOpenAuth={() => setIsAuthDialogOpen(true)}
       />
 
       {/* Main Body */}
@@ -408,6 +425,7 @@ export function PopupApp() {
           errorMessage={saveCurrentError}
           alreadySaved={isAlreadySaved}
           onSave={handleSaveCurrentTab}
+          onAddToNext={handleAddToNext}
         />
 
         {/* Destination Picker */}
@@ -563,6 +581,12 @@ export function PopupApp() {
           <span>Settings</span>
         </button>
       </footer>
+
+      {/* In-Extension Auth & Cloud Sync Modal */}
+      <AuthDialog
+        isOpen={isAuthDialogOpen}
+        onOpenChange={setIsAuthDialogOpen}
+      />
     </div>
   );
 }

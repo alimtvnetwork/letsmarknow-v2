@@ -110,7 +110,8 @@ export class OrganizationService {
     const orgId = uuidv7();
     const spaceId = uuidv7();
     const slugBase = cleanName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
-    const slug = `${slugBase || "org"}-${orgId.slice(0, 6)}`;
+    const randomSuffix = orgId.replace(/-/g, "").slice(-8);
+    const slug = `${slugBase || "org"}-${randomSuffix}`;
     const now = new Date();
 
     if (isDb) {

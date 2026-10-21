@@ -62,9 +62,6 @@ const App = () => (
           <Route path="/web/invite/:inviteId" element={<InviteAcceptancePage />} />
           <Route path="/web/help" element={<HelpPage />} />
 
-          {/* Web Organizer Fallback Single Route */}
-          <Route path="/web/app" element={<WebOrganizerFallback />} />
-
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />
         </Routes>

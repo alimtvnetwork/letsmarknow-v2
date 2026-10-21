@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Bookmark,
   Check,
   ChevronDown,
   History,
@@ -44,30 +45,30 @@ export function WorkspaceRail({
   return (
     <aside
       className={cn(
-        "flex w-[72px] shrink-0 flex-col items-center border-r border-border bg-sidebar py-4",
+        "flex w-14 shrink-0 flex-col items-center border-r border-border/40 bg-card/30 py-3.5",
         className
       )}
     >
-      <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20">
+      <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground shadow-md shadow-primary/25 border border-primary/40">
         L
       </div>
-      <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col items-center gap-2.5">
         {organizations.map((organization) => (
           <button
             key={organization.id}
             type="button"
             onClick={() => onSelect(organization.id)}
             className={cn(
-              "relative flex h-11 w-11 items-center justify-center rounded-lg border text-sm font-semibold transition",
+              "relative flex h-9 w-9 items-center justify-center rounded-lg border text-xs font-semibold transition-all",
               activeOrgId === organization.id
-                ? "border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                : "border-sidebar-border bg-sidebar-accent text-sidebar-foreground hover:border-primary/60"
+                ? "border-primary bg-primary text-primary-foreground shadow-sm shadow-primary/30"
+                : "border-border/60 bg-card/50 text-muted-foreground hover:border-primary/50 hover:text-foreground"
             )}
             title={organization.name}
           >
             {organization.initials}
             {activeOrgId === organization.id && (
-              <span className="absolute -right-[15px] h-7 w-1 rounded-full bg-primary" />
+              <span className="absolute -right-[13px] h-5 w-1 rounded-l-full bg-primary" />
             )}
           </button>
         ))}
@@ -75,11 +76,11 @@ export function WorkspaceRail({
         <Button
           variant="ghost"
           size="icon"
-          className="h-11 w-11 rounded-lg border border-dashed border-sidebar-border text-muted-foreground transition hover:border-primary/60 hover:bg-sidebar-accent hover:text-foreground"
+          className="h-9 w-9 rounded-lg border border-dashed border-border/80 text-muted-foreground transition hover:border-primary/60 hover:bg-card hover:text-foreground"
           title="Add workspace"
           onClick={onCreateWorkspace}
         >
-          <Plus className="h-5 w-5" />
+          <Plus className="h-4 w-4" />
         </Button>
       </div>
       <div className="flex-1" />
@@ -94,6 +95,7 @@ interface SpaceSidebarProps {
   spaces: Space[];
   activeSpaceId: string;
   deletedCount: number;
+  nextCount?: number;
   shareSettings?: ShareSettings[];
   onSelectSpace: (spaceId: string) => void;
   onSelectOrganization?: (organizationId: string) => void;
@@ -116,6 +118,7 @@ export function SpaceSidebar({
   spaces,
   activeSpaceId,
   deletedCount,
+  nextCount,
   shareSettings,
   onSelectSpace,
   onSelectOrganization,
@@ -282,6 +285,13 @@ export function SpaceSidebar({
           onClick={() => handleNav("/web/app")}
         />
         <SidebarButton
+          icon={Bookmark}
+          label="Next"
+          count={nextCount}
+          isActive={activePage === "next"}
+          onClick={() => handleNav("/web/app?view=next")}
+        />
+        <SidebarButton
           icon={Trash2}
           label="Trash"
           count={deletedCount}
@@ -420,6 +430,7 @@ export function MobileSidebarDrawer({
   spaces,
   activeSpaceId,
   deletedCount,
+  nextCount,
   activePage,
   shareSettings,
   onSelectOrganization,
@@ -440,6 +451,7 @@ export function MobileSidebarDrawer({
   spaces: Space[];
   activeSpaceId: string;
   deletedCount: number;
+  nextCount?: number;
   activePage: AppPage;
   shareSettings?: ShareSettings[];
   onSelectOrganization: (id: string) => void;
@@ -479,6 +491,7 @@ export function MobileSidebarDrawer({
           spaces={spaces}
           activeSpaceId={activeSpaceId}
           deletedCount={deletedCount}
+          nextCount={nextCount}
           shareSettings={shareSettings}
           onSelectSpace={(id) => {
             onSelectSpace(id);

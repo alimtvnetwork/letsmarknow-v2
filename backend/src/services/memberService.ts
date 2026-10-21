@@ -1,4 +1,4 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { AppError } from "../errors/AppError.js";
 import { getDb, checkDbConnection } from "../db/client.js";
 import * as schema from "../db/schema/index.js";
@@ -34,29 +34,58 @@ export class MemberService {
           invitedBy: schema.orgMembers.invitedBy,
           createdAt: schema.orgMembers.createdAt,
           updatedAt: schema.orgMembers.updatedAt,
-          email: schema.accounts.email,
-          name: schema.accounts.displayName,
-          avatarUrl: schema.accounts.avatarUrl,
         })
         .from(schema.orgMembers)
-        .leftJoin(schema.accounts, eq(schema.orgMembers.accountId, schema.accounts.id))
         .where(eq(schema.orgMembers.organizationId, orgId));
 
-      const activeMembers = memberRows.map((m) => ({
-        id: m.memberId,
-        organization_id: m.orgId,
-        account_id: m.accountId,
-        email: m.email || "unknown@letsmarknow.com",
-        name: m.name || m.email?.split("@")[0] || "Member",
-        avatar_url: m.avatarUrl || null,
-        role: m.role,
-        status: m.status,
-        invited_by: m.invitedBy || null,
-        joined_at: m.createdAt.toISOString(),
-        last_active_at: m.updatedAt.toISOString(),
-        created_at: m.createdAt.toISOString(),
-        updated_at: m.updatedAt.toISOString(),
-      }));
+      // Cross-domain fetch (Split-DB application-level join)
+      const accountIds = memberRows
+        .map((m: any) => m.accountId)
+        .filter((id: any): id is string => Boolean(id));
+
+      const accountMap = new Map<
+        string,
+        { email: string; name?: string | null; avatarUrl?: string | null }
+      >();
+
+      if (accountIds.length > 0) {
+        const accountsList = await db
+          .select({
+            id: schema.accounts.id,
+            email: schema.accounts.email,
+            displayName: schema.accounts.displayName,
+            avatarUrl: schema.accounts.avatarUrl,
+          })
+          .from(schema.accounts)
+          .where(inArray(schema.accounts.id, accountIds));
+
+        for (const a of accountsList) {
+          accountMap.set(a.id, {
+            email: a.email,
+            name: a.displayName,
+            avatarUrl: a.avatarUrl,
+          });
+        }
+      }
+
+      const activeMembers = memberRows.map((m: any) => {
+        const acc = m.accountId ? accountMap.get(m.accountId) : undefined;
+        return {
+          id: m.memberId,
+          organization_id: m.orgId,
+          account_id: m.accountId,
+          email: acc?.email || "unknown@letsmarknow.com",
+          name: acc?.name || acc?.email?.split("@")[0] || "Member",
+          avatar_url: acc?.avatarUrl || null,
+          role: m.role,
+          status: m.status,
+          invited_by: m.invitedBy || null,
+          joined_at: m.createdAt.toISOString(),
+          last_active_at: m.updatedAt.toISOString(),
+          created_at: m.createdAt.toISOString(),
+          updated_at: m.updatedAt.toISOString(),
+        };
+      });
 
       if (!includePending) return activeMembers;
 
@@ -161,26 +190,33 @@ export class MemberService {
 
       if (isDb) {
         const db = getDb();
-        // Check if already member
-        const existingMembers = await db
-          .select({ memberId: schema.orgMembers.id })
-          .from(schema.orgMembers)
-          .innerJoin(schema.accounts, eq(schema.orgMembers.accountId, schema.accounts.id))
-          .where(
-            and(
-              eq(schema.orgMembers.organizationId, orgId),
-              eq(schema.accounts.email, cleanEmail)
-            )
-          )
+        // Check if already member via Split-DB decoupled check
+        const matchingAccounts = await db
+          .select({ id: schema.accounts.id })
+          .from(schema.accounts)
+          .where(eq(schema.accounts.email, cleanEmail))
           .limit(1);
 
-        if (existingMembers.length > 0) {
-          results.push({
-            index,
-            status: 409,
-            error: { code: "CONFLICT", details: { reason: "already_member" } },
-          });
-          continue;
+        if (matchingAccounts.length > 0) {
+          const existingMembers = await db
+            .select({ memberId: schema.orgMembers.id })
+            .from(schema.orgMembers)
+            .where(
+              and(
+                eq(schema.orgMembers.organizationId, orgId),
+                eq(schema.orgMembers.accountId, matchingAccounts[0].id)
+              )
+            )
+            .limit(1);
+
+          if (existingMembers.length > 0) {
+            results.push({
+              index,
+              status: 409,
+              error: { code: "CONFLICT", details: { reason: "already_member" } },
+            });
+            continue;
+          }
         }
 
         await db.insert(schema.orgInvites).values({

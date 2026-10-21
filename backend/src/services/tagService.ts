@@ -1,4 +1,4 @@
-import { eq, and, ilike, desc, asc } from "drizzle-orm";
+import { eq, and, like, desc, asc } from "drizzle-orm";
 import { AppError } from "../errors/AppError.js";
 import { getDb, checkDbConnection } from "../db/client.js";
 import * as schema from "../db/schema/index.js";
@@ -42,7 +42,7 @@ export class TagService {
       const conditions = [eq(schema.tags.organizationId, orgId)];
 
       if (options.q) {
-        conditions.push(ilike(schema.tags.name, `%${options.q.trim()}%`));
+        conditions.push(like(schema.tags.name, `%${options.q.trim()}%`));
       }
 
       let orderClause = asc(schema.tags.name);
@@ -132,7 +132,7 @@ export class TagService {
         .where(
           and(
             eq(schema.tags.organizationId, orgId),
-            ilike(schema.tags.name, cleanName)
+            like(schema.tags.name, cleanName)
           )
         )
         .limit(1);
@@ -153,6 +153,18 @@ export class TagService {
         name: cleanName,
         color: input.color || "purple",
         createdBy: accountId,
+      });
+
+      const now = new Date();
+      memRepo.tags.push({
+        id: tagId,
+        organizationId: orgId,
+        name: cleanName,
+        color: input.color || "purple",
+        usageCountCache: 0,
+        createdBy: accountId,
+        createdAt: now,
+        updatedAt: now,
       });
 
       return this.getTag(orgId, tagId);
@@ -249,7 +261,7 @@ export class TagService {
           .where(
             and(
               eq(schema.tags.organizationId, orgId),
-              ilike(schema.tags.name, cleanName)
+              like(schema.tags.name, cleanName)
             )
           )
           .limit(1);

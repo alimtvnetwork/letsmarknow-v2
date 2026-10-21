@@ -26,6 +26,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import type { Collection, Space } from "@/types/lmn";
+import { toast } from "sonner";
 import { Favicon } from "./Favicon";
 import { searchQuick, type QuickSearchResultItem } from "@/lib/workspaceApiClient";
 
@@ -143,9 +144,21 @@ export function CommandPalette({
             <FolderPlus className="mr-2 h-4 w-4" />
             Create collection
           </CommandItem>
-          <CommandItem onSelect={() => run(onCreateItem)}>
+          <CommandItem
+            onSelect={() => {
+              if (collections.length === 0) {
+                toast.info("Please create a collection first before adding items.");
+                run(onCreateCollection);
+              } else {
+                run(onCreateItem);
+              }
+            }}
+          >
             <Link2 className="mr-2 h-4 w-4" />
-            Add item
+            <span>Add item</span>
+            {collections.length === 0 && (
+              <span className="ml-auto text-[10px] text-muted-foreground">(Requires collection)</span>
+            )}
           </CommandItem>
           <CommandItem onSelect={() => run(onCreateSpace)}>
             <Layers className="mr-2 h-4 w-4" />

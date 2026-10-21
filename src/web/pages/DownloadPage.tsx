@@ -149,8 +149,7 @@ export default function DownloadPage() {
       {/* Footer */}
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
         <Link to="/web" className="hover:text-foreground">Return to Home</Link> &bull;{" "}
-        <Link to="/web/help" className="hover:text-foreground">Help & Support</Link> &bull;{" "}
-        <Link to="/web/app" className="hover:text-foreground">Fallback Web Dashboard</Link>
+        <Link to="/web/help" className="hover:text-foreground">Help & Support</Link>
       </footer>
     </div>
   );

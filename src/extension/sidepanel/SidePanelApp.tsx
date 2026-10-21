@@ -26,6 +26,7 @@ import type {
   Space,
 } from "@/types/lmn";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import {
   getActiveTab,
@@ -326,45 +327,50 @@ export function SidePanelApp() {
         </div>
       </header>
 
-      {/* Surface Navigation Tabs */}
-      <nav className="flex border-b border-border bg-muted/20 px-2 pt-1.5 shrink-0 gap-1">
-        <button
-          type="button"
-          onClick={() => setPanelTab("capture")}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-t-md transition-colors border-b-2 ${
-            panelTab === "capture"
-              ? "border-primary text-foreground bg-card font-semibold"
-              : "border-transparent text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <Bookmark className="h-3.5 w-3.5" />
-          Capture
-        </button>
-        <button
-          type="button"
-          onClick={() => setPanelTab("tabs")}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-t-md transition-colors border-b-2 ${
-            panelTab === "tabs"
-              ? "border-primary text-foreground bg-card font-semibold"
-              : "border-transparent text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <Layers className="h-3.5 w-3.5" />
-          Open Tabs ({windowTabs.length})
-        </button>
-        <button
-          type="button"
-          onClick={() => setPanelTab("collections")}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-t-md transition-colors border-b-2 ${
-            panelTab === "collections"
-              ? "border-primary text-foreground bg-card font-semibold"
-              : "border-transparent text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <Folder className="h-3.5 w-3.5" />
-          Collections
-        </button>
-      </nav>
+      {/* Surface Navigation Tabs - Obsidian Segmented Control */}
+      <div className="px-3 pt-2 pb-1 shrink-0">
+        <nav className="flex rounded-xl border border-border/80 border-t-white/12 bg-card/60 p-1 shadow-2xs gap-1">
+          <button
+            type="button"
+            onClick={() => setPanelTab("capture")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs rounded-lg transition-all",
+              panelTab === "capture"
+                ? "bg-card text-foreground font-semibold shadow-obsidian border border-border/70"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/40 font-medium"
+            )}
+          >
+            <Bookmark className="h-3.5 w-3.5 text-primary" />
+            <span>Capture</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPanelTab("tabs")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs rounded-lg transition-all",
+              panelTab === "tabs"
+                ? "bg-card text-foreground font-semibold shadow-obsidian border border-border/70"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/40 font-medium"
+            )}
+          >
+            <Layers className="h-3.5 w-3.5 text-sky-400" />
+            <span>Tabs ({windowTabs.length})</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPanelTab("collections")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs rounded-lg transition-all",
+              panelTab === "collections"
+                ? "bg-card text-foreground font-semibold shadow-obsidian border border-border/70"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/40 font-medium"
+            )}
+          >
+            <Folder className="h-3.5 w-3.5 text-amber-400" />
+            <span>Collections</span>
+          </button>
+        </nav>
+      </div>
 
       {/* Body Area */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">

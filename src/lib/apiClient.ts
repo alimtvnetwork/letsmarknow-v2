@@ -89,6 +89,34 @@ class ApiClient {
       credentials: "include", // Send and receive HTTP-only cookies
     });
 
+    if (response.status === 401 && !endpoint.includes("/auth/")) {
+      // Attempt token refresh via HTTP-only cookie
+      try {
+        const refreshRes = await fetch(`${this.baseUrl}/auth/token`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({}),
+        });
+
+        if (refreshRes.ok) {
+          const refreshData = await refreshRes.json();
+          const newToken = refreshData?.data?.access_token;
+          if (newToken) {
+            this.setAccessToken(newToken);
+            headers.set("Authorization", `Bearer ${newToken}`);
+            const retryRes = await fetch(url, { ...options, headers, credentials: "include" });
+            if (retryRes.ok) {
+              if (retryRes.status === 204) return {} as T;
+              return retryRes.json() as Promise<T>;
+            }
+          }
+        }
+      } catch {
+        // Refresh failed, fall through to throw ApiError
+      }
+    }
+
     if (!response.ok) {
       let errorData: { error?: ApiErrorPayload } = {};
       try {

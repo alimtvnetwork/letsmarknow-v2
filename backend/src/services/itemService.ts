@@ -1,4 +1,4 @@
-import { eq, and, isNull, ilike, or } from "drizzle-orm";
+import { eq, and, isNull, like, or } from "drizzle-orm";
 import { AppError } from "../errors/AppError.js";
 import { getDb, checkDbConnection } from "../db/client.js";
 import * as schema from "../db/schema/index.js";
@@ -107,7 +107,7 @@ export class ItemService {
 
       if (options.q) {
         const query = `%${options.q.trim()}%`;
-        conditions.push(or(ilike(schema.items.title, query), ilike(schema.items.url, query))!);
+        conditions.push(or(like(schema.items.title, query), like(schema.items.url, query))!);
       }
 
       const rows = await db
@@ -121,7 +121,7 @@ export class ItemService {
         const foundTags = await db
           .select({ id: schema.tags.id })
           .from(schema.tags)
-          .where(and(eq(schema.tags.organizationId, orgId), ilike(schema.tags.name, options.tag.trim())))
+          .where(and(eq(schema.tags.organizationId, orgId), like(schema.tags.name, options.tag.trim())))
           .limit(1);
         if (foundTags.length > 0) targetTagId = foundTags[0].id;
         else return [];
@@ -303,25 +303,25 @@ export class ItemService {
         source: input.source || "manual",
         createdBy: accountId,
       });
-    } else {
-      memRepo.items.push({
-        id: itemId,
-        organizationId: orgId,
-        spaceId: targetSpaceId,
-        collectionId: targetCollectionId!,
-        groupId: targetGroupId,
-        title,
-        url: cleanUrl,
-        description: input.description,
-        faviconUrl,
-        color: input.color || "none",
-        position: (memRepo.items.filter((it) => it.collectionId === targetCollectionId).length + 1) * 1024,
-        source: input.source || "manual",
-        createdBy: accountId,
-        createdAt: now,
-        updatedAt: now,
-      });
     }
+
+    memRepo.items.push({
+      id: itemId,
+      organizationId: orgId,
+      spaceId: targetSpaceId,
+      collectionId: targetCollectionId!,
+      groupId: targetGroupId,
+      title,
+      url: cleanUrl,
+      description: input.description,
+      faviconUrl,
+      color: input.color || "none",
+      position: (memRepo.items.filter((it) => it.collectionId === targetCollectionId).length + 1) * 1024,
+      source: input.source || "manual",
+      createdBy: accountId,
+      createdAt: now,
+      updatedAt: now,
+    });
 
     await historyService.recordEvent({
       orgId,

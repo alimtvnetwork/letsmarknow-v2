@@ -12,9 +12,14 @@ const envSchema = z.object({
     .default("http://localhost:5173,http://localhost:3000")
     .transform((val) => val.split(",").map((s) => s.trim())),
   API_PREFIX: z.string().default("/v1"),
+  DB_DRIVER: z.enum(["sqlite", "postgres"]).default("sqlite"),
   DATABASE_URL: z
     .string()
-    .default("postgresql://postgres:postgres@localhost:5432/letsmarknow"),
+    .default(
+      process.env.NODE_ENV === "test"
+        ? "file::memory:?cache=shared"
+        : "file:./data/letsmarknow.db"
+    ),
   JWT_SECRET: z.string().default("dev_jwt_access_secret_32_chars_long_minimum"),
   COOKIE_SECRET: z.string().default("dev_cookie_signing_secret_32_chars_long"),
 });

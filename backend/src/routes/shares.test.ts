@@ -458,5 +458,49 @@ describe("Shares & Public Viewer Endpoints (Step 11)", () => {
       expect(res.statusCode).toBe(403);
       expect(res.json().error.code).toBe("FEATURE_NOT_AVAILABLE");
     });
+    it("publishes collection and items in 1-step from extension via /shares/publish", async () => {
+      const pubSlug = `pub-ext-${Date.now()}`;
+      const pubRes = await app.inject({
+        method: "POST",
+        url: "/v1/shares/publish",
+        headers: { authorization: `Bearer ${token}`, "x-organization-id": orgId },
+        payload: {
+          name: "Published From Extension",
+          description: "Bookmarks direct from Chrome",
+          slug: pubSlug,
+          mode: "public",
+          groups: [
+            {
+              name: "Tools",
+              items: [
+                {
+                  title: "GitHub",
+                  url: "https://github.com",
+                  description: "Code collaboration",
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      expect(pubRes.statusCode).toBe(201);
+      const data = pubRes.json().data;
+      expect(data.slug).toBe(pubSlug);
+      expect(data.target_type).toBe("collection");
+
+      // Verify unauthenticated public viewer can immediately access published contents
+      const viewerRes = await app.inject({
+        method: "GET",
+        url: `/v1/public/shares/${pubSlug}/contents`,
+      });
+
+      expect(viewerRes.statusCode).toBe(200);
+      const contents = viewerRes.json().data;
+      expect(contents.target.name).toBe("Published From Extension");
+      expect(contents.groups.length).toBe(1);
+      expect(contents.groups[0].items[0].title).toBe("GitHub");
+      expect(contents.groups[0].items[0].url).toBe("https://github.com");
+    });
   });
 });

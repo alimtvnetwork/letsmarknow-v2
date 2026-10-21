@@ -15,7 +15,9 @@
     "tabs",
     "storage",
     "activeTab",
-    "sidePanel"
+    "sidePanel",
+    "contextMenus",
+    "identity"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -23,5 +25,25 @@
   "side_panel": {
     "default_path": "sidepanel.html"
   },
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "externally_connectable": {
+    "matches": [
+      "http://localhost/*",
+      "http://127.0.0.1/*",
+      "https://letsmarknow.com/*",
+      "https://*.letsmarknow.com/*"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://letsmarknow.com/*",
+        "https://*.letsmarknow.com/*"
+      ],
+      "js": ["contentScript.js"],
+      "run_at": "document_start"
+    }
+  ]
 }

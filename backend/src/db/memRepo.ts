@@ -149,6 +149,22 @@ export interface MemItem {
   deletedAt?: Date | null;
 }
 
+export interface MemNextItem {
+  id: string;
+  accountId: string;
+  nextCollectionId: string;
+  itemId?: string | null;
+  sourceCollectionId?: string | null;
+  titleSnapshot: string;
+  urlSnapshot: string;
+  faviconUrlSnapshot?: string | null;
+  position: number;
+  isDone: boolean;
+  isTombstone: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface MemTag {
   id: string;
   organizationId: string;
@@ -482,6 +498,7 @@ export class InMemoryRepository {
   jobs: MemJob[] = [];
   licenses: MemLicense[] = [];
   subscriptions: MemSubscription[] = [];
+  nextItems: MemNextItem[] = [];
   flags: Map<string, MemFlag> = new Map();
 
   constructor() {
@@ -556,6 +573,7 @@ export class InMemoryRepository {
     this.jobs = [];
     this.licenses = [];
     this.subscriptions = [];
+    this.nextItems = [];
     this.initDefaultFlags();
   }
 

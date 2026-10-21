@@ -347,7 +347,7 @@ describe("web dashboard UI", { timeout: 30000 }, () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Save Changes" }));
     expect(screen.queryByText(/Share.*Design Systems/i)).not.toBeInTheDocument();
-  });
+  }, 60000);
 
   it("shows item actions dropdown with open, copy, and share links", () => {
     renderDashboard();

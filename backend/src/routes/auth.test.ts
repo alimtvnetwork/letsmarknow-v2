@@ -199,6 +199,59 @@ describe("Auth & Account Routes", () => {
     expect(body.data.length).toBeGreaterThan(0);
   });
 
+  it("POST /v1/auth/google - registers and signs in with Google profile", async () => {
+    const googleEmail = `google_user_${Date.now()}@gmail.com`;
+    const res = await app.inject({
+      method: "POST",
+      url: "/v1/auth/google",
+      payload: {
+        mock_profile: {
+          email: googleEmail,
+          name: "Google Sync User",
+          avatar_url: "https://lh3.googleusercontent.com/a/test-avatar",
+          sub: "google-sub-12345",
+        },
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.account_id).toBeDefined();
+    expect(body.data.access_token).toBeDefined();
+    expect(body.data.default_organization_id).toBeDefined();
+    expect(body.data.user.email).toBe(googleEmail);
+    expect(body.data.user.name).toBe("Google Sync User");
+
+    // Cookie is set
+    const cookie = res.cookies.find((c) => c.name === "lmn_refresh");
+    expect(cookie).toBeDefined();
+
+    // Re-authenticating existing user returns same account_id
+    const res2 = await app.inject({
+      method: "POST",
+      url: "/v1/auth/google",
+      payload: {
+        mock_profile: {
+          email: googleEmail,
+          name: "Google Sync User",
+        },
+      },
+    });
+
+    expect(res2.statusCode).toBe(200);
+    expect(res2.json().data.account_id).toBe(body.data.account_id);
+  });
+
+  it("POST /v1/auth/google - rejects empty payload with 400", async () => {
+    const res = await app.inject({
+      method: "POST",
+      url: "/v1/auth/google",
+      payload: {},
+    });
+
+    expect(res.statusCode).toBe(400);
+  });
+
   it("POST /v1/auth/signout - revokes session and clears cookie", async () => {
     const res = await app.inject({
       method: "POST",

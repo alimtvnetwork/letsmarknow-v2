@@ -38,13 +38,13 @@ export function SaveSessionBar({
     <div
       data-testid="save-session-bar"
       className={cn(
-        "flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/75 p-3.5 backdrop-blur-xs shadow-2xs",
+        "flex flex-wrap items-center justify-between gap-3.5 rounded-2xl border border-white/10 border-t-white/15 bg-card/85 p-4 backdrop-blur-xl shadow-obsidian shadow-lg transition-all",
         className
       )}
     >
       {/* Tab Counter & Status */}
       <div className="flex items-center gap-3 min-w-0">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-primary/25 to-indigo-500/10 border border-primary/30 text-primary shadow-2xs">
           <Sparkles className="h-4.5 w-4.5" />
         </div>
         <div className="min-w-0">
@@ -77,7 +77,8 @@ export function SaveSessionBar({
           className="h-8 text-xs font-medium"
         >
           <FolderPlus className="h-3.5 w-3.5 mr-1.5 text-primary" />
-          Save session
+          <span>Save session</span>
+          <kbd className="ml-1.5 px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">S</kbd>
         </Button>
 
         <Button
@@ -94,7 +95,8 @@ export function SaveSessionBar({
           }
         >
           <XCircle className="h-3.5 w-3.5 mr-1.5" />
-          Close saved tabs ({openSavedTabsCount})
+          <span>Close saved tabs ({openSavedTabsCount})</span>
+          <kbd className="ml-1.5 px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">A</kbd>
         </Button>
 
         <Button
@@ -111,7 +113,8 @@ export function SaveSessionBar({
           }
         >
           <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-          Restore last session
+          <span>Restore last session</span>
+          <kbd className="ml-1.5 px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">R</kbd>
         </Button>
       </div>
     </div>

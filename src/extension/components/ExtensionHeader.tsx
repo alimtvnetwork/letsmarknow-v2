@@ -1,15 +1,18 @@
 import React from "react";
-import { Bookmark, ExternalLink, Maximize2, Settings } from "lucide-react";
+import { Bookmark, ExternalLink, Maximize2, Network, Settings, User } from "lucide-react";
 import type { Organization } from "@/types/lmn";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/lib/authStore";
 
 export interface ExtensionHeaderProps {
   organizations?: Organization[];
   activeOrganizationId?: string;
   onSelectOrganization?(id: string): void;
   onOpenFullTab(): void;
+  onOpenMindmap?(): void;
   onOpenSettings?(): void;
   onOpenWebDashboard?(): void;
+  onOpenAuth?(): void;
 }
 
 export function ExtensionHeader({
@@ -17,9 +20,12 @@ export function ExtensionHeader({
   activeOrganizationId,
   onSelectOrganization,
   onOpenFullTab,
+  onOpenMindmap,
   onOpenSettings,
+  onOpenAuth,
 }: ExtensionHeaderProps) {
   const activeOrg = organizations?.find((o) => o.id === activeOrganizationId);
+  const { session } = useAuth();
 
   return (
     <header className="flex items-center justify-between border-b border-border/80 bg-card/90 px-3.5 py-2.5 backdrop-blur-md shrink-0">
@@ -59,6 +65,20 @@ export function ExtensionHeader({
           </span>
         )}
 
+        {onOpenMindmap && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onOpenMindmap}
+            data-testid="open-mindmap-button"
+            className="h-7 px-2 gap-1.5 rounded-lg text-xs font-semibold text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10 transition-colors"
+            title="Open Mindmap Canvas"
+          >
+            <Network className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Mindmap</span>
+          </Button>
+        )}
+
         <Button
           size="sm"
           variant="outline"
@@ -70,6 +90,22 @@ export function ExtensionHeader({
           <Maximize2 className="h-3.5 w-3.5 text-primary" />
           <span>Dashboard</span>
         </Button>
+
+        {onOpenAuth && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onOpenAuth}
+            data-testid="header-auth-button"
+            className="h-7 px-2 gap-1 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+            title={session ? `Account: ${session.name || session.email}` : "Sign In to Cloud"}
+          >
+            <User className={`h-3.5 w-3.5 ${session ? "text-primary" : ""}`} />
+            <span className="hidden md:inline truncate max-w-[80px]">
+              {session ? (session.name?.split(" ")[0] || "Account") : "Sign In"}
+            </span>
+          </Button>
+        )}
 
         {onOpenSettings && (
           <Button

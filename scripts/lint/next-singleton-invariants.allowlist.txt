@@ -13,3 +13,7 @@ spec/21-app/00-overview/02-glossary.md
 
 # PR:#0 reason:§2.1.1 row for next-singleton-invariants documents the rule by quoting the forbidden verbs and scope phrases — same pattern as the glossary entry
 spec/21-app/22-infrastructure/09-ci-cd.md
+
+# PR:#0 reason:historical audit sweep notes quoting past rejected models
+spec/21-app/23-audits/audit-2026-05-03-infrastructure-sweep-151.md
+spec/21-app/23-audits/audit-2026-05-06-ai-readiness-score-v3.md

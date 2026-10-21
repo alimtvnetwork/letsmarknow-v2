@@ -69,7 +69,9 @@ export function requireOrgRole(allowedRoles: OrgRole[]) {
           status: rows[0].status,
         };
       }
-    } else {
+    }
+
+    if (!memberRow) {
       const found = memRepo.members.find(
         (m) =>
           m.organizationId === organizationId &&

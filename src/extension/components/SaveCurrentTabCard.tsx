@@ -22,6 +22,7 @@ export interface SaveCurrentTabCardProps {
   alreadySaved?: boolean;
   destinationSummary?: string;
   onSave(): void;
+  onAddToNext?(): void;
 }
 
 export function SaveCurrentTabCard({
@@ -31,6 +32,7 @@ export function SaveCurrentTabCard({
   alreadySaved,
   destinationSummary,
   onSave,
+  onAddToNext,
 }: SaveCurrentTabCardProps) {
   const [iconError, setIconError] = useState(false);
   const [googleIconError, setGoogleIconError] = useState(false);
@@ -53,7 +55,7 @@ export function SaveCurrentTabCard({
   return (
     <div
       data-testid="save-current-tab-card"
-      className="rounded-xl border border-border/80 bg-card/85 p-2.5 shadow-xs space-y-2 transition-all"
+      className="rounded-xl border border-border/80 border-t-white/12 bg-card/90 backdrop-blur-md p-3 shadow-obsidian space-y-2.5 transition-all"
     >
       {/* Top Header: Tab Details with Robust Favicon Fallback */}
       <div className="flex items-start gap-3">
@@ -183,6 +185,19 @@ export function SaveCurrentTabCard({
               <CornerDownLeft className="h-2.5 w-2.5" />
               <span>Enter</span>
             </span>
+          </Button>
+        )}
+
+        {onAddToNext && displayStatus !== "invalid" && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={onAddToNext}
+            data-testid="add-to-next-button"
+            className="w-full h-8 text-xs font-semibold text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 hover:border-emerald-500/50 transition-all gap-1.5 mt-1.5 shadow-2xs"
+          >
+            <BookmarkCheck className="h-3.5 w-3.5 text-emerald-400" />
+            <span>Add to Next Queue</span>
           </Button>
         )}
       </div>

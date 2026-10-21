@@ -13,8 +13,11 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "preview:web": "vite preview --outDir dist/web",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "run": "powershell -ExecutionPolicy Bypass -File ./run.ps1",
+    "local:install": "powershell -ExecutionPolicy Bypass -File ./local-install.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

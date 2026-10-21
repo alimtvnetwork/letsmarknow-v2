@@ -14,6 +14,7 @@ import {
   Globe,
   Grid3X3,
   GripVertical,
+  Info,
   Layers,
   Link2,
   List,
@@ -348,12 +349,12 @@ export function DashboardBoard({
 
   return (
     <section className="min-h-0 flex-1 overflow-auto bg-background/50">
-      {/* 1. Toby-Style Space Header */}
+      {/* 1. Space Header */}
       <div className="border-b border-border/80 bg-card/40 px-6 py-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3.5 min-w-0">
             {/* Space Avatar / Icon Badge */}
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-500/20 via-pink-500/10 to-primary/10 border border-rose-500/30 text-rose-400 shadow-xs">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 via-indigo-500/10 to-violet-500/10 border border-primary/30 text-primary shadow-xs">
               <Globe className="h-5 w-5" />
             </div>
 
@@ -394,25 +395,15 @@ export function DashboardBoard({
 
             {/* Collaborator Avatar */}
             <div
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-rose-500 text-xs font-semibold text-primary-foreground shadow-2xs"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-primary to-violet-500 text-xs font-semibold text-primary-foreground shadow-2xs"
               title="Workspace member"
             >
               Y
             </div>
-
-            {/* Vibrant Toby-style Primary Accent CTA */}
-            <Button
-              onClick={onCreateCollection}
-              className="rounded-full bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 hover:from-rose-500 hover:to-pink-500 text-white font-semibold shadow-md shadow-rose-600/25 px-4 h-9 gap-1.5 text-xs transition-all active:scale-95 cursor-pointer"
-              title="Create new collection"
-            >
-              <Plus className="h-4 w-4" />
-              New Collection
-            </Button>
           </div>
         </div>
 
-        {/* 2. Toby-Style Space Toolbar */}
+        {/* 2. Space Toolbar */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/40">
           <div className="flex flex-wrap items-center gap-2">
             {/* Sort / Custom Order Dropdown */}
@@ -756,7 +747,9 @@ export function DashboardBoard({
         viewMode === "mindmap" ? (
           <div className="space-y-8 p-6">
             {sortedCollections.map((collection) => {
-              const allItems = collection.groups.flatMap((g) => g.items);
+              const allItems = collection.groups.flatMap((g) =>
+                g.items.map((i) => ({ ...i, groupId: (i as any).groupId || g.id }))
+              );
               return (
                 <div key={collection.id} className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -772,6 +765,11 @@ export function DashboardBoard({
                     collection={collection}
                     groups={collection.groups}
                     items={allItems}
+                    onItemClick={(item) => {
+                      if (item.url) {
+                        window.open(item.url, "_blank", "noopener,noreferrer");
+                      }
+                    }}
                   />
                 </div>
               );
@@ -818,7 +816,6 @@ export function DashboardBoard({
       ) : (
         <EmptyDashboard
           onCreateCollection={onCreateCollection}
-          onCreateItem={onCreateItem}
           onRestoreDemoData={onRestoreDemoData}
         />
       )}
@@ -2068,32 +2065,56 @@ function ItemRow({
 
 function EmptyDashboard({
   onCreateCollection,
-  onCreateItem,
   onRestoreDemoData,
 }: {
   onCreateCollection: () => void;
-  onCreateItem: (collectionId?: string, groupId?: string) => void;
+  onCreateItem?: (collectionId?: string, groupId?: string) => void;
   onRestoreDemoData?: () => void;
 }) {
   return (
-    <div className="flex min-h-[500px] items-center justify-center p-6">
-      <div className="max-w-md text-center">
+    <div className="flex min-h-[520px] items-center justify-center p-6">
+      <div className="max-w-lg text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/15 text-primary">
           <Sparkles className="h-7 w-7" />
         </div>
         <h2 className="text-2xl font-bold tracking-tight">Start this Space</h2>
-        <p className="mt-2.5 text-sm leading-6 text-muted-foreground">
-          Create your first collection, add links, or restore mock demo data to explore the full
-          dashboard interactions.
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          Create your first collection to start organizing bookmarks, links, and documents.
         </p>
+
+        {/* Informational Guidance: How and where to add items */}
+        <div className="mt-6 rounded-xl border border-border/70 bg-card/60 p-4 text-left shadow-2xs backdrop-blur">
+          <div className="flex items-center gap-2 font-semibold text-xs text-foreground mb-2">
+            <Info className="h-4 w-4 text-primary shrink-0" />
+            <span>Where is the option to add items?</span>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+            In LetsMarkNow, saved items (bookmarks, links, docs) must belong to a <strong>collection</strong> and <strong>group</strong>. Because this space currently has 0 collections, items cannot be added yet.
+          </p>
+          <div className="space-y-2 text-xs">
+            <div className="flex items-start gap-2 text-muted-foreground">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
+                1
+              </span>
+              <span>
+                <strong>Create a Collection first</strong> below (e.g. &ldquo;Engineering&rdquo;, &ldquo;Design Systems&rdquo;, or &ldquo;Reading List&rdquo;).
+              </span>
+            </div>
+            <div className="flex items-start gap-2 text-muted-foreground">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
+                2
+              </span>
+              <span>
+                <strong>Add Items anytime:</strong> Look for the <strong>+</strong> button in the header of each collection card or group section, save active tabs with the Chrome extension popup, or press <kbd className="rounded border border-border/80 bg-muted px-1.5 py-0.5 font-mono text-[10px]">Ctrl+K</kbd>.
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div className="mt-6 flex flex-wrap justify-center gap-2.5">
           <Button onClick={onCreateCollection}>
             <Plus className="mr-1.5 h-4 w-4" />
             Create collection
-          </Button>
-          <Button variant="outline" onClick={onCreateItem}>
-            <Link2 className="mr-1.5 h-4 w-4" />
-            Add item
           </Button>
           {onRestoreDemoData && (
             <Button variant="ghost" onClick={onRestoreDemoData} title="Restore demo data">

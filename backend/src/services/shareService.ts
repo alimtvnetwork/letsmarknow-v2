@@ -480,6 +480,254 @@ export class ShareService {
     return this.toDto(memShare);
   }
 
+  /**
+   * 1-Step Direct Publish of Collection & Items from Extension
+   */
+  public async publishCollectionShare(
+    orgId: string,
+    accountId: string,
+    params: {
+      name: string;
+      description?: string | null;
+      slug?: string | null;
+      mode?: "public" | "password" | "invite_only";
+      password?: string | null;
+      groups?: Array<{
+        name: string;
+        color?: string;
+        items?: Array<{
+          title: string;
+          url: string;
+          description?: string | null;
+          favicon_url?: string | null;
+        }>;
+      }>;
+      items?: Array<{
+        title: string;
+        url: string;
+        description?: string | null;
+        favicon_url?: string | null;
+      }>;
+    }
+  ): Promise<ShareDto> {
+    const isDb = await checkDbConnection();
+    const now = new Date();
+    const collectionId = uuidv7();
+
+    if (isDb) {
+      const db = getDb();
+
+      // 1. Ensure space exists
+      const existingSpaces = await db
+        .select({ id: schema.spaces.id })
+        .from(schema.spaces)
+        .where(and(eq(schema.spaces.organizationId, orgId), isNull(schema.spaces.deletedAt)))
+        .limit(1);
+
+      let spaceId: string;
+      if (existingSpaces.length > 0) {
+        spaceId = existingSpaces[0].id;
+      } else {
+        spaceId = uuidv7();
+        await db.insert(schema.spaces).values({
+          id: spaceId,
+          organizationId: orgId,
+          name: "Main Space",
+          slug: "main-space",
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+
+      // 2. Insert collection
+      await db.insert(schema.collections).values({
+        id: collectionId,
+        organizationId: orgId,
+        spaceId: spaceId,
+        accountId: accountId,
+        name: params.name,
+        description: params.description || null,
+        createdBy: accountId,
+        updatedBy: accountId,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      // 3. Insert groups and items
+      if (params.groups && Array.isArray(params.groups)) {
+        for (let gIdx = 0; gIdx < params.groups.length; gIdx++) {
+          const g = params.groups[gIdx];
+          const groupId = uuidv7();
+          await db.insert(schema.groups).values({
+            id: groupId,
+            organizationId: orgId,
+            collectionId: collectionId,
+            name: g.name || `Group ${gIdx + 1}`,
+            color: g.color || "none",
+            position: gIdx,
+            createdAt: now,
+            updatedAt: now,
+          });
+
+          if (g.items && Array.isArray(g.items)) {
+            for (let iIdx = 0; iIdx < g.items.length; iIdx++) {
+              const it = g.items[iIdx];
+              await db.insert(schema.items).values({
+                id: uuidv7(),
+                organizationId: orgId,
+                collectionId: collectionId,
+                groupId: groupId,
+                title: it.title || it.url,
+                url: it.url,
+                description: it.description || null,
+                faviconUrl: it.favicon_url || null,
+                position: iIdx,
+                createdBy: accountId,
+                updatedBy: accountId,
+                createdAt: now,
+                updatedAt: now,
+              });
+            }
+          }
+        }
+      }
+
+      // 4. Insert root items (items without group)
+      if (params.items && Array.isArray(params.items)) {
+        for (let rIdx = 0; rIdx < params.items.length; rIdx++) {
+          const it = params.items[rIdx];
+          await db.insert(schema.items).values({
+            id: uuidv7(),
+            organizationId: orgId,
+            collectionId: collectionId,
+            groupId: null,
+            title: it.title || it.url,
+            url: it.url,
+            description: it.description || null,
+            faviconUrl: it.favicon_url || null,
+            position: rIdx,
+            createdBy: accountId,
+            updatedBy: accountId,
+            createdAt: now,
+            updatedAt: now,
+          });
+        }
+      }
+    } else {
+      let space = memRepo.spaces.find((s) => s.organizationId === orgId && !s.deletedAt);
+      if (!space) {
+        space = {
+          id: uuidv7(),
+          organizationId: orgId,
+          name: "Main Space",
+          slug: "main-space",
+          description: null,
+          icon: null,
+          color: "none",
+          position: 0,
+          isStarred: false,
+          visibility: "private",
+          deletedAt: null,
+          createdAt: now,
+          updatedAt: now,
+        };
+        memRepo.spaces.push(space);
+      }
+
+      const memColl = {
+        id: collectionId,
+        organizationId: orgId,
+        spaceId: space.id,
+        name: params.name,
+        slug: params.slug || null,
+        description: params.description || null,
+        color: "none",
+        isStarred: false,
+        viewMode: "grid",
+        deletedAt: null,
+        createdAt: now,
+        updatedAt: now,
+      };
+      memRepo.collections.push(memColl);
+
+      if (params.groups && Array.isArray(params.groups)) {
+        for (let gIdx = 0; gIdx < params.groups.length; gIdx++) {
+          const g = params.groups[gIdx];
+          const groupId = uuidv7();
+          memRepo.groups.push({
+            id: groupId,
+            organizationId: orgId,
+            collectionId: collectionId,
+            name: g.name,
+            color: g.color || "none",
+            position: gIdx,
+            isStarred: false,
+            isHidden: false,
+            deletedAt: null,
+            createdAt: now,
+            updatedAt: now,
+          });
+
+          if (g.items) {
+            for (let iIdx = 0; iIdx < g.items.length; iIdx++) {
+              const it = g.items[iIdx];
+              memRepo.items.push({
+                id: uuidv7(),
+                organizationId: orgId,
+                collectionId: collectionId,
+                groupId: groupId,
+                title: it.title || it.url,
+                url: it.url,
+                description: it.description || null,
+                faviconUrl: it.favicon_url || null,
+                color: "none",
+                isStarred: false,
+                position: iIdx,
+                source: "extension",
+                deletedAt: null,
+                createdAt: now,
+                updatedAt: now,
+              });
+            }
+          }
+        }
+      }
+
+      if (params.items) {
+        for (let rIdx = 0; rIdx < params.items.length; rIdx++) {
+          const it = params.items[rIdx];
+          memRepo.items.push({
+            id: uuidv7(),
+            organizationId: orgId,
+            collectionId: collectionId,
+            groupId: null,
+            title: it.title || it.url,
+            url: it.url,
+            description: it.description || null,
+            faviconUrl: it.favicon_url || null,
+            color: "none",
+            isStarred: false,
+            position: rIdx,
+            source: "extension",
+            deletedAt: null,
+            createdAt: now,
+            updatedAt: now,
+          });
+        }
+      }
+    }
+
+    return await this.createShare(orgId, accountId, {
+      target_type: "collection",
+      target_id: collectionId,
+      slug: params.slug,
+      mode: params.mode || "public",
+      password: params.password,
+      title_override: params.name,
+      description_override: params.description,
+    });
+  }
+
   private async isSlugTaken(slug: string): Promise<boolean> {
     const isDb = await checkDbConnection();
     if (isDb) {

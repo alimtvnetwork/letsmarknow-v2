@@ -38,6 +38,7 @@ import type {
 } from "@/types/lmn";
 import { getSharePath, getShareUrl } from "@/lib/shareLinks";
 import { InviteMemberDialog } from "./ManageDialogs";
+import { useAuth } from "@/lib/authStore";
 
 interface TeamMember {
   id: string;
@@ -85,8 +86,9 @@ export function SettingsPage({
   defaultTab?: string;
 }) {
   const navigate = useNavigate();
-  const [profileName, setProfileName] = useState("Jane Doe");
-  const [profileEmail, setProfileEmail] = useState("jane@letsmarknow.com");
+  const { session } = useAuth();
+  const [profileName, setProfileName] = useState(session?.name || "Workspace Owner");
+  const [profileEmail, setProfileEmail] = useState(session?.email || "owner@letsmarknow.com");
   const [profileTimezone, setProfileTimezone] = useState("UTC");
 
   const [wsName, setWsName] = useState(activeOrganization.name);

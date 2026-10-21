@@ -120,7 +120,7 @@ export function OpenTabsList({
         </div>
       </div>
 
-      {/* Tabs list: Toby-style individual pill cards */}
+      {/* Tabs list: Obsidian individual pill cards */}
       <div className="space-y-2">
         {tabs.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border/80 bg-card/20 p-6 text-center text-xs text-muted-foreground">

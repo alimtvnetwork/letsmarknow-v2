@@ -11,8 +11,16 @@ export async function requireAuth(
   _reply: FastifyReply
 ): Promise<void> {
   const authHeader = request.headers.authorization;
+  const queryToken = (request.query as { token?: string })?.token;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  let token: string | undefined;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.substring(7).trim();
+  } else if (queryToken && typeof queryToken === "string") {
+    token = queryToken.trim();
+  }
+
+  if (!token) {
     throw new AppError({
       statusCode: 401,
       code: "UNAUTHENTICATED",
@@ -20,8 +28,6 @@ export async function requireAuth(
       docUrl: "https://docs.letsmarknow.com/errors/unauthenticated",
     });
   }
-
-  const token = authHeader.substring(7).trim();
 
   try {
     const payload = await verifyAccessToken(token);

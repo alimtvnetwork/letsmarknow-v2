@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Check,
@@ -15,9 +15,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { mockWorkspace } from "@/data/mockWorkspace";
-import { resolveShare } from "@/lib/shareLinks";
+import { resolveShare, type ResolvedShare, type ResolvedShareItem } from "@/lib/shareLinks";
 import { Favicon } from "@/components/dashboard/Favicon";
 import { getHost } from "@/components/dashboard/helpers";
+import { fetchPublicShareContents } from "@/lib/workspaceApiClient";
 import type { AppData } from "@/types/lmn";
 
 export default function PublicShareViewerPage() {
@@ -28,6 +29,8 @@ export default function PublicShareViewerPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [remoteShare, setRemoteShare] = useState<ResolvedShare | null>(null);
+  const [loadingRemote, setLoadingRemote] = useState(false);
 
   // Load data from localStorage or fallback mock
   const data: AppData = useMemo(() => {
@@ -43,14 +46,78 @@ export default function PublicShareViewerPage() {
     return mockWorkspace;
   }, []);
 
-  const resolved = useMemo(() => {
+  const localResolved = useMemo(() => {
     const res = resolveShare(data, targetType, shareId);
-    if (res.status === "not_found" && (shareId === "public-share-demo" || !targetType)) {
+    if (res.status === "not_found" && shareId === "public-share-demo") {
       // Graceful fallback to first public share or collection for previews/demos
       return resolveShare(data);
     }
     return res;
   }, [data, targetType, shareId]);
+
+  // If not found in local workspace and not demo, try fetching from backend API
+  useEffect(() => {
+    if (localResolved.status !== "not_found" || shareId === "public-share-demo") return;
+    let active = true;
+    setLoadingRemote(true);
+
+    fetchPublicShareContents(shareId)
+      .then((contents) => {
+        if (!active) return;
+        const items: ResolvedShareItem[] = [];
+        contents.groups?.forEach((g) => {
+          g.items?.forEach((i) => {
+            items.push({
+              id: i.id,
+              title: i.title,
+              url: i.url,
+              description: i.description || "",
+              faviconUrl: i.favicon_url || undefined,
+              tags: i.tags || [],
+              groupName: g.name,
+              collectionName: contents.target?.name || contents.target?.title,
+              groupId: g.id,
+              position: i.position || 0,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            } as ResolvedShareItem);
+          });
+        });
+        contents.items?.forEach((i) => {
+          items.push({
+            id: i.id,
+            title: i.title,
+            url: i.url,
+            description: i.description || "",
+            faviconUrl: i.favicon_url || undefined,
+            tags: i.tags || [],
+            collectionName: contents.target?.name || contents.target?.title,
+            position: i.position || 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          } as ResolvedShareItem);
+        });
+
+        setRemoteShare({
+          status: "found",
+          targetName: contents.target?.name || contents.target?.title || "Shared Collection",
+          targetDescription: contents.target?.description || undefined,
+          items,
+        });
+      })
+      .catch(() => {
+        // Fall back to not_found state
+      })
+      .finally(() => {
+        if (active) setLoadingRemote(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [shareId, localResolved.status]);
+
+  const resolved = remoteShare || localResolved;
 
   const allItems = resolved.items;
 
@@ -80,6 +147,19 @@ export default function PublicShareViewerPage() {
     toast.success("Share link copied to clipboard");
     setTimeout(() => setCopied(false), 2000);
   };
+
+  // 0. Loading Remote State
+  if (loadingRemote) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center font-sans p-6 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4 animate-pulse">
+          <Globe2 className="h-6 w-6 animate-spin" />
+        </div>
+        <h2 className="text-base font-semibold">Loading shared collection...</h2>
+        <p className="mt-1 text-xs text-muted-foreground">Fetching public bookmarks from LetsMarkNow</p>
+      </div>
+    );
+  }
 
   // 1. Not Found State
   if (resolved.status === "not_found") {

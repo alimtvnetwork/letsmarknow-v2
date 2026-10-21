@@ -26,6 +26,19 @@ const updateAccountSchema = z.object({
   avatar_url: z.string().url().optional(),
 });
 
+const googleAuthSchema = z.object({
+  credential: z.string().optional(),
+  token: z.string().optional(),
+  mock_profile: z
+    .object({
+      email: z.string().email(),
+      name: z.string().optional(),
+      avatar_url: z.string().url().optional(),
+      sub: z.string().optional(),
+    })
+    .optional(),
+});
+
 export const authRoutes: FastifyPluginAsync = async (app) => {
   // POST /v1/auth/signup
   app.post("/v1/auth/signup", async (request, reply) => {
@@ -96,6 +109,44 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
         mfa_challenge_id: null,
         access_token: result.access_token,
         expires_in: result.expires_in,
+      },
+    });
+  });
+
+  // POST /v1/auth/google
+  app.post("/v1/auth/google", async (request, reply) => {
+    const parseResult = googleAuthSchema.safeParse(request.body || {});
+    if (!parseResult.success) {
+      throw new AppError({
+        statusCode: 400,
+        code: "VALIDATION_FAILED",
+        message: parseResult.error.issues[0]?.message || "Invalid Google auth payload",
+        details: { errors: parseResult.error.format() },
+        docUrl: "https://docs.letsmarknow.com/errors/validation_failed",
+      });
+    }
+
+    const result = await authService.googleAuth(parseResult.data);
+
+    reply.setCookie("lmn_refresh", result.refresh_token, {
+      httpOnly: true,
+      secure: env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/v1/auth",
+      maxAge: 30 * 24 * 60 * 60,
+    });
+
+    return reply.status(200).send({
+      data: {
+        account_id: result.account_id,
+        default_organization_id: result.default_organization_id,
+        access_token: result.access_token,
+        expires_in: result.expires_in,
+        user: {
+          email: result.email,
+          name: result.name,
+          avatar_url: result.avatar_url,
+        },
       },
     });
   });

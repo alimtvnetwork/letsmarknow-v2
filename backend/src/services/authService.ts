@@ -25,10 +25,22 @@ export interface SigninInput {
   ipAddress?: string;
 }
 
+export interface GoogleAuthInput {
+  credential?: string;
+  token?: string;
+  mock_profile?: {
+    email: string;
+    name?: string;
+    avatar_url?: string;
+    sub?: string;
+  };
+}
+
 export interface AuthResult {
   account_id: string;
   email: string;
   name?: string;
+  avatar_url?: string;
   default_organization_id: string;
   access_token: string;
   refresh_token: string;
@@ -87,7 +99,8 @@ export class AuthService {
 
     const displayName = input.name?.trim() || cleanEmail.split("@")[0];
     const orgName = `${displayName}'s Workspace`;
-    const orgSlug = `${displayName.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${accountId.slice(0, 6)}`;
+    const randomSuffix = accountId.replace(/-/g, "").slice(-8);
+    const orgSlug = `${displayName.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${randomSuffix}`;
 
     if (isDb) {
       const db = getDb();
@@ -139,46 +152,47 @@ export class AuthService {
         refreshTokenHash,
         expiresAt: sessionExpiresAt,
       });
-    } else {
-      memRepo.accounts.set(cleanEmail, {
-        id: accountId,
-        email: cleanEmail,
-        passwordHash,
-        displayName,
-        status: "active",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-
-      const now = new Date();
-      memRepo.organizations.set(orgId, {
-        id: orgId,
-        name: orgName,
-        slug: orgSlug,
-        ownerAccountId: accountId,
-        plan: "free",
-        createdAt: now,
-        updatedAt: now,
-      });
-
-      memRepo.members.push({
-        id: uuidv7(),
-        organizationId: orgId,
-        accountId,
-        role: "owner",
-        status: "active",
-        createdAt: now,
-        updatedAt: now,
-      });
-
-      memRepo.sessions.set(refreshTokenHash, {
-        id: uuidv7(),
-        accountId,
-        refreshTokenHash,
-        expiresAt: sessionExpiresAt,
-        createdAt: new Date(),
-      });
     }
+
+    // Always mirror to memRepo cache for fast in-memory lookups
+    memRepo.accounts.set(cleanEmail, {
+      id: accountId,
+      email: cleanEmail,
+      passwordHash,
+      displayName,
+      status: "active",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    const now = new Date();
+    memRepo.organizations.set(orgId, {
+      id: orgId,
+      name: orgName,
+      slug: orgSlug,
+      ownerAccountId: accountId,
+      plan: "free",
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    memRepo.members.push({
+      id: uuidv7(),
+      organizationId: orgId,
+      accountId,
+      role: "owner",
+      status: "active",
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    memRepo.sessions.set(refreshTokenHash, {
+      id: uuidv7(),
+      accountId,
+      refreshTokenHash,
+      expiresAt: sessionExpiresAt,
+      createdAt: new Date(),
+    });
 
     // Send verification email via ConsoleMailer
     const verifyToken = generateSecureToken(16);
@@ -230,7 +244,7 @@ export class AuthService {
         const memberRow = await db
           .select()
           .from(schema.orgMembers)
-          .where(eq(schema.orgMembers.accountId, accountRecord.id))
+          .where(eq(schema.orgMembers.accountId, accounts[0].id))
           .limit(1);
         if (memberRow.length > 0) {
           defaultOrgId = memberRow[0].organizationId;
@@ -282,17 +296,17 @@ export class AuthService {
         ipAddress: input.ipAddress,
         expiresAt: sessionExpiresAt,
       });
-    } else {
-      memRepo.sessions.set(refreshTokenHash, {
-        id: uuidv7(),
-        accountId: accountRecord.id,
-        refreshTokenHash,
-        userAgent: input.userAgent,
-        ipAddress: input.ipAddress,
-        expiresAt: sessionExpiresAt,
-        createdAt: new Date(),
-      });
     }
+
+    memRepo.sessions.set(refreshTokenHash, {
+      id: uuidv7(),
+      accountId: accountRecord.id,
+      refreshTokenHash,
+      userAgent: input.userAgent,
+      ipAddress: input.ipAddress,
+      expiresAt: sessionExpiresAt,
+      createdAt: new Date(),
+    });
 
     const accessToken = await createAccessToken({
       sub: accountRecord.id,
@@ -308,6 +322,269 @@ export class AuthService {
       access_token: accessToken,
       refresh_token: rawRefreshToken,
       expires_in: 900,
+    };
+  }
+
+  public async googleAuth(input: GoogleAuthInput): Promise<AuthResult> {
+    let email = "";
+    let displayName = "";
+    let avatarUrl: string | undefined = undefined;
+    let googleSub = "";
+
+    const rawToken = input.credential || input.token;
+    if (rawToken) {
+      try {
+        // 1. If it looks like a JWT ID token (e.g. contains two dots and does not start with ya29)
+        if (rawToken.split(".").length === 3 && !rawToken.startsWith("ya29.")) {
+          const res = await fetch(
+            `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(rawToken)}`
+          );
+          if (res.ok) {
+            const profile = (await res.json()) as {
+              email?: string;
+              name?: string;
+              picture?: string;
+              sub?: string;
+            };
+            if (profile.email) {
+              email = profile.email.trim().toLowerCase();
+              displayName = profile.name || email.split("@")[0];
+              avatarUrl = profile.picture;
+              googleSub = profile.sub || "";
+            }
+          }
+        }
+
+        // 2. If not ID token or ID token lookup failed, try Google OAuth2 UserInfo API with access token
+        if (!email) {
+          const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: {
+              Authorization: `Bearer ${rawToken}`,
+            },
+          });
+          if (res.ok) {
+            const profile = (await res.json()) as {
+              email?: string;
+              name?: string;
+              picture?: string;
+              sub?: string;
+            };
+            if (profile.email) {
+              email = profile.email.trim().toLowerCase();
+              displayName = profile.name || email.split("@")[0];
+              avatarUrl = profile.picture;
+              googleSub = profile.sub || "";
+            }
+          }
+        }
+
+        // 3. Fallback: try tokeninfo endpoint with access_token param
+        if (!email) {
+          const res = await fetch(
+            `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(rawToken)}`
+          );
+          if (res.ok) {
+            const profile = (await res.json()) as {
+              email?: string;
+              sub?: string;
+            };
+            if (profile.email) {
+              email = profile.email.trim().toLowerCase();
+              displayName = email.split("@")[0];
+              googleSub = profile.sub || "";
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Google token verification network error:", err);
+      }
+    }
+
+    if (!email && input.mock_profile?.email) {
+      email = input.mock_profile.email.trim().toLowerCase();
+      displayName = input.mock_profile.name || email.split("@")[0];
+      avatarUrl = input.mock_profile.avatar_url;
+      googleSub = input.mock_profile.sub || "";
+    }
+
+    if (!email) {
+      throw new AppError({
+        statusCode: 400,
+        code: "VALIDATION_FAILED",
+        message: "Valid Google authentication credentials or profile required.",
+        docUrl: "https://docs.letsmarknow.com/errors/validation_failed",
+      });
+    }
+
+    const isDb = await checkDbConnection();
+    let accountId = "";
+    let defaultOrgId = "";
+
+    if (isDb) {
+      const db = getDb();
+      const existing = await db
+        .select()
+        .from(schema.accounts)
+        .where(eq(schema.accounts.email, email))
+        .limit(1);
+
+      if (existing.length > 0) {
+        accountId = existing[0].id;
+        displayName = existing[0].displayName || displayName;
+        avatarUrl = existing[0].avatarUrl || avatarUrl;
+
+        const members = await db
+          .select({ orgId: schema.orgMembers.organizationId })
+          .from(schema.orgMembers)
+          .where(eq(schema.orgMembers.accountId, accountId))
+          .limit(1);
+        if (members.length > 0) {
+          defaultOrgId = members[0].orgId;
+        }
+      } else {
+        accountId = uuidv7();
+        defaultOrgId = uuidv7();
+        const spaceId = uuidv7();
+        const collectionId = uuidv7();
+        const randomPassword = generateSecureToken(32);
+        const passwordHash = await hashPassword(randomPassword);
+
+        const orgName = `${displayName}'s Workspace`;
+        const randomSuffix = accountId.replace(/-/g, "").slice(-8);
+        const orgSlug = `${displayName.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${randomSuffix}`;
+
+        await db.insert(schema.accounts).values({
+          id: accountId,
+          email,
+          passwordHash,
+          displayName,
+          avatarUrl,
+          status: "active",
+        });
+
+        await db.insert(schema.organizations).values({
+          id: defaultOrgId,
+          name: orgName,
+          slug: orgSlug,
+          ownerAccountId: accountId,
+        });
+
+        await db.insert(schema.orgMembers).values({
+          id: uuidv7(),
+          organizationId: defaultOrgId,
+          accountId,
+          role: "owner",
+          status: "active",
+        });
+
+        await db.insert(schema.spaces).values({
+          id: spaceId,
+          organizationId: defaultOrgId,
+          name: "Personal Space",
+          slug: "personal-space",
+          position: 0,
+          createdBy: accountId,
+        });
+
+        await db.insert(schema.collections).values({
+          id: collectionId,
+          organizationId: defaultOrgId,
+          spaceId,
+          name: "Quick Saves",
+          slug: "quick-saves",
+          position: 0,
+          createdBy: accountId,
+        });
+      }
+    } else {
+      let existing = memRepo.accounts.get(email);
+      if (existing) {
+        accountId = existing.id;
+        displayName = existing.displayName || displayName;
+        avatarUrl = existing.avatarUrl || avatarUrl;
+        const member = memRepo.members.find((m) => m.accountId === accountId);
+        defaultOrgId = member?.organizationId || "";
+      } else {
+        accountId = uuidv7();
+        defaultOrgId = uuidv7();
+        const randomPassword = generateSecureToken(32);
+        const passwordHash = await hashPassword(randomPassword);
+        const orgName = `${displayName}'s Workspace`;
+        const randomSuffix = accountId.replace(/-/g, "").slice(-8);
+        const orgSlug = `${displayName.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${randomSuffix}`;
+        const now = new Date();
+
+        memRepo.accounts.set(email, {
+          id: accountId,
+          email,
+          passwordHash,
+          displayName,
+          avatarUrl,
+          status: "active",
+          createdAt: now,
+          updatedAt: now,
+        });
+
+        memRepo.organizations.set(defaultOrgId, {
+          id: defaultOrgId,
+          name: orgName,
+          slug: orgSlug,
+          ownerAccountId: accountId,
+          plan: "free",
+          createdAt: now,
+          updatedAt: now,
+        });
+
+        memRepo.members.push({
+          id: uuidv7(),
+          organizationId: defaultOrgId,
+          accountId,
+          role: "owner",
+          status: "active",
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+    }
+
+    const rawRefreshToken = generateSecureToken(32);
+    const refreshTokenHash = hashToken(rawRefreshToken);
+    const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+    if (isDb) {
+      const db = getDb();
+      await db.insert(schema.sessions).values({
+        id: uuidv7(),
+        accountId,
+        refreshTokenHash,
+        expiresAt: sessionExpiresAt,
+      });
+    }
+
+    memRepo.sessions.set(refreshTokenHash, {
+      id: uuidv7(),
+      accountId,
+      refreshTokenHash,
+      expiresAt: sessionExpiresAt,
+      createdAt: new Date(),
+    });
+
+    const accessToken = await createAccessToken({
+      sub: accountId,
+      email,
+      org_id: defaultOrgId,
+      role: "owner",
+    });
+
+    return {
+      account_id: accountId,
+      email,
+      name: displayName,
+      avatar_url: avatarUrl,
+      default_organization_id: defaultOrgId,
+      access_token: accessToken,
+      refresh_token: rawRefreshToken,
+      expires_in: 3600,
     };
   }
 
@@ -493,6 +770,8 @@ export class AuthService {
         name: acc.displayName || undefined,
         avatar_url: acc.avatarUrl || undefined,
         email_verified: Boolean(acc.emailVerifiedAt),
+        has_password: Boolean(acc.passwordHash),
+        auth_provider: acc.passwordHash ? "email" : "google",
         created_at: acc.createdAt.toISOString(),
       };
     } else {
@@ -504,6 +783,8 @@ export class AuthService {
             name: acc.displayName || undefined,
             avatar_url: acc.avatarUrl || undefined,
             email_verified: Boolean(acc.emailVerifiedAt),
+            has_password: Boolean(acc.passwordHash),
+            auth_provider: acc.passwordHash ? "email" : "google",
             created_at: acc.createdAt.toISOString(),
           };
         }

@@ -71,7 +71,7 @@ export function tabToSavedItem(
     title: tab.title?.trim() || domain || "Untitled Tab",
     url: tab.url,
     description: options?.description ?? `Captured from ${domain}`,
-    tags: options?.tags ?? (domain && domain !== "unknown" ? [domain] : []),
+    tags: options?.tags ?? [],
     color: options?.color ?? "pink",
     faviconUrl: tab.favIconUrl,
     source: options?.source ?? "current-tab",

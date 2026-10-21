@@ -1,6 +1,6 @@
 export type ViewMode = "list" | "compact" | "grid" | "mindmap";
 
-export type AppPage = "dashboard" | "settings" | "trash" | "activity" | "share";
+export type AppPage = "dashboard" | "settings" | "trash" | "activity" | "share" | "next";
 
 export type ColorLabel =
   | "none"
@@ -51,6 +51,8 @@ export interface SavedItem {
   faviconUrl?: string;
   source?: "manual" | "current-tab" | "session";
   isDeleted?: boolean;
+  done?: boolean;
+  completedAt?: string;
 }
 
 export interface BrowserTabSnapshot {
@@ -69,6 +71,7 @@ export interface ExtensionPreferences {
   defaultSpaceId?: string;
   defaultCollectionId?: string;
   defaultGroupId?: string;
+  defaultViewMode?: ViewMode;
   closeTabsAfterSave?: boolean;
   openMainAfterSave?: boolean;
   openFullTabAfterSave?: boolean;
@@ -92,6 +95,7 @@ export interface Collection {
   note: string;
   color: ColorLabel;
   isStarred: boolean;
+  kind?: "collection" | "next" | "session";
   groups: Group[];
 }
 

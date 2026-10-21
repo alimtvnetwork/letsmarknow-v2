@@ -449,7 +449,7 @@ function parseTobyJson(jsonStr: string): { items: ParsedItem[]; warnings: Record
         title: card.title || url,
         description: card.description,
         collectionName: colName,
-        tags: ["toby"],
+        tags: [],
       });
     }
   }

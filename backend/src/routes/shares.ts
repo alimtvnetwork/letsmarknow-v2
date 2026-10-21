@@ -51,6 +51,38 @@ const unlockShareSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+const publishShareSchema = z.object({
+  name: z.string().min(1, "name is required").max(120),
+  description: z.string().max(500).nullable().optional(),
+  slug: z.string().min(3).max(64).nullable().optional(),
+  mode: z.enum(["public", "password", "invite_only"]).default("public"),
+  password: z.string().nullable().optional(),
+  groups: z.array(
+    z.object({
+      name: z.string().min(1).max(120),
+      color: z.string().optional(),
+      items: z.array(
+        z.object({
+          title: z.string().min(1).max(300),
+          url: z.string().min(1),
+          description: z.string().nullable().optional(),
+          favicon_url: z.string().nullable().optional(),
+          tags: z.array(z.string()).optional(),
+        })
+      ).optional(),
+    })
+  ).optional(),
+  items: z.array(
+    z.object({
+      title: z.string().min(1).max(300),
+      url: z.string().min(1),
+      description: z.string().nullable().optional(),
+      favicon_url: z.string().nullable().optional(),
+      tags: z.array(z.string()).optional(),
+    })
+  ).optional(),
+});
+
 export const shareRoutes: FastifyPluginAsync = async (app) => {
   // =========================================================================
   // MANAGEMENT ENDPOINTS (/v1/shares)
@@ -98,6 +130,31 @@ export const shareRoutes: FastifyPluginAsync = async (app) => {
       }
 
       const share = await shareService.createShare(
+        request.organizationId!,
+        request.account!.id,
+        parseResult.data
+      );
+
+      return reply.status(201).send({ data: share });
+    }
+  );
+
+  // POST /v1/shares/publish - Direct 1-step publish collection from extension
+  app.post(
+    "/v1/shares/publish",
+    { preHandler: [requireAuth, requireEditorOrAbove] },
+    async (request, reply) => {
+      const parseResult = publishShareSchema.safeParse(request.body);
+      if (!parseResult.success) {
+        throw new AppError({
+          statusCode: 400,
+          code: "VALIDATION_FAILED",
+          message: parseResult.error.issues[0]?.message || "Invalid payload",
+          details: { errors: parseResult.error.format() },
+        });
+      }
+
+      const share = await shareService.publishCollectionShare(
         request.organizationId!,
         request.account!.id,
         parseResult.data

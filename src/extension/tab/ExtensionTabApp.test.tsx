@@ -245,5 +245,75 @@ describe("ExtensionTabApp", () => {
     expect(screen.queryByText("Loading LetsMarkNow Tab...")).not.toBeInTheDocument();
     expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
   });
+
+  it("persists view mode selection in localStorage across re-renders and page reload", async () => {
+    const { unmount } = render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Click list view button
+    const listViewBtn = screen.getByTitle("list view");
+    fireEvent.click(listViewBtn);
+
+    await waitFor(() => {
+      const raw = localStorage.getItem("lmn_selected_view_mode_v1");
+      expect(raw ? JSON.parse(raw) : null).toBe("list");
+    });
+
+    unmount();
+
+    // Re-render (simulating page reload)
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Verify list view is still active and grid view is not active
+    const reloadedListViewBtn = screen.getByTitle("list view");
+    expect(reloadedListViewBtn.className).toContain("bg-primary");
+    const reloadedGridViewBtn = screen.getByTitle("grid view");
+    expect(reloadedGridViewBtn.className).not.toContain("bg-primary");
+  });
+
+  it("restores previously saved mindmap view mode from localStorage on initial mount", async () => {
+    localStorage.setItem("lmn_selected_view_mode_v1", JSON.stringify("mindmap"));
+
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Verify mindmap view is active
+    const mindmapBtn = screen.getByTitle("mindmap view");
+    expect(mindmapBtn.className).toContain("bg-primary");
+    const gridViewBtn = screen.getByTitle("grid view");
+    expect(gridViewBtn.className).not.toContain("bg-primary");
+  });
+
+  it("switches from mindmap to grid and saves to storage when clicking Collections button", async () => {
+    localStorage.setItem("lmn_selected_view_mode_v1", JSON.stringify("mindmap"));
+
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    expect(screen.getByTitle("mindmap view").className).toContain("bg-primary");
+
+    // Click sidebar collections button
+    const collectionsBtn = screen.getByTestId("nav-collections-button");
+    fireEvent.click(collectionsBtn);
+
+    await waitFor(() => {
+      expect(screen.getByTitle("grid view").className).toContain("bg-primary");
+      const raw = localStorage.getItem("lmn_selected_view_mode_v1");
+      expect(raw ? JSON.parse(raw) : null).toBe("grid");
+    });
+  });
 });
 

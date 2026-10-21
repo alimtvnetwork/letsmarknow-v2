@@ -893,6 +893,35 @@ export async function createBackendShare(params: {
   return res.data;
 }
 
+export async function publishBackendShare(params: {
+  name: string;
+  description?: string | null;
+  slug?: string | null;
+  mode?: "public" | "password" | "invite_only";
+  password?: string | null;
+  groups?: Array<{
+    name: string;
+    color?: string;
+    items?: Array<{
+      title: string;
+      url: string;
+      description?: string | null;
+      favicon_url?: string | null;
+      tags?: string[];
+    }>;
+  }>;
+  items?: Array<{
+    title: string;
+    url: string;
+    description?: string | null;
+    favicon_url?: string | null;
+    tags?: string[];
+  }>;
+}): Promise<BackendShare> {
+  const res = await api.post<Envelope<BackendShare>>("/shares/publish", params);
+  return res.data;
+}
+
 export async function fetchBackendShare(shareId: string): Promise<BackendShare> {
   const res = await api.get<Envelope<BackendShare>>(`/shares/${shareId}`);
   return res.data;
@@ -1733,5 +1762,130 @@ export async function fetchInvoicePdfMetadata(
     headers: { Accept: "application/json" },
   });
   return res.data;
+}
+
+// ===================== NEXT QUEUE =====================
+export interface BackendNextItem {
+  id: string;
+  accountId: string;
+  nextCollectionId: string;
+  itemId: string | null;
+  sourceCollectionId: string | null;
+  titleSnapshot: string;
+  urlSnapshot: string;
+  faviconUrlSnapshot: string | null;
+  position: number;
+  isDone: boolean;
+  isTombstone: boolean;
+  createdAt: string;
+  updatedAt: string;
+  isExisting?: boolean;
+  reopened?: boolean;
+  softCapWarning?: boolean;
+}
+
+export interface AddToNextPayload {
+  item_id?: string | null;
+  url: string;
+  title?: string | null;
+  favicon_url?: string | null;
+  source_kind?: "collection" | "browser_tab" | "manual" | "session" | "bulk";
+  source_collection_id?: string | null;
+  position?: number;
+  insert_position?: "top" | "bottom";
+}
+
+export interface UpdateNextItemPayload {
+  is_done?: boolean;
+  position?: number;
+  title?: string;
+}
+
+export interface NextQueueResponse {
+  items: BackendNextItem[];
+  total_count: number;
+  open_count: number;
+}
+
+export interface NextQueueRealtimeEvent {
+  type: "next.item.added" | "next.item.updated" | "next.item.removed" | "next.item.tombstoned";
+  channel: string;
+  data: {
+    item?: BackendNextItem;
+    itemId?: string;
+    accountId: string;
+    timestamp: string;
+  };
+}
+
+export async function fetchNextQueue(options?: { includeDone?: boolean }): Promise<NextQueueResponse> {
+  const query = options?.includeDone === false ? "?include_done=false" : "";
+  const res = await api.get<Envelope<NextQueueResponse>>(`/next${query}`);
+  return res.data;
+}
+
+export async function addToNextQueue(payload: AddToNextPayload): Promise<{ data: BackendNextItem; message: string }> {
+  const res = await api.post<{ data: BackendNextItem; message: string }>("/next", payload);
+  return res;
+}
+
+export async function updateNextQueueItem(id: string, patch: UpdateNextItemPayload): Promise<BackendNextItem> {
+  const res = await api.patch<Envelope<BackendNextItem>>(`/next/${id}`, patch);
+  return res.data;
+}
+
+export async function removeNextQueueItem(id: string): Promise<{ ok: boolean; removed_id: string }> {
+  const res = await api.delete<Envelope<{ ok: boolean; removed_id: string }>>(`/next/${id}`);
+  return res.data;
+}
+
+export async function clearCompletedNextQueue(): Promise<{ deleted_count: number }> {
+  const res = await api.post<Envelope<{ deleted_count: number }>>("/next/clear-completed", {});
+  return res.data;
+}
+
+export function subscribeNextQueueSSE(
+  onEvent: (event: NextQueueRealtimeEvent) => void,
+  onError?: (err: any) => void
+): () => void {
+  const baseUrl = (api as any).baseUrl || "http://localhost:3000/v1";
+  const token = (api as any).accessToken;
+  const url = `${baseUrl}/next/events${token ? `?token=${encodeURIComponent(token)}` : ""}`;
+
+  let eventSource: EventSource | null = null;
+  let isClosed = false;
+
+  try {
+    eventSource = new EventSource(url, { withCredentials: true });
+
+    eventSource.addEventListener("next", (e: MessageEvent) => {
+      try {
+        const parsed = JSON.parse(e.data);
+        onEvent(parsed);
+      } catch (err) {
+        console.error("Failed to parse next queue event:", err);
+      }
+    });
+
+    eventSource.onerror = (err) => {
+      // Prevent infinite background reconnect loop that spins the browser tab
+      if (eventSource && eventSource.readyState === EventSource.CLOSED) {
+        eventSource.close();
+      }
+      if (!isClosed) {
+        onError?.(err);
+      }
+    };
+  } catch (err) {
+    onError?.(err);
+  }
+
+  return () => {
+    isClosed = true;
+    if (eventSource) {
+      eventSource.close();
+      eventSource = null;
+    }
+  };
 }
 

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "projectName": "LetsMarkNow",
+  "version": "0.2.11",
+  "description": "LetsMarkNow Chrome Extension & Companion Backend",
+  "ports": {
+    "frontend": 5173,
+    "backend": 3000
+  },
+  "paths": {
+    "root": ".",
+    "backend": "backend",
+    "extensionDist": "dist/extension",
+    "webDist": "dist/web",
+    "database": "backend/data/letsmarknow.db"
+  },
+  "prerequisites": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "commands": {
+    "installRoot": "npm install",
+    "installBackend": "npm --prefix backend install",
+    "buildExtension": "npm run build:extension",
+    "devFrontend": "npm run dev",
+    "devBackend": "npm --prefix backend run dev",
+    "testFrontend": "npm test",
+    "testBackend": "npm --prefix backend run test"
+  }
+}

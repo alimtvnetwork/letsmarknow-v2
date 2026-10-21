@@ -7,12 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signinUser } from "@/lib/authStore";
 import { ApiError } from "@/lib/apiClient";
+import { AuthDialog, GoogleLogo } from "@/components/auth/AuthDialog";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,74 +49,67 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-sm">
-          <div className="space-y-1.5 text-xs">
-            <Label className="text-xs">Email Address</Label>
-            <Input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="h-9 text-xs"
-            />
-          </div>
-
-          <div className="space-y-1.5 text-xs">
-            <div className="flex items-center justify-between">
-              <Label className="text-xs">Password</Label>
-              <a href="#forgot" onClick={() => toast.info("Password reset link sent")} className="text-[11px] text-primary hover:underline">
-                Forgot password?
-              </a>
-            </div>
-            <Input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••••"
-              className="h-9 text-xs"
-            />
-          </div>
-
-          <Button type="submit" disabled={isLoading} className="w-full text-xs font-semibold h-9">
-            {isLoading ? "Signing In..." : "Sign In"}
+        <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-sm">
+          {/* Primary Google Sign-In */}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsAuthDialogOpen(true)}
+            className="w-full text-xs font-semibold h-10 gap-2.5 border-border/80 hover:bg-muted/50"
+          >
+            <GoogleLogo className="h-4 w-4" />
+            Continue with Google
           </Button>
 
-          <div className="relative py-2 text-center text-[11px] text-muted-foreground">
+          <div className="relative py-1 text-center text-[11px] text-muted-foreground">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-border" />
             </div>
-            <span className="relative bg-card px-2">or continue with</span>
+            <span className="relative bg-card px-2">or continue with email</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                toast.success("Google sign-in simulated");
-                navigate("/web/account");
-              }}
-              className="text-xs"
-            >
-              Google
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5 text-xs">
+              <Label className="text-xs">Email Address</Label>
+              <Input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="h-9 text-xs"
+              />
+            </div>
+
+            <div className="space-y-1.5 text-xs">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs">Password</Label>
+                <a
+                  href="#forgot"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast.info("Password reset instructions sent to your email.");
+                  }}
+                  className="text-[11px] text-primary hover:underline"
+                >
+                  Forgot password?
+                </a>
+              </div>
+              <Input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                className="h-9 text-xs"
+              />
+            </div>
+
+            <Button type="submit" disabled={isLoading} className="w-full text-xs font-semibold h-9">
+              {isLoading ? "Signing In..." : "Sign In with Email"}
             </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                toast.success("GitHub sign-in simulated");
-                navigate("/web/account");
-              }}
-              className="text-xs"
-            >
-              GitHub
-            </Button>
-          </div>
-        </form>
+          </form>
+        </div>
 
         <p className="text-center text-xs text-muted-foreground">
           Don&apos;t have an account?{" "}
@@ -124,12 +119,24 @@ export default function LoginPage() {
         </p>
 
         <div className="pt-2 text-center">
-          <Link to="/web/download" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5">
+          <Link
+            to="/web/download"
+            className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5"
+          >
             <Chrome className="h-3.5 w-3.5" />
             Prefer to install the extension first? Add to Chrome
           </Link>
         </div>
       </div>
+
+      <AuthDialog
+        isOpen={isAuthDialogOpen}
+        onOpenChange={setIsAuthDialogOpen}
+        promptMessage="Sign in with your Google account to sync your LetsMarkNow bookmarks, billing, and team workspaces."
+        onSuccess={() => {
+          navigate("/web/account");
+        }}
+      />
     </div>
   );
 }

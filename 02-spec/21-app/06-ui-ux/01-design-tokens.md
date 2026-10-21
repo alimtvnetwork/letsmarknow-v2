@@ -10,21 +10,21 @@ All colors stored as `H S% L%` triplets (no `hsl()` wrapper) so Tailwind can com
 
 ### 1.1 Brand
 
-Toby pink. Anchor `--brand-500 = 343 79% 60%` ≈ `#EC4868`. Locked by SI-021 (2026-04-29). All ramp steps share hue `343` and saturation `~78–82%`; lightness varies. Mirrors Toby's primary CTA color so users porting from Toby see visual continuity.
+Obsidian Electric Indigo. Anchor `--brand-500 = 239 84% 67%` ≈ `#6366F1` (Option A — Linear / Raycast Aesthetic). Updated from legacy Toby pink to establish a distinct, high-precision developer & power-user visual identity. All ramp steps share hue `239` with luminous violet/indigo saturation.
 
 ```css
 :root {
-  --brand-50:  343 100% 97%;
-  --brand-100: 343  96% 93%;
-  --brand-200: 343  92% 86%;
-  --brand-300: 343  86% 76%;
-  --brand-400: 343  82% 68%;
-  --brand-500: 343  79% 60%;   /* primary anchor — Toby pink #EC4868 */
-  --brand-600: 343  74% 52%;
-  --brand-700: 343  70% 44%;
-  --brand-800: 343  64% 34%;
-  --brand-900: 343  58% 24%;
-  --brand-950: 343  56% 14%;
+  --brand-50:  239 100% 97%;
+  --brand-100: 239  96% 94%;
+  --brand-200: 239  92% 88%;
+  --brand-300: 239  88% 80%;
+  --brand-400: 239  86% 72%;
+  --brand-500: 239  84% 67%;   /* primary anchor — Electric Indigo #6366F1 */
+  --brand-600: 243  75% 59%;   /* high-contrast light anchor #4F46E5 */
+  --brand-700: 244  60% 50%;
+  --brand-800: 244  55% 41%;
+  --brand-900: 242  47% 34%;
+  --brand-950: 244  49% 20%;
 }
 ```
 
@@ -81,14 +81,14 @@ Toby pink. Anchor `--brand-500 = 343 79% 60%` ≈ `#EC4868`. Locked by SI-021 (2
 
 ```css
 .dark {
-  --background:        222 47% 6%;
+  --background:        230 25% 5%;    /* Deep Pitch Zinc #090A0F */
   --foreground:        210 40% 98%;
   --card:              222 47% 8%;
   --card-foreground:   210 40% 98%;
   --popover:           222 47% 8%;
   --popover-foreground:210 40% 98%;
-  --primary:           343 82% 68%;   /* Toby-pink, lifted for dark contrast */
-  --primary-foreground:343 60%  8%;
+  --primary:           239 84% 67%;   /* Electric Indigo #6366F1 */
+  --primary-foreground:0 0% 100%;
   --secondary:         217 33% 17%;
   --secondary-foreground: 210 40% 98%;
   --muted:             217 33% 17%;
@@ -177,7 +177,7 @@ Tailwind wiring (per §11): each `--color-label-*` is exposed as `border-label-{
 
 ```css
 :root {
-  --font-sans:  "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans:  "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --font-heading: "Inter Display", var(--font-sans);
 }

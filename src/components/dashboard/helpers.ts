@@ -9,7 +9,7 @@ export const colorLabelClasses: Record<ColorLabel, string> = {
   teal: "bg-teal-500/15 text-teal-300 border-teal-500/30",
   blue: "bg-sky-500/15 text-sky-300 border-sky-500/30",
   purple: "bg-violet-500/15 text-violet-300 border-violet-500/30",
-  pink: "bg-primary/15 text-primary border-primary/30",
+  pink: "bg-pink-500/15 text-pink-400 border-pink-500/30",
 };
 
 export const colorDotClasses: Record<ColorLabel, string> = {
@@ -21,7 +21,7 @@ export const colorDotClasses: Record<ColorLabel, string> = {
   teal: "bg-teal-500",
   blue: "bg-sky-500",
   purple: "bg-violet-500",
-  pink: "bg-primary",
+  pink: "bg-pink-500",
 };
 
 export const createId = (prefix: string) => {

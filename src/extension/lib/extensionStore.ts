@@ -1,5 +1,10 @@
 import { cleanWorkspace, mockWorkspace } from "@/data/mockWorkspace";
-import { isValidAppData, LOCAL_STORAGE_KEY, type StoredWorkspaceState } from "@/lib/localWorkspaceStore";
+import {
+  isValidAppData,
+  LOCAL_STORAGE_KEY,
+  VIEW_MODE_STORAGE_KEY,
+  type StoredWorkspaceState,
+} from "@/lib/localWorkspaceStore";
 import {
   createCollectionMutation,
   createGroupMutation,
@@ -14,16 +19,24 @@ import type {
   ExtensionPreferences,
   Group,
   SavedItem,
+  ViewMode,
 } from "@/types/lmn";
 import { closeTab, getStorage, removeStorage, setStorage } from "./browserApi";
 import { filterSaveableTabs, generateSessionName, tabToSavedItem } from "./tabCapture";
 import { getStoredAuth } from "@/lib/authStore";
-import { createBackendItem, saveSessionToBackend } from "@/lib/workspaceApiClient";
+import {
+  createBackendItem,
+  saveSessionToBackend,
+  addToNextQueue,
+  updateBackendAccountPreferences,
+} from "@/lib/workspaceApiClient";
 
 export const EXTENSION_STORAGE_KEY = LOCAL_STORAGE_KEY;
 export const EXTENSION_PREFERENCES_KEY = "lmn_extension_prefs_v1";
+export const EXTENSION_VIEW_MODE_KEY = VIEW_MODE_STORAGE_KEY;
 
 export const DEFAULT_EXTENSION_PREFERENCES: ExtensionPreferences = {
+  defaultViewMode: "grid",
   openFullTabAfterSave: false,
   openMainAfterSave: false,
   closeTabsAfterSave: false,
@@ -130,6 +143,98 @@ export async function savePreferences(prefs: ExtensionPreferences): Promise<void
     normalized.openMainAfterSave = normalized.openFullTabAfterSave;
   }
   await setStorage(EXTENSION_PREFERENCES_KEY, normalized);
+}
+
+/**
+ * Loads the user-selected view mode (grid, list, compact, mindmap) with fallback checks.
+ */
+export async function loadSelectedViewMode(): Promise<ViewMode> {
+  const validModes: ViewMode[] = ["list", "compact", "grid", "mindmap"];
+
+  try {
+    // 1. Dedicated storage key
+    const directStored = await getStorage<string | ViewMode>(EXTENSION_VIEW_MODE_KEY);
+    if (directStored) {
+      const clean = String(directStored).replace(/"/g, "").trim() as ViewMode;
+      if (validModes.includes(clean)) {
+        return clean;
+      }
+    }
+
+    // 2. Extension preferences
+    const prefs = await loadPreferences();
+    if (prefs.defaultViewMode && validModes.includes(prefs.defaultViewMode)) {
+      return prefs.defaultViewMode;
+    }
+
+    // 3. Stored workspace state
+    const rawState = await getStorage<StoredWorkspaceState>(EXTENSION_STORAGE_KEY);
+    if (rawState?.viewMode && validModes.includes(rawState.viewMode)) {
+      return rawState.viewMode;
+    }
+
+    // 4. Synchronous localStorage fallback
+    if (typeof window !== "undefined" && window.localStorage) {
+      const lsVal = window.localStorage.getItem(EXTENSION_VIEW_MODE_KEY);
+      if (lsVal) {
+        const clean = lsVal.replace(/"/g, "").trim() as ViewMode;
+        if (validModes.includes(clean)) {
+          return clean;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Failed to load selected view mode:", err);
+  }
+
+  return "grid";
+}
+
+/**
+ * Persists the user-selected view mode across extension storage, localStorage,
+ * preferences, and backend account settings.
+ */
+export async function saveSelectedViewMode(mode: ViewMode): Promise<void> {
+  const validModes: ViewMode[] = ["list", "compact", "grid", "mindmap"];
+  if (!validModes.includes(mode)) return;
+
+  try {
+    // 1. Direct synchronous localStorage write for instant surviving across immediate reload
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem(EXTENSION_VIEW_MODE_KEY, JSON.stringify(mode));
+    }
+
+    // 2. Write to extension storage (chrome.storage.local or async fallback)
+    await setStorage(EXTENSION_VIEW_MODE_KEY, mode);
+
+    // 3. Keep StoredWorkspaceState in sync
+    const existing = await getStorage<StoredWorkspaceState>(EXTENSION_STORAGE_KEY);
+    if (existing && typeof existing === "object") {
+      await setStorage(EXTENSION_STORAGE_KEY, {
+        ...existing,
+        viewMode: mode,
+      });
+    }
+
+    // 4. Keep ExtensionPreferences in sync
+    const prefs = await loadPreferences();
+    if (prefs.defaultViewMode !== mode) {
+      await savePreferences({
+        ...prefs,
+        defaultViewMode: mode,
+      });
+    }
+
+    // 5. Opportunistically sync to backend account preferences if authenticated
+    const auth = getStoredAuth();
+    if (auth?.access_token) {
+      updateBackendAccountPreferences({ default_view: mode }).catch(() => {
+        // Non-blocking sync
+      });
+    }
+  } catch (err) {
+    console.warn("Failed to save selected view mode:", err);
+  }
 }
 
 /**
@@ -403,4 +508,76 @@ export async function importExtensionData(jsonString: string): Promise<AppData> 
   }
   await saveWorkspaceData(data);
   return data;
+}
+
+/**
+ * Adds an open tab snapshot directly to the user's Next queue singleton collection.
+ */
+export async function addItemToNextQueue(tab: BrowserTabSnapshot): Promise<AppData> {
+  const currentData = await loadWorkspaceData();
+  let col = currentData.collections.find((c) => c.kind === "next" || c.name.toLowerCase() === "next");
+  let nextData = currentData;
+
+  if (!col) {
+    const newCol: Collection = {
+      id: "next-queue-" + Date.now(),
+      spaceId: currentData.spaces[0]?.id || "",
+      name: "Next",
+      note: "Per-Account focused to-do queue",
+      color: "teal",
+      isStarred: true,
+      kind: "next",
+      groups: [{ id: "next-group-default", name: "To-Do", items: [] }],
+    };
+    nextData = {
+      ...currentData,
+      collections: [...currentData.collections, newCol],
+    };
+    col = newCol;
+  }
+
+  const newItem: SavedItem = {
+    id: "next-item-" + Date.now(),
+    title: tab.title || tab.url,
+    url: tab.url,
+    description: "",
+    tags: ["next"],
+    color: "teal",
+    addedAt: new Date().toISOString(),
+    faviconUrl: tab.favIconUrl,
+    source: "current-tab",
+    done: false,
+  };
+
+  nextData = {
+    ...nextData,
+    collections: nextData.collections.map((c) => {
+      if (c.id !== col!.id) return c;
+      return {
+        ...c,
+        groups: c.groups.map((g, idx) => {
+          if (idx === 0) return { ...g, items: [newItem, ...g.items] };
+          return g;
+        }),
+      };
+    }),
+  };
+
+  await saveWorkspaceData(nextData);
+
+  try {
+    const auth = getStoredAuth();
+    if (auth?.token) {
+      await addToNextQueue({
+        url: tab.url,
+        title: tab.title || tab.url,
+        favicon_url: tab.favIconUrl,
+        source_kind: "browser_tab",
+      });
+    }
+  } catch (err) {
+    console.warn("Failed to sync item to backend Next queue, saved locally:", err);
+  }
+
+  return nextData;
 }

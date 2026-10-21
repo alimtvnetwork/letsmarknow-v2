@@ -11,6 +11,7 @@ import {
   Laptop,
   LayoutDashboard,
   LogOut,
+  RefreshCw,
   Shield,
   Smartphone,
   Trash2,
@@ -21,7 +22,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/lib/authStore";
+import { useAuth, fetchCurrentAccount } from "@/lib/authStore";
 import {
   changeBackendPassword,
   fetchBackendSessions,
@@ -29,6 +30,7 @@ import {
   signoutAllBackendSessions,
   triggerBackendGdprExport,
 } from "@/lib/workspaceApiClient";
+import { AuthDialog, GoogleLogo } from "@/components/auth/AuthDialog";
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -40,6 +42,7 @@ export default function AccountPage() {
   const [newPassword, setNewPassword] = useState("");
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [isGdprLoading, setIsGdprLoading] = useState(false);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
 
   // Connected browsers/devices list
   const [connectedDevices, setConnectedDevices] = useState([
@@ -51,6 +54,11 @@ export default function AccountPage() {
     if (session) {
       if (session.name) setName(session.name);
       if (session.email) setEmail(session.email);
+    }
+
+    // Refresh profile from backend if session exists
+    if (session?.access_token) {
+      fetchCurrentAccount().catch(() => {});
     }
 
     async function loadSessions() {
@@ -67,7 +75,7 @@ export default function AccountPage() {
           );
         }
       } catch {
-        // Fallback to local default sessions
+        // Fallback to default sessions
       }
     }
     loadSessions();
@@ -120,7 +128,6 @@ export default function AccountPage() {
       setConnectedDevices((prev) => prev.filter((d) => d.id !== id));
       toast.success("Device disconnected successfully");
     } catch {
-      // Local fallback
       setConnectedDevices((prev) => prev.filter((d) => d.id !== id));
       toast.success("Device disconnected successfully");
     }
@@ -149,6 +156,8 @@ export default function AccountPage() {
     }
   };
 
+  const isGoogleSession = Boolean(session && (session.auth_provider === "google" || session.email?.endsWith("@gmail.com") || !session.has_password));
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/20">
       {/* Top Header */}
@@ -167,18 +176,30 @@ export default function AccountPage() {
               Launch Extension Tab
             </Button>
           </Link>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={async () => {
-              await signout();
-              toast.success("Signed out successfully");
-              navigate("/web/login");
-            }}
-            className="gap-1 text-xs text-muted-foreground"
-          >
-            <LogOut className="h-3.5 w-3.5" /> Sign out
-          </Button>
+
+          {session ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={async () => {
+                await signout();
+                toast.success("Signed out successfully");
+                navigate("/web/login");
+              }}
+              className="gap-1 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <LogOut className="h-3.5 w-3.5" /> Sign out
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              onClick={() => setIsAuthDialogOpen(true)}
+              className="gap-1.5 text-xs font-semibold bg-primary text-primary-foreground"
+            >
+              <GoogleLogo className="h-3.5 w-3.5" />
+              Sign in with Google
+            </Button>
+          )}
         </div>
       </header>
 
@@ -229,7 +250,7 @@ export default function AccountPage() {
         </aside>
 
         {/* Content Area */}
-        <main className="md:col-span-3 space-y-8">
+        <main className="md:col-span-3 space-y-6">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Account Profile</h1>
             <p className="text-xs text-muted-foreground mt-1">
@@ -237,9 +258,77 @@ export default function AccountPage() {
             </p>
           </div>
 
+          {/* Account Sync Banner (Prominent Google Sync Callout) */}
+          {!session ? (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-start gap-3.5">
+                <div className="p-2.5 rounded-lg bg-card border border-border shadow-xs shrink-0 mt-0.5">
+                  <GoogleLogo className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    Connect Google Account for Cloud Sync
+                    <span className="rounded bg-amber-500/10 text-amber-400 px-2 py-0.5 text-[10px] font-mono">
+                      Not Signed In
+                    </span>
+                  </h3>
+                  <p className="text-xs text-muted-foreground mt-0.5 max-w-md">
+                    Sign in with Google to synchronize your bookmarks, subscriptions, team spaces, and public share links across the web dashboard and your Chrome extension.
+                  </p>
+                </div>
+              </div>
+
+              <Button
+                size="sm"
+                onClick={() => setIsAuthDialogOpen(true)}
+                className="text-xs font-semibold shrink-0 gap-2 h-9"
+              >
+                <GoogleLogo className="h-3.5 w-3.5" />
+                Sign in with Google
+              </Button>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
+                  <Check className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground flex items-center gap-2">
+                    Account Cloud Sync Active
+                    <span className="rounded bg-emerald-500/20 text-emerald-400 px-1.5 py-0.2 text-[10px] font-mono">
+                      Google OAuth Connected
+                    </span>
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Connected as <strong className="text-foreground">{session.email}</strong>. Workspaces and shares sync automatically.
+                  </p>
+                </div>
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsAuthDialogOpen(true)}
+                className="h-7 text-xs text-muted-foreground hover:text-foreground shrink-0"
+              >
+                Switch Account
+              </Button>
+            </div>
+          )}
+
           {/* Profile Form */}
           <form onSubmit={handleSaveProfile} className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
-            <h2 className="text-sm font-semibold border-b border-border/60 pb-3">Personal Information</h2>
+            <div className="flex items-center justify-between border-b border-border/60 pb-3">
+              <h2 className="text-sm font-semibold">Personal Information</h2>
+              {session?.email && (
+                <span className="text-[11px] text-muted-foreground flex items-center gap-1.5 font-mono">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
+                  Synced
+                </span>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <Label className="text-xs">Display Name</Label>
@@ -255,9 +344,15 @@ export default function AccountPage() {
                 <Input
                   type="email"
                   value={email}
+                  disabled={Boolean(session)}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-9 text-xs"
+                  className="h-9 text-xs disabled:opacity-75 disabled:cursor-not-allowed"
                 />
+                {session && (
+                  <p className="text-[10px] text-muted-foreground">
+                    Managed by your verified Google authentication.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -270,45 +365,72 @@ export default function AccountPage() {
           </form>
 
           {/* Password & Authentication */}
-          <form onSubmit={handlePasswordChange} className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
-            <div className="flex items-center gap-2 border-b border-border/60 pb-3">
-              <Key className="h-4 w-4 text-primary" />
-              <h2 className="text-sm font-semibold">Security & Password</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="space-y-1.5">
-                <Label className="text-xs">Current Password</Label>
-                <Input
-                  type="password"
-                  placeholder="••••••••••••"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="h-9 text-xs"
-                />
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
+            <div className="flex items-center justify-between border-b border-border/60 pb-3">
+              <div className="flex items-center gap-2">
+                <Key className="h-4 w-4 text-primary" />
+                <h2 className="text-sm font-semibold">Security & Password</h2>
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs">New Password</Label>
-                <Input
-                  type="password"
-                  placeholder="Min 8 characters"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="h-9 text-xs"
-                />
+
+              {isGoogleSession && (
+                <span className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
+                  <Check className="h-3 w-3" /> Passwordless Single Sign-On
+                </span>
+              )}
+            </div>
+
+            {isGoogleSession ? (
+              <div className="p-4 rounded-lg bg-muted/40 border border-border/60 space-y-2">
+                <div className="flex items-center gap-2.5">
+                  <GoogleLogo className="h-5 w-5" />
+                  <p className="text-xs font-semibold text-foreground">
+                    Google OAuth 2.0 Single Sign-On
+                  </p>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Your LetsMarkNow account is connected directly to Google. You do not need to create or maintain a separate password. You can seamlessly log in from the Chrome extension and web dashboard using 1-click Google authentication.
+                </p>
               </div>
-            </div>
-            <div className="pt-2 flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">Changing your password invalidates other active sessions.</span>
-              <Button
-                type="submit"
-                size="sm"
-                disabled={isUpdatingPassword}
-                className="text-xs"
-              >
-                {isUpdatingPassword ? "Updating..." : "Update Password"}
-              </Button>
-            </div>
-          </form>
+            ) : (
+              <form onSubmit={handlePasswordChange} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">Current Password</Label>
+                    <Input
+                      type="password"
+                      placeholder="••••••••••••"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-xs">New Password</Label>
+                    <Input
+                      type="password"
+                      placeholder="Min 8 characters"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                </div>
+                <div className="pt-2 flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground">
+                    Changing your password invalidates other active sessions.
+                  </span>
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={isUpdatingPassword}
+                    className="text-xs"
+                  >
+                    {isUpdatingPassword ? "Updating..." : "Update Password"}
+                  </Button>
+                </div>
+              </form>
+            )}
+          </div>
 
           {/* Connected Browsers & Devices */}
           <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-xs">
@@ -408,6 +530,17 @@ export default function AccountPage() {
           </div>
         </main>
       </div>
+
+      <AuthDialog
+        isOpen={isAuthDialogOpen}
+        onOpenChange={setIsAuthDialogOpen}
+        promptMessage="Sign in with your Google account to sync your LetsMarkNow bookmarks, billing, and team workspaces."
+        onSuccess={(auth) => {
+          setName(auth.name || auth.email.split("@")[0]);
+          setEmail(auth.email);
+          toast.success("Google Account successfully synced!");
+        }}
+      />
     </div>
   );
 }

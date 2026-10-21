@@ -10,10 +10,12 @@ import TeamPage from "./pages/TeamPage";
 import ImportExportPage from "./pages/ImportExportPage";
 import PublicShareViewerPage from "./pages/PublicShareViewerPage";
 import HelpPage from "./pages/HelpPage";
+import { setStoredAuth } from "@/lib/authStore";
 
 describe("Web App Portal Surface", () => {
   beforeEach(() => {
     localStorage.clear();
+    setStoredAuth(null);
   });
 
   it("renders Landing Page with install CTA", () => {
@@ -70,7 +72,32 @@ describe("Web App Portal Surface", () => {
     expect(screen.getByText("Invoice History")).toBeInTheDocument();
   });
 
-  it("renders Team Page and lists members", () => {
+  it("handles auth_sync payload seamlessly on Billing Page without infinite loading", () => {
+    const rawSync = encodeURIComponent(
+      JSON.stringify({
+        account_id: "01a15ec4-7b13-7237-8b37-3964c905225b",
+        email: "joy.altersense@gmail.com",
+        name: "Sk. Yeasin Kabir Joy",
+        default_organization_id: "01a15ec4-7b15-78a9-9035-d6f2c3140868",
+        access_token: "mock-valid-sync-token",
+        expires_in: 3600,
+      })
+    );
+
+    window.location.hash = `auth_sync=${rawSync}`;
+
+    render(
+      <MemoryRouter initialEntries={[`/web/billing#auth_sync=${rawSync}`]}>
+        <BillingPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Subscription & Billing")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Sk\./i })).toBeInTheDocument();
+    window.location.hash = "";
+  });
+
+  it("renders Team Page unauthenticated and prompts for login without dummy members", () => {
     render(
       <MemoryRouter>
         <TeamPage />
@@ -78,11 +105,55 @@ describe("Web App Portal Surface", () => {
     );
 
     expect(screen.getByText("Workspace Team Members")).toBeInTheDocument();
-    expect(screen.getByText("Alex Chen")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /invite member/i })).toBeInTheDocument();
+    expect(screen.getByText(/log in to view team and members/i)).toBeInTheDocument();
+    expect(screen.queryByText("Alex Chen")).not.toBeInTheDocument();
+    expect(screen.queryByText("Jordan Smith")).not.toBeInTheDocument();
+    expect(screen.queryByText("Taylor Swift")).not.toBeInTheDocument();
   });
 
-  it("renders Import and Export Page", () => {
+  it("renders Team Page authenticated with current user and invite controls", () => {
+    setStoredAuth({
+      account_id: "acc_owner_test",
+      email: "sarah@letsmarknow.com",
+      name: "Sarah Connor",
+      access_token: "mock-jwt-token",
+      expires_in: 3600,
+      default_organization_id: "org_test",
+    });
+
+    render(
+      <MemoryRouter>
+        <TeamPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Workspace Team Members")).toBeInTheDocument();
+    expect(screen.getByText(/Sarah Connor/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /invite member/i })).toBeInTheDocument();
+    expect(screen.queryByText("Alex Chen")).not.toBeInTheDocument();
+  });
+
+  it("renders Import and Export Page unauthenticated with login prompt", () => {
+    render(
+      <MemoryRouter>
+        <ImportExportPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Import, Export & Data Backups")).toBeInTheDocument();
+    expect(screen.getByText(/log in to access import & export/i)).toBeInTheDocument();
+  });
+
+  it("renders Import and Export Page authenticated with export tools", () => {
+    setStoredAuth({
+      account_id: "acc_owner_test",
+      email: "sarah@letsmarknow.com",
+      name: "Sarah Connor",
+      access_token: "mock-jwt-token",
+      expires_in: 3600,
+      default_organization_id: "org_test",
+    });
+
     render(
       <MemoryRouter>
         <ImportExportPage />

@@ -21,6 +21,8 @@ import {
   saveWorkspaceState,
   type ActiveFilter,
 } from "@/lib/localWorkspaceStore";
+import { getStoredAuth } from "@/lib/authStore";
+import { updateBackendAccountPreferences } from "@/lib/workspaceApiClient";
 import {
   createCollectionMutation,
   createGroupMutation,
@@ -43,7 +45,10 @@ import {
   updateSpaceMutation,
   updateWorkspaceMutation,
 } from "@/lib/workspaceMutations";
-import { mockWorkspace } from "@/data/mockWorkspace";
+import { cleanWorkspace, mockWorkspace } from "@/data/mockWorkspace";
+
+const isTestEnv = typeof process !== "undefined" && process.env?.NODE_ENV === "test";
+const defaultWorkspace = isTestEnv ? mockWorkspace : cleanWorkspace;
 import {
   findShareSettings,
   generateShareSlug,
@@ -157,7 +162,7 @@ export function useWorkspaceDashboard() {
   const [groupForm, setGroupForm] = useState<GroupFormValue>(emptyGroupForm);
   const [itemForm, setItemForm] = useState<ItemFormValue>(emptyItemForm);
 
-  // Save to localStorage on state changes
+  // Save to localStorage and backend on state changes
   useEffect(() => {
     saveWorkspaceState({
       data,
@@ -166,6 +171,12 @@ export function useWorkspaceDashboard() {
       viewMode,
       activeFilter,
     });
+    const auth = getStoredAuth();
+    if (auth?.access_token && ["list", "compact", "grid", "mindmap"].includes(viewMode)) {
+      updateBackendAccountPreferences({ default_view: viewMode }).catch(() => {
+        // Non-blocking sync
+      });
+    }
   }, [data, activeOrganizationId, activeSpaceId, viewMode, activeFilter]);
 
   // Derived current models
@@ -173,7 +184,7 @@ export function useWorkspaceDashboard() {
     () =>
       data.organizations.find((org) => org.id === activeOrganizationId) ??
       data.organizations[0] ??
-      mockWorkspace.organizations[0],
+      defaultWorkspace.organizations[0],
     [data.organizations, activeOrganizationId]
   );
 
@@ -187,7 +198,7 @@ export function useWorkspaceDashboard() {
       organizationSpaces.find((space) => space.id === activeSpaceId) ??
       organizationSpaces[0] ??
       data.spaces[0] ??
-      mockWorkspace.spaces[0],
+      defaultWorkspace.spaces[0],
     [organizationSpaces, activeSpaceId, data.spaces]
   );
 
@@ -778,13 +789,14 @@ export function useWorkspaceDashboard() {
 
   const handleResetData = () => {
     clearWorkspaceState();
-    setData(mockWorkspace);
-    setActiveOrganizationId(mockWorkspace.organizations[0].id);
-    setActiveSpaceId(mockWorkspace.spaces[0].id);
+    const resetTarget = isTestEnv ? mockWorkspace : cleanWorkspace;
+    setData(resetTarget);
+    setActiveOrganizationId(resetTarget.organizations[0].id);
+    setActiveSpaceId(resetTarget.spaces[0].id);
     setViewMode("grid");
     setActiveFilter("all");
     navigate("/web/app");
-    toast.success("Demo data restored");
+    toast.success(isTestEnv ? "Demo data restored" : "Workspace reset to clean state");
   };
 
   const handleExportWorkspaceJson = () => {

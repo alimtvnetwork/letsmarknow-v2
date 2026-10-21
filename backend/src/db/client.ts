@@ -1,21 +1,33 @@
-import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle as drizzlePg } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { env } from "../config/env.js";
 import * as schema from "./schema/index.js";
+import { dbRegistry, DbRegistry } from "./registry.js";
+import type { DbDomain } from "./splitSchemas.js";
 
-let sqlClient: ReturnType<typeof postgres> | null = null;
-let dbInstance: ReturnType<typeof drizzle<typeof schema>> | null = null;
+export { dbRegistry, DbRegistry };
+export type { DbDomain };
 
-export function getDb() {
-  if (!dbInstance) {
-    sqlClient = postgres(env.DATABASE_URL, {
+let pgClient: ReturnType<typeof postgres> | null = null;
+let pgDbInstance: any = null;
+
+export function getDb(domain?: DbDomain): any {
+  if (env.DB_DRIVER === "postgres") {
+    if (pgDbInstance) return pgDbInstance;
+    pgClient = postgres(env.DATABASE_URL, {
       max: env.NODE_ENV === "production" ? 20 : 5,
       idle_timeout: 30,
-      connect_timeout: 1, // 1s connect timeout to prevent hanging health checks
+      connect_timeout: 1,
     });
-    dbInstance = drizzle(sqlClient, { schema });
+    pgDbInstance = drizzlePg(pgClient, { schema });
+    return pgDbInstance;
   }
-  return dbInstance;
+
+  // SQLite Split-DB architecture
+  if (domain) {
+    return dbRegistry.get(domain);
+  }
+  return dbRegistry.createRoutingProxy();
 }
 
 let lastDbCheckTime = 0;
@@ -29,23 +41,30 @@ export async function checkDbConnection(): Promise<boolean> {
   }
 
   try {
-    getDb();
-    if (!sqlClient) {
+    if (env.DB_DRIVER === "postgres") {
+      getDb();
+      if (!pgClient) {
+        lastDbCheckTime = now;
+        lastDbCheckResult = false;
+        return false;
+      }
+      const timeoutMs = env.NODE_ENV === "test" ? 150 : 1000;
+      await Promise.race([
+        pgClient`SELECT 1`,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("DB_CONNECT_TIMEOUT")), timeoutMs)
+        ),
+      ]);
       lastDbCheckTime = now;
-      lastDbCheckResult = false;
-      return false;
+      lastDbCheckResult = true;
+      return true;
     }
 
-    const timeoutMs = env.NODE_ENV === "test" ? 150 : 1000;
-    await Promise.race([
-      sqlClient`SELECT 1`,
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("DB_CONNECT_TIMEOUT")), timeoutMs)
-      ),
-    ]);
+    // SQLite Split-DB connection & schema verification across all 5 databases
+    const ok = await dbRegistry.checkConnection();
     lastDbCheckTime = now;
-    lastDbCheckResult = true;
-    return true;
+    lastDbCheckResult = ok;
+    return ok;
   } catch {
     lastDbCheckTime = now;
     lastDbCheckResult = false;
@@ -54,9 +73,10 @@ export async function checkDbConnection(): Promise<boolean> {
 }
 
 export async function closeDb(): Promise<void> {
-  if (sqlClient) {
-    await sqlClient.end();
-    sqlClient = null;
-    dbInstance = null;
+  if (pgClient) {
+    await pgClient.end();
+    pgClient = null;
   }
+  pgDbInstance = null;
+  await dbRegistry.close();
 }

@@ -1,6 +1,9 @@
 import { uuidv7 } from "../db/utils/uuidv7.js";
 import { AppError } from "../errors/AppError.js";
 import { memRepo, type MemJob, type MemItem } from "../db/memRepo.js";
+import { getDb, checkDbConnection } from "../db/client.js";
+import * as schema from "../db/schema/index.js";
+import { eq } from "drizzle-orm";
 
 export interface CreateJobParams {
   organizationId: string;
@@ -560,6 +563,19 @@ export class JobService {
         total: items.length,
         percent: items.length > 0 ? Math.round(((idx + 1) / items.length) * 100) : 100,
       };
+    }
+
+    const isDb = await checkDbConnection();
+    if (isDb) {
+      const db = getDb();
+      for (const item of items) {
+        if (item.faviconUrl) {
+          await db
+            .update(schema.items)
+            .set({ faviconUrl: item.faviconUrl, updatedAt: new Date() })
+            .where(eq(schema.items.id, item.id));
+        }
+      }
     }
 
     job.status = "succeeded";

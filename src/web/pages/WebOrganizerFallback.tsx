@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Chrome, Sparkles } from "lucide-react";
 
@@ -9,6 +9,7 @@ import {
 } from "@/components/dashboard/AppShell";
 import { CommandPalette } from "@/components/dashboard/CommandPalette";
 import { DashboardBoard, TrashPage } from "@/components/dashboard/DashboardBoard";
+import { NextQueueView } from "@/components/dashboard/NextQueueView";
 import {
   CollectionDialog,
   ConfirmDialog,
@@ -23,6 +24,7 @@ import { SettingsPage } from "@/components/dashboard/SettingsPage";
 import { ShareDialog } from "@/components/dashboard/ShareDialog";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { useWorkspaceDashboard } from "@/hooks/useWorkspaceDashboard";
+import { fetchNextQueue, subscribeNextQueueSSE } from "@/lib/workspaceApiClient";
 import type { AppPage } from "@/types/lmn";
 
 const getPage = (pathname: string, search: string = ""): AppPage => {
@@ -31,6 +33,7 @@ const getPage = (pathname: string, search: string = ""): AppPage => {
   if (query === "trash" || pathname.startsWith("/trash")) return "trash";
   if (query === "activity" || pathname.startsWith("/activity")) return "activity";
   if (query === "share" || pathname.startsWith("/share")) return "share";
+  if (query === "next" || pathname.startsWith("/next")) return "next";
   return "dashboard";
 };
 
@@ -146,6 +149,28 @@ export default function Index() {
   } = useWorkspaceDashboard();
 
   const activePage = getPage(location.pathname, location.search);
+  const [nextCount, setNextCount] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const updateCount = () => {
+      fetchNextQueue({ includeDone: false })
+        .then((res) => {
+          if (isMounted && res) setNextCount(res.open_count || 0);
+        })
+        .catch(() => {});
+    };
+
+    updateCount();
+    const unsubscribe = subscribeNextQueueSSE(() => {
+      updateCount();
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -174,45 +199,47 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex min-h-screen">
-        {/* Desktop Workspace Rail */}
-        <WorkspaceRail
-          organizations={data.organizations}
-          activeOrgId={activeOrganization.id}
-          onSelect={(organizationId) => {
-            setActiveOrganizationId(organizationId);
-            navigate("/web/app");
-          }}
-          onCreateWorkspace={openCreateWorkspace}
-          className="hidden md:flex"
-        />
+        {/* Unified Obsidian Navigation Sidebar */}
+        <div className="hidden md:flex shrink-0 border-r border-border/80 bg-card/40 backdrop-blur-md shadow-obsidian">
+          <WorkspaceRail
+            organizations={data.organizations}
+            activeOrgId={activeOrganization.id}
+            onSelect={(organizationId) => {
+              setActiveOrganizationId(organizationId);
+              navigate("/web/app");
+            }}
+            onCreateWorkspace={openCreateWorkspace}
+            className="flex border-r border-border/40 bg-card/30"
+          />
 
-        {/* Desktop Space Sidebar */}
-        <SpaceSidebar
-          activePage={activePage}
-          activeOrganization={activeOrganization}
-          organizations={data.organizations}
-          spaces={organizationSpaces}
-          activeSpaceId={activeSpace.id}
-          deletedCount={deletedItems.length}
-          onSelectSpace={(spaceId) => {
-            setActiveSpaceId(spaceId);
-            navigate(`/web/app?spaceId=${spaceId}`);
-          }}
-          onSelectOrganization={(orgId) => {
-            setActiveOrganizationId(orgId);
-            navigate("/web/app");
-          }}
-          onCreateWorkspace={openCreateWorkspace}
-          onEditWorkspace={openEditWorkspace}
-          onDeleteWorkspace={requestDeleteWorkspace}
-          onCreateSpace={openCreateSpace}
-          onEditSpace={openEditSpace}
-          onDeleteSpace={requestDeleteSpace}
-          shareSettings={data.shareSettings}
-          onShareWorkspace={() => openShareWorkspace(activeOrganization.id)}
-          onShareSpace={(spaceId) => openShareSpace(spaceId)}
-          className="hidden lg:flex"
-        />
+          <SpaceSidebar
+            activePage={activePage}
+            activeOrganization={activeOrganization}
+            organizations={data.organizations}
+            spaces={organizationSpaces}
+            activeSpaceId={activeSpace.id}
+            deletedCount={deletedItems.length}
+            nextCount={nextCount}
+            onSelectSpace={(spaceId) => {
+              setActiveSpaceId(spaceId);
+              navigate(`/web/app?spaceId=${spaceId}`);
+            }}
+            onSelectOrganization={(orgId) => {
+              setActiveOrganizationId(orgId);
+              navigate("/web/app");
+            }}
+            onCreateWorkspace={openCreateWorkspace}
+            onEditWorkspace={openEditWorkspace}
+            onDeleteWorkspace={requestDeleteWorkspace}
+            onCreateSpace={openCreateSpace}
+            onEditSpace={openEditSpace}
+            onDeleteSpace={requestDeleteSpace}
+            shareSettings={data.shareSettings}
+            onShareWorkspace={() => openShareWorkspace(activeOrganization.id)}
+            onShareSpace={(spaceId) => openShareSpace(spaceId)}
+            className="hidden lg:flex border-r-0 bg-transparent"
+          />
+        </div>
 
         {/* Main Content Area */}
         <main className="flex min-w-0 flex-1 flex-col">
@@ -264,6 +291,8 @@ export default function Index() {
               onDisableShare={handleDisableShare}
               onOpenShareDialog={openShareDialog}
             />
+          ) : activePage === "next" ? (
+            <NextQueueView />
           ) : activePage === "trash" ? (
             <TrashPage items={deletedItems} onRestore={restoreItem} />
           ) : activePage === "activity" ? (
@@ -326,6 +355,7 @@ export default function Index() {
         spaces={organizationSpaces}
         activeSpaceId={activeSpace.id}
         deletedCount={deletedItems.length}
+        nextCount={nextCount}
         activePage={activePage}
         onSelectOrganization={(orgId) => {
           setActiveOrganizationId(orgId);

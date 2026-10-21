@@ -166,17 +166,17 @@ export default function LandingPage() {
 
       {/* 2. Hero Section with Interactive Sandbox Console */}
       <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,70,239,0.15),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,70,239,0.12),rgba(0,0,0,0))]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.18),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.15),rgba(0,0,0,0))]" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3.5 py-1 text-xs text-muted-foreground shadow-xs mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/80 px-3.5 py-1 text-xs text-muted-foreground shadow-xs mb-6 backdrop-blur-md">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             <span>The Browser Extension is the Primary Workspace</span>
           </div>
 
           <h1 className="mx-auto max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl sm:leading-[1.12]">
             Save tabs, organize sessions, and{" "}
-            <span className="bg-gradient-to-r from-primary via-fuchsia-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
               reopen your focus
             </span>{" "}
             in seconds.
@@ -1035,11 +1035,6 @@ export default function LandingPage() {
             <Link to="/web/download">
               <Button size="lg" className="h-12 px-7 text-xs sm:text-sm font-semibold gap-2 shadow-lg shadow-primary/25">
                 <Chrome className="h-4 w-4" /> Add to Chrome Now — Free
-              </Button>
-            </Link>
-            <Link to="/web/app">
-              <Button size="lg" variant="outline" className="h-12 px-5 text-xs sm:text-sm font-medium">
-                Open Fallback Web Organizer
               </Button>
             </Link>
           </div>

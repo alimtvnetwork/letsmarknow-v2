@@ -347,6 +347,44 @@ describe("DashboardBoard Top 5 Extension Native Capabilities", () => {
     expect(screen.getByText("Auto Layout")).toBeInTheDocument();
     expect(screen.getByText("Save View")).toBeInTheDocument();
   });
+
+  it("renders empty space without an 'Add item' button when collections list is empty", () => {
+    const handleCreateCollection = vi.fn();
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={[]}
+        viewMode="grid"
+        activeFilter="all"
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={handleCreateCollection}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    expect(screen.getByRole("heading", { name: "Start this Space" })).toBeInTheDocument();
+    expect(screen.getByText("Where is the option to add items?")).toBeInTheDocument();
+    expect(screen.getByText(/In LetsMarkNow, saved items/i)).toBeInTheDocument();
+    expect(screen.getByText(/Create a Collection first/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /create collection/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /add item/i })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /create collection/i }));
+    expect(handleCreateCollection).toHaveBeenCalledTimes(1);
+  });
 });
 
 

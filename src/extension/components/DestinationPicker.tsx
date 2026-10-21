@@ -45,7 +45,7 @@ export function DestinationPicker({
   const availableGroups = activeCollection ? activeCollection.groups : [];
 
   return (
-    <div className="space-y-2.5 rounded-xl border border-border/80 bg-card/70 p-3.5 text-xs shadow-xs transition-all hover:border-border">
+    <div className="space-y-2.5 rounded-xl border border-border/80 border-t-white/12 bg-card/75 backdrop-blur-md p-3.5 text-xs shadow-obsidian transition-all hover:border-border">
       {/* Header */}
       <div className="flex items-center justify-between pb-1.5 border-b border-border/50">
         <span className="font-semibold text-foreground tracking-tight flex items-center gap-1.5">

@@ -29,7 +29,15 @@ export function getSharePath(targetType: ShareTargetType, slug: string): string 
 }
 
 export function getShareUrl(targetType: ShareTargetType, slug: string): string {
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  let origin = typeof window !== "undefined" ? window.location.origin : "";
+  if (
+    !origin ||
+    origin.startsWith("chrome-extension:") ||
+    origin.startsWith("moz-extension:") ||
+    !origin.startsWith("http")
+  ) {
+    origin = (import.meta.env?.VITE_WEB_URL as string) || "http://localhost:5173";
+  }
   return `${origin}${getSharePath(targetType, slug)}`;
 }
 

@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LetsMarkNow - Options</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Geist:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
       html, body {
         width: 100%;
         min-height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #020817;
+        background-color: #090A0F;
         color: #f8fafc;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-family: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        letter-spacing: -0.01em;
       }
       #root {
         width: 100%;
@@ -21,7 +25,7 @@
       }
     </style>
   </head>
-  <body class="bg-background text-foreground antialiased selection:bg-primary/20 m-0 p-0">
+  <body class="bg-background text-foreground antialiased selection:bg-primary/20 m-0 p-0 font-sans">
     <div id="root"></div>
     <script type="module" src="/src/extension/options/OptionsRoot.tsx"></script>
   </body>

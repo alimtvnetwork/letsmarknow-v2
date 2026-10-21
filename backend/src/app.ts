@@ -27,6 +27,7 @@ import { accountRoutes } from "./routes/account.js";
 import { jobRoutes } from "./routes/jobs.js";
 import { flagRoutes } from "./routes/flags.js";
 import { billingRoutes } from "./routes/billing.js";
+import { nextQueueRoutes } from "./routes/nextQueue.js";
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = fastify({
@@ -157,6 +158,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(jobRoutes);
   await app.register(flagRoutes);
   await app.register(billingRoutes);
+  await app.register(nextQueueRoutes);
 
   return app;
 }

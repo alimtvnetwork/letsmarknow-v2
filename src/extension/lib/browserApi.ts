@@ -1,4 +1,5 @@
 import type { BrowserTabSnapshot } from "@/types/lmn";
+import { getStoredAuth } from "@/lib/authStore";
 
 /**
  * Fallback tabs used when running in standalone browser dev mode / preview.
@@ -303,20 +304,49 @@ export async function openExtensionMain(page: string = "app.html"): Promise<void
 }
 
 /**
- * Opens the web dashboard URL in a browser tab.
+ * Opens the web dashboard URL in a browser tab with account session synchronization.
  */
 export async function openWebDashboard(url: string = "http://localhost:5173/web"): Promise<void> {
-  return openUrl(url);
+  let targetUrl = url;
+  if (!targetUrl.startsWith("http://") && !targetUrl.startsWith("https://")) {
+    const baseUrl =
+      typeof window !== "undefined" && window.location
+        ? window.location.origin
+        : "http://localhost:5173";
+    targetUrl = `${baseUrl}${targetUrl.startsWith("/") ? "" : "/"}${targetUrl}`;
+  }
+
+  const auth = getStoredAuth();
+  if (auth?.access_token && !targetUrl.includes("auth_sync=")) {
+    const separator = targetUrl.includes("#") ? "&" : "#";
+    targetUrl = `${targetUrl}${separator}auth_sync=${encodeURIComponent(JSON.stringify(auth))}`;
+  }
+
+  return openUrl(targetUrl);
 }
 
 /**
- * Section 9 adapter: Opens web account/portal page in a browser tab.
+ * Section 9 adapter: Opens web account/portal page in a browser tab with account session synchronization.
  */
 export async function openWebAccount(path: string = "/web/account"): Promise<void> {
-  const baseUrl = typeof window !== "undefined" && window.location ? window.location.origin : "http://localhost:5173";
+  const isExtension = typeof chrome !== "undefined" && Boolean(chrome?.runtime?.id);
+  const webOrigin = isExtension
+    ? (import.meta.env.VITE_WEB_URL || "http://localhost:5173")
+    : typeof window !== "undefined" && window.location
+    ? window.location.origin
+    : "http://localhost:5173";
+
   const normalized = path.startsWith("/") ? path : `/${path}`;
   const targetPath = normalized.startsWith("/web") ? normalized : `/web${normalized}`;
-  return openUrl(`${baseUrl}${targetPath}`);
+  let finalUrl = `${webOrigin}${targetPath}`;
+
+  const auth = getStoredAuth();
+  if (auth?.access_token && !finalUrl.includes("auth_sync=")) {
+    const separator = finalUrl.includes("#") ? "&" : "#";
+    finalUrl = `${finalUrl}${separator}auth_sync=${encodeURIComponent(JSON.stringify(auth))}`;
+  }
+
+  return openUrl(finalUrl);
 }
 
 /**
@@ -341,7 +371,11 @@ export async function getStorage<T>(key: string): Promise<T | null> {
     try {
       const raw = window.localStorage.getItem(key);
       if (!raw) return null;
-      return JSON.parse(raw) as T;
+      try {
+        return JSON.parse(raw) as T;
+      } catch {
+        return raw as unknown as T;
+      }
     } catch (err) {
       console.warn(`Failed to parse localStorage key '${key}':`, err);
       return null;

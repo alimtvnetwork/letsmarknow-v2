@@ -51,6 +51,7 @@ export default defineConfig(({ mode }) => {
     sidepanel: path.resolve(__dirname, "sidepanel.html"),
     options: path.resolve(__dirname, "options.html"),
     background: path.resolve(__dirname, "src/extension/background/serviceWorker.ts"),
+    contentScript: path.resolve(__dirname, "src/extension/content/authSyncContentScript.ts"),
   };
 
   const webInputs = {
@@ -100,8 +101,33 @@ export default defineConfig(({ mode }) => {
             if (chunkInfo.name === "background") {
               return "background.js";
             }
+            if (chunkInfo.name === "contentScript") {
+              return "contentScript.js";
+            }
             return "assets/[name]-[hash].js";
           },
+          manualChunks: isWeb
+            ? (id) => {
+                if (id.includes("node_modules")) {
+                  if (id.includes("react-router")) {
+                    return "vendor-router";
+                  }
+                  if (id.includes("react") || id.includes("react-dom") || id.includes("scheduler")) {
+                    return "vendor-react";
+                  }
+                  if (id.includes("@radix-ui")) {
+                    return "vendor-radix";
+                  }
+                  if (id.includes("lucide-react")) {
+                    return "vendor-lucide";
+                  }
+                  if (id.includes("@tanstack")) {
+                    return "vendor-query";
+                  }
+                  return "vendor-core";
+                }
+              }
+            : undefined,
         },
       },
     },

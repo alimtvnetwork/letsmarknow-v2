@@ -82,14 +82,14 @@ describe("tabCapture utilities", () => {
       expect(item.isDeleted).toBe(false);
     });
 
-    it("falls back to domain when title is missing", () => {
+    it("falls back to domain when title is missing and does not auto-tag", () => {
       const tab: BrowserTabSnapshot = {
         url: "https://tailwindcss.com/",
       };
 
       const item = tabToSavedItem(tab);
       expect(item.title).toBe("tailwindcss.com");
-      expect(item.tags).toEqual(["tailwindcss.com"]);
+      expect(item.tags).toEqual([]);
     });
   });
 

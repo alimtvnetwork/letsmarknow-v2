@@ -1,0 +1,64 @@
+# Litestream Configuration for LetsMarkNow Split-DB Architecture
+# Continuous real-time WAL replication to S3-compatible cloud object storage
+# (Cloudflare R2 / AWS S3 / MinIO / Backblaze B2)
+#
+# Usage:
+#   litestream replicate -config litestream.yml
+# Restore example:
+#   litestream restore -config litestream.yml -o ./data/bookmarks.db bookmarks
+
+dbs:
+  - path: ./data/auth.db
+    replicas:
+      - type: s3
+        bucket: "${LITESTREAM_BUCKET}"
+        path: "auth"
+        endpoint: "${LITESTREAM_ENDPOINT}"
+        access-key-id: "${LITESTREAM_ACCESS_KEY_ID}"
+        secret-access-key: "${LITESTREAM_SECRET_ACCESS_KEY}"
+        retention: "720h"
+        sync-interval: "1s"
+
+  - path: ./data/workspace.db
+    replicas:
+      - type: s3
+        bucket: "${LITESTREAM_BUCKET}"
+        path: "workspace"
+        endpoint: "${LITESTREAM_ENDPOINT}"
+        access-key-id: "${LITESTREAM_ACCESS_KEY_ID}"
+        secret-access-key: "${LITESTREAM_SECRET_ACCESS_KEY}"
+        retention: "720h"
+        sync-interval: "1s"
+
+  - path: ./data/bookmarks.db
+    replicas:
+      - type: s3
+        bucket: "${LITESTREAM_BUCKET}"
+        path: "bookmarks"
+        endpoint: "${LITESTREAM_ENDPOINT}"
+        access-key-id: "${LITESTREAM_ACCESS_KEY_ID}"
+        secret-access-key: "${LITESTREAM_SECRET_ACCESS_KEY}"
+        retention: "720h"
+        sync-interval: "1s"
+
+  - path: ./data/shares.db
+    replicas:
+      - type: s3
+        bucket: "${LITESTREAM_BUCKET}"
+        path: "shares"
+        endpoint: "${LITESTREAM_ENDPOINT}"
+        access-key-id: "${LITESTREAM_ACCESS_KEY_ID}"
+        secret-access-key: "${LITESTREAM_SECRET_ACCESS_KEY}"
+        retention: "720h"
+        sync-interval: "1s"
+
+  - path: ./data/history.db
+    replicas:
+      - type: s3
+        bucket: "${LITESTREAM_BUCKET}"
+        path: "history"
+        endpoint: "${LITESTREAM_ENDPOINT}"
+        access-key-id: "${LITESTREAM_ACCESS_KEY_ID}"
+        secret-access-key: "${LITESTREAM_SECRET_ACCESS_KEY}"
+        retention: "720h"
+        sync-interval: "1s"

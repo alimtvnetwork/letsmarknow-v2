@@ -23,8 +23,12 @@ import {
   redeemLifetimeLicense,
   stackLifetimeLicense,
 } from "@/lib/workspaceApiClient";
+import { useAuth } from "@/lib/authStore";
+import { AuthDialog, GoogleLogo } from "@/components/auth/AuthDialog";
 
 export default function BillingPage() {
+  const { session } = useAuth();
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState<"Starter" | "Pro" | "Team">("Pro");
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("annually");
   const [licenseCode, setLicenseCode] = useState("");
@@ -96,11 +100,22 @@ export default function BillingPage() {
               Launch Extension
             </Button>
           </Link>
-          <Link to="/web/account">
-            <Button size="sm" variant="ghost" className="text-xs">
-              Account
+          {session ? (
+            <Link to="/web/account">
+              <Button size="sm" variant="ghost" className="text-xs">
+                {session.name ? session.name.split(" ")[0] : "Account"}
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              size="sm"
+              onClick={() => setIsAuthDialogOpen(true)}
+              className="gap-1.5 text-xs font-semibold bg-primary text-primary-foreground"
+            >
+              <GoogleLogo className="h-3.5 w-3.5" />
+              Sign in with Google
             </Button>
-          </Link>
+          )}
         </div>
       </header>
 
@@ -383,6 +398,8 @@ export default function BillingPage() {
           </div>
         </main>
       </div>
+
+      <AuthDialog open={isAuthDialogOpen} onOpenChange={setIsAuthDialogOpen} />
     </div>
   );
 }

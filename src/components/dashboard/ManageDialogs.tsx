@@ -1,5 +1,5 @@
 import { useState, type FormEvent, type ReactNode } from "react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Info } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -295,6 +295,19 @@ export function ItemDialog({
                 : "Saved items can be links, docs, references, or pages from the extension later."}
             </DialogDescription>
           </DialogHeader>
+
+          {mode === "create" && collections.length === 0 && (
+            <div className="mt-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-500 dark:text-amber-400 space-y-1">
+              <div className="flex items-center gap-1.5 font-semibold">
+                <Info className="h-4 w-4 shrink-0" />
+                <span>A collection is required before adding items</span>
+              </div>
+              <p className="text-muted-foreground leading-relaxed text-[11px]">
+                In LetsMarkNow, saved items must belong to a collection and group. Please close this dialog and create a collection first. Once created, you will see a <strong>+</strong> button on each collection card and group header to add items directly!
+              </p>
+            </div>
+          )}
+
           <div className="grid gap-4 py-5">
             <Field label="Title">
               <Input

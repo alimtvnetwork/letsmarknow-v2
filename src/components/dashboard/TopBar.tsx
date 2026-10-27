@@ -1,7 +1,16 @@
-import { Command, PanelLeft, Plus, Search } from "lucide-react";
+import { useState } from "react";
+import { Command, MoreHorizontal, PanelLeft, Pencil, Plus, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { Space } from "@/types/lmn";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 interface TopBarProps {
   activeSpace: Space;
@@ -12,6 +21,9 @@ interface TopBarProps {
   onCreateItem?: () => void;
   onOpenCommand: () => void;
   onToggleMobileMenu?: () => void;
+  onEditSpace?: (spaceId: string) => void;
+  onDeleteSpace?: (spaceId: string) => void;
+  canDeleteSpace?: boolean;
   children?: React.ReactNode;
 }
 
@@ -23,8 +35,13 @@ export function TopBar({
   onCreateCollection,
   onOpenCommand,
   onToggleMobileMenu,
+  onEditSpace,
+  onDeleteSpace,
+  canDeleteSpace = true,
   children,
 }: TopBarProps) {
+  const [isSpaceMenuOpen, setIsSpaceMenuOpen] = useState(false);
+
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-border bg-background/90 px-4 md:px-5 backdrop-blur">
       <div className="flex min-w-0 items-center gap-2.5">
@@ -38,9 +55,62 @@ export function TopBar({
         >
           <PanelLeft className="h-4 w-4" />
         </Button>
-        <div className="min-w-0">
-          <h2 className="truncate text-base font-semibold">{activeSpace.name}</h2>
-          <p className="text-xs text-muted-foreground">{itemCount} active items</p>
+        <div className="min-w-0 flex items-center gap-1.5">
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-semibold">{activeSpace.name}</h2>
+            <p className="text-xs text-muted-foreground">{itemCount} active items</p>
+          </div>
+          {(onEditSpace || onDeleteSpace) && (
+            <DropdownMenu open={isSpaceMenuOpen} onOpenChange={setIsSpaceMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  data-testid="topbar-space-options-button"
+                  className="h-7 w-7 text-muted-foreground hover:text-foreground shrink-0 rounded-lg ml-0.5"
+                  title="Space options"
+                  onClick={() => setIsSpaceMenuOpen((prev) => !prev)}
+                >
+                  <MoreHorizontal className="h-3.5 w-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-36">
+                {onEditSpace && (
+                  <DropdownMenuItem
+                    data-testid="topbar-edit-space-menu-item"
+                    onClick={() => {
+                      setIsSpaceMenuOpen(false);
+                      onEditSpace(activeSpace.id);
+                    }}
+                    className="cursor-pointer text-xs"
+                  >
+                    <Pencil className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+                    Edit space
+                  </DropdownMenuItem>
+                )}
+                {onDeleteSpace && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      data-testid="topbar-delete-space-menu-item"
+                      disabled={!canDeleteSpace}
+                      onClick={() => {
+                        setIsSpaceMenuOpen(false);
+                        onDeleteSpace(activeSpace.id);
+                      }}
+                      className={cn(
+                        "cursor-pointer text-xs text-rose-500 focus:text-rose-500 focus:bg-rose-500/10",
+                        !canDeleteSpace && "opacity-50 cursor-not-allowed text-muted-foreground"
+                      )}
+                    >
+                      <Trash2 className="mr-2 h-3.5 w-3.5" />
+                      Delete space
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
 

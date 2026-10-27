@@ -16,7 +16,7 @@ describe("ExtensionTabApp", () => {
     });
 
     expect(screen.getByText("LetsMarkNow")).toBeInTheDocument();
-    expect(screen.getByText("Design Systems")).toBeInTheDocument();
+    expect(screen.getAllByText("Design Systems")[0]).toBeInTheDocument();
 
     const gridViewBtn = screen.getByTitle("grid view");
     expect(gridViewBtn.className).toContain("bg-primary");
@@ -100,7 +100,7 @@ describe("ExtensionTabApp", () => {
     render(<ExtensionTabApp />);
 
     await waitFor(() => {
-      expect(screen.getByText("Design Systems")).toBeInTheDocument();
+      expect(screen.getAllByText("Design Systems")[0]).toBeInTheDocument();
     });
 
     const searchInput = document.querySelector("input[data-dashboard-search]") as HTMLInputElement;
@@ -169,9 +169,12 @@ describe("ExtensionTabApp", () => {
     fireEvent.keyDown(window, { key: "/" });
     expect(document.activeElement).toBe(searchInput);
 
-    // Verify Quick Focus queues are rendered
+    // Verify Quick Focus queue is rendered and Quick Inbox is removed
     expect(screen.getByText("Next")).toBeInTheDocument();
-    expect(screen.getByText("Quick Inbox")).toBeInTheDocument();
+    expect(screen.queryByText("Quick Inbox")).not.toBeInTheDocument();
+
+    // Verify Views & Tools section header is rendered
+    expect(screen.getByText("Views & Tools")).toBeInTheDocument();
 
     // Verify Space header is rendered
     expect(screen.getByText(/Spaces \(\d+\)/)).toBeInTheDocument();
@@ -313,6 +316,169 @@ describe("ExtensionTabApp", () => {
       expect(screen.getByTitle("grid view").className).toContain("bg-primary");
       const raw = localStorage.getItem("lmn_selected_view_mode_v1");
       expect(raw ? JSON.parse(raw) : null).toBe("grid");
+    });
+  });
+
+  it("renders collapsible collection list in sidebar and toggles expansion", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-collections-list")).toBeInTheDocument();
+    });
+
+    // Both collections in Personal Engine space should be listed in the sidebar
+    expect(screen.getByTestId("nav-collection-item-collection-design")).toBeInTheDocument();
+
+    // Toggle collapse button
+    const collapseToggle = screen.getByTestId("toggle-collections-collapse-button");
+    fireEvent.click(collapseToggle);
+
+    // List should now be collapsed (hidden)
+    expect(screen.queryByTestId("sidebar-collections-list")).not.toBeInTheDocument();
+
+    // Toggle back open
+    fireEvent.click(collapseToggle);
+    expect(screen.getByTestId("sidebar-collections-list")).toBeInTheDocument();
+  });
+
+  it("filters dashboard to single collection when collection item is clicked in sidebar and clears filter", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-collections-list")).toBeInTheDocument();
+    });
+
+    // Initially no filter banner
+    expect(screen.queryByTestId("active-collection-filter-banner")).not.toBeInTheDocument();
+
+    // Click on collection item in sidebar
+    const colItemBtn = screen.getByTestId("nav-collection-item-collection-design");
+    fireEvent.click(colItemBtn);
+
+    // Filter banner appears with collection name
+    await waitFor(() => {
+      expect(screen.getByTestId("active-collection-filter-banner")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Filtered collection:")).toBeInTheDocument();
+
+    // Click 'Show all collections' on the banner
+    const clearBtn = screen.getByTestId("clear-collection-filter-button");
+    fireEvent.click(clearBtn);
+
+    // Filter banner disappears
+    await waitFor(() => {
+      expect(screen.queryByTestId("active-collection-filter-banner")).not.toBeInTheDocument();
+    });
+
+    // Filter again via sidebar
+    fireEvent.click(colItemBtn);
+    expect(screen.getByTestId("active-collection-filter-banner")).toBeInTheDocument();
+
+    // Clicking the parent Collections button also clears the filter
+    const collectionsParentBtn = screen.getByTestId("nav-collections-button");
+    fireEvent.click(collectionsParentBtn);
+    expect(screen.queryByTestId("active-collection-filter-banner")).not.toBeInTheDocument();
+  });
+
+  it("renders SPACES before Views & Tools, and nests collections under spaces", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-collections-list")).toBeInTheDocument();
+    });
+
+    const sidebar = screen.getByTestId("extension-sidebar");
+    const textContent = sidebar.textContent || "";
+    const spacesIndex = textContent.indexOf("Spaces");
+    const viewsToolsIndex = textContent.indexOf("Views & Tools");
+
+    expect(spacesIndex).toBeGreaterThan(-1);
+    expect(viewsToolsIndex).toBeGreaterThan(-1);
+    expect(spacesIndex).toBeLessThan(viewsToolsIndex);
+    expect(textContent).not.toContain("Quick Inbox");
+  });
+
+  it("allows updating/editing a space from the sidebar space options dropdown", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("space-options-button-space-home")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("space-options-button-space-home"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("edit-space-menu-item-space-home")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("edit-space-menu-item-space-home"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: "Edit space" })).toBeInTheDocument();
+    });
+
+    const nameInput = screen.getByPlaceholderText("Research");
+    fireEvent.change(nameInput, { target: { value: "My Super Collections" } });
+
+    fireEvent.click(screen.getByRole("button", { name: "Save space" }));
+
+    await waitFor(() => {
+      expect(screen.getAllByText("My Super Collections")[0]).toBeInTheDocument();
+    });
+  });
+
+  it("allows deleting a space when multiple spaces exist, and disables delete when only one space remains", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("space-options-button-space-launch")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("space-options-button-space-launch"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("delete-space-menu-item-space-launch")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("delete-space-menu-item-space-launch"));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Delete space\?/i)).toBeInTheDocument();
+    });
+
+    const confirmDeleteBtn = screen.getByRole("button", { name: /^delete$/i });
+    fireEvent.click(confirmDeleteBtn);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("space-options-button-space-launch")).not.toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("space-options-button-space-home"));
+
+    await waitFor(() => {
+      const deleteItem = screen.getByTestId("delete-space-menu-item-space-home");
+      expect(deleteItem).toBeInTheDocument();
+      expect(deleteItem.getAttribute("aria-disabled") === "true" || deleteItem.hasAttribute("disabled")).toBe(true);
+    });
+  });
+
+  it("allows editing space via TopBar space options menu", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("topbar-space-options-button")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("topbar-space-options-button"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("topbar-edit-space-menu-item")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("topbar-edit-space-menu-item"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: "Edit space" })).toBeInTheDocument();
     });
   });
 });

@@ -6,11 +6,12 @@ import {
   ExternalLink,
   FolderPlus,
   Globe,
-  Inbox,
   Layers,
   LayoutDashboard,
+  MoreHorizontal,
   Network,
   PanelLeft,
+  Pencil,
   Plus,
   RefreshCw,
   Search,
@@ -84,6 +85,7 @@ import {
   updateWorkspaceMutation,
 } from "@/lib/workspaceMutations";
 import {
+  colorDotClasses,
   countActiveItems,
   getCollectionSearchText,
 } from "@/components/dashboard/helpers";
@@ -211,7 +213,43 @@ export function ExtensionTabApp() {
   }, []);
 
   const [activeFilter, setActiveFilter] = useState<"all" | "starred" | "recent">("all");
+  const [selectedCollectionFilterId, setSelectedCollectionFilterId] = useState<string | null>(null);
+  const [manuallyCollapsedSpaceIds, setManuallyCollapsedSpaceIds] = useState<Set<string>>(new Set());
+  const [manuallyExpandedSpaceIds, setManuallyExpandedSpaceIds] = useState<Set<string>>(new Set());
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const isSpaceExpanded = useCallback(
+    (spaceId: string) => {
+      if (spaceId === activeSpaceId) {
+        return !manuallyCollapsedSpaceIds.has(spaceId);
+      }
+      return manuallyExpandedSpaceIds.has(spaceId);
+    },
+    [activeSpaceId, manuallyCollapsedSpaceIds, manuallyExpandedSpaceIds]
+  );
+
+  const toggleSpaceExpand = useCallback(
+    (spaceId: string) => {
+      if (spaceId === activeSpaceId) {
+        setManuallyCollapsedSpaceIds((prev) => {
+          const next = new Set(prev);
+          if (next.has(spaceId)) next.delete(spaceId);
+          else next.add(spaceId);
+          return next;
+        });
+      } else {
+        setManuallyExpandedSpaceIds((prev) => {
+          const next = new Set(prev);
+          if (next.has(spaceId)) next.delete(spaceId);
+          else next.add(spaceId);
+          return next;
+        });
+      }
+    },
+    [activeSpaceId]
+  );
+
+  const [activeSpaceMenuId, setActiveSpaceMenuId] = useState<string | null>(null);
 
   // Open Browser Tabs state
   const [openTabs, setOpenTabs] = useState<BrowserTabSnapshot[]>([]);
@@ -388,9 +426,28 @@ export function ExtensionTabApp() {
     return data.collections.filter((c) => c.spaceId === activeSpace.id);
   }, [data, activeSpace]);
 
+  // Reset collection filter if active space changes and the selected collection is no longer in it
+  useEffect(() => {
+    if (selectedCollectionFilterId) {
+      const exists = collectionsForActiveSpace.some((c) => c.id === selectedCollectionFilterId);
+      if (!exists) {
+        setSelectedCollectionFilterId(null);
+      }
+    }
+  }, [collectionsForActiveSpace, selectedCollectionFilterId]);
+
+  const selectedFilteredCollection = useMemo(() => {
+    if (!selectedCollectionFilterId) return null;
+    return collectionsForActiveSpace.find((c) => c.id === selectedCollectionFilterId) || null;
+  }, [collectionsForActiveSpace, selectedCollectionFilterId]);
+
   const filteredCollections = useMemo(() => {
     const currentQuery = query.trim().toLowerCase();
     let cols = collectionsForActiveSpace;
+
+    if (selectedCollectionFilterId) {
+      cols = cols.filter((c) => c.id === selectedCollectionFilterId);
+    }
 
     if (activeFilter === "starred") {
       cols = cols.filter((c) => c.isStarred);
@@ -404,7 +461,7 @@ export function ExtensionTabApp() {
       if (activeFilter === "recent") return b.id.localeCompare(a.id);
       return Number(b.isStarred) - Number(a.isStarred);
     });
-  }, [activeFilter, collectionsForActiveSpace, query]);
+  }, [activeFilter, collectionsForActiveSpace, query, selectedCollectionFilterId]);
 
   const deletedItems = useMemo(() => {
     if (!data) return [];
@@ -999,6 +1056,7 @@ export function ExtensionTabApp() {
       );
       await updateData(nextData);
       setActiveSpaceId(newSpace.id);
+      toast.success("Space created");
     } else if (spaceMode === "edit" && dialogTarget.spaceId) {
       const nextData = updateSpaceMutation(
         data,
@@ -1008,6 +1066,7 @@ export function ExtensionTabApp() {
         spaceForm.accentClass
       );
       await updateData(nextData);
+      toast.success("Space updated");
     }
     setSpaceMode(null);
   };
@@ -1384,10 +1443,13 @@ export function ExtensionTabApp() {
         setActiveSpaceId(result.nextSpaceId);
       }
     } else if (deleteTarget.type === "space" && deleteTarget.spaceId) {
-      const result = deleteSpaceMutation(data, deleteTarget.spaceId);
+      const result = deleteSpaceMutation(data, deleteTarget.spaceId, activeOrgId);
       if (result) {
         await updateData(result.nextData);
         setActiveSpaceId(result.nextSpaceId);
+        toast.success("Space deleted");
+      } else {
+        toast.error("Cannot delete your only space");
       }
     } else if (deleteTarget.type === "collection" && deleteTarget.collectionId) {
       const nextData = deleteCollectionMutation(data, deleteTarget.collectionId);
@@ -1545,7 +1607,7 @@ export function ExtensionTabApp() {
 
         {/* Navigation Sections */}
         <div className="flex-1 overflow-y-auto p-3 space-y-4">
-          {/* Quick Focus Queues: Next & Quick Inbox */}
+          {/* Quick Focus: Next */}
           <div className="space-y-1">
             <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
               Quick Focus
@@ -1556,6 +1618,7 @@ export function ExtensionTabApp() {
               type="button"
               onClick={() => {
                 setActiveFilter(activeFilter === "starred" ? "all" : "starred");
+                setSelectedCollectionFilterId(null);
                 if (activePage !== "dashboard") setActivePage("dashboard");
               }}
               className={cn(
@@ -1574,62 +1637,214 @@ export function ExtensionTabApp() {
                 {data?.collections ? data.collections.filter((c) => c.isStarred).length : 0}
               </span>
             </button>
-
-            {/* Quick Inbox */}
-            <button
-              type="button"
-              onClick={() => {
-                setActiveFilter("all");
-                setQuery("");
-                if (activePage !== "dashboard") setActivePage("dashboard");
-              }}
-              className={cn(
-                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
-                activeFilter === "all" && activePage === "dashboard" && query === ""
-                  ? "bg-primary/10 text-primary font-semibold border border-primary/20"
-                  : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
-              )}
-              title="Quick Inbox & Unsorted Links"
-            >
-              <span className="flex items-center gap-2">
-                <Inbox className="h-3.5 w-3.5 text-primary" />
-                <span>Quick Inbox</span>
-              </span>
-              <span className="rounded-full bg-primary/20 text-primary px-1.5 py-0.2 text-[10px] font-semibold">
-                {openTabs.length}
-              </span>
-            </button>
           </div>
 
-          {/* Main Extension Views */}
+          {/* SPACES Section: Positioned Before Views & Tools with Nested Collapsible Collections */}
           <div className="space-y-1 pt-2 border-t border-border/40">
-            <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
-              Workspace
+            <div className="flex items-center justify-between px-2 pb-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+                Spaces ({organizationSpaces.length})
+              </span>
+              <button
+                type="button"
+                onClick={openCreateSpace}
+                className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted/60 transition cursor-pointer"
+                title="Create Space"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
             </div>
 
-            <button
-              type="button"
-              data-testid="nav-collections-button"
-              onClick={() => {
-                setActivePage("dashboard");
-                setActiveFilter("all");
-                if (viewMode === "mindmap") {
-                  handleViewModeChange("grid");
-                }
-              }}
-              className={cn(
-                "flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
-                activePage === "dashboard" && activeFilter !== "starred" && viewMode !== "mindmap"
-                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
-                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-              )}
-            >
-              <span className="flex items-center gap-2">
-                <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
-                Collections
-              </span>
-              <span className="text-[10px] font-semibold opacity-80">{activeItemCount}</span>
-            </button>
+            <div className="space-y-1">
+              {organizationSpaces.map((space) => {
+                const isSelected = space.id === activeSpaceId;
+                const spaceCollections = (data?.collections || []).filter(
+                  (c) => c.spaceId === space.id
+                );
+                const spaceItems = countActiveItems(spaceCollections);
+                const emoji = getSpaceEmoji(space.name);
+                const isExpanded = isSpaceExpanded(space.id);
+
+                return (
+                  <div key={space.id} className="space-y-1">
+                    <div
+                      className={cn(
+                        "group flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition-all",
+                        isSelected && activePage === "dashboard" && !selectedCollectionFilterId
+                          ? "bg-card font-semibold text-foreground border border-border shadow-2xs"
+                          : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                      )}
+                    >
+                      <button
+                        type="button"
+                        data-testid={isSelected ? "nav-collections-button" : `nav-space-button-${space.id}`}
+                        onClick={() => {
+                          setActiveSpaceId(space.id);
+                          setSelectedCollectionFilterId(null);
+                          if (activePage !== "dashboard") setActivePage("dashboard");
+                          if (viewMode === "mindmap") {
+                            handleViewModeChange("grid");
+                          }
+                        }}
+                        className="flex items-center gap-2.5 min-w-0 flex-1 text-left focus:outline-none"
+                        title={`Space: ${space.name} (click to view all)`}
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-muted/60 border border-border/40 text-xs shadow-2xs">
+                          {emoji}
+                        </span>
+                        <span className="truncate">{space.name}</span>
+                      </button>
+
+                      <div className="flex items-center gap-1 shrink-0 ml-1">
+                        <span className="text-[10px] font-mono text-muted-foreground">{spaceItems}</span>
+
+                        <DropdownMenu
+                          open={activeSpaceMenuId === space.id}
+                          onOpenChange={(open) => setActiveSpaceMenuId(open ? space.id : null)}
+                        >
+                          <DropdownMenuTrigger asChild>
+                            <button
+                              type="button"
+                              data-testid={`space-options-button-${space.id}`}
+                              className="opacity-0 group-hover:opacity-100 focus:opacity-100 flex h-5 w-5 items-center justify-center rounded hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-opacity"
+                              title="Space options"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveSpaceMenuId((prev) => (prev === space.id ? null : space.id));
+                              }}
+                            >
+                              <MoreHorizontal className="h-3 w-3" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-36 p-1">
+                            <DropdownMenuItem
+                              data-testid={`edit-space-menu-item-${space.id}`}
+                              onClick={() => {
+                                setActiveSpaceMenuId(null);
+                                openEditSpace(space.id);
+                              }}
+                              className="cursor-pointer text-xs"
+                            >
+                              <Pencil className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+                              Edit space
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              data-testid={`delete-space-menu-item-${space.id}`}
+                              disabled={organizationSpaces.length <= 1}
+                              onClick={() => {
+                                setActiveSpaceMenuId(null);
+                                if (organizationSpaces.length <= 1) {
+                                  toast.error("Cannot delete your only space");
+                                  return;
+                                }
+                                openDeleteConfirm({
+                                  type: "space",
+                                  spaceId: space.id,
+                                  name: space.name,
+                                });
+                              }}
+                              className={cn(
+                                "cursor-pointer text-xs text-rose-500 focus:text-rose-500 focus:bg-rose-500/10",
+                                organizationSpaces.length <= 1 && "opacity-50 cursor-not-allowed text-muted-foreground"
+                              )}
+                            >
+                              <Trash2 className="mr-2 h-3.5 w-3.5" />
+                              Delete space
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        {spaceCollections.length > 0 && (
+                          <button
+                            type="button"
+                            data-testid={isSelected ? "toggle-collections-collapse-button" : `toggle-space-collapse-${space.id}`}
+                            title={isExpanded ? "Collapse collections" : "Expand collections"}
+                            onClick={() => toggleSpaceExpand(space.id)}
+                            className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted/60 transition cursor-pointer"
+                          >
+                            <ChevronDown
+                              className={cn(
+                                "h-3 w-3 transition-transform duration-200",
+                                !isExpanded && "-rotate-90"
+                              )}
+                            />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Nested Collections List under Space */}
+                    {isExpanded && spaceCollections.length > 0 && (
+                      <div
+                        data-testid={isSelected ? "sidebar-collections-list" : `sidebar-collections-list-${space.id}`}
+                        className="space-y-0.5 pl-3 pt-0.5 ml-3.5 border-l border-border/40"
+                      >
+                        {spaceCollections.map((col) => {
+                          const isColActive =
+                            activePage === "dashboard" &&
+                            activeSpaceId === space.id &&
+                            selectedCollectionFilterId === col.id;
+                          const colItemCount = countActiveItems([col]);
+                          const dotClass =
+                            colorDotClasses[col.color || "none"] || colorDotClasses.none;
+
+                          return (
+                            <button
+                              key={col.id}
+                              type="button"
+                              data-testid={`nav-collection-item-${col.id}`}
+                              onClick={() => {
+                                setActiveSpaceId(space.id);
+                                setActivePage("dashboard");
+                                if (
+                                  selectedCollectionFilterId === col.id &&
+                                  activeSpaceId === space.id
+                                ) {
+                                  setSelectedCollectionFilterId(null);
+                                } else {
+                                  setSelectedCollectionFilterId(col.id);
+                                }
+                                if (viewMode === "mindmap") {
+                                  handleViewModeChange("grid");
+                                }
+                              }}
+                              className={cn(
+                                "group flex w-full items-center justify-between rounded-lg px-2 py-1 text-xs font-medium transition-colors",
+                                isColActive
+                                  ? "bg-card text-foreground font-semibold shadow-2xs border border-border/80"
+                                  : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                              )}
+                              title={`Filter to ${col.name} (click to ${
+                                isColActive ? "clear filter" : "filter"
+                              })`}
+                            >
+                              <span className="flex items-center gap-2 min-w-0">
+                                <span
+                                  className={cn("h-2 w-2 rounded-full shrink-0", dotClass)}
+                                  aria-hidden="true"
+                                />
+                                <span className="truncate text-left text-[11px]">{col.name}</span>
+                              </span>
+                              <span className="text-[10px] font-mono text-muted-foreground shrink-0 pl-1">
+                                {colItemCount}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Views & Tools Navigation (Formerly WORKSPACE) */}
+          <div className="space-y-1 pt-2 border-t border-border/40">
+            <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
+              Views & Tools
+            </div>
 
             <button
               type="button"
@@ -1674,7 +1889,6 @@ export function ExtensionTabApp() {
                 {nextUncompletedCount}
               </span>
             </button>
-
 
             <button
               type="button"
@@ -1757,58 +1971,6 @@ export function ExtensionTabApp() {
                 Extension Settings
               </span>
             </button>
-          </div>
-
-          {/* Spaces Section with Rich Icons/Emojis */}
-          <div className="pt-2 border-t border-border/40">
-            <div className="flex items-center justify-between px-2 pb-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
-                Spaces ({organizationSpaces.length})
-              </span>
-              <button
-                type="button"
-                onClick={openCreateSpace}
-                className="flex h-5 w-5 items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted/60 transition"
-                title="Create Space"
-              >
-                <Plus className="h-3.5 w-3.5" />
-              </button>
-            </div>
-
-            <div className="space-y-1">
-              {organizationSpaces.map((space) => {
-                const isSelected = space.id === activeSpaceId;
-                const spaceItems = countActiveItems(
-                  data.collections.filter((c) => c.spaceId === space.id)
-                );
-                const emoji = getSpaceEmoji(space.name);
-
-                return (
-                  <button
-                    key={space.id}
-                    type="button"
-                    onClick={() => {
-                      setActiveSpaceId(space.id);
-                      if (activePage !== "dashboard") setActivePage("dashboard");
-                    }}
-                    className={cn(
-                      "flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs transition-all",
-                      isSelected && activePage === "dashboard"
-                        ? "bg-card font-semibold text-foreground border border-border shadow-2xs"
-                        : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
-                    )}
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-muted/60 border border-border/40 text-xs shadow-2xs">
-                        {emoji}
-                      </span>
-                      <span className="truncate">{space.name}</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-muted-foreground">{spaceItems}</span>
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </div>
 
@@ -1898,6 +2060,20 @@ export function ExtensionTabApp() {
               onCreateItem={() => openCreateItem()}
               onOpenCommand={() => {}}
               onToggleMobileMenu={() => setIsSidebarOpen((prev) => !prev)}
+              onEditSpace={openEditSpace}
+              onDeleteSpace={(spaceId) => {
+                if (organizationSpaces.length <= 1) {
+                  toast.error("Cannot delete your only space");
+                  return;
+                }
+                const target = organizationSpaces.find((s) => s.id === spaceId);
+                openDeleteConfirm({
+                  type: "space",
+                  spaceId,
+                  name: target?.name || activeSpace.name,
+                });
+              }}
+              canDeleteSpace={organizationSpaces.length > 1}
             >
               <Button
                 size="sm"
@@ -1959,18 +2135,50 @@ export function ExtensionTabApp() {
                   isSaving={isSavingTabs}
                 />
 
+                {/* Active Collection Filter Banner */}
+                {selectedFilteredCollection && (
+                  <div
+                    data-testid="active-collection-filter-banner"
+                    className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-foreground shadow-2xs"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-muted-foreground text-[11px]">Filtered collection:</span>
+                      <span className="flex items-center gap-1.5 font-semibold text-primary truncate">
+                        <span
+                          className={cn(
+                            "h-2 w-2 rounded-full shrink-0",
+                            colorDotClasses[selectedFilteredCollection.color || "none"] ||
+                              colorDotClasses.none
+                          )}
+                        />
+                        {selectedFilteredCollection.name}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setSelectedCollectionFilterId(null)}
+                      data-testid="clear-collection-filter-button"
+                      className="h-6 px-2 text-[11px] text-muted-foreground hover:text-foreground cursor-pointer"
+                    >
+                      Show all collections
+                    </Button>
+                  </div>
+                )}
+
                 <DashboardBoard
                   activeSpace={activeSpace}
                   collections={filteredCollections}
                   viewMode={viewMode}
                   activeFilter={activeFilter}
-                  hasSearchQuery={!!query}
+                  hasSearchQuery={!!query || !!selectedCollectionFilterId}
                   shareSettings={data.shareSettings}
                   openUrlSet={openUrlSet}
                   duplicateUrlCounts={workspaceUrlStats.urlCounts}
                   onClearFilters={() => {
                     setQuery("");
                     setActiveFilter("all");
+                    setSelectedCollectionFilterId(null);
                   }}
                   onViewModeChange={handleViewModeChange}
                   onFilterChange={setActiveFilter}
@@ -2596,6 +2804,7 @@ export function ExtensionTabApp() {
         isOpen={deleteTarget !== null}
         title={`Delete ${deleteTarget?.type || "item"}?`}
         description={`Are you sure you want to delete ${deleteTarget?.name ? `"${deleteTarget.name}"` : "this"}?`}
+        actionLabel="Delete"
         onOpenChange={(open) => !open && setDeleteTarget(null)}
         onConfirm={handleConfirmDelete}
       />

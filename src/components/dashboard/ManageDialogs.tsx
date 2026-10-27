@@ -415,14 +415,14 @@ export function ConfirmDialog({
   isOpen,
   title,
   description,
-  actionLabel,
+  actionLabel = "Delete",
   onOpenChange,
   onConfirm,
 }: {
   isOpen: boolean;
   title: string;
   description: string;
-  actionLabel: string;
+  actionLabel?: string;
   onOpenChange: (isOpen: boolean) => void;
   onConfirm: () => void;
 }) {

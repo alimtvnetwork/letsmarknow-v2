@@ -122,10 +122,35 @@ if ($isLocalRepo) {
     $downloadSuccess = $false
 
     # Strategy 1: Direct CDN Asset Download (bypasses GitHub REST API rate limits completely)
-    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.13" }
-    $directUrls = @(
-        "https://github.com/$Repo/releases/download/v$versionTag/LetsMarkNow-Portable-v$versionTag.zip",
-        "https://github.com/$Repo/releases/download/$versionTag/LetsMarkNow-Portable-$versionTag.zip",
+    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { $null }
+
+    # Resolve "latest" to the actual newest release tag via the GitHub API.
+    # (Uses /releases list, not /releases/latest, because this repo ships
+    # pre-releases which /latest excludes.) Without this, "latest" would
+    # silently pin to a stale hardcoded version below.
+    if (-not $versionTag) {
+        try {
+            $headers = @{ "User-Agent" = "LetsMarkNow-Installer" }
+            $allReleases = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases" -Headers $headers -Method Get -ErrorAction Stop
+            $newest = $allReleases | Select-Object -First 1
+            if ($newest -and $newest.tag_name) {
+                $versionTag = ($newest.tag_name -replace '^v','')
+                Write-Host "  * Latest release resolved: v$versionTag" -ForegroundColor DarkGray
+            }
+        } catch {
+            Write-Host "  [WARN] Could not resolve latest release tag; trying known versions." -ForegroundColor DarkYellow
+        }
+    }
+
+    $directUrls = @()
+    if ($versionTag) {
+        $directUrls += "https://github.com/$Repo/releases/download/v$versionTag/LetsMarkNow-Portable-v$versionTag.zip"
+        $directUrls += "https://github.com/$Repo/releases/download/$versionTag/LetsMarkNow-Portable-$versionTag.zip"
+    }
+    # Last-resort known-good versions (newest first) if API resolution failed
+    $directUrls += @(
+        "https://github.com/$Repo/releases/download/v1.0.15/LetsMarkNow-Portable-v1.0.15.zip",
+        "https://github.com/$Repo/releases/download/v1.0.14/LetsMarkNow-Portable-v1.0.14.zip",
         "https://github.com/$Repo/releases/download/v1.0.13/LetsMarkNow-Portable-v1.0.13.zip",
         "https://github.com/$Repo/releases/download/v1.0.12/LetsMarkNow-Portable-v1.0.12.zip",
         "https://github.com/$Repo/releases/download/v1.0.11/LetsMarkNow-Portable-v1.0.11.zip",
@@ -206,7 +231,8 @@ if ((-not (Test-Path $installedUnins)) -and $targetRelease) {
 }
 if (-not (Test-Path $installedUnins)) {
     try {
-        $directUninsUrl = "https://github.com/$Repo/releases/download/v$versionTag/uninstall.ps1"
+        $uninsTag = if ($versionTag) { $versionTag } else { "1.0.15" }
+        $directUninsUrl = "https://github.com/$Repo/releases/download/v$uninsTag/uninstall.ps1"
         Invoke-WebRequest -Uri $directUninsUrl -OutFile $installedUnins -UseBasicParsing -ErrorAction SilentlyContinue
     } catch { }
 }
@@ -267,7 +293,7 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
-$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.13" }
+$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } elseif ($versionTag) { $versionTag } else { "1.0.15" }
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value $installedVersion
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"

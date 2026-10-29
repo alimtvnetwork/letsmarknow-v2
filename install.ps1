@@ -113,7 +113,7 @@ if ($isLocalRepo) {
         $localNodeModules = Join-Path $localBackend "node_modules"
         $targetNodeModules = Join-Path $targetBackend "node_modules"
         if ((Test-Path $localNodeModules) -and (-not (Test-Path $targetNodeModules))) {
-            Copy-Item -Recurse $localNodeModules $targetNodeModules -Force
+            & robocopy "$localNodeModules" "$targetNodeModules" /E /XJ /NFL /NDL /NJH /NJS /NC /NS /NP /MT:16 | Out-Null
         }
     }
 } else {
@@ -122,10 +122,12 @@ if ($isLocalRepo) {
     $downloadSuccess = $false
 
     # Strategy 1: Direct CDN Asset Download (bypasses GitHub REST API rate limits completely)
-    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.12" }
+    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.13" }
     $directUrls = @(
         "https://github.com/$Repo/releases/download/v$versionTag/LetsMarkNow-Portable-v$versionTag.zip",
         "https://github.com/$Repo/releases/download/$versionTag/LetsMarkNow-Portable-$versionTag.zip",
+        "https://github.com/$Repo/releases/download/v1.0.13/LetsMarkNow-Portable-v1.0.13.zip",
+        "https://github.com/$Repo/releases/download/v1.0.12/LetsMarkNow-Portable-v1.0.12.zip",
         "https://github.com/$Repo/releases/download/v1.0.11/LetsMarkNow-Portable-v1.0.11.zip",
         "https://github.com/$Repo/releases/download/v1.0.10/LetsMarkNow-Portable-v1.0.10.zip",
         "https://github.com/$Repo/releases/download/v1.0.9/LetsMarkNow-Portable-v1.0.9.zip",
@@ -265,7 +267,7 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
-$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.12" }
+$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.13" }
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value $installedVersion
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"
@@ -289,7 +291,7 @@ Write-Host "==========================================================" -Foregro
 Write-Host "  [SUCCESS] LetsMarkNow installed successfully!" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green
 
-# 6. Auto-Launch Backend Service & Chromium Fullscreen Workspace
+# 6. Auto-Launch Backend Service & Dual-Window Chromium Workspace
 if (-not $SkipLaunch) {
     # 6a. Start Backend Service
     $backendExe = Join-Path $installDir "backend.exe"
@@ -297,21 +299,21 @@ if (-not $SkipLaunch) {
         Write-Host ""
         Write-Host "[LAUNCH] Starting LetsMarkNow Backend Service..." -ForegroundColor Cyan
         Start-Process -FilePath $backendExe
-        for ($i = 0; $i -lt 30; $i++) {
-            Start-Sleep -Milliseconds 200
+        for ($i = 0; $i -lt 80; $i++) {
+            Start-Sleep -Milliseconds 250
             try {
-                $resp = Invoke-RestMethod -Uri "http://localhost:3000/v1/health" -TimeoutSec 1 -ErrorAction SilentlyContinue
+                $resp = Invoke-RestMethod -Uri "http://127.0.0.1:3000/v1/health" -TimeoutSec 1 -ErrorAction SilentlyContinue
                 if ($resp -and $resp.status -eq "ok") {
-                    Write-Host "  * Backend & Web App online at http://localhost:3000 (Health: OK)" -ForegroundColor Green
+                    Write-Host "  * Backend & Web App online at http://127.0.0.1:3000 (Health: OK)" -ForegroundColor Green
                     break
                 }
             } catch { }
         }
     }
 
-    # 6b. Start Chromium in Fullscreen
+    # 6b. Start Chromium Workspace (Window 1: Extension, Window 2: Web Dashboard)
     Write-Host ""
-    Write-Host "[LAUNCH] Starting LetsMarkNow in Chromium fullscreen workspace..." -ForegroundColor Cyan
+    Write-Host "[LAUNCH] Starting LetsMarkNow Workspace (Extension Window + Web Dashboard Window)..." -ForegroundColor Cyan
     $exeToLaunch = Join-Path $installDir "LetsMarkNow.exe"
     Start-Process -FilePath $exeToLaunch
 }

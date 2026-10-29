@@ -5,46 +5,53 @@ import { DEFAULT_EXTENSION_PREFERENCES, EXTENSION_PREFERENCES_KEY, EXTENSION_STO
  * Service Worker Lifecycle for LetsMarkNow Extension (Manifest V3).
  */
 
+let isEnsuringExtensionWindow = false;
+
 /**
- * Ensures the primary LetsMarkNow dashboard (app.html) is always opened or focused.
- * If an initial start tab is blank/newtab, it replaces it so no blank tabs linger.
+ * Ensures the primary LetsMarkNow extension workspace (app.html) is opened in a dedicated window or focused.
+ * Opens Window 1 for the Extension, allowing the Web Dashboard to run concurrently in Window 2.
  */
-export async function ensureAppTabOpen(): Promise<void> {
+export async function ensureExtensionWindow(): Promise<void> {
+  if (isEnsuringExtensionWindow) return;
+  isEnsuringExtensionWindow = true;
+
   try {
-    if (typeof chrome === "undefined" || !chrome.tabs) return;
+    if (typeof chrome === "undefined" || !chrome.windows || !chrome.tabs) return;
 
     const appUrl = chrome.runtime.getURL("app.html");
-    const tabs = await chrome.tabs.query({});
-    const existingAppTab = tabs.find(t => t.url && t.url.startsWith(appUrl));
+    const allWindows = await chrome.windows.getAll({ populate: true });
 
-    if (existingAppTab) {
-      if (existingAppTab.id && !existingAppTab.active) {
-        await chrome.tabs.update(existingAppTab.id, { active: true });
+    for (const win of allWindows) {
+      const foundTab = win.tabs?.find((t) => t.url && t.url.startsWith(appUrl));
+      if (foundTab) {
+        if (win.id) {
+          await chrome.windows.update(win.id, { focused: true });
+        }
+        if (foundTab.id) {
+          await chrome.tabs.update(foundTab.id, { active: true });
+        }
+        return;
       }
-      return;
     }
 
-    // Look for a blank / initial start page tab to convert
-    const placeholderTab = tabs.find(
-      t =>
-        !t.url ||
-        t.url === "about:blank" ||
-        t.url.startsWith("edge://newtab") ||
-        t.url.startsWith("chrome://newtab")
-    );
-
-    if (placeholderTab && placeholderTab.id) {
-      await chrome.tabs.update(placeholderTab.id, { url: appUrl, active: true });
-    } else {
-      await chrome.tabs.create({ url: appUrl, active: true });
-    }
+    // Open dedicated window for the extension app
+    await chrome.windows.create({
+      url: appUrl,
+      type: "normal",
+      focused: true,
+      state: "maximized",
+    });
   } catch (err) {
-    console.warn("Failed to ensure LetsMarkNow app tab open:", err);
+    console.warn("Failed to ensure LetsMarkNow extension window:", err);
+  } finally {
+    setTimeout(() => {
+      isEnsuringExtensionWindow = false;
+    }, 800);
   }
 }
 
-// 1. Ensure tab is opened immediately when Service Worker boots
-ensureAppTabOpen();
+// 1. Ensure extension window is opened when Service Worker boots
+ensureExtensionWindow();
 
 // 2. Lifecycle: On Extension Installation / Update
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -93,7 +100,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       });
     }
 
-    await ensureAppTabOpen();
+    await ensureExtensionWindow();
   } catch (err) {
     console.warn("Failed to initialize storage onInstalled:", err);
   }
@@ -102,28 +109,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 // 3. Lifecycle: On Browser Startup
 if (typeof chrome !== "undefined" && chrome.runtime?.onStartup) {
   chrome.runtime.onStartup.addListener(() => {
-    ensureAppTabOpen();
-  });
-}
-
-// 4. Lifecycle: On New Window Creation (e.g. desktop icon clicked while browser in background)
-if (typeof chrome !== "undefined" && chrome.windows?.onCreated) {
-  chrome.windows.onCreated.addListener(() => {
-    setTimeout(ensureAppTabOpen, 100);
-  });
-}
-
-// 5. Lifecycle: On New Tab Creation (converts initial blank/newtab to app.html)
-if (typeof chrome !== "undefined" && chrome.tabs?.onCreated) {
-  chrome.tabs.onCreated.addListener((tab) => {
-    if (
-      !tab.url ||
-      tab.url === "about:blank" ||
-      tab.url.startsWith("edge://newtab") ||
-      tab.url.startsWith("chrome://newtab")
-    ) {
-      setTimeout(ensureAppTabOpen, 100);
-    }
+    ensureExtensionWindow();
   });
 }
 
@@ -131,7 +117,7 @@ if (typeof chrome !== "undefined" && chrome.tabs?.onCreated) {
 if (typeof chrome !== "undefined" && chrome.contextMenus?.onClicked) {
   chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     if (info.menuItemId === "lmn_open_dashboard") {
-      chrome.tabs.create({ url: chrome.runtime.getURL("app.html") });
+      ensureExtensionWindow();
     } else if (info.menuItemId === "lmn_add_to_next") {
       const url = info.linkUrl || info.pageUrl || tab?.url;
       const title = tab?.title || url;
@@ -158,6 +144,12 @@ if (typeof chrome !== "undefined" && chrome.contextMenus?.onClicked) {
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "GET_EXTENSION_STATUS") {
     sendResponse({ status: "active", version: "0.1.0" });
+    return true;
+  }
+
+  if (message?.type === "ENSURE_EXTENSION_WINDOW" || message?.type === "OPEN_EXTENSION_WINDOW") {
+    ensureExtensionWindow();
+    sendResponse({ ok: true });
     return true;
   }
 
@@ -192,7 +184,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   return false;
 });
 
-// Listener for external web page messages (auto-login bridge)
+// Listener for external web page messages (auto-login bridge & window triggers)
 if (typeof chrome !== "undefined" && chrome.runtime?.onMessageExternal) {
   chrome.runtime.onMessageExternal.addListener((message, _sender, sendResponse) => {
     if (message?.type === "GET_EXTENSION_AUTH") {
@@ -201,6 +193,13 @@ if (typeof chrome !== "undefined" && chrome.runtime?.onMessageExternal) {
       });
       return true;
     }
+
+    if (message?.type === "ENSURE_EXTENSION_WINDOW" || message?.type === "OPEN_EXTENSION_WINDOW") {
+      ensureExtensionWindow();
+      sendResponse({ ok: true });
+      return true;
+    }
+
     return false;
   });
 }

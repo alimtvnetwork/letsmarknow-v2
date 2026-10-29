@@ -69,7 +69,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     logger: {
       level: env.NODE_ENV === "test" ? "silent" : "info",
       transport:
-        env.NODE_ENV === "development"
+        env.NODE_ENV === "development" && process.stdout?.isTTY
           ? {
               target: "pino-pretty",
               options: {

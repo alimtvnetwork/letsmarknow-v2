@@ -31,6 +31,15 @@ function syncAuthFromExtension(): void {
 // Initial sync upon script execution
 syncAuthFromExtension();
 
+// Ensure extension window is opened alongside web dashboard
+try {
+  if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
+    chrome.runtime.sendMessage({ type: "ENSURE_EXTENSION_WINDOW" }).catch(() => {});
+  }
+} catch {
+  // Ignored if runtime unavailable
+}
+
 // Listen for storage changes from the extension (e.g. login/logout in popup or sidepanel)
 if (typeof chrome !== "undefined" && chrome.storage?.onChanged) {
   chrome.storage.onChanged.addListener((changes, area) => {

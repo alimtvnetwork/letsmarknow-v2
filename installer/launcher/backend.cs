@@ -8,7 +8,7 @@ namespace LetsMarkNowBackendLauncher
 {
     static class Program
     {
-        private const string HealthCheckUrl = "http://localhost:3000/v1/health";
+        private const string HealthCheckUrl = "http://127.0.0.1:3000/v1/health";
 
         [STAThread]
         static int Main(string[] args)
@@ -83,13 +83,9 @@ namespace LetsMarkNowBackendLauncher
                     FileName = nodeExe,
                     Arguments = "\"" + serverJs + "\"",
                     WorkingDirectory = backendDir,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
+                    UseShellExecute = true,
                     WindowStyle = ProcessWindowStyle.Hidden
                 };
-
-                psi.EnvironmentVariables["NODE_ENV"] = "production";
-                psi.EnvironmentVariables["PORT"] = "3000";
 
                 Process proc = Process.Start(psi);
                 if (proc == null)
@@ -97,10 +93,10 @@ namespace LetsMarkNowBackendLauncher
                     return 4;
                 }
 
-                // Wait up to 10 seconds for health check to succeed
-                for (int i = 0; i < 50; i++)
+                // Wait up to 25 seconds for health check to succeed
+                for (int i = 0; i < 100; i++)
                 {
-                    Thread.Sleep(200);
+                    Thread.Sleep(250);
                     if (IsBackendHealthy(HealthCheckUrl))
                     {
                         return 0;
@@ -128,9 +124,16 @@ namespace LetsMarkNowBackendLauncher
 
         public static bool IsBackendHealthy(string url)
         {
+            if (CheckHealthUrl("http://127.0.0.1:3000/v1/health")) return true;
+            if (CheckHealthUrl("http://localhost:3000/v1/health")) return true;
+            return false;
+        }
+
+        private static bool CheckHealthUrl(string testUrl)
+        {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(testUrl);
                 request.Timeout = 800;
                 request.Method = "GET";
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())

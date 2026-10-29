@@ -11,7 +11,7 @@ namespace LetsMarkNowLauncher
     static class Program
     {
         private const string StaticExtensionId = "pnfhjpjocddcolcnlginjoblglphhgpm";
-        private const string HealthCheckUrl = "http://localhost:3000/v1/health";
+        private const string HealthCheckUrl = "http://127.0.0.1:3000/v1/health";
 
         [STAThread]
         static void Main(string[] args)
@@ -53,7 +53,7 @@ namespace LetsMarkNowLauncher
                     Directory.CreateDirectory(profileDir);
                 }
 
-                string initialTarget = "http://localhost:3000";
+                string initialTarget = "http://127.0.0.1:3000";
                 bool forceEdge = false;
                 foreach (string arg in args)
                 {
@@ -80,10 +80,11 @@ namespace LetsMarkNowLauncher
                     return;
                 }
 
-                // Launch Chromium browser (Google Chrome preferred) with unpacked extension loaded into isolated profile in fullscreen.
-                // Defaults to opening the local Web App dashboard at http://localhost:3000
+                // Launch Chromium browser (Google Chrome preferred) with unpacked extension loaded into isolated profile.
+                // Opens Window 2 for the local Web App dashboard at http://localhost:3000
+                // The background service worker concurrently opens Window 1 for the Extension App (app.html).
                 string launchArgs = string.Format(
-                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check --disable-background-mode {2}",
+                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-maximized --no-first-run --no-default-browser-check --disable-background-mode {2}",
                     extensionDir,
                     profileDir,
                     initialTarget
@@ -132,10 +133,10 @@ namespace LetsMarkNowLauncher
                     };
                     Process.Start(psi);
 
-                    // Wait up to 6 seconds for backend to become ready
-                    for (int i = 0; i < 30; i++)
+                    // Wait up to 20 seconds for backend to become ready
+                    for (int i = 0; i < 80; i++)
                     {
-                        Thread.Sleep(200);
+                        Thread.Sleep(250);
                         if (IsBackendHealthy(HealthCheckUrl))
                         {
                             break;
@@ -174,9 +175,16 @@ namespace LetsMarkNowLauncher
 
         private static bool IsBackendHealthy(string url)
         {
+            if (CheckHealthUrl("http://127.0.0.1:3000/v1/health")) return true;
+            if (CheckHealthUrl("http://localhost:3000/v1/health")) return true;
+            return false;
+        }
+
+        private static bool CheckHealthUrl(string testUrl)
+        {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(testUrl);
                 request.Timeout = 800;
                 request.Method = "GET";
                 using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())

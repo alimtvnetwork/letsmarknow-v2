@@ -33,7 +33,7 @@
 | `06-cdn-storage.md` | CDN config, storage buckets, cache headers. |
 | `07-queues.md` | Background job queue: imports, exports, webhooks, email. |
 | `08-cron.md` | Scheduled jobs (trash purge, dunning, share-expiry, analytics rollups) with per-job timezone column. |
-| `09-ci-cd.md` | Pipelines + spec-drift-linter (11 sub-checks locking W-1, W-3 … W-13, F-M09/F-M10) + deployment gates + rollback. |
+| `09-ci-cd.md` | Pipelines + spec-drift-linter (18 sub-checks locking W-1, W-3 … W-13, F-M09/F-M10) + deployment gates + rollback. |
 | `10-observability.md` | Logs, metrics, traces, alerts, on-call. |
 | `11-email-provider.md` | Resend config, DKIM/SPF/DMARC, EU residency. |
 | `12-storage-layout.md` | Bucket and prefix map; W-7 lock. |

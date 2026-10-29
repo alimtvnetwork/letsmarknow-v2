@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -13,6 +14,16 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Geist", "Inter", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+        mono: ["'Geist Mono'", "'JetBrains Mono'", "'Fira Code'", "monospace"],
+      },
+      boxShadow: {
+        obsidian: "inset 0 1px 0 0 rgba(255, 255, 255, 0.06), 0 4px 20px -2px rgba(0, 0, 0, 0.4)",
+        "obsidian-hover": "inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 8px 30px -4px rgba(99, 102, 241, 0.18)",
+        specular: "inset 0 1px 0 0 rgba(255, 255, 255, 0.08)",
+        "glow-primary": "0 0 20px -4px hsl(var(--primary) / 0.4)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -87,5 +98,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;

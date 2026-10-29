@@ -1,0 +1,390 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { DashboardBoard } from "./DashboardBoard";
+import type { Collection, Space } from "@/types/lmn";
+
+describe("DashboardBoard Top 5 Extension Native Capabilities", () => {
+  const mockSpace: Space = {
+    id: "space-1",
+    name: "Engineering",
+    description: "Core dev bookmarks",
+    organizationId: "org-1",
+    accentClass: "bg-blue-500",
+  };
+
+  const mockCollections: Collection[] = [
+    {
+      id: "col-1",
+      spaceId: "space-1",
+      name: "Dev Workflows",
+      color: "pink",
+      isStarred: false,
+      groups: [
+        {
+          id: "grp-1",
+          name: "Docs & PRs",
+          items: [
+            {
+              id: "item-1",
+              title: "React Official Docs",
+              url: "https://react.dev",
+              tags: ["react", "frontend"],
+              color: "pink",
+              isDeleted: false,
+            },
+            {
+              id: "item-2",
+              title: "GitHub Repository",
+              url: "https://github.com/repo",
+              tags: ["git"],
+              color: "blue",
+              isDeleted: false,
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
+  it("renders 'Open now' badge when a bookmark URL matches currently open browser tabs", () => {
+    const openUrlSet = new Set(["https://react.dev"]);
+    const duplicateUrlCounts = new Map([
+      ["https://react.dev", 1],
+      ["https://github.com/repo", 1],
+    ]);
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="list"
+        activeFilter="all"
+        openUrlSet={openUrlSet}
+        duplicateUrlCounts={duplicateUrlCounts}
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    // "Open now" should appear for React Docs
+    expect(screen.getByText("Open now")).toBeInTheDocument();
+    // "Duplicate" should not appear since count is 1
+    expect(screen.queryByText("Duplicate")).not.toBeInTheDocument();
+  });
+
+  it("renders 'Duplicate' badge when a link appears > 1 time across the workspace", () => {
+    const openUrlSet = new Set<string>();
+    const duplicateUrlCounts = new Map([
+      ["https://react.dev", 1],
+      ["https://github.com/repo", 3], // Duplicate count > 1
+    ]);
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="list"
+        activeFilter="all"
+        openUrlSet={openUrlSet}
+        duplicateUrlCounts={duplicateUrlCounts}
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("Duplicate")).toBeInTheDocument();
+  });
+
+  it("triggers onOpenAllUrls from collection menu for new tabs, new window, and replace window", () => {
+    const onOpenAllUrls = vi.fn();
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="list"
+        activeFilter="all"
+        onOpenAllUrls={onOpenAllUrls}
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    const collectionActionBtn = screen.getByTitle("Collection actions");
+    fireEvent.click(collectionActionBtn);
+
+    const openAllTabsOption = screen.getByText(/open all in new tabs/i);
+    expect(openAllTabsOption).toBeInTheDocument();
+
+    fireEvent.click(openAllTabsOption);
+    expect(onOpenAllUrls).toHaveBeenCalledWith(
+      ["https://react.dev", "https://github.com/repo"],
+      "tabs"
+    );
+  });
+
+  it("handles dropping dropped items into group dropzone", () => {
+    const onDropItem = vi.fn();
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="list"
+        activeFilter="all"
+        onDropItem={onDropItem}
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    // Group drop container
+    const groupHeading = screen.getByText("Docs & PRs");
+    const groupSection = groupHeading.closest("section");
+    expect(groupSection).toBeInTheDocument();
+
+    const mockTabPayload = JSON.stringify({
+      type: "open-tab",
+      tab: { id: 5, title: "Dropped Tab", url: "https://example.com" },
+    });
+
+    fireEvent.drop(groupSection!, {
+      dataTransfer: {
+        getData: (type: string) => (type === "application/json" ? mockTabPayload : ""),
+      },
+    });
+
+    expect(onDropItem).toHaveBeenCalledWith(mockTabPayload, "col-1", "grp-1");
+  });
+
+  it("renders Today's Desk hero shelf and handles pin/unpin and launching desk", () => {
+    localStorage.clear();
+    localStorage.setItem("lmn_todays_desk_pinned_ids_v1", JSON.stringify(["item-1"]));
+
+    const onOpenAllUrls = vi.fn();
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="grid"
+        activeFilter="all"
+        onOpenAllUrls={onOpenAllUrls}
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    // Shelf should be present with test ID
+    const deskShelf = screen.getByTestId("todays-desk-shelf");
+    expect(deskShelf).toBeInTheDocument();
+    expect(screen.getByText("Today's Desk")).toBeInTheDocument();
+
+    // Domain badges should be displayed for react.dev and github.com
+    expect(screen.getAllByText("react.dev").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("github.com").length).toBeGreaterThan(0);
+
+    // Launch desk button should be present with count 1
+    const launchButton = screen.getByRole("button", { name: /launch desk \(1\)/i });
+    expect(launchButton).toBeInTheDocument();
+
+    fireEvent.click(launchButton);
+    expect(onOpenAllUrls).toHaveBeenCalledWith(["https://react.dev"], "tabs");
+
+    // Desk item should be draggable and have drag handle
+    const deskCard = screen.getByTestId("desk-item-item-1");
+    expect(deskCard).toHaveAttribute("draggable", "true");
+    expect(deskCard.querySelector("svg.lucide-grip-vertical")).toBeInTheDocument();
+  });
+
+  it("renders Today's Desk dropzone with drag-and-drop prompt and pins item when dropped", () => {
+    localStorage.clear();
+
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="grid"
+        activeFilter="all"
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    // Dropzone should be present with drag and drop suggestion text
+    const dropzone = screen.getByTestId("todays-desk-dropzone");
+    expect(dropzone).toBeInTheDocument();
+    expect(screen.getByText("Drag and drop items here")).toBeInTheDocument();
+    // Must NOT have "Pin top 3" button
+    expect(screen.queryByText(/pin top 3/i)).not.toBeInTheDocument();
+
+    // Drop item-2 onto the dropzone
+    fireEvent.drop(dropzone, {
+      dataTransfer: {
+        getData: (type: string) => {
+          if (type === "application/json") {
+            return JSON.stringify({ type: "saved-item", itemId: "item-2" });
+          }
+          return "col-1:grp-1:item-2";
+        },
+      },
+    });
+
+    // Item-2 (GitHub Repository) should now be pinned on Today's Desk
+    expect(screen.getByTestId("desk-item-item-2")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /launch desk \(1\)/i })).toBeInTheDocument();
+  });
+
+  it("renders Mindmap canvas when viewMode is mindmap", () => {
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={mockCollections}
+        viewMode="mindmap"
+        activeFilter="all"
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={vi.fn()}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("Auto Layout")).toBeInTheDocument();
+    expect(screen.getByText("Save View")).toBeInTheDocument();
+  });
+
+  it("renders empty space without an 'Add item' button when collections list is empty", () => {
+    const handleCreateCollection = vi.fn();
+    render(
+      <DashboardBoard
+        activeSpace={mockSpace}
+        collections={[]}
+        viewMode="grid"
+        activeFilter="all"
+        onViewModeChange={vi.fn()}
+        onFilterChange={vi.fn()}
+        onToggleStar={vi.fn()}
+        onDuplicateCollection={vi.fn()}
+        onEditCollection={vi.fn()}
+        onDeleteCollection={vi.fn()}
+        onAddGroup={vi.fn()}
+        onEditGroup={vi.fn()}
+        onDeleteGroup={vi.fn()}
+        onEditItem={vi.fn()}
+        onDuplicateItem={vi.fn()}
+        onDeleteItem={vi.fn()}
+        onMoveItem={vi.fn()}
+        onDropItem={vi.fn()}
+        onCreateCollection={handleCreateCollection}
+        onCreateItem={vi.fn()}
+      />
+    );
+
+    expect(screen.getByRole("heading", { name: "Start this Space" })).toBeInTheDocument();
+    expect(screen.getByText("Where is the option to add items?")).toBeInTheDocument();
+    expect(screen.getByText(/In LetsMarkNow, saved items/i)).toBeInTheDocument();
+    expect(screen.getByText(/Create a Collection first/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /create collection/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /add item/i })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /create collection/i }));
+    expect(handleCreateCollection).toHaveBeenCalledTimes(1);
+  });
+});
+
+

@@ -1,0 +1,236 @@
+import type { AppData } from "@/types/lmn";
+
+export const cleanWorkspace: AppData = {
+  organizations: [
+    { id: "org-personal", name: "Personal Engine", initials: "PE", plan: "Pro" },
+  ],
+  spaces: [
+    {
+      id: "space-home",
+      organizationId: "org-personal",
+      name: "My Collections",
+      description: "Daily research, useful tools, and saved reading.",
+      accentClass: "bg-primary",
+      icon: "💼",
+    },
+  ],
+  collections: [],
+  shareSettings: [],
+};
+
+export const mockWorkspace: AppData = {
+  organizations: [
+    { id: "org-personal", name: "Personal Engine", initials: "PE", plan: "Pro" },
+    { id: "org-agency", name: "Agency Ops", initials: "AU", plan: "Team" },
+    { id: "org-lab", name: "Experiment Lab", initials: "XL", plan: "Free" },
+  ],
+  spaces: [
+    {
+      id: "space-home",
+      organizationId: "org-personal",
+      name: "My Collections",
+      description: "Daily research, useful tools, and saved reading.",
+      accentClass: "bg-primary",
+      icon: "💼",
+    },
+    {
+      id: "space-launch",
+      organizationId: "org-personal",
+      name: "LMN Launch",
+      description: "Product launch references and competitor notes.",
+      accentClass: "bg-sky-500",
+      icon: "🚀",
+    },
+    {
+      id: "space-client",
+      organizationId: "org-agency",
+      name: "Client Work",
+      description: "Shared client resources and handoff links.",
+      accentClass: "bg-emerald-500",
+      icon: "🎨",
+    },
+  ],
+  collections: [
+    {
+      id: "collection-design",
+      spaceId: "space-home",
+      name: "Design Systems",
+      note: "Reusable UI decisions, dense app patterns, and extension-ready components.",
+      color: "pink",
+      icon: "🎨",
+      isStarred: true,
+      groups: [
+        {
+          id: "group-reference",
+          name: "Reference",
+          items: [
+            {
+              id: "item-radix",
+              title: "Radix UI primitives",
+              url: "https://www.radix-ui.com",
+              description: "Accessible primitives for menus, dialogs, popovers, and tabs.",
+              tags: ["ui", "accessibility"],
+              color: "purple",
+              addedAt: "Today",
+            },
+            {
+              id: "item-linear",
+              title: "Linear app layout",
+              url: "https://linear.app",
+              description: "Dense command-first SaaS layout reference.",
+              tags: ["layout", "saas"],
+              color: "blue",
+              addedAt: "Yesterday",
+            },
+          ],
+        },
+        {
+          id: "group-assets",
+          name: "Assets",
+          items: [
+            {
+              id: "item-icons",
+              title: "Lucide icons",
+              url: "https://lucide.dev",
+              description: "Icon system for web app and extension controls.",
+              tags: ["icons"],
+              color: "teal",
+              addedAt: "Sep 29",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "collection-research",
+      spaceId: "space-home",
+      name: "Browser Productivity",
+      note: "Toby, Tab Extend, Chrome APIs, open-tabs behavior, and save-session patterns.",
+      color: "blue",
+      icon: "🔬",
+      isStarred: false,
+      groups: [
+        {
+          id: "group-competitors",
+          name: "Competitors",
+          items: [
+            {
+              id: "item-toby",
+              title: "Toby",
+              url: "https://www.gettoby.com",
+              description: "Workspace and collection sharing reference.",
+              tags: ["competitor", "sharing"],
+              color: "pink",
+              addedAt: "Oct 1",
+            },
+            {
+              id: "item-tabextend",
+              title: "Tab Extend",
+              url: "https://tabextend.com",
+              description: "Column layout, typography, and grouping reference.",
+              tags: ["competitor", "columns"],
+              color: "orange",
+              addedAt: "Oct 2",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "collection-build",
+      spaceId: "space-launch",
+      name: "Phase 0 Build",
+      note: "First dashboard, mock data, local interactions, and extension-ready components.",
+      color: "green",
+      icon: "🚀",
+      isStarred: true,
+      groups: [
+        {
+          id: "group-week-one",
+          name: "Week 1",
+          items: [
+            {
+              id: "item-shell",
+              title: "Dashboard shell spec",
+              url: "https://letsmarknow.com/spec/dashboard-shell",
+              description: "Left rail, space sidebar, top toolbar, and main canvas.",
+              tags: ["mvp", "dashboard"],
+              color: "green",
+              addedAt: "Today",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  shareSettings: [
+    {
+      id: "share-design",
+      targetType: "collection",
+      targetId: "collection-design",
+      visibility: "public",
+      permission: "view",
+      publicSlug: "design-systems",
+      allowCopy: true,
+      createdAt: "Yesterday",
+    },
+    {
+      id: "share-personal",
+      targetType: "workspace",
+      targetId: "org-personal",
+      visibility: "members",
+      permission: "view",
+      publicSlug: "personal-engine",
+      allowCopy: true,
+      createdAt: "2 days ago",
+    },
+  ],
+  members: [
+    {
+      id: "m-1",
+      organizationId: "org-personal",
+      name: "You (Owner)",
+      email: "user@letsmarknow.com",
+      role: "Owner",
+      status: "Active",
+      invitedAt: "2 weeks ago",
+    },
+    {
+      id: "m-2",
+      organizationId: "org-personal",
+      name: "Alex Chen",
+      email: "alex@example.com",
+      role: "Admin",
+      status: "Active",
+      invitedAt: "5 days ago",
+    },
+    {
+      id: "m-3",
+      organizationId: "org-personal",
+      name: "Jordan Smith",
+      email: "jordan@example.com",
+      role: "Member",
+      status: "Active",
+      invitedAt: "3 days ago",
+    },
+    {
+      id: "m-4",
+      organizationId: "org-agency",
+      name: "Morgan Bailey",
+      email: "morgan@agencyops.io",
+      role: "Admin",
+      status: "Active",
+      invitedAt: "1 month ago",
+    },
+  ],
+  pendingInvites: [
+    {
+      id: "inv-1",
+      organizationId: "org-personal",
+      email: "taylor@partner.org",
+      role: "Viewer",
+      token: "invite-taylor-partner",
+      createdAt: "Yesterday",
+    },
+  ],
+};

@@ -79,7 +79,11 @@ function loadAllowlist(): Set<string> {
     const t = line.trim();
     if (!t || t.startsWith('#')) continue;
     // Allowlist Discipline schema: "<path> PR:#<n> reason:<text>" — first token is the path.
-    out.add(t.split(/\s+/)[0]);
+    const normalized = t.split(/\s+/)[0].replace(/\\/g, '/');
+    out.add(normalized);
+    if (!normalized.startsWith('02-')) {
+      out.add(`02-${normalized}`);
+    }
   }
   return out;
 }
@@ -99,8 +103,8 @@ function* walk(dir: string): Generator<string> {
 let scanned = 0;
 for (const path of walk(ROOT)) {
   scanned++;
-  const rel = relative('.', path);
-  if (allowlist.has(rel)) continue;
+  const rel = relative('.', path).replace(/\\/g, '/');
+  if (allowlist.has(rel) || allowlist.has(rel.replace(/^02-/, ''))) continue;
   const lines = readFileSync(path, 'utf8').split('\n');
   let inFence = false;
   for (let i = 0; i < lines.length; i++) {

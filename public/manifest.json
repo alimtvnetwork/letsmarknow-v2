@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "LetsMarkNow",
+  "version": "0.1.0",
+  "description": "Save, organize, and reopen browser tabs.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAolw1cWRUuMG6YFLYWZrlsbeHP+Xobymq1q4knqRIIxFiB06x5dGZAf81JcMUaEcfYW0oI0ayh7tNYm6ecqKNEQbOkR9KX7HhKge/1ijZpTki/hOT0Ttj/fg1lh6Jibjb96BKWtIFvllyM91qAD17wjeP5uxrEmc7NFP1Fo8uavQe/9nPsY6pno0gi70pyJAzsty6YHKe/fgC5HyeQ7oaeDo60L/hYEdTcmH3C0E8Pq7QsVputr4TpyDRMhsUEGFiO2PbAxcgLbAlwe8FVvBjcpX1ejjp2b+Q8/ErfumAojYCLLyBPqFgq69m0uOCMIcdeglM19/InauGfxS7xeh1QwIDAQAB",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "LetsMarkNow"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab",
+    "sidePanel",
+    "contextMenus",
+    "identity",
+    "bookmarks"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "options_page": "options.html",
+  "externally_connectable": {
+    "matches": [
+      "http://localhost/*",
+      "http://127.0.0.1/*",
+      "https://letsmarknow.com/*",
+      "https://*.letsmarknow.com/*"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://letsmarknow.com/*",
+        "https://*.letsmarknow.com/*"
+      ],
+      "js": ["contentScript.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

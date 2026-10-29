@@ -77,7 +77,7 @@ namespace LetsMarkNowLauncher
                 // Launch Chromium browser with unpacked extension loaded into isolated profile in fullscreen.
                 // Microsoft Edge natively supports --load-extension on Windows without the branded Google Chrome 137+ command-line blocking.
                 string launchArgs = string.Format(
-                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check",
+                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check --disable-background-mode about:blank",
                     extensionDir,
                     profileDir
                 );

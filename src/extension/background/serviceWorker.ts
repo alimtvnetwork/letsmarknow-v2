@@ -4,6 +4,49 @@ import { DEFAULT_EXTENSION_PREFERENCES, EXTENSION_PREFERENCES_KEY, EXTENSION_STO
 /**
  * Service Worker Lifecycle for LetsMarkNow Extension (Manifest V3).
  */
+
+/**
+ * Ensures the primary LetsMarkNow dashboard (app.html) is always opened or focused.
+ * If an initial start tab is blank/newtab, it replaces it so no blank tabs linger.
+ */
+export async function ensureAppTabOpen(): Promise<void> {
+  try {
+    if (typeof chrome === "undefined" || !chrome.tabs) return;
+
+    const appUrl = chrome.runtime.getURL("app.html");
+    const tabs = await chrome.tabs.query({});
+    const existingAppTab = tabs.find(t => t.url && t.url.startsWith(appUrl));
+
+    if (existingAppTab) {
+      if (existingAppTab.id && !existingAppTab.active) {
+        await chrome.tabs.update(existingAppTab.id, { active: true });
+      }
+      return;
+    }
+
+    // Look for a blank / initial start page tab to convert
+    const placeholderTab = tabs.find(
+      t =>
+        !t.url ||
+        t.url === "about:blank" ||
+        t.url.startsWith("edge://newtab") ||
+        t.url.startsWith("chrome://newtab")
+    );
+
+    if (placeholderTab && placeholderTab.id) {
+      await chrome.tabs.update(placeholderTab.id, { url: appUrl, active: true });
+    } else {
+      await chrome.tabs.create({ url: appUrl, active: true });
+    }
+  } catch (err) {
+    console.warn("Failed to ensure LetsMarkNow app tab open:", err);
+  }
+}
+
+// 1. Ensure tab is opened immediately when Service Worker boots
+ensureAppTabOpen();
+
+// 2. Lifecycle: On Extension Installation / Update
 chrome.runtime.onInstalled.addListener(async (details) => {
   console.log("LetsMarkNow Extension installed/updated:", details.reason);
 
@@ -34,8 +77,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       console.log("Initialized default extension preferences in chrome.storage.local");
     }
 
-    // Register Context Menu for quick access and "Add to Next"
-    if (typeof chrome.contextMenus !== "undefined") {
+    // Setup Context Menus
+    if (chrome.contextMenus) {
       chrome.contextMenus.removeAll(() => {
         chrome.contextMenus.create({
           id: "lmn_open_dashboard",
@@ -50,21 +93,39 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       });
     }
 
-    // Automatically open app.html when installed or updated
-    try {
-      const appUrl = chrome.runtime.getURL("app.html");
-      const tabs = await chrome.tabs.query({});
-      const hasApp = tabs.some(t => t.url && t.url.startsWith(appUrl));
-      if (!hasApp) {
-        await chrome.tabs.create({ url: appUrl });
-      }
-    } catch {
-      // ignore
-    }
+    await ensureAppTabOpen();
   } catch (err) {
     console.warn("Failed to initialize storage onInstalled:", err);
   }
 });
+
+// 3. Lifecycle: On Browser Startup
+if (typeof chrome !== "undefined" && chrome.runtime?.onStartup) {
+  chrome.runtime.onStartup.addListener(() => {
+    ensureAppTabOpen();
+  });
+}
+
+// 4. Lifecycle: On New Window Creation (e.g. desktop icon clicked while browser in background)
+if (typeof chrome !== "undefined" && chrome.windows?.onCreated) {
+  chrome.windows.onCreated.addListener(() => {
+    setTimeout(ensureAppTabOpen, 100);
+  });
+}
+
+// 5. Lifecycle: On New Tab Creation (converts initial blank/newtab to app.html)
+if (typeof chrome !== "undefined" && chrome.tabs?.onCreated) {
+  chrome.tabs.onCreated.addListener((tab) => {
+    if (
+      !tab.url ||
+      tab.url === "about:blank" ||
+      tab.url.startsWith("edge://newtab") ||
+      tab.url.startsWith("chrome://newtab")
+    ) {
+      setTimeout(ensureAppTabOpen, 100);
+    }
+  });
+}
 
 // Context Menu click handler
 if (typeof chrome !== "undefined" && chrome.contextMenus?.onClicked) {
@@ -141,23 +202,5 @@ if (typeof chrome !== "undefined" && chrome.runtime?.onMessageExternal) {
       return true;
     }
     return false;
-  });
-}
-
-
-
-// Auto-open app tab on browser startup
-if (typeof chrome !== "undefined" && chrome.runtime?.onStartup) {
-  chrome.runtime.onStartup.addListener(async () => {
-    try {
-      const appUrl = chrome.runtime.getURL("app.html");
-      const tabs = await chrome.tabs.query({});
-      const hasApp = tabs.some(t => t.url && t.url.startsWith(appUrl));
-      if (!hasApp) {
-        await chrome.tabs.create({ url: appUrl });
-      }
-    } catch {
-      // ignore
-    }
   });
 }

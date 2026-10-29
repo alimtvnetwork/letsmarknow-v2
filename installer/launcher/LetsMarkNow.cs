@@ -81,13 +81,21 @@ namespace LetsMarkNowLauncher
                 }
 
                 // Launch Chromium browser (Google Chrome preferred) with unpacked extension loaded into isolated profile.
-                // Opens Window 2 for the local Web App dashboard at http://localhost:3000
-                // The background service worker concurrently opens Window 1 for the Extension App (app.html).
+                // Opens ONE window with TWO tabs: tab 1 = Extension App (app.html), tab 2 = Web Dashboard.
+                // The extension ID is pinned by the "key" in the extension manifest, so the
+                // chrome-extension:// URL below is stable for --load-extension from any install path.
+                // The service worker's ensureExtensionWindow() de-dupes: it finds this tab and
+                // focuses it instead of opening anything extra.
+                string extensionTabUrl = GetPinnedExtensionAppUrl(extensionDir);
+                string tabsArg = string.IsNullOrEmpty(extensionTabUrl)
+                    ? string.Format("\"{0}\"", initialTarget)
+                    : string.Format("\"{0}\" \"{1}\"", extensionTabUrl, initialTarget);
+
                 string launchArgs = string.Format(
                     "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-maximized --no-first-run --no-default-browser-check --disable-background-mode {2}",
                     extensionDir,
                     profileDir,
-                    initialTarget
+                    tabsArg
                 );
 
                 ProcessStartInfo startInfo = new ProcessStartInfo
@@ -195,6 +203,37 @@ namespace LetsMarkNowLauncher
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Returns the chrome-extension:// URL for the bundled app.html, but ONLY when the
+        /// extension manifest pins the extension ID with a "key" (making the ID predictable
+        /// for --load-extension). Returns null otherwise so the launcher falls back to the
+        /// previous single-tab behavior instead of opening a dead tab.
+        /// </summary>
+        private static string GetPinnedExtensionAppUrl(string extensionDir)
+        {
+            try
+            {
+                string manifestPath = Path.Combine(extensionDir, "manifest.json");
+                string appHtmlPath = Path.Combine(extensionDir, "app.html");
+                if (!File.Exists(manifestPath) || !File.Exists(appHtmlPath))
+                {
+                    return null;
+                }
+
+                string manifest = File.ReadAllText(manifestPath);
+                if (manifest.IndexOf("\"key\"", StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    return null;
+                }
+
+                return "chrome-extension://" + StaticExtensionId + "/app.html";
+            }
+            catch
+            {
+                return null;
             }
         }
 

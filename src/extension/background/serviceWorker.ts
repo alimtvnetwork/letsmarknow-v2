@@ -6,10 +6,13 @@ import { DEFAULT_EXTENSION_PREFERENCES, EXTENSION_PREFERENCES_KEY, EXTENSION_STO
  */
 
 let isEnsuringExtensionWindow = false;
+let scheduledEnsureTimer: ReturnType<typeof setTimeout> | null = null;
 
 /**
- * Ensures the primary LetsMarkNow extension workspace (app.html) is opened in a dedicated window or focused.
- * Opens Window 1 for the Extension, allowing the Web Dashboard to run concurrently in Window 2.
+ * Ensures the primary LetsMarkNow extension workspace (app.html) is open as a tab
+ * and focused. If a tab is already open (e.g. the desktop launcher opened it as tab 1
+ * alongside the web dashboard tab), it is focused and nothing new is created.
+ * Otherwise the app opens as a TAB in the current window — never a second window.
  */
 export async function ensureExtensionWindow(): Promise<void> {
   if (isEnsuringExtensionWindow) return;
@@ -34,15 +37,16 @@ export async function ensureExtensionWindow(): Promise<void> {
       }
     }
 
-    // Open dedicated window for the extension app
-    await chrome.windows.create({
-      url: appUrl,
-      type: "normal",
-      focused: true,
-      state: "maximized",
-    });
+    // No app tab yet: open it as a tab in the last-focused window.
+    const targetWindow = [...allWindows].reverse().find((w) => typeof w.id === "number");
+    if (targetWindow && typeof targetWindow.id === "number") {
+      await chrome.tabs.create({ windowId: targetWindow.id, url: appUrl, active: true });
+    } else {
+      // No browser window exists at all (headless-ish edge case): create one.
+      await chrome.windows.create({ url: appUrl, type: "normal", focused: true });
+    }
   } catch (err) {
-    console.warn("Failed to ensure LetsMarkNow extension window:", err);
+    console.warn("Failed to ensure LetsMarkNow extension tab:", err);
   } finally {
     setTimeout(() => {
       isEnsuringExtensionWindow = false;
@@ -50,8 +54,23 @@ export async function ensureExtensionWindow(): Promise<void> {
   }
 }
 
-// 1. Ensure extension window is opened when Service Worker boots
-ensureExtensionWindow();
+/**
+ * Boot-time triggers (worker start, install, browser startup) are delayed and coalesced:
+ * the desktop launcher already opens the extension as tab 1, so the delayed scan finds
+ * that tab and the worker creates nothing — no duplicate tab/window race.
+ */
+function scheduleEnsureExtensionWindow(delayMs = 1500): void {
+  if (scheduledEnsureTimer) {
+    clearTimeout(scheduledEnsureTimer);
+  }
+  scheduledEnsureTimer = setTimeout(() => {
+    scheduledEnsureTimer = null;
+    ensureExtensionWindow();
+  }, delayMs);
+}
+
+// 1. Ensure extension tab is opened when Service Worker boots (delayed: launcher tabs win the race)
+scheduleEnsureExtensionWindow();
 
 // 2. Lifecycle: On Extension Installation / Update
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -100,16 +119,16 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       });
     }
 
-    await ensureExtensionWindow();
+    scheduleEnsureExtensionWindow();
   } catch (err) {
     console.warn("Failed to initialize storage onInstalled:", err);
   }
 });
 
-// 3. Lifecycle: On Browser Startup
+// 3. Lifecycle: On Browser Startup (delayed: launcher tabs win the race)
 if (typeof chrome !== "undefined" && chrome.runtime?.onStartup) {
   chrome.runtime.onStartup.addListener(() => {
-    ensureExtensionWindow();
+    scheduleEnsureExtensionWindow();
   });
 }
 

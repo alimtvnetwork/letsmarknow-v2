@@ -28,12 +28,14 @@ export interface SpaceFormValue {
   name: string;
   description: string;
   accentClass: string;
+  icon?: string;
 }
 
 export interface CollectionFormValue {
   name: string;
   note: string;
   color: ColorLabel;
+  icon?: string;
 }
 
 export interface GroupFormValue {
@@ -46,6 +48,7 @@ export interface ItemFormValue {
   description: string;
   tags: string;
   color: ColorLabel;
+  previewImageUrl?: string;
   collectionId?: string;
   groupId?: string;
 }
@@ -141,6 +144,11 @@ export function SpaceDialog({
                 onChange={(event) => onValueChange({ ...value, name: event.target.value })}
               />
             </Field>
+            <EmojiPickerField
+              value={value.icon}
+              onChange={(icon) => onValueChange({ ...value, icon })}
+              label="Space Icon / Emoji"
+            />
             <Field label="Description">
               <Textarea
                 placeholder="What belongs in this space?"
@@ -198,6 +206,11 @@ export function CollectionDialog({
                 onChange={(event) => onValueChange({ ...value, name: event.target.value })}
               />
             </Field>
+            <EmojiPickerField
+              value={value.icon}
+              onChange={(icon) => onValueChange({ ...value, icon })}
+              label="Collection Icon / Emoji"
+            />
             <Field label="Note">
               <Textarea
                 placeholder="Short context for this collection"
@@ -239,7 +252,7 @@ export function GroupDialog({
             <Field label="Name">
               <Input
                 autoFocus
-                placeholder="Inbox"
+                placeholder="General"
                 value={value.name}
                 onChange={(event) => onValueChange({ name: event.target.value })}
               />
@@ -343,6 +356,13 @@ export function ItemDialog({
                 onChange={(event) => onValueChange({ ...value, tags: event.target.value })}
               />
             </Field>
+            <Field label="Preview Image URL (Optional)">
+              <Input
+                placeholder="https://... or leave blank for auto preview"
+                value={value.previewImageUrl || ""}
+                onChange={(event) => onValueChange({ ...value, previewImageUrl: event.target.value })}
+              />
+            </Field>
             <ColorField value={value.color} onChange={(color) => onValueChange({ ...value, color })} />
           </div>
           <DialogFooter>
@@ -392,7 +412,7 @@ export function MoveItemDialog({
                 {collections.flatMap((collection) =>
                   collection.groups.map((group) => (
                     <option key={`${collection.id}:${group.id}`} value={`${collection.id}:${group.id}`}>
-                      {collection.name} / {group.name}
+                      {collection.icon ? `${collection.icon} ` : ""}{collection.name} / {group.name}
                     </option>
                   )),
                 )}
@@ -455,6 +475,80 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
       <Label>{label}</Label>
       {children}
     </div>
+  );
+}
+
+export const POPULAR_SPACE_COLLECTION_EMOJIS = [
+  "🚀", "💼", "🎨", "💻", "📚", "🛠️", "💡", "⚡",
+  "🎯", "🌐", "🔬", "🔥", "📊", "📝", "🌟", "🏷️",
+  "🧠", "☕", "🎮", "📱", "📁", "🏆", "📌", "⚙️",
+];
+
+export function EmojiPickerField({
+  value,
+  onChange,
+  label = "Icon / Emoji",
+}: {
+  value?: string;
+  onChange: (emoji: string) => void;
+  label?: string;
+}) {
+  return (
+    <Field label={label}>
+      <div className="space-y-2 pt-1">
+        <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-xl border border-input/60 bg-muted/20">
+          {POPULAR_SPACE_COLLECTION_EMOJIS.map((emoji) => {
+            const isSelected = value === emoji;
+            return (
+              <button
+                key={emoji}
+                type="button"
+                data-testid={`emoji-option-${emoji}`}
+                onClick={() => onChange(isSelected ? "" : emoji)}
+                className={cn(
+                  "h-8 w-8 rounded-lg text-base flex items-center justify-center transition-all cursor-pointer",
+                  isSelected
+                    ? "bg-primary/20 border-2 border-primary scale-110 shadow-xs"
+                    : "hover:bg-muted hover:scale-105 border border-transparent"
+                )}
+                title={`Choose ${emoji}`}
+              >
+                {emoji}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-input bg-muted/40 text-lg shadow-2xs select-none"
+            title="Current icon preview"
+          >
+            {value || "—"}
+          </div>
+          <Input
+            data-testid="custom-emoji-input"
+            placeholder="Or type/paste any emoji (e.g. 🦄, 🛸)..."
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value.trim())}
+            maxLength={6}
+            className="text-xs h-9 flex-1"
+          />
+          {value && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              data-testid="clear-emoji-button"
+              onClick={() => onChange("")}
+              className="h-9 px-2 text-xs text-muted-foreground hover:text-foreground"
+            >
+              Clear
+            </Button>
+          )}
+        </div>
+      </div>
+    </Field>
   );
 }
 

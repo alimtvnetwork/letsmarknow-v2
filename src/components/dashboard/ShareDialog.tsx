@@ -188,9 +188,9 @@ export function ShareDialog({
               {effectiveValue.publicSlug}
             </span>
           </div>
-          <DialogTitle className="text-xl font-bold flex items-center gap-2">
-            <Share2 className="h-5 w-5 text-primary" />
-            Share "{targetName}"
+          <DialogTitle className="text-xl font-bold flex items-center gap-2 min-w-0">
+            <Share2 className="h-5 w-5 text-primary shrink-0" />
+            <span className="truncate">Share &ldquo;{targetName}&rdquo;</span>
           </DialogTitle>
           <DialogDescription className="text-xs">
             Generate and manage access links for this {targetType.toLowerCase()}. Control whether
@@ -204,12 +204,12 @@ export function ShareDialog({
             <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Who can access
             </Label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
               <button
                 type="button"
                 onClick={() => handleValueChange({ ...effectiveValue, visibility: "private" })}
                 className={cn(
-                  "flex flex-col items-center justify-center rounded-lg border p-3 text-center transition",
+                  "flex flex-col items-center justify-center rounded-lg border p-2 sm:p-3 text-center transition",
                   effectiveValue.visibility === "private"
                     ? "border-primary bg-primary/10 text-primary font-medium ring-1 ring-primary"
                     : "border-border bg-card text-muted-foreground hover:bg-muted/40 hover:text-foreground"
@@ -223,7 +223,7 @@ export function ShareDialog({
                 type="button"
                 onClick={() => handleValueChange({ ...effectiveValue, visibility: "public" })}
                 className={cn(
-                  "flex flex-col items-center justify-center rounded-lg border p-3 text-center transition",
+                  "flex flex-col items-center justify-center rounded-lg border p-2 sm:p-3 text-center transition",
                   effectiveValue.visibility === "public"
                     ? "border-primary bg-primary/10 text-primary font-medium ring-1 ring-primary"
                     : "border-border bg-card text-muted-foreground hover:bg-muted/40 hover:text-foreground"
@@ -237,7 +237,7 @@ export function ShareDialog({
                 type="button"
                 onClick={() => handleValueChange({ ...effectiveValue, visibility: "members" })}
                 className={cn(
-                  "flex flex-col items-center justify-center rounded-lg border p-3 text-center transition",
+                  "flex flex-col items-center justify-center rounded-lg border p-2 sm:p-3 text-center transition",
                   effectiveValue.visibility === "members"
                     ? "border-primary bg-primary/10 text-primary font-medium ring-1 ring-primary"
                     : "border-border bg-card text-muted-foreground hover:bg-muted/40 hover:text-foreground"
@@ -382,7 +382,7 @@ export function ShareDialog({
               variant="destructive"
               size="sm"
               onClick={handleDisable}
-              className="text-xs"
+              className="text-xs w-full sm:w-auto"
             >
               Disable Access
             </Button>
@@ -390,16 +390,17 @@ export function ShareDialog({
             <div />
           )}
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => onOpenChange(false)}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
-            <Button type="button" size="sm" onClick={handleSave}>
+            <Button type="button" size="sm" onClick={handleSave} className="w-full sm:w-auto">
               Save Changes
             </Button>
           </div>

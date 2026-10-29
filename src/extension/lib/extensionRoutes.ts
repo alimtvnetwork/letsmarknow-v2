@@ -1,4 +1,4 @@
-export type ExtensionTabRoute = "dashboard" | "open-tabs" | "trash" | "settings" | "workspace" | "next";
+export type ExtensionTabRoute = "dashboard" | "open-tabs" | "trash" | "workspace" | "settings";
 
 /**
  * Returns the path or relative URL to the full extension tab page with optional view query.
@@ -31,7 +31,7 @@ export function parseExtensionTabRoute(searchString: string): ExtensionTabRoute 
   try {
     const params = new URLSearchParams(searchString);
     const page = params.get("page");
-    if (page === "open-tabs" || page === "trash" || page === "settings" || page === "workspace" || page === "next") {
+    if (page === "open-tabs" || page === "trash" || page === "workspace" || page === "settings") {
       return page;
     }
   } catch {

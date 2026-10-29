@@ -58,7 +58,7 @@ export function DestinationPicker({
       </div>
 
       {/* Workspace & Space 2-Col Grid */}
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-1 min-[340px]:grid-cols-2 gap-2.5">
         <div className="space-y-1">
           <label
             htmlFor="ext-select-org"
@@ -107,7 +107,7 @@ export function DestinationPicker({
       </div>
 
       {/* Collection & Group 2-Col Grid */}
-      <div className="grid grid-cols-2 gap-2.5 pt-0.5">
+      <div className="grid grid-cols-1 min-[340px]:grid-cols-2 gap-2.5 pt-0.5">
         {/* Collection Selection */}
         <div className="space-y-1">
           <div className="flex items-center justify-between">

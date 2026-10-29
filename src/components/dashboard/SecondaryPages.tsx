@@ -42,33 +42,35 @@ export function ActivityPage({ collections }: { collections: Collection[] }) {
   );
 
   return (
-    <section className="min-h-0 flex-1 overflow-auto p-6">
+    <section className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
       <PageHeader eyebrow="Workspace audit log" title="Activity" />
       <div className="rounded-lg border border-border bg-card divide-y divide-border">
         {events.length ? (
           events.map((event) => (
             <div
               key={event.id}
-              className="flex items-center gap-4 p-4 hover:bg-muted/30 transition"
+              className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3.5 sm:p-4 hover:bg-muted/30 transition"
             >
-              <div
-                className={cn(
-                  "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-primary",
-                  event.isDeleted ? "bg-destructive/15 text-destructive" : "bg-primary/15"
-                )}
-              >
-                <FileClock className="h-4 w-4" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <Favicon url={event.url} size="sm" />
-                  <h3 className="truncate text-sm font-semibold">
-                    {event.isDeleted ? "Deleted" : "Saved"} {event.title}
-                  </h3>
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div
+                  className={cn(
+                    "flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg text-primary",
+                    event.isDeleted ? "bg-destructive/15 text-destructive" : "bg-primary/15"
+                  )}
+                >
+                  <FileClock className="h-4 w-4" />
                 </div>
-                <p className="truncate text-xs text-muted-foreground">{event.meta}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Favicon url={event.url} size="sm" className="shrink-0" />
+                    <h3 className="truncate text-sm font-semibold">
+                      {event.isDeleted ? "Deleted" : "Saved"} {event.title}
+                    </h3>
+                  </div>
+                  <p className="truncate text-xs text-muted-foreground">{event.meta}</p>
+                </div>
               </div>
-              <span className="text-xs text-muted-foreground shrink-0">{event.time}</span>
+              <span className="text-xs text-muted-foreground shrink-0 pl-12 sm:pl-0">{event.time}</span>
             </div>
           ))
         ) : (
@@ -197,7 +199,7 @@ export function PublicSharePage({
     resolved.targetDescription || "Curated bookmarks and reference links shared from LetsMarkNow.";
 
   return (
-    <section className="min-h-0 flex-1 overflow-auto p-6">
+    <section className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">

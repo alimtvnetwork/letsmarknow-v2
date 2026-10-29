@@ -173,7 +173,8 @@ export default function AccountPage() {
           <Link to="/">
             <Button size="sm" variant="outline" className="gap-1.5 text-xs">
               <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
-              Launch Extension Tab
+              <span className="hidden sm:inline">Launch Extension Tab</span>
+              <span className="sm:hidden">Extension</span>
             </Button>
           </Link>
 
@@ -205,40 +206,42 @@ export default function AccountPage() {
 
       {/* Main Container */}
       <div className="flex-1 max-w-5xl mx-auto w-full px-4 py-8 sm:py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Navigation Sidebar */}
-        <aside className="md:col-span-1 space-y-1 text-xs">
-          <Link
-            to="/web/account"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground font-semibold"
-          >
-            <User className="h-4 w-4" /> Account Profile
-          </Link>
-          <Link
-            to="/web/billing"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <CreditCard className="h-4 w-4" /> Billing & Subscription
-          </Link>
-          <Link
-            to="/web/team"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <Users className="h-4 w-4" /> Team & Members
-          </Link>
-          <Link
-            to="/web/import-export"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <Download className="h-4 w-4" /> Import / Export / Backup
-          </Link>
-          <Link
-            to="/web/settings"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <Shield className="h-4 w-4" /> Web Portal Settings
-          </Link>
+        {/* Navigation Sidebar / Mobile Nav Bar */}
+        <aside className="md:col-span-1 text-xs flex flex-col">
+          <nav className="flex md:flex-col overflow-x-auto gap-1.5 pb-2 md:pb-0 whitespace-nowrap scrollbar-none shrink-0">
+            <Link
+              to="/web/account"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground font-semibold shrink-0"
+            >
+              <User className="h-4 w-4" /> Account Profile
+            </Link>
+            <Link
+              to="/web/billing"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <CreditCard className="h-4 w-4" /> Billing & Subscription
+            </Link>
+            <Link
+              to="/web/team"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <Users className="h-4 w-4" /> Team & Members
+            </Link>
+            <Link
+              to="/web/import-export"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <Download className="h-4 w-4" /> Import / Export / Backup
+            </Link>
+            <Link
+              to="/web/settings"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <Shield className="h-4 w-4" /> Web Portal Settings
+            </Link>
+          </nav>
 
-          <div className="pt-6 border-t border-border mt-4">
+          <div className="hidden md:block pt-6 border-t border-border mt-4">
             <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-[11px] space-y-2">
               <p className="font-semibold text-primary">Looking for your bookmarks?</p>
               <p className="text-muted-foreground">The saved-link organizer lives inside the extension main page.</p>

@@ -3228,6 +3228,99 @@ sign not working
 - `src/components/auth/AuthDialog.test.tsx`: Added 2 unit tests verifying email form submission to `signInWithGoogle` and error handling banner retention with accessible inputs (all 5 tests passing).
 - Verification: 41/41 web tests passing (`src/web/`), 5/5 AuthDialog tests passing, and `npm run build` completed with 0 errors.
 
+---
+
+## 2026-10-28 17:00 (UTC+8) — Session 169 — Comprehensive Multi-Surface Responsiveness Polish
+
+```
+make sure the extensions and webs are responsivie, each and every components
+```
+
+**Refactored into:**
+- `src/components/ui/dialog.tsx`: Configured `DialogContent` to `w-[calc(100%-2rem)] max-w-lg max-h-[90vh] overflow-y-auto`, ensuring all modal dialogs across web and extension viewports fit cleanly on mobile and short viewports without horizontal clipping or pushing action buttons off-screen.
+- `src/components/dashboard/TopBar.tsx`: Added responsive mobile search trigger (`md:hidden`) hooked to `onOpenCommand`, condensed duplicate counter pills on small screens, and ensured collection header wrap hygiene.
+- `src/components/dashboard/AppShell.tsx`: Standardized `MobileSidebarDrawer` SheetContent to `w-[340px] max-w-[88vw] overflow-hidden`, `WorkspaceRail` to `w-14 sm:w-16`, and `SpaceSidebar` to `flex-1 min-w-0 border-r-0 max-w-none` eliminating horizontal overflow on narrow mobile screens (320px–360px).
+- `src/extension/tab/ExtensionTabApp.tsx`: Updated obsidian navigation sidebar to overlay with backdrop on mobile (`fixed inset-y-0 left-0 z-40 max-w-[85vw] md:relative md:inset-auto`) while preserving required `w-64` and `w-0` state tokens for test contracts, preventing dashboard squish on smaller viewports.
+- `popup.html` & `src/extension/popup/PopupApp.tsx`: Made popup width responsive (`width: 100%; max-width: 440px`), eliminated hardcoded fixed widths, and added `timeoutsRef` cleanup hook on unmount to resolve Vitest teardown warnings.
+- `src/extension/components/DestinationPicker.tsx`: Updated workspace/space and collection/group selection grids to `grid-cols-1 min-[340px]:grid-cols-2` to support narrow side panel viewports.
+- `src/extension/components/WorkspaceSettingsView.tsx`: Enhanced navigation tabs with `overflow-x-auto whitespace-nowrap scrollbar-none pb-px` and added `shrink-0` to tabs.
+- `src/components/dashboard/MindmapView.tsx`: Enhanced top HUD controls with `flex-wrap gap-2`, responsive layout name truncation, and responsive button labels on narrow viewports.
+- `src/web/pages/` (`AccountPage.tsx`, `BillingPage.tsx`, `TeamPage.tsx`, `ImportExportPage.tsx`, `WebSettingsPage.tsx`): Transformed vertical aside navigation into a sleek responsive horizontal scrollable pill bar on mobile viewports (`flex md:flex-col overflow-x-auto gap-1.5 whitespace-nowrap scrollbar-none`) with hidden bookmark prompt banner on mobile. Updated `WebSettingsPage.tsx` link health stats grid to `grid-cols-2 sm:grid-cols-3 lg:grid-cols-5`.
+- `src/web/pages/LandingPage.tsx`: Added responsive hamburger menu toggle (`Menu` / `X`) with collapsible mobile navigation drawer, fluid table container scrolling (`-mx-4 px-4 sm:mx-0 sm:px-0`), and flex-wrapped trust badges.
+- `src/web/pages/` (`DownloadPage.tsx`, `HelpPage.tsx`, `PublicShareViewerPage.tsx`): Updated header action buttons with responsive labels preventing overflow on mobile.
+- `src/extension/sidepanel/SidePanelApp.tsx` & `src/extension/components/SaveAllTabsCard.tsx`: Added `truncate` and `min-w-0` tokens on segmented controls and buttons.
+- Verification: 29/29 test files passed (246 tests passing with 0 errors), both extension and web builds completed successfully via `npm run build`.
+
+---
+
+## 2026-10-28 19:35 (UTC+8) — Session 170 — Comprehensive Second-Pass Responsiveness Audit
+
+```
+do you have checked everyting, check again for responsiveness issue
+```
+
+**Refactored into:**
+- `src/extension/tab/ExtensionTabApp.tsx`:
+  - Replaced rigid `min-w-[280px]` in the Save Selected Tabs Destination container with `flex-col sm:flex-row items-stretch sm:items-center min-w-0 w-full sm:w-auto`, preventing container bursting on small mobile viewports.
+  - Added mobile backdrop overlay (`fixed inset-0 z-40 bg-black/60 md:hidden`) for the docked open tabs staging panel (`isOpenTabsPanelOpen`), enabling 1-tap outside dismissal on mobile.
+  - Reduced outer container padding on open-tabs view from `p-6` to responsive `p-4 sm:p-6`.
+- `src/components/dashboard/DashboardBoard.tsx`:
+  - Refactored collection and group item grid density definitions from hardcoded `grid-cols-2` down to `grid-cols-1 min-[340px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6`, preventing cramped cards on narrow mobile screens (320px) or browser side panels.
+  - Scaled Space Header, Today's Desk Hero shelf, and Collection container paddings from fixed `p-6` / `px-6` to responsive `p-3 sm:p-6` / `px-4 sm:px-6`, regaining 16px–24px of horizontal room for items.
+- `src/components/dashboard/ShareDialog.tsx`:
+  - Scaled visibility selector grid buttons (`Private`, `Public`, `Members`) with responsive padding `p-2 sm:p-3` and tighter gap `gap-1.5 sm:gap-2` to fit narrow mobile modal dialogs.
+- `src/extension/components/ExtensionHeader.tsx`:
+  - Applied `hidden min-[360px]:inline` to the `Dashboard` text label on the full-tab launcher button so the header remains compact without text clipping or bursting on narrow extension popups.
+- Verification: Full Vitest suite re-executed with 29/29 test files passing (246/246 tests), and production builds for both `build:extension` and `build:web` succeeded with 0 warnings.
+
+---
+
+## 2026-10-28 20:00 (UTC+8) — Session 171 — Deep Component-Level Responsiveness Audit
+
+```
+check aonther deeply
+```
+
+**Refactored into:**
+- `src/components/dashboard/DuplicateCleanerDialog.tsx`:
+  - Adjusted modal padding from rigid `p-6` to responsive `p-4 sm:p-6`.
+  - Refactored duplicate comparison rows (Kept item and duplicate candidates) from single-line `flex justify-between` into `flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-0` with `truncate` on titles and collection paths.
+  - Converted dialog footer buttons to stack responsively `flex-col-reverse sm:flex-row items-stretch sm:items-center w-full sm:w-auto`, preventing the long action button from bursting outside the modal on mobile viewports.
+- `src/components/dashboard/NextQueueView.tsx`:
+  - Replaced rigid header layout with responsive `flex-col gap-3 sm:flex-row sm:items-center sm:justify-between`.
+  - Allowed header description to truncate or wrap gracefully without colliding into the realtime status pill and clear button.
+  - Made item remove action button visible by default on mobile/touch screens (`opacity-100 sm:opacity-0 sm:group-hover:opacity-100`).
+  - Adjusted outer scroll container padding from `p-4 md:p-8` to `p-3 sm:p-6 md:p-8`.
+- `src/components/dashboard/CommandPalette.tsx`:
+  - Added `min-w-0 flex-1 truncate` to remote and local search result titles.
+  - Scaled collection destination badges to responsive `max-w-[90px] sm:max-w-[140px] truncate shrink-0 pl-2`, ensuring long titles and paths never expand past the command palette boundary.
+- `src/extension/components/SaveCurrentTabCard.tsx`:
+  - Added `min-w-0` and `truncate` to the "Already in collection" status pill.
+  - Hidden the `<kbd>Enter</kbd>` shortcut on ultra-narrow sidepanels (`hidden min-[320px]:flex`), guaranteeing primary button labels never clip on narrow widths.
+- `src/extension/components/SaveSessionBar.tsx`:
+  - Added `hidden min-[480px]:inline-block` to `<kbd>` shortcut indicators (`S`, `A`, `R`), allowing all three action buttons to remain compact and readable on small screens.
+- `src/extension/options/OptionsApp.tsx`:
+  - Updated header padding from `px-6` to `px-4 sm:px-6` and hid secondary "Options & Preferences" subtitle on mobile screens (`hidden sm:inline`).
+- `src/components/dashboard/SettingsPage.tsx`:
+  - Refactored Team Members list rows from horizontal row into responsive `flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between` with truncation on member names and email addresses.
+  - Allowed shared link actions (`Copy`, `Preview`, `Disable`) to wrap into `flex-wrap gap-1.5 sm:gap-2 shrink-0`.
+- `src/components/dashboard/SecondaryPages.tsx`:
+  - Transformed Activity audit log rows from fixed row into responsive `flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3.5 sm:p-4`, preventing timestamp metadata from crowding item titles on mobile.
+- `src/components/dashboard/DashboardBoard.tsx`:
+  - Refactored Today's Desk Hero shelf grid to `grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 pt-1`.
+  - Refactored comfortable card density grid to `grid-cols-1 min-[340px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5`.
+  - Scaled `TrashPage` container padding to `p-4 sm:p-6` and converted trash item rows to responsive `flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4`.
+- `src/components/dashboard/ShareDialog.tsx`:
+  - Added `min-w-0` and `truncate` to dialog title to safely handle long resource names.
+  - Enhanced footer buttons to stack on mobile (`w-full sm:w-auto`).
+- `src/web/pages/HelpPage.tsx`:
+  - Scaled header brand title to `LetsMarkNow <span className="hidden sm:inline">Help & Support</span>` with `truncate` on mobile.
+- `src/extension/tab/ExtensionTabApp.tsx`:
+  - Updated floating docked open-tabs panel container to `top-2 bottom-2 right-2 sm:top-3 sm:bottom-3 sm:right-3 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-1.5rem)]` for mobile viewports.
+- Verification: All 29 test files passed (246/246 tests passing with 0 errors); production builds (`build:extension` and `build:web`) compiled cleanly with 0 errors.
+
+
+
 
 
 

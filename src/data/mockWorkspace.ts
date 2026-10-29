@@ -11,6 +11,7 @@ export const cleanWorkspace: AppData = {
       name: "My Collections",
       description: "Daily research, useful tools, and saved reading.",
       accentClass: "bg-primary",
+      icon: "💼",
     },
   ],
   collections: [],
@@ -30,6 +31,7 @@ export const mockWorkspace: AppData = {
       name: "My Collections",
       description: "Daily research, useful tools, and saved reading.",
       accentClass: "bg-primary",
+      icon: "💼",
     },
     {
       id: "space-launch",
@@ -37,6 +39,7 @@ export const mockWorkspace: AppData = {
       name: "LMN Launch",
       description: "Product launch references and competitor notes.",
       accentClass: "bg-sky-500",
+      icon: "🚀",
     },
     {
       id: "space-client",
@@ -44,6 +47,7 @@ export const mockWorkspace: AppData = {
       name: "Client Work",
       description: "Shared client resources and handoff links.",
       accentClass: "bg-emerald-500",
+      icon: "🎨",
     },
   ],
   collections: [
@@ -53,6 +57,7 @@ export const mockWorkspace: AppData = {
       name: "Design Systems",
       note: "Reusable UI decisions, dense app patterns, and extension-ready components.",
       color: "pink",
+      icon: "🎨",
       isStarred: true,
       groups: [
         {
@@ -102,6 +107,7 @@ export const mockWorkspace: AppData = {
       name: "Browser Productivity",
       note: "Toby, Tab Extend, Chrome APIs, open-tabs behavior, and save-session patterns.",
       color: "blue",
+      icon: "🔬",
       isStarred: false,
       groups: [
         {
@@ -136,6 +142,7 @@ export const mockWorkspace: AppData = {
       name: "Phase 0 Build",
       note: "First dashboard, mock data, local interactions, and extension-ready components.",
       color: "green",
+      icon: "🚀",
       isStarred: true,
       groups: [
         {

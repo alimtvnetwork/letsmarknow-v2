@@ -119,7 +119,7 @@ export function SaveAllTabsCard({
             data-testid="save-all-tabs-button"
             className="flex-1 h-8 text-xs font-semibold hover:border-primary/50 transition-colors"
           >
-            Save All Tabs ({validTabCount})
+            <span className="truncate">Save All Tabs ({validTabCount})</span>
           </Button>
         )}
 
@@ -130,11 +130,11 @@ export function SaveAllTabsCard({
             disabled={validTabCount === 0 || status === "loading"}
             onClick={onSaveSession}
             data-testid="save-session-button"
-            className="h-8 text-xs font-medium px-3 hover:bg-muted transition-colors"
+            className="h-8 text-xs font-medium px-3 hover:bg-muted transition-colors shrink-0"
             title="Snapshot whole window as a new dated session collection"
           >
-            <FolderPlus className="h-3.5 w-3.5 mr-1 text-primary" />
-            As Session
+            <FolderPlus className="h-3.5 w-3.5 mr-1 text-primary shrink-0" />
+            <span className="truncate">As Session</span>
           </Button>
         )}
       </div>

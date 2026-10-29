@@ -238,17 +238,17 @@ export function NextQueueView({ className }: NextQueueViewProps) {
   return (
     <div
       data-testid="next-queue-view"
-      className={cn("flex flex-1 flex-col overflow-y-auto p-4 md:p-8", className)}
+      className={cn("flex flex-1 flex-col overflow-y-auto p-3 sm:p-6 md:p-8", className)}
     >
       <div className="mx-auto w-full max-w-[720px] space-y-6">
         {/* Header */}
         <div className="flex flex-col gap-3 border-b border-border pb-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Bookmark className="h-5 w-5 fill-primary/20" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-bold tracking-tight text-foreground">
                     Next
@@ -265,14 +265,14 @@ export function NextQueueView({ className }: NextQueueViewProps) {
                     {openCount}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground truncate sm:whitespace-normal">
                   Toby Next helps you move forward by turning open tabs into a clear, focused to-do list.
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
               <div
                 className="flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] text-muted-foreground"
                 title={isLiveConnected ? "Realtime sync active" : "Syncing with workspace"}
@@ -500,7 +500,7 @@ export function NextQueueView({ className }: NextQueueViewProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-destructive transition-opacity"
+                      className="h-8 w-8 text-muted-foreground opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:text-destructive transition-opacity"
                       onClick={() => handleRemove(item)}
                       title="Remove from Next"
                       aria-label="Remove from Next"

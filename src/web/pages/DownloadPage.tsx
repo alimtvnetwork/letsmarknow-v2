@@ -29,15 +29,17 @@ export default function DownloadPage() {
           <span className="font-bold text-base tracking-tight">LetsMarkNow</span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link to="/">
             <Button variant="ghost" size="sm" className="text-xs">
-              Preview Extension Tab
+              <span className="hidden sm:inline">Preview Extension Tab</span>
+              <span className="sm:hidden">Extension</span>
             </Button>
           </Link>
           <Link to="/web/account">
             <Button variant="outline" size="sm" className="text-xs">
-              Web Account
+              <span className="hidden sm:inline">Web Account</span>
+              <span className="sm:hidden">Account</span>
             </Button>
           </Link>
         </div>

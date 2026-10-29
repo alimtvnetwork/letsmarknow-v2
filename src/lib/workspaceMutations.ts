@@ -38,7 +38,7 @@ export function createWorkspaceMutation(
   const space: Space = {
     id: createId("space"),
     organizationId: organization.id,
-    name: "Inbox",
+    name: "My Collections",
     description: "Default space for this workspace.",
     accentClass: "bg-primary",
   };
@@ -124,7 +124,8 @@ export function createSpaceMutation(
   orgId: string,
   name: string,
   description: string,
-  accentClass: string
+  accentClass: string,
+  icon?: string
 ): { nextData: AppData; newSpace: Space } {
   const space: Space = {
     id: createId("space"),
@@ -132,6 +133,7 @@ export function createSpaceMutation(
     name: name.trim(),
     description: description.trim() || "A new space for organized saved links.",
     accentClass: accentClass || "bg-primary",
+    icon: icon ? icon.trim() : undefined,
   };
 
   return {
@@ -148,7 +150,8 @@ export function updateSpaceMutation(
   spaceId: string,
   name: string,
   description: string,
-  accentClass: string
+  accentClass: string,
+  icon?: string
 ): AppData {
   return {
     ...data,
@@ -159,6 +162,7 @@ export function updateSpaceMutation(
             name: name.trim() || space.name,
             description: description.trim() || space.description,
             accentClass: accentClass || space.accentClass,
+            icon: icon !== undefined ? (icon.trim() || undefined) : space.icon,
           }
         : space
     ),
@@ -198,7 +202,8 @@ export function createCollectionMutation(
   spaceId: string,
   name: string,
   note: string,
-  color: ColorLabel
+  color: ColorLabel,
+  icon?: string
 ): { nextData: AppData; newCollection: Collection } {
   const collection: Collection = {
     id: createId("collection"),
@@ -207,7 +212,8 @@ export function createCollectionMutation(
     note: note.trim() || "New collection ready for saved tabs, notes, and grouped links.",
     color: color || "pink",
     isStarred: false,
-    groups: [{ id: createId("group"), name: "Inbox", items: [] }],
+    icon: icon ? icon.trim() : undefined,
+    groups: [{ id: createId("group"), name: "General", items: [] }],
   };
 
   return {
@@ -383,6 +389,7 @@ export function softDeleteItemMutation(
   groupId: string,
   itemId: string
 ): AppData {
+  const now = new Date().toISOString();
   return updateCollectionMutation(data, collectionId, (col) => ({
     ...col,
     groups: col.groups.map((group) =>
@@ -390,7 +397,9 @@ export function softDeleteItemMutation(
         ? {
             ...group,
             items: group.items.map((item) =>
-              item.id === itemId ? { ...item, isDeleted: true } : item
+              item.id === itemId
+                ? { ...item, isDeleted: true, deletedAt: item.deletedAt || now }
+                : item
             ),
           }
         : group
@@ -406,11 +415,74 @@ export function restoreItemMutation(data: AppData, itemId: string): AppData {
       groups: col.groups.map((group) => ({
         ...group,
         items: group.items.map((item) =>
-          item.id === itemId ? { ...item, isDeleted: false } : item
+          item.id === itemId ? { ...item, isDeleted: false, deletedAt: undefined } : item
         ),
       })),
     })),
   };
+}
+
+export function permanentlyDeleteItemMutation(data: AppData, itemId: string): AppData {
+  return {
+    ...data,
+    collections: data.collections.map((col) => ({
+      ...col,
+      groups: col.groups.map((group) => ({
+        ...group,
+        items: group.items.filter((item) => item.id !== itemId),
+      })),
+    })),
+  };
+}
+
+export function emptyTrashMutation(data: AppData): AppData {
+  return {
+    ...data,
+    collections: data.collections.map((col) => ({
+      ...col,
+      groups: col.groups.map((group) => ({
+        ...group,
+        items: group.items.filter((item) => !item.isDeleted),
+      })),
+    })),
+  };
+}
+
+export const TRASH_RETENTION_DAYS = 15;
+export const TRASH_RETENTION_MS = TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+
+export function purgeExpiredTrashMutation(
+  data: AppData,
+  maxAgeDays = TRASH_RETENTION_DAYS,
+  nowMs = Date.now()
+): AppData {
+  const maxAgeMs = maxAgeDays * 24 * 60 * 60 * 1000;
+  let hasExpired = false;
+
+  const nextCollections = data.collections.map((col) => {
+    let colModified = false;
+    const nextGroups = col.groups.map((group) => {
+      const remainingItems = group.items.filter((item) => {
+        if (!item.isDeleted) return true;
+        if (item.deletedAt) {
+          const deletedTime = new Date(item.deletedAt).getTime();
+          if (!isNaN(deletedTime) && nowMs - deletedTime >= maxAgeMs) {
+            hasExpired = true;
+            colModified = true;
+            return false;
+          }
+        }
+        return true;
+      });
+      return remainingItems.length !== group.items.length
+        ? { ...group, items: remainingItems }
+        : group;
+    });
+
+    return colModified ? { ...col, groups: nextGroups } : col;
+  });
+
+  return hasExpired ? { ...data, collections: nextCollections } : data;
 }
 
 export function moveItemMutation(

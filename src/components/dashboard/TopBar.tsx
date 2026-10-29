@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Command, MoreHorizontal, PanelLeft, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { Command, FileText, MoreHorizontal, PanelLeft, Pencil, Plus, Search, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { Space } from "@/types/lmn";
@@ -24,6 +24,9 @@ interface TopBarProps {
   onEditSpace?: (spaceId: string) => void;
   onDeleteSpace?: (spaceId: string) => void;
   canDeleteSpace?: boolean;
+  onExportMarkdown?: () => void;
+  duplicateCount?: number;
+  onOpenDuplicateCleaner?: () => void;
   children?: React.ReactNode;
 }
 
@@ -38,6 +41,9 @@ export function TopBar({
   onEditSpace,
   onDeleteSpace,
   canDeleteSpace = true,
+  onExportMarkdown,
+  duplicateCount,
+  onOpenDuplicateCleaner,
   children,
 }: TopBarProps) {
   const [isSpaceMenuOpen, setIsSpaceMenuOpen] = useState(false);
@@ -55,7 +61,15 @@ export function TopBar({
         >
           <PanelLeft className="h-4 w-4" />
         </Button>
-        <div className="min-w-0 flex items-center gap-1.5">
+        <div className="min-w-0 flex items-center gap-2">
+          {activeSpace.icon && (
+            <span
+              data-testid="topbar-space-icon"
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted/60 border border-border/40 text-sm shadow-2xs select-none"
+            >
+              {activeSpace.icon}
+            </span>
+          )}
           <div className="min-w-0">
             <h2 className="truncate text-base font-semibold">{activeSpace.name}</h2>
             <p className="text-xs text-muted-foreground">{itemCount} active items</p>
@@ -86,6 +100,19 @@ export function TopBar({
                   >
                     <Pencil className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
                     Edit space
+                  </DropdownMenuItem>
+                )}
+                {onExportMarkdown && (
+                  <DropdownMenuItem
+                    data-testid="topbar-export-space-markdown-menu-item"
+                    onClick={() => {
+                      setIsSpaceMenuOpen(false);
+                      onExportMarkdown();
+                    }}
+                    className="cursor-pointer text-xs"
+                  >
+                    <FileText className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+                    Export to Markdown
                   </DropdownMenuItem>
                 )}
                 {onDeleteSpace && (
@@ -133,11 +160,38 @@ export function TopBar({
         </button>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onOpenCommand}
+          className="h-8 w-8 text-muted-foreground hover:text-foreground md:hidden shrink-0"
+          title="Search bookmarks (Cmd+K)"
+        >
+          <Search className="h-4 w-4" />
+        </Button>
         {children}
-        <Button size="sm" onClick={onCreateCollection} title="Create collection (required before adding items)">
+        {duplicateCount !== undefined && duplicateCount > 0 && onOpenDuplicateCleaner && (
+          <button
+            type="button"
+            onClick={onOpenDuplicateCleaner}
+            data-testid="duplicate-cleaner-pill"
+            aria-label={`⚠️ ${duplicateCount} Duplicates Found`}
+            className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 sm:px-2.5 py-1 text-xs font-medium text-amber-500 hover:bg-amber-500/20 hover:border-amber-500/60 transition-colors shadow-sm shrink-0"
+            title={`${duplicateCount} duplicate links found. Click to review and clean.`}
+          >
+            <span>⚠️</span>
+            <span className="hidden sm:inline">
+              {duplicateCount} {duplicateCount === 1 ? "Duplicate" : "Duplicates"} Found
+            </span>
+            <span className="sm:hidden font-mono">
+              {duplicateCount} Dups
+            </span>
+          </button>
+        )}
+        <Button size="sm" onClick={onCreateCollection} title="Create collection (required before adding items)" className="shrink-0">
           <Plus className="h-4 w-4" />
-          Collection
+          <span>Collection</span>
         </Button>
       </div>
     </header>

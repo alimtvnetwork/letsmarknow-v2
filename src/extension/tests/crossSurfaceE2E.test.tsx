@@ -4,13 +4,13 @@ import { PopupApp } from "../popup/PopupApp";
 import { ExtensionTabApp } from "../tab/ExtensionTabApp";
 import * as browserApi from "../lib/browserApi";
 
-describe("Cross-Surface E2E Smoke Tests: Popup to Next Queue Dashboard", () => {
+describe("Cross-Surface E2E Smoke Tests: Popup to Extension Tab Dashboard", () => {
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
   });
 
-  it("adds current active tab to Next queue from Popup, then inspects and checks off in Dashboard", async () => {
+  it("saves current active tab from Popup, then verifies Extension Tab Dashboard without Next Queue or Settings clutter", async () => {
     // 1. Mock the active tab in browserApi
     vi.spyOn(browserApi, "getActiveTab").mockResolvedValue({
       id: 99,
@@ -24,16 +24,15 @@ describe("Cross-Surface E2E Smoke Tests: Popup to Next Queue Dashboard", () => {
     const { unmount } = render(<PopupApp />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("add-to-next-button")).toBeInTheDocument();
+      expect(screen.getByTestId("save-current-tab-button")).toBeInTheDocument();
     });
 
-    // 3. User clicks "Add to Next Queue" in the popup
-    const addToNextBtn = screen.getByTestId("add-to-next-button");
-    fireEvent.click(addToNextBtn);
+    // 3. User saves current tab in popup
+    const saveBtn = screen.getByTestId("save-current-tab-button");
+    fireEvent.click(saveBtn);
 
-    // Wait for async persistence to complete
     await waitFor(() => {
-      expect(screen.getByTestId("extension-popup-app")).toBeInTheDocument();
+      expect(screen.getByText(/saved successfully/i)).toBeInTheDocument();
     });
 
     // 4. Unmount popup (user closes popup)
@@ -43,33 +42,13 @@ describe("Cross-Surface E2E Smoke Tests: Popup to Next Queue Dashboard", () => {
     render(<ExtensionTabApp />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("nav-next-queue-button")).toBeInTheDocument();
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
     });
 
-    // 6. Verify Next Queue button in the sidebar reflects the newly added uncompleted item
-    const navNextBtn = screen.getByTestId("nav-next-queue-button");
-    expect(navNextBtn).toHaveTextContent("1");
-
-    // 7. Click Next Queue button in the sidebar
-    fireEvent.click(navNextBtn);
-
-    // 8. Verify the dedicated Next Queue view is rendered
-    await waitFor(() => {
-      expect(screen.getByTestId("next-queue-view")).toBeInTheDocument();
-    });
-
-    expect(screen.getByText("GitHub: Let's Mark Now")).toBeInTheDocument();
-    expect(screen.getByText("https://github.com/letsmarknow")).toBeInTheDocument();
-
-    // 9. Check off the item as completed
-    const completeButton = screen.getByTitle("Mark completed");
-    expect(completeButton).toBeInTheDocument();
-    fireEvent.click(completeButton);
-
-    // 10. Verify item updates to done and button title changes to "Mark incomplete"
-    await waitFor(() => {
-      expect(screen.getByTitle("Mark incomplete")).toBeInTheDocument();
-    });
-    expect(screen.getByText(/0 open/i)).toBeInTheDocument();
+    // 6. Verify Next Queue and Extension Settings are completely removed
+    expect(screen.queryByText("Next Queue")).not.toBeInTheDocument();
+    expect(screen.queryByText("Extension Settings")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("nav-next-queue-button")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("nav-settings-button")).not.toBeInTheDocument();
   });
 });

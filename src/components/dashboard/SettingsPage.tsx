@@ -158,7 +158,7 @@ export function SettingsPage({
   const [activeTab, setActiveTab] = useState(defaultTab);
 
   return (
-    <section className="min-h-0 flex-1 overflow-auto p-6">
+    <section className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
       <div className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Workspace & Preferences
@@ -402,17 +402,17 @@ export function SettingsPage({
 
             <div className="mt-5 rounded-lg border border-border divide-y divide-border">
               {members.map((member) => (
-                <div key={member.id} className="flex items-center justify-between p-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">
+                <div key={member.id} className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between p-3.5">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary text-xs font-bold">
                       {member.name.slice(0, 2).toUpperCase()}
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold">{member.name}</p>
-                      <p className="text-xs text-muted-foreground">{member.email}</p>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold truncate">{member.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{member.email}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                     <span className="rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground">
                       {member.role}
                     </span>
@@ -610,7 +610,7 @@ export function SettingsPage({
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 shrink-0">
                         <Button
                           variant="outline"
                           size="sm"

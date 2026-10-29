@@ -10,6 +10,7 @@ import {
   createGroupMutation,
   createItemMutation,
   isValidUrl,
+  purgeExpiredTrashMutation,
 } from "@/lib/workspaceMutations";
 import type {
   AppData,
@@ -77,6 +78,37 @@ export async function loadWorkspaceData(): Promise<AppData> {
         if (isLegacyDemo) {
           await saveWorkspaceData(cleanWorkspace);
           return cleanWorkspace;
+        }
+
+        // Migrate any remnant "Inbox" group or space names
+        let modified = false;
+        const nextSpaces = loaded.spaces.map((s) => {
+          if (s.name.trim().toLowerCase() === "inbox") {
+            modified = true;
+            return { ...s, name: "My Collections" };
+          }
+          return s;
+        });
+        const nextCollections = loaded.collections.map((c) => {
+          const nextGroups = c.groups.map((g) => {
+            if (g.name.trim().toLowerCase() === "inbox") {
+              modified = true;
+              return { ...g, name: "General" };
+            }
+            return g;
+          });
+          return { ...c, groups: nextGroups };
+        });
+        if (modified) {
+          loaded = { ...loaded, spaces: nextSpaces, collections: nextCollections };
+          await saveWorkspaceData(loaded);
+        }
+
+        // Auto-purge any items in Trash for more than 15 days
+        const purged = purgeExpiredTrashMutation(loaded);
+        if (purged !== loaded) {
+          loaded = purged;
+          await saveWorkspaceData(loaded);
         }
       }
       return loaded;

@@ -78,7 +78,7 @@ export function SaveSessionBar({
         >
           <FolderPlus className="h-3.5 w-3.5 mr-1.5 text-primary" />
           <span>Save session</span>
-          <kbd className="ml-1.5 px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">S</kbd>
+          <kbd className="ml-1.5 hidden min-[480px]:inline-block px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">S</kbd>
         </Button>
 
         <Button
@@ -96,7 +96,7 @@ export function SaveSessionBar({
         >
           <XCircle className="h-3.5 w-3.5 mr-1.5" />
           <span>Close saved tabs ({openSavedTabsCount})</span>
-          <kbd className="ml-1.5 px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">A</kbd>
+          <kbd className="ml-1.5 hidden min-[480px]:inline-block px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">A</kbd>
         </Button>
 
         <Button
@@ -114,7 +114,7 @@ export function SaveSessionBar({
         >
           <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
           <span>Restore last session</span>
-          <kbd className="ml-1.5 px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">R</kbd>
+          <kbd className="ml-1.5 hidden min-[480px]:inline-block px-1.5 py-0.5 rounded border border-border/80 bg-background/80 text-[10px] font-mono font-semibold text-foreground shadow-2xs">R</kbd>
         </Button>
       </div>
     </div>

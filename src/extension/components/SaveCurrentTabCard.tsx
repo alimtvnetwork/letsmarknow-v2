@@ -159,15 +159,15 @@ export function SaveCurrentTabCard({
           </Button>
         ) : alreadySaved ? (
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold px-2.5 py-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 flex-1">
-              <BookmarkCheck className="h-3.5 w-3.5 text-emerald-400" />
-              <span>Already in collection</span>
+            <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold px-2.5 py-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20 flex-1 min-w-0">
+              <BookmarkCheck className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+              <span className="truncate">Already in collection</span>
             </div>
             <Button
               size="sm"
               variant="outline"
               onClick={onSave}
-              className="h-9 text-xs font-semibold px-3 hover:border-primary/50"
+              className="h-9 text-xs font-semibold px-3 shrink-0 hover:border-primary/50"
             >
               Save Again
             </Button>
@@ -179,9 +179,9 @@ export function SaveCurrentTabCard({
             data-testid="save-current-tab-button"
             className="w-full h-9 text-xs font-bold gap-2 shadow-md shadow-primary/25 hover:shadow-primary/40 transition-all"
           >
-            <Bookmark className="h-3.5 w-3.5" />
-            <span>Save Current Tab</span>
-            <span className="ml-auto flex items-center gap-0.5 rounded-sm bg-primary-foreground/20 px-1.5 py-0.5 text-[10px] font-mono text-primary-foreground">
+            <Bookmark className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">Save Current Tab</span>
+            <span className="ml-auto hidden min-[320px]:flex items-center gap-0.5 rounded-sm bg-primary-foreground/20 px-1.5 py-0.5 text-[10px] font-mono text-primary-foreground shrink-0">
               <CornerDownLeft className="h-2.5 w-2.5" />
               <span>Enter</span>
             </span>

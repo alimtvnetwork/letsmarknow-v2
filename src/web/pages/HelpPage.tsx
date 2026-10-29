@@ -46,20 +46,29 @@ export default function HelpPage() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/20">
       {/* Header */}
-      <header className="border-b border-border/80 bg-background/80 backdrop-blur-md px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <Link to="/web" className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground text-sm">
+      <header className="border-b border-border/80 bg-background/80 backdrop-blur-md px-4 sm:px-8 py-3.5 flex items-center justify-between gap-3">
+        <Link to="/web" className="flex items-center gap-2.5 min-w-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary font-bold text-primary-foreground text-sm">
             L
           </div>
-          <span className="font-bold text-base tracking-tight">LetsMarkNow Help & Support</span>
+          <span className="font-bold text-base tracking-tight truncate">
+            LetsMarkNow <span className="hidden sm:inline">Help & Support</span>
+          </span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link to="/web/download">
-            <Button size="sm" className="gap-1.5 text-xs"><Chrome className="h-3.5 w-3.5" /> Add to Chrome</Button>
+            <Button size="sm" className="gap-1.5 text-xs">
+              <Chrome className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Add to Chrome</span>
+              <span className="sm:hidden">Install</span>
+            </Button>
           </Link>
           <Link to="/web/account">
-            <Button size="sm" variant="outline" className="text-xs">Account Portal</Button>
+            <Button size="sm" variant="outline" className="text-xs">
+              <span className="hidden sm:inline">Account Portal</span>
+              <span className="sm:hidden">Account</span>
+            </Button>
           </Link>
         </div>
       </header>

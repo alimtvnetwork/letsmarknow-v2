@@ -261,19 +261,22 @@ export default function PublicShareViewerPage() {
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={handleCopyLink}
-            className="h-8 text-xs gap-1.5"
+            className="h-8 text-xs gap-1 sm:gap-1.5 px-2 sm:px-3"
           >
             {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-            Copy Link
+            <span className="hidden sm:inline">Copy Link</span>
+            <span className="sm:hidden">Share</span>
           </Button>
           <Link to="/web/download">
-            <Button size="sm" className="h-8 text-xs gap-1.5 font-semibold">
-              <Chrome className="h-3.5 w-3.5" /> Install Extension
+            <Button size="sm" className="h-8 text-xs gap-1 sm:gap-1.5 font-semibold px-2 sm:px-3">
+              <Chrome className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Install Extension</span>
+              <span className="sm:hidden">Install</span>
             </Button>
           </Link>
         </div>

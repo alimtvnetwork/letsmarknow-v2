@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
   AlertTriangle,
+  Bookmark,
   Check,
   Download,
   ExternalLink,
+  FolderInput,
   RefreshCw,
   Save,
   Settings,
   Shield,
   Upload,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { AppData, ExtensionPreferences } from "@/types/lmn";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,8 +24,10 @@ import {
   loadWorkspaceData,
   resetExtensionData,
   savePreferences,
+  saveWorkspaceData,
 } from "../lib/extensionStore";
 import { openWebDashboard } from "../lib/browserApi";
+import { getBrowserBookmarkTree, importBookmarksToWorkspace } from "@/lib/bookmarkImport";
 
 export interface ExtensionSettingsViewProps {
   onDataUpdated?: (newData: AppData) => void;
@@ -134,7 +139,7 @@ export function ExtensionSettingsView({
 
       {/* Workspace & Members Navigation Banner */}
       {onOpenWorkspaceSettings && (
-        <div className="flex items-center justify-between rounded-xl border border-primary/25 bg-primary/5 p-4 text-xs gap-3">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-xl border border-primary/25 bg-primary/5 p-4 text-xs gap-3">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Shield className="h-5 w-5" />
@@ -374,6 +379,49 @@ export function ExtensionSettingsView({
                 Save Preferences
               </>
             )}
+          </Button>
+        </div>
+      </div>
+
+      {/* 1-Click Chrome Bookmarks Migration */}
+      <div className="rounded-xl border border-sky-500/30 bg-sky-500/5 p-5 space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <h2 className="text-sm font-semibold text-sky-400 flex items-center gap-2">
+              <Bookmark className="h-4 w-4" />
+              1-Click Chrome Bookmarks Import
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Directly import your Chrome browser bookmarks bar and folders into your workspace collections.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            data-testid="settings-import-chrome-bookmarks-btn"
+            onClick={async () => {
+              if (!data) return;
+              try {
+                const targetSpaceId = prefs?.defaultSpaceId || data.spaces[0]?.id;
+                const tree = await getBrowserBookmarkTree();
+                const result = importBookmarksToWorkspace(data, targetSpaceId, tree);
+                if (result.importedItemCount === 0) {
+                  toast.info("No bookmarks found to import.");
+                  return;
+                }
+                await saveWorkspaceData(result.nextData);
+                setData(result.nextData);
+                onDataUpdated?.(result.nextData);
+                toast.success(
+                  `Imported ${result.importedItemCount} bookmarks across ${result.importedCollectionCount} collections!`
+                );
+              } catch (err: any) {
+                toast.error(err?.message || "Failed to import bookmarks");
+              }
+            }}
+            className="h-8 text-xs bg-sky-600 hover:bg-sky-500 text-white shrink-0 cursor-pointer"
+          >
+            <FolderInput className="h-3.5 w-3.5 mr-1.5" />
+            Import Browser Bookmarks
           </Button>
         </div>
       </div>

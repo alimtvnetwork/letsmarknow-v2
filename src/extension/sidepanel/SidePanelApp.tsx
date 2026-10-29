@@ -334,40 +334,40 @@ export function SidePanelApp() {
             type="button"
             onClick={() => setPanelTab("capture")}
             className={cn(
-              "flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs rounded-lg transition-all",
+              "flex-1 min-w-0 flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 text-xs rounded-lg transition-all",
               panelTab === "capture"
                 ? "bg-card text-foreground font-semibold shadow-obsidian border border-border/70"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40 font-medium"
             )}
           >
-            <Bookmark className="h-3.5 w-3.5 text-primary" />
-            <span>Capture</span>
+            <Bookmark className="h-3.5 w-3.5 text-primary shrink-0" />
+            <span className="truncate">Capture</span>
           </button>
           <button
             type="button"
             onClick={() => setPanelTab("tabs")}
             className={cn(
-              "flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs rounded-lg transition-all",
+              "flex-1 min-w-0 flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 text-xs rounded-lg transition-all",
               panelTab === "tabs"
                 ? "bg-card text-foreground font-semibold shadow-obsidian border border-border/70"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40 font-medium"
             )}
           >
-            <Layers className="h-3.5 w-3.5 text-sky-400" />
-            <span>Tabs ({windowTabs.length})</span>
+            <Layers className="h-3.5 w-3.5 text-sky-400 shrink-0" />
+            <span className="truncate">Tabs ({windowTabs.length})</span>
           </button>
           <button
             type="button"
             onClick={() => setPanelTab("collections")}
             className={cn(
-              "flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs rounded-lg transition-all",
+              "flex-1 min-w-0 flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 text-xs rounded-lg transition-all",
               panelTab === "collections"
                 ? "bg-card text-foreground font-semibold shadow-obsidian border border-border/70"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/40 font-medium"
             )}
           >
-            <Folder className="h-3.5 w-3.5 text-amber-400" />
-            <span>Collections</span>
+            <Folder className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+            <span className="truncate">Collections</span>
           </button>
         </nav>
       </div>

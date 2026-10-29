@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ExtensionTabApp } from "./ExtensionTabApp";
 
@@ -62,21 +62,17 @@ describe("ExtensionTabApp", () => {
     });
   });
 
-  it("navigates to Extension Settings and updates preferences", async () => {
+  it("does not render Extension Settings or Next Queue in the sidebar", async () => {
     render(<ExtensionTabApp />);
 
     await waitFor(() => {
-      expect(screen.getByTestId("nav-settings-button")).toBeInTheDocument();
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId("nav-settings-button"));
-
-    await waitFor(() => {
-      expect(screen.getByText(/Extension Preferences/i)).toBeInTheDocument();
-    });
-
-    expect(screen.getByText(/Default Capture Destination/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /save preferences/i })).toBeInTheDocument();
+    expect(screen.queryByTestId("nav-settings-button")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("nav-next-queue-button")).not.toBeInTheDocument();
+    expect(screen.queryByText("Extension Settings")).not.toBeInTheDocument();
+    expect(screen.queryByText("Next Queue")).not.toBeInTheDocument();
   });
 
   it("keeps docked Open Tabs panel closed by default and opens on toggle", async () => {
@@ -169,8 +165,9 @@ describe("ExtensionTabApp", () => {
     fireEvent.keyDown(window, { key: "/" });
     expect(document.activeElement).toBe(searchInput);
 
-    // Verify Quick Focus queue is rendered and Quick Inbox is removed
-    expect(screen.getByText("Next")).toBeInTheDocument();
+    // Verify Quick Focus and Next/Inbox queues are removed
+    expect(screen.queryByText("Quick Focus")).not.toBeInTheDocument();
+    expect(screen.queryByText("Next")).not.toBeInTheDocument();
     expect(screen.queryByText("Quick Inbox")).not.toBeInTheDocument();
 
     // Verify Views & Tools section header is rendered
@@ -479,6 +476,253 @@ describe("ExtensionTabApp", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("heading", { name: "Edit space" })).toBeInTheDocument();
+    });
+  });
+
+  it("opens Command Palette via TopBar button and Cmd+K keyboard shortcut", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTitle("Open command palette")).toBeInTheDocument();
+    });
+
+    // 1. Open via TopBar button
+    fireEvent.click(screen.getByTitle("Open command palette"));
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText("Search commands, spaces, collections, or links...")
+      ).toBeInTheDocument();
+    });
+
+    // Close via Escape
+    fireEvent.keyDown(document.body, { key: "Escape" });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByPlaceholderText("Search commands, spaces, collections, or links...")
+      ).not.toBeInTheDocument();
+    });
+
+    // 2. Open via Cmd+K keyboard shortcut
+    fireEvent.keyDown(window, { key: "k", metaKey: true });
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText("Search commands, spaces, collections, or links...")
+      ).toBeInTheDocument();
+    });
+
+    // Verify command options are present
+    expect(screen.getByText("Import Chrome Bookmarks")).toBeInTheDocument();
+    expect(screen.getByText("Create collection")).toBeInTheDocument();
+  });
+
+  it("renders visual card preview banners on grid cards", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Verify visual card preview elements exist on rendered cards
+    const previews = screen.getAllByTestId(/^visual-card-preview-/);
+    expect(previews.length).toBeGreaterThan(0);
+  });
+
+  it("imports browser bookmarks into workspace via 1-Click bookmark import dialog", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-import-bookmarks-button")).toBeInTheDocument();
+    });
+
+    // Open import dialog
+    fireEvent.click(screen.getByTestId("sidebar-import-bookmarks-button"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Import Chrome & Browser Bookmarks")).toBeInTheDocument();
+      expect(screen.getByTestId("import-browser-bookmarks-button")).toBeInTheDocument();
+    });
+
+    // Click 1-Click browser import
+    fireEvent.click(screen.getByTestId("import-browser-bookmarks-button"));
+
+    // Verify import completed message
+    await waitFor(() => {
+      expect(screen.getByText("Import Complete!")).toBeInTheDocument();
+    });
+
+    // Close dialog
+    fireEvent.click(screen.getByRole("button", { name: "Done" }));
+
+    // Verify imported collection is now visible in the workspace
+    await waitFor(() => {
+      expect(screen.getAllByText("Development Tools")[0]).toBeInTheDocument();
+    });
+  });
+
+  it("exports space and collections to Markdown with 1-click clipboard copy", async () => {
+    const writeTextMock = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText: writeTextMock },
+      writable: true,
+      configurable: true,
+    });
+
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("topbar-space-options-button")).toBeInTheDocument();
+    });
+
+    // 1. Export space via TopBar
+    fireEvent.click(screen.getByTestId("topbar-space-options-button"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Export to Markdown")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText("Export to Markdown"));
+
+    expect(writeTextMock).toHaveBeenCalled();
+    const lastExportedText = writeTextMock.mock.calls[0][0];
+    expect(lastExportedText).toContain("# ");
+    expect(lastExportedText).toContain("- [");
+  });
+
+  it("detects duplicates, displays TopBar warning pill, and cleans duplicates in 1 click", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Initially 0 duplicates -> pill should NOT be rendered
+    expect(screen.queryByTestId("duplicate-cleaner-pill")).not.toBeInTheDocument();
+
+    // Duplicate an item
+    const itemCard = screen.getAllByText("Radix UI primitives")[0].closest(".group");
+    expect(itemCard).not.toBeNull();
+    fireEvent.click(within(itemCard as HTMLElement).getByTitle("Item actions"));
+    fireEvent.click(screen.getByTitle("Duplicate item"));
+
+    // Now 1 duplicate exists -> pill should appear in TopBar
+    await waitFor(() => {
+      expect(screen.getByTestId("duplicate-cleaner-pill")).toBeInTheDocument();
+      expect(screen.getByText(/1 Duplicate Found/i)).toBeInTheDocument();
+    });
+
+    // Click pill to open preview modal
+    fireEvent.click(screen.getByTestId("duplicate-cleaner-pill"));
+
+    await waitFor(() => {
+      expect(screen.getByText("Duplicate Cleaner & URL Deduplicator")).toBeInTheDocument();
+      expect(screen.getByTestId("clean-duplicates-confirm-button")).toBeInTheDocument();
+      expect(screen.getByText("Keep Newest & Clean Duplicates")).toBeInTheDocument();
+    });
+
+    // Click "Keep Newest & Clean Duplicates"
+    fireEvent.click(screen.getByTestId("clean-duplicates-confirm-button"));
+
+    // Verify modal closes and pill disappears
+    await waitFor(() => {
+      expect(screen.queryByTestId("duplicate-cleaner-pill")).not.toBeInTheDocument();
+    });
+  });
+
+  it("navigates to settings when clicking the settings button in the user profile bar", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sidebar-settings-button")).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId("sidebar-settings-button"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /Rename & Workspace Identity/i })).toBeInTheDocument();
+    });
+  });
+
+  it("adds and edits inline sticky notes and context annotations on bookmark cards", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Find the first item card
+    const itemCard = screen.getAllByText("Radix UI primitives")[0].closest(".group");
+    expect(itemCard).not.toBeNull();
+
+    // Find the note button in the item card
+    const noteButton = within(itemCard as HTMLElement).getByTestId("item-note-button");
+    expect(noteButton).toBeInTheDocument();
+
+    // Click note button to toggle inline note editor
+    fireEvent.click(noteButton);
+
+    // Verify inline note editor is active
+    await waitFor(() => {
+      expect(within(itemCard as HTMLElement).getByTestId("item-note-editor")).toBeInTheDocument();
+      expect(within(itemCard as HTMLElement).getByTestId("item-note-input")).toBeInTheDocument();
+    });
+
+    // Type a context note
+    const noteInput = within(itemCard as HTMLElement).getByTestId("item-note-input");
+    fireEvent.change(noteInput, { target: { value: "Review accessibility props before release" } });
+
+    // Save note
+    const saveButton = within(itemCard as HTMLElement).getByTestId("save-item-note-button");
+    fireEvent.click(saveButton);
+
+    // Verify note chip is displayed on the card face
+    await waitFor(() => {
+      expect(screen.getByText("Review accessibility props before release")).toBeInTheDocument();
+    });
+
+    // Click note chip to reopen editor and modify note
+    const noteChip = screen.getByText("Review accessibility props before release").closest("[data-testid^='item-note-chip-']");
+    expect(noteChip).not.toBeNull();
+    fireEvent.click(noteChip as HTMLElement);
+
+    await waitFor(() => {
+      expect(within(itemCard as HTMLElement).getByTestId("item-note-input")).toBeInTheDocument();
+    });
+  });
+
+  it("allows selecting custom emoji/icon for collections and displays it in sidebar and card header", async () => {
+    render(<ExtensionTabApp />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("extension-tab-app")).toBeInTheDocument();
+    });
+
+    // Open create collection dialog via TopBar button
+    const createColBtn = screen.getByTitle("Create collection (required before adding items)");
+    fireEvent.click(createColBtn);
+
+    // Verify collection dialog and emoji picker are open
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: "Create collection" })).toBeInTheDocument();
+      expect(screen.getByTestId("emoji-option-🚀")).toBeInTheDocument();
+    });
+
+    // Click 🚀 emoji
+    fireEvent.click(screen.getByTestId("emoji-option-🚀"));
+
+    // Type collection name
+    const nameInput = screen.getByPlaceholderText("Marketing research");
+    fireEvent.change(nameInput, { target: { value: "Rocket Launch Project" } });
+
+    // Submit form
+    fireEvent.click(screen.getByRole("button", { name: "Create collection" }));
+
+    // Verify collection is created with custom emoji rendered in sidebar and collection card
+    await waitFor(() => {
+      expect(screen.getAllByText("Rocket Launch Project")[0]).toBeInTheDocument();
+      expect(screen.getAllByText("🚀")[0]).toBeInTheDocument();
     });
   });
 });

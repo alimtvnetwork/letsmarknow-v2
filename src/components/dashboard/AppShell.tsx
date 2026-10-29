@@ -145,7 +145,7 @@ export function SpaceSidebar({
   return (
     <aside
       className={cn(
-        "flex w-[292px] shrink-0 flex-col border-r border-border bg-card/60",
+        "flex w-[292px] max-w-full min-w-0 shrink-0 flex-col border-r border-border bg-card/60",
         className
       )}
     >
@@ -358,7 +358,11 @@ export function SpaceSidebar({
                   className="min-w-0 flex-1 text-left"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className={cn("h-2.5 w-2.5 rounded-full shrink-0", space.accentClass)} />
+                    {space.icon ? (
+                      <span className="text-sm shrink-0 select-none">{space.icon}</span>
+                    ) : (
+                      <span className={cn("h-2.5 w-2.5 rounded-full shrink-0", space.accentClass)} />
+                    )}
                     <span className="truncate text-sm font-medium">{space.name}</span>
                     {spaceShare && spaceShare.visibility !== "private" && (
                       <span
@@ -467,7 +471,7 @@ export function MobileSidebarDrawer({
 }) {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent side="left" className="flex w-[340px] max-w-full p-0">
+      <SheetContent side="left" className="flex w-[340px] max-w-[88vw] p-0 overflow-hidden">
         <SheetHeader className="sr-only">
           <SheetTitle>Navigation Menu</SheetTitle>
         </SheetHeader>
@@ -482,7 +486,7 @@ export function MobileSidebarDrawer({
             onCreateWorkspace();
             onOpenChange(false);
           }}
-          className="w-16"
+          className="w-14 sm:w-16 shrink-0"
         />
         <SpaceSidebar
           activePage={activePage}
@@ -531,7 +535,7 @@ export function MobileSidebarDrawer({
             onOpenChange(false);
           }}
           onNavigateExtra={() => onOpenChange(false)}
-          className="flex-1 border-r-0"
+          className="flex-1 min-w-0 border-r-0 max-w-none"
         />
       </SheetContent>
     </Sheet>

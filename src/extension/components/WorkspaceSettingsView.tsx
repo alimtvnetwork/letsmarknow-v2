@@ -46,6 +46,7 @@ import { slugify } from "@/lib/shareLinks";
 export interface WorkspaceSettingsViewProps {
   data: AppData;
   activeOrgId: string;
+  initialTab?: "general" | "members" | "sharing" | "data";
   onUpdateWorkspace: (name: string, initials: string, plan: string) => Promise<void> | void;
   onDeleteWorkspace?: (orgId: string) => Promise<void> | void;
   onSwitchWorkspace: (orgId: string) => void;
@@ -56,6 +57,7 @@ export interface WorkspaceSettingsViewProps {
 export function WorkspaceSettingsView({
   data,
   activeOrgId,
+  initialTab,
   onUpdateWorkspace,
   onDeleteWorkspace,
   onSwitchWorkspace,
@@ -74,7 +76,13 @@ export function WorkspaceSettingsView({
     );
   }, [data.organizations, activeOrgId]);
 
-  const [activeTab, setActiveTab] = useState<"general" | "members" | "sharing" | "data">("general");
+  const [activeTab, setActiveTab] = useState<"general" | "members" | "sharing" | "data">(initialTab ?? "general");
+
+  React.useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   // Form states for workspace rename
   const [nameInput, setNameInput] = useState(activeOrg.name);
@@ -196,7 +204,11 @@ export function WorkspaceSettingsView({
     navigator.clipboard?.writeText(inviteUrl).catch(() => {});
     setCopiedInviteId(inviteId);
     toast.success("Invite acceptance link copied to clipboard");
-    setTimeout(() => setCopiedInviteId(null), 2000);
+    setTimeout(() => {
+      if (typeof window !== "undefined") {
+        setCopiedInviteId(null);
+      }
+    }, 2000);
   };
 
   // 3. Sharing & Visibility
@@ -317,7 +329,7 @@ export function WorkspaceSettingsView({
   return (
     <div
       data-testid="workspace-settings-view"
-      className="flex-1 overflow-y-auto p-6 max-w-5xl mx-auto w-full space-y-6"
+      className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-5xl mx-auto w-full space-y-6"
     >
       {/* Top Header & Workspace Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-5">
@@ -361,12 +373,12 @@ export function WorkspaceSettingsView({
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-1 border-b border-border text-xs">
+      <div className="flex items-center gap-1 border-b border-border text-xs overflow-x-auto whitespace-nowrap scrollbar-none pb-px">
         <button
           type="button"
           onClick={() => setActiveTab("general")}
           className={cn(
-            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors",
+            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors shrink-0",
             activeTab === "general"
               ? "border-primary text-primary font-semibold"
               : "border-transparent text-muted-foreground hover:text-foreground"
@@ -379,7 +391,7 @@ export function WorkspaceSettingsView({
           type="button"
           onClick={() => setActiveTab("members")}
           className={cn(
-            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors",
+            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors shrink-0",
             activeTab === "members"
               ? "border-primary text-primary font-semibold"
               : "border-transparent text-muted-foreground hover:text-foreground"
@@ -392,7 +404,7 @@ export function WorkspaceSettingsView({
           type="button"
           onClick={() => setActiveTab("sharing")}
           className={cn(
-            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors",
+            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors shrink-0",
             activeTab === "sharing"
               ? "border-primary text-primary font-semibold"
               : "border-transparent text-muted-foreground hover:text-foreground"
@@ -405,7 +417,7 @@ export function WorkspaceSettingsView({
           type="button"
           onClick={() => setActiveTab("data")}
           className={cn(
-            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors",
+            "flex items-center gap-2 px-3.5 py-2 font-medium border-b-2 transition-colors shrink-0",
             activeTab === "data"
               ? "border-primary text-primary font-semibold"
               : "border-transparent text-muted-foreground hover:text-foreground"

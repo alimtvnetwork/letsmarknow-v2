@@ -1,0 +1,96 @@
+name: Build & Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 0.2.11)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: Build Installer & Publish GitHub Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Determine Application Version
+        id: version
+        shell: pwsh
+        run: |
+          $ver = "${{ github.event.inputs.version }}"
+          if (-not $ver) {
+            if ($env:GITHUB_REF_TYPE -eq "tag" -and $env:GITHUB_REF_NAME -match "^v(.+)$") {
+              $ver = $Matches[1]
+            } else {
+              $pkg = Get-Content "package.json" -Raw | ConvertFrom-Json
+              $ver = $pkg.version
+            }
+          }
+          if (-not $ver) { $ver = "0.2.11" }
+          Write-Host "Resolved Version: $ver"
+          "APP_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "TAG_NAME=v$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Setup Inno Setup
+        uses: brentgahagan/setup-inno-setup@v2.2.0
+
+      - name: Build Extension, Launcher & Inno Setup Installer
+        shell: pwsh
+        run: |
+          .\installer\build-installer.ps1 -Version "${{ env.APP_VERSION }}"
+
+      - name: Verify Distributable Artifacts
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -Path dist-installer -Filter "LetsMarkNow-Setup-v*.exe"
+          $portable = Get-ChildItem -Path dist-installer -Filter "LetsMarkNow-Portable-v*.zip"
+          $checksums = Get-ChildItem -Path dist-installer -Filter "checksums.txt"
+
+          if (-not $installer) { throw "Missing LetsMarkNow-Setup-v*.exe in dist-installer/" }
+          if (-not $portable) { throw "Missing LetsMarkNow-Portable-v*.zip in dist-installer/" }
+          if (-not $checksums) { throw "Missing checksums.txt in dist-installer/" }
+
+          Write-Host "Verified Artifacts:" -ForegroundColor Green
+          Write-Host "  * $($installer.Name) ($([Math]::Round($installer.Length / 1MB, 2)) MB)"
+          Write-Host "  * $($portable.Name) ($([Math]::Round($portable.Length / 1MB, 2)) MB)"
+          Write-Host "  * $($checksums.Name)"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: LetsMarkNow v${{ env.APP_VERSION }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            dist-installer/LetsMarkNow-Setup-v*.exe
+            dist-installer/LetsMarkNow-Portable-v*.zip
+            dist-installer/checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

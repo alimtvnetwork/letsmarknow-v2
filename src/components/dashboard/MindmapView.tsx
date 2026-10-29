@@ -655,18 +655,18 @@ export const MindmapView: React.FC<MindmapViewProps> = ({
       onPointerUp={processPointerUp}
     >
       {/* Canvas Top Bar HUD */}
-      <div className="absolute top-3 left-3 right-3 z-10 flex items-center justify-between pointer-events-none">
+      <div className="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
         {/* Left: Saved Views Picker */}
-        <div className="pointer-events-auto flex items-center gap-2">
+        <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-3 gap-2 bg-card/80 backdrop-blur shadow-xs border-border/70"
+                className="h-9 px-2.5 sm:px-3 gap-1.5 sm:gap-2 bg-card/80 backdrop-blur shadow-xs border-border/70"
               >
                 <Layers className="h-4 w-4 text-indigo-500" />
-                <span className="font-medium text-xs truncate max-w-[140px]">
+                <span className="font-medium text-xs truncate max-w-[100px] sm:max-w-[140px]">
                   {currentLayoutName}
                 </span>
                 <ChevronDown className="h-3 w-3 text-muted-foreground" />
@@ -705,12 +705,12 @@ export const MindmapView: React.FC<MindmapViewProps> = ({
             className="h-9 px-2.5 gap-1.5 bg-card/80 backdrop-blur shadow-xs border-border/70 text-xs"
           >
             <Save className="h-3.5 w-3.5 text-muted-foreground" />
-            <span>Save View</span>
+            <span className="hidden sm:inline">Save View</span>
           </Button>
         </div>
 
         {/* Right: Zoom & Export Controls */}
-        <div className="pointer-events-auto flex items-center gap-1.5 bg-card/80 backdrop-blur p-1 rounded-lg border border-border/70 shadow-xs">
+        <div className="pointer-events-auto flex items-center gap-1 sm:gap-1.5 bg-card/80 backdrop-blur p-1 rounded-lg border border-border/70 shadow-xs">
           <Button
             variant="ghost"
             size="icon"

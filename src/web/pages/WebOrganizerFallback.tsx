@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Chrome, Sparkles } from "lucide-react";
 
@@ -25,6 +25,9 @@ import { ShareDialog } from "@/components/dashboard/ShareDialog";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { useWorkspaceDashboard } from "@/hooks/useWorkspaceDashboard";
 import { fetchNextQueue, subscribeNextQueueSSE } from "@/lib/workspaceApiClient";
+import { spaceToMarkdown, copyMarkdownToClipboard } from "@/lib/markdownExport";
+import { findDuplicateGroups, countRedundantDuplicates } from "@/lib/duplicateCleaner";
+import { DuplicateCleanerDialog } from "@/components/dashboard/DuplicateCleanerDialog";
 import type { AppPage } from "@/types/lmn";
 
 const getPage = (pathname: string, search: string = ""): AppPage => {
@@ -124,6 +127,7 @@ export default function Index() {
     openEditItem,
     saveItem,
     duplicateItem,
+    updateItemNote,
     softDeleteItem,
     restoreItem,
     openMoveItem,
@@ -146,7 +150,12 @@ export default function Index() {
     handleCopyItemLink,
     handleCopyItemShareLink,
     openShareDialog,
+    cleanDuplicates,
   } = useWorkspaceDashboard();
+
+  const [isDuplicateCleanerOpen, setIsDuplicateCleanerOpen] = useState(false);
+  const duplicateGroups = useMemo(() => findDuplicateGroups(data?.collections ?? []), [data?.collections]);
+  const duplicateCount = useMemo(() => countRedundantDuplicates(duplicateGroups), [duplicateGroups]);
 
   const activePage = getPage(location.pathname, location.search);
   const [nextCount, setNextCount] = useState(0);
@@ -252,6 +261,13 @@ export default function Index() {
             onCreateItem={openCreateItem}
             onOpenCommand={() => setIsCommandOpen(true)}
             onToggleMobileMenu={() => setIsMobileMenuOpen(true)}
+            onExportMarkdown={() => {
+              if (!activeSpace || !collectionsForActiveSpace) return;
+              const md = spaceToMarkdown(activeSpace, collectionsForActiveSpace);
+              copyMarkdownToClipboard(md, activeSpaceItemCount, "space links");
+            }}
+            duplicateCount={duplicateCount}
+            onOpenDuplicateCleaner={() => setIsDuplicateCleanerOpen(true)}
           />
 
           {/* Web Fallback Notice */}
@@ -331,6 +347,7 @@ export default function Index() {
               onDeleteGroup={requestDeleteGroup}
               onShareGroup={openShareGroup}
               onEditItem={openEditItem}
+              onUpdateItemNote={updateItemNote}
               onDuplicateItem={duplicateItem}
               onDeleteItem={softDeleteItem}
               onMoveItem={openMoveItem}
@@ -469,6 +486,23 @@ export default function Index() {
         onClearFilters={() => {
           setActiveFilter("all");
           setQuery("");
+        }}
+        onExportMarkdown={() => {
+          if (!activeSpace || !collectionsForActiveSpace) return;
+          const md = spaceToMarkdown(activeSpace, collectionsForActiveSpace);
+          copyMarkdownToClipboard(md, activeSpaceItemCount, "space links");
+        }}
+        duplicateCount={duplicateCount}
+        onOpenDuplicateCleaner={() => setIsDuplicateCleanerOpen(true)}
+      />
+
+      <DuplicateCleanerDialog
+        isOpen={isDuplicateCleanerOpen}
+        onOpenChange={setIsDuplicateCleanerOpen}
+        duplicateGroups={duplicateGroups}
+        onCleanDuplicates={() => {
+          cleanDuplicates(duplicateGroups);
+          setIsDuplicateCleanerOpen(false);
         }}
       />
 

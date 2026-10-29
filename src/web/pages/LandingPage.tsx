@@ -19,6 +19,7 @@ import {
   Layers,
   LayoutDashboard,
   Lock,
+  Menu,
   Minus,
   RefreshCw,
   Search,
@@ -28,6 +29,7 @@ import {
   Sparkles,
   Star,
   Users,
+  X,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -107,6 +109,7 @@ export default function LandingPage() {
   const [activeTabKey, setActiveTabKey] = useState<string>("dev");
   const [isSavedSnapshot, setIsSavedSnapshot] = useState<boolean>(false);
   const [billingCycle, setBillingCycle] = useState<"annual" | "monthly">("annual");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   const currentSpace = DEMO_SPACES[activeTabKey];
 
@@ -148,8 +151,8 @@ export default function LandingPage() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
-            <Link to="/web/login">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/web/login" className="hidden sm:inline-flex">
               <Button variant="ghost" size="sm" className="text-xs font-medium">
                 Sign in
               </Button>
@@ -157,11 +160,76 @@ export default function LandingPage() {
             <Link to="/web/download">
               <Button size="sm" className="gap-2 text-xs font-semibold shadow-sm shadow-primary/30 hover:shadow-primary/50 transition-all">
                 <Chrome className="h-4 w-4" />
-                Add to Chrome
+                <span className="hidden sm:inline">Add to Chrome</span>
+                <span className="sm:hidden">Install</span>
               </Button>
             </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden h-8 w-8 text-muted-foreground hover:text-foreground"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              aria-label="Toggle navigation menu"
+            >
+              {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </Button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-border/80 bg-background/95 backdrop-blur-md px-4 py-3 space-y-1">
+            <a
+              href="#features"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#workflow"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              How it works
+            </a>
+            <a
+              href="#comparison"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Compare
+            </a>
+            <a
+              href="#pricing"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Pricing
+            </a>
+            <a
+              href="#faq"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              FAQ
+            </a>
+            <Link
+              to="/web/import-export"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Import / Export
+            </Link>
+            <Link
+              to="/web/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              Sign In
+            </Link>
+          </div>
+        )}
       </header>
 
       {/* 2. Hero Section with Interactive Sandbox Console */}
@@ -699,7 +767,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="max-w-5xl mx-auto overflow-x-auto">
+          <div className="max-w-5xl mx-auto overflow-x-auto -mx-4 px-4 sm:mx-auto sm:px-0">
             <table className="w-full text-left text-sm border-collapse">
               <thead>
                 <tr className="border-b border-border/80">
@@ -939,7 +1007,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="mt-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-6">
+          <div className="mt-10 text-center text-xs text-muted-foreground flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <span className="flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5 text-emerald-400" /> 14-day money back guarantee
             </span>

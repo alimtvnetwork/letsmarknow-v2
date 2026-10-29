@@ -38,7 +38,7 @@ describe("web dashboard UI", { timeout: 30000 }, () => {
     fireEvent.submit(input.closest("form") as HTMLFormElement);
 
     expect(screen.getByText("Growth Stack")).toBeInTheDocument();
-    expect(screen.getByText("Inbox")).toBeInTheDocument();
+    expect(screen.getByText("No saved links in this collection")).toBeInTheDocument();
   });
 
   it("creates a workspace from the rail and switches to its default space", () => {
@@ -52,7 +52,7 @@ describe("web dashboard UI", { timeout: 30000 }, () => {
 
     expect(screen.getByTitle("QA Lab")).toBeInTheDocument();
     expect(screen.getByText("QA Lab")).toBeInTheDocument();
-    expect(screen.getAllByText("Inbox").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("My Collections").length).toBeGreaterThan(0);
   });
 
   it("adds an item to the first visible collection group", () => {
@@ -140,7 +140,7 @@ describe("web dashboard UI", { timeout: 30000 }, () => {
     expect(renamedCard).not.toBeNull();
     fireEvent.click(within(renamedCard as HTMLElement).getByTitle("Collection actions"));
     fireEvent.click(screen.getByTitle("Add group"));
-    const groupInput = screen.getByPlaceholderText("Inbox");
+    const groupInput = screen.getByPlaceholderText("General");
     fireEvent.change(groupInput, { target: { value: "Reading" } });
     fireEvent.submit(groupInput.closest("form") as HTMLFormElement);
     expect(screen.getByText("Reading")).toBeInTheDocument();

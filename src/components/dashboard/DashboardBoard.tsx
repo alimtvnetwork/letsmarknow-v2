@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArchiveRestore,
   Boxes,
@@ -10,6 +10,7 @@ import {
   Columns3,
   Copy,
   ExternalLink,
+  FileText,
   FilterX,
   Globe,
   Grid3X3,
@@ -30,6 +31,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   Star,
+  StickyNote,
   Tag,
   Trash2,
   Zap,
@@ -48,8 +50,15 @@ import { cn } from "@/lib/utils";
 import type { Collection, Group, SavedItem, ShareSettings, Space, ViewMode } from "@/types/lmn";
 import { colorDotClasses, colorLabelClasses, getDomainBadgeStyle, getHost } from "./helpers";
 import { Favicon } from "./Favicon";
+import { CardVisualPreview } from "./CardVisualPreview";
 import { normalizeUrl } from "@/extension/lib/tabCapture";
 import { MindmapView } from "./MindmapView";
+import {
+  collectionToMarkdown,
+  groupToMarkdown,
+  itemToMarkdown,
+  copyMarkdownToClipboard,
+} from "@/lib/markdownExport";
 
 interface DashboardBoardProps {
   activeSpace: Space;
@@ -73,6 +82,7 @@ interface DashboardBoardProps {
   onDeleteGroup: (collectionId: string, groupId: string) => void;
   onShareGroup?: (collectionId: string, groupId: string) => void;
   onEditItem: (collectionId: string, groupId: string, itemId: string) => void;
+  onUpdateItemNote?: (collectionId: string, groupId: string, itemId: string, note: string) => void;
   onDuplicateItem: (collectionId: string, groupId: string, itemId: string) => void;
   onDeleteItem: (collectionId: string, groupId: string, itemId: string) => void;
   onMoveItem: (collectionId: string, groupId: string, itemId: string) => void;
@@ -108,6 +118,7 @@ export function DashboardBoard({
   onDeleteGroup,
   onShareGroup,
   onEditItem,
+  onUpdateItemNote,
   onDuplicateItem,
   onDeleteItem,
   onMoveItem,
@@ -350,7 +361,7 @@ export function DashboardBoard({
   return (
     <section className="min-h-0 flex-1 overflow-auto bg-background/50">
       {/* 1. Space Header */}
-      <div className="border-b border-border/80 bg-card/40 px-6 py-5">
+      <div className="border-b border-border/80 bg-card/40 px-4 sm:px-6 py-4 sm:py-5">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3.5 min-w-0">
             {/* Space Avatar / Icon Badge */}
@@ -529,7 +540,7 @@ export function DashboardBoard({
 
       {/* Today's Desk Hero Shelf */}
       {collections.length > 0 && !hasSearchQuery && activeFilter === "all" && (
-        <div className="px-6 pt-5 pb-0">
+        <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-0">
           <div
             data-testid="todays-desk-shelf"
             onDragOver={(e) => {
@@ -623,7 +634,7 @@ export function DashboardBoard({
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 pt-1">
+                <div className="grid grid-cols-1 min-[380px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 pt-1">
                   {deskItems.map((item) => {
                     const normUrl = normalizeUrl(item.url);
                     const isOpenNow = Boolean(openUrlSet && normUrl && openUrlSet.has(normUrl));
@@ -745,7 +756,7 @@ export function DashboardBoard({
 
       {sortedCollections.length ? (
         viewMode === "mindmap" ? (
-          <div className="space-y-8 p-6">
+          <div className="space-y-6 sm:space-y-8 p-3 sm:p-6">
             {sortedCollections.map((collection) => {
               const allItems = collection.groups.flatMap((g) =>
                 g.items.map((i) => ({ ...i, groupId: (i as any).groupId || g.id }))
@@ -754,7 +765,11 @@ export function DashboardBoard({
                 <div key={collection.id} className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h3 className="text-base font-semibold text-foreground flex items-center gap-2">
-                      <Network className="h-4 w-4 text-indigo-500" />
+                      {collection.icon ? (
+                        <span className="text-base select-none">{collection.icon}</span>
+                      ) : (
+                        <Network className="h-4 w-4 text-indigo-500" />
+                      )}
                       <span>{collection.name}</span>
                       <span className="text-xs text-muted-foreground font-normal">
                         ({allItems.length} items, {collection.groups.length} groups)
@@ -776,7 +791,7 @@ export function DashboardBoard({
             })}
           </div>
         ) : (
-          <div className="space-y-6 p-6">
+          <div className="space-y-4 sm:space-y-6 p-3 sm:p-6">
             {sortedCollections.map((collection) => (
               <CollectionCard
                 key={collection.id}
@@ -798,6 +813,7 @@ export function DashboardBoard({
                 onDeleteGroup={onDeleteGroup}
                 onShareGroup={onShareGroup}
                 onEditItem={onEditItem}
+                onUpdateItemNote={onUpdateItemNote}
                 onDuplicateItem={onDuplicateItem}
                 onDeleteItem={onDeleteItem}
                 onMoveItem={onMoveItem}
@@ -884,7 +900,7 @@ export function DomainBadge({ host }: { host: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium tracking-tight border select-none transition-colors",
+        "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium tracking-tight border select-none transition-colors min-w-0 max-w-full",
         style.bg,
         style.text,
         style.border
@@ -892,7 +908,7 @@ export function DomainBadge({ host }: { host: string }) {
       title={host}
     >
       <Globe className="h-2.5 w-2.5 opacity-60 shrink-0" />
-      <span className="truncate max-w-[120px]">{host}</span>
+      <span className="truncate min-w-0 max-w-full">{host}</span>
     </span>
   );
 }
@@ -916,6 +932,7 @@ function CollectionCard({
   onDeleteGroup,
   onShareGroup,
   onEditItem,
+  onUpdateItemNote,
   onDuplicateItem,
   onDeleteItem,
   onMoveItem,
@@ -944,6 +961,7 @@ function CollectionCard({
   onDeleteGroup: (collectionId: string, groupId: string) => void;
   onShareGroup?: (collectionId: string, groupId: string) => void;
   onEditItem: (collectionId: string, groupId: string, itemId: string) => void;
+  onUpdateItemNote?: (collectionId: string, groupId: string, itemId: string, note: string) => void;
   onDuplicateItem: (collectionId: string, groupId: string, itemId: string) => void;
   onDeleteItem: (collectionId: string, groupId: string, itemId: string) => void;
   onMoveItem: (collectionId: string, groupId: string, itemId: string) => void;
@@ -1001,10 +1019,19 @@ function CollectionCard({
       <div className="flex flex-col gap-3 border-b border-border/50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between bg-card/30">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted/60 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
-              <span className={cn("h-2 w-2 rounded-full", colorDotClasses[collection.color])} />
-              <span className="capitalize">{collection.color !== "none" ? collection.color : "Default"}</span>
-            </span>
+            {collection.icon ? (
+              <span
+                data-testid={`collection-icon-${collection.id}`}
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted/70 border border-border/50 text-sm shadow-2xs select-none"
+              >
+                {collection.icon}
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-muted/60 px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                <span className={cn("h-2 w-2 rounded-full", colorDotClasses[collection.color])} />
+                <span className="capitalize">{collection.color !== "none" ? collection.color : "Default"}</span>
+              </span>
+            )}
             <h3 className="truncate text-base font-bold text-foreground">{collection.name}</h3>
             <span className="text-xs text-muted-foreground font-medium">
               · {itemCount} {itemCount === 1 ? "tab" : "tabs"}
@@ -1161,6 +1188,18 @@ function CollectionCard({
                   Share collection
                 </DropdownMenuItem>
               )}
+              <DropdownMenuItem
+                data-testid="collection-export-markdown-menu-item"
+                onClick={() => {
+                  copyMarkdownToClipboard(collectionToMarkdown(collection), itemCount);
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Copy collection as Markdown"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Export to Markdown
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
@@ -1196,6 +1235,7 @@ function CollectionCard({
             onDeleteGroup={onDeleteGroup}
             onShareGroup={onShareGroup}
             onEditItem={onEditItem}
+            onUpdateItemNote={onUpdateItemNote}
             onDuplicateItem={onDuplicateItem}
             onDeleteItem={onDeleteItem}
             onMoveItem={onMoveItem}
@@ -1227,6 +1267,7 @@ function GroupPanel({
   onDeleteGroup,
   onShareGroup,
   onEditItem,
+  onUpdateItemNote,
   onDuplicateItem,
   onDeleteItem,
   onMoveItem,
@@ -1251,6 +1292,7 @@ function GroupPanel({
   onDeleteGroup: (collectionId: string, groupId: string) => void;
   onShareGroup?: (collectionId: string, groupId: string) => void;
   onEditItem: (collectionId: string, groupId: string, itemId: string) => void;
+  onUpdateItemNote?: (collectionId: string, groupId: string, itemId: string, note: string) => void;
   onDuplicateItem: (collectionId: string, groupId: string, itemId: string) => void;
   onDeleteItem: (collectionId: string, groupId: string, itemId: string) => void;
   onMoveItem: (collectionId: string, groupId: string, itemId: string) => void;
@@ -1271,6 +1313,10 @@ function GroupPanel({
   const validGroupUrls = group.items
     .filter((item) => !item.isDeleted && item.url)
     .map((item) => item.url);
+
+  const isDefaultOrInboxGroup =
+    group.name.trim().toLowerCase() === "inbox" ||
+    (isOnlyGroup && (group.name.trim().toLowerCase() === "general" || group.name.trim() === ""));
 
   return (
     <section
@@ -1298,9 +1344,10 @@ function GroupPanel({
     >
       {isDragOver && (
         <div className="mb-2 rounded-lg bg-primary/20 border border-primary/40 px-3 py-1 text-center text-xs font-semibold text-primary animate-in fade-in duration-150">
-          Drop tab to add to &ldquo;{group.name}&rdquo;
+          Drop tab to add to {isDefaultOrInboxGroup ? "collection" : `\u201C${group.name}\u201D`}
         </div>
       )}
+      {!isDefaultOrInboxGroup && (
       <div className="mb-2 flex items-center justify-between px-1">
         <div className="flex min-w-0 items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary/70 shrink-0" />
@@ -1410,6 +1457,18 @@ function GroupPanel({
                   Share group
                 </DropdownMenuItem>
               )}
+              <DropdownMenuItem
+                data-testid="group-export-markdown-menu-item"
+                onClick={() => {
+                  copyMarkdownToClipboard(groupToMarkdown(group, false), group.items.length);
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Copy group as Markdown"
+              >
+                <FileText className="mr-2 h-3.5 w-3.5" />
+                Export to Markdown
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
@@ -1427,18 +1486,19 @@ function GroupPanel({
           </DropdownMenu>
         </div>
       </div>
+      )}
 
       {group.items.length ? (
         viewMode === "grid" ? (
           <div
             className={cn(
-              "grid gap-3.5",
+              "grid gap-3",
               cardDensity === "compact" &&
-                "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5",
+                "grid-cols-1 min-[340px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2",
               cardDensity === "normal" &&
-                "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5",
+                "grid-cols-1 min-[340px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3",
               cardDensity === "comfortable" &&
-                "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                "grid-cols-1 min-[340px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5"
             )}
           >
             {group.items.map((item) => (
@@ -1452,6 +1512,11 @@ function GroupPanel({
                 isPinnedToDesk={isPinnedToDesk ? isPinnedToDesk(item.id) : false}
                 onTogglePinDesk={onTogglePinDesk ? () => onTogglePinDesk(item.id) : undefined}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
+                onUpdateNote={
+                  onUpdateItemNote
+                    ? (note) => onUpdateItemNote(collectionId, group.id, item.id, note)
+                    : undefined
+                }
                 onDuplicate={() => onDuplicateItem(collectionId, group.id, item.id)}
                 onDelete={() => onDeleteItem(collectionId, group.id, item.id)}
                 onMove={() => onMoveItem(collectionId, group.id, item.id)}
@@ -1477,6 +1542,11 @@ function GroupPanel({
                 isPinnedToDesk={isPinnedToDesk ? isPinnedToDesk(item.id) : false}
                 onTogglePinDesk={onTogglePinDesk ? () => onTogglePinDesk(item.id) : undefined}
                 onEdit={() => onEditItem(collectionId, group.id, item.id)}
+                onUpdateNote={
+                  onUpdateItemNote
+                    ? (note) => onUpdateItemNote(collectionId, group.id, item.id, note)
+                    : undefined
+                }
                 onDuplicate={() => onDuplicateItem(collectionId, group.id, item.id)}
                 onDelete={() => onDeleteItem(collectionId, group.id, item.id)}
                 onMove={() => onMoveItem(collectionId, group.id, item.id)}
@@ -1495,7 +1565,9 @@ function GroupPanel({
           <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60 text-muted-foreground">
             <Link2 className="h-4 w-4" />
           </div>
-          <p className="text-xs font-medium text-foreground">No saved links in {group.name}</p>
+          <p className="text-xs font-medium text-foreground">
+            {isDefaultOrInboxGroup ? "No saved links in this collection" : `No saved links in ${group.name}`}
+          </p>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             Drop items here or save a link.
           </p>
@@ -1523,6 +1595,7 @@ function ItemRow({
   isPinnedToDesk,
   onTogglePinDesk,
   onEdit,
+  onUpdateNote,
   onDuplicate,
   onDelete,
   onMove,
@@ -1539,6 +1612,7 @@ function ItemRow({
   isPinnedToDesk?: boolean;
   onTogglePinDesk?: () => void;
   onEdit: () => void;
+  onUpdateNote?: (note: string) => void;
   onDuplicate: () => void;
   onDelete: () => void;
   onMove: () => void;
@@ -1548,6 +1622,12 @@ function ItemRow({
   onDragStart: (itemId: string) => string;
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isEditingNote, setIsEditingNote] = useState(false);
+  const [noteDraft, setNoteDraft] = useState(item.userNote || "");
+
+  useEffect(() => {
+    setNoteDraft(item.userNote || "");
+  }, [item.userNote]);
   const isCompact = viewMode === "compact";
   const isGrid = viewMode === "grid";
 
@@ -1558,15 +1638,17 @@ function ItemRow({
   );
 
   if (isGrid) {
+    const showVisualPreview = cardDensity !== "compact";
+
     return (
       <div
         className={cn(
-          "group relative flex flex-col justify-between rounded-2xl border border-border/70 bg-card/75 hover:bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer select-none",
+          "group relative flex flex-col justify-between rounded-xl border border-border/70 bg-card/75 hover:bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer select-none overflow-hidden",
           cardDensity === "compact"
-            ? "p-2.5 min-h-[64px]"
+            ? "p-2 min-h-[56px]"
             : cardDensity === "comfortable"
-            ? "p-4 min-h-[96px]"
-            : "p-3.5 min-h-[76px]",
+            ? "min-h-[110px]"
+            : "min-h-[88px]",
           isOpenNow && "ring-1 ring-emerald-500/30"
         )}
         draggable
@@ -1582,19 +1664,25 @@ function ItemRow({
         }}
         onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
       >
-        <div className="flex items-start gap-3 min-w-0">
-          <div
-            className={cn(
-              "flex shrink-0 items-center justify-center rounded-xl bg-muted/40 border border-border/30 overflow-hidden shadow-2xs",
-              cardDensity === "compact" ? "h-7 w-7" : "h-9 w-9"
-            )}
-          >
-            <Favicon url={item.url} size={cardDensity === "compact" ? "sm" : "md"} />
-          </div>
+        {showVisualPreview && (
+          <CardVisualPreview item={item} cardDensity={cardDensity} />
+        )}
 
-          <div className="min-w-0 flex-1 pr-6">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <h5 className="truncate text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+        <div className={cn("flex items-start gap-2.5 min-w-0 flex-1", showVisualPreview ? "p-2.5 pt-2" : "")}>
+          {!showVisualPreview && (
+            <div
+              className={cn(
+                "flex shrink-0 items-center justify-center rounded-lg bg-muted/40 border border-border/30 overflow-hidden shadow-2xs",
+                cardDensity === "compact" ? "h-6 w-6" : "h-7 w-7"
+              )}
+            >
+              <Favicon url={item.url} size={cardDensity === "compact" ? "sm" : "md"} />
+            </div>
+          )}
+
+          <div className="min-w-0 flex-1 pr-5">
+            <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+              <h5 className="truncate text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
                 {item.title}
               </h5>
               {isOpenNow && (
@@ -1616,12 +1704,12 @@ function ItemRow({
               )}
             </div>
 
-            <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+            <div className="flex items-center gap-1.5 mt-1 flex-wrap min-w-0 max-w-full">
               <DomainBadge host={getHost(item.url)} />
               {item.tags?.slice(0, 2).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center rounded-md bg-muted/60 border border-border/40 px-1.5 py-0.2 text-[9px] font-medium text-muted-foreground"
+                  className="inline-flex items-center rounded-md bg-muted/60 border border-border/40 px-1.5 py-0.2 text-[9px] font-medium text-muted-foreground truncate max-w-[80px]"
                 >
                   #{tag}
                 </span>
@@ -1633,14 +1721,121 @@ function ItemRow({
                 {item.description}
               </p>
             )}
+
+            {/* Inline Context Note on Card Face */}
+            {!isEditingNote && item.userNote && (
+              <div
+                data-testid={`item-note-chip-${item.id}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setNoteDraft(item.userNote || "");
+                  setIsEditingNote(true);
+                }}
+                className="mt-2 flex items-start gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/30 px-2 py-1 text-xs text-amber-200/90 hover:bg-amber-500/15 hover:border-amber-500/50 transition cursor-pointer group/note"
+                title="Click to edit context note"
+              >
+                <StickyNote className="h-3 w-3 text-amber-400 shrink-0 mt-0.5 fill-amber-400/20" />
+                <span className="leading-tight flex-1 break-words text-[11px] font-medium">{item.userNote}</span>
+                <Pencil className="h-2.5 w-2.5 opacity-0 group-hover/note:opacity-100 text-amber-400 shrink-0 mt-0.5 transition-opacity" />
+              </div>
+            )}
+
+            {/* Inline Note Editor */}
+            {isEditingNote && (
+              <div
+                data-testid="item-note-editor"
+                className="mt-2 space-y-1.5 rounded-lg bg-card/95 border border-amber-500/50 p-2 shadow-xs text-left cursor-default z-20"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <textarea
+                  data-testid="item-note-input"
+                  value={noteDraft}
+                  onChange={(e) => setNoteDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      onUpdateNote?.(noteDraft.trim());
+                      setIsEditingNote(false);
+                    } else if (e.key === "Escape") {
+                      setNoteDraft(item.userNote || "");
+                      setIsEditingNote(false);
+                    }
+                  }}
+                  autoFocus
+                  placeholder="Add context note (e.g. Review PR #42 before standup)..."
+                  rows={2}
+                  className="w-full resize-none bg-transparent text-xs text-foreground placeholder:text-muted-foreground outline-none font-sans"
+                />
+                <div className="flex items-center justify-between gap-1 pt-1.5 border-t border-border/40">
+                  <span className="text-[10px] text-muted-foreground">↵ Enter to save</span>
+                  <div className="flex items-center gap-1">
+                    {item.userNote && (
+                      <button
+                        type="button"
+                        className="text-[10px] text-rose-400 hover:text-rose-300 px-1 py-0.5"
+                        onClick={() => {
+                          onUpdateNote?.("");
+                          setNoteDraft("");
+                          setIsEditingNote(false);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="text-[10px] text-muted-foreground hover:text-foreground px-1 py-0.5"
+                      onClick={() => {
+                        setNoteDraft(item.userNote || "");
+                        setIsEditingNote(false);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      data-testid="save-item-note-button"
+                      className="rounded bg-amber-500 hover:bg-amber-600 text-black font-semibold text-[10px] px-2 py-0.5 transition-colors cursor-pointer"
+                      onClick={() => {
+                        onUpdateNote?.(noteDraft.trim());
+                        setIsEditingNote(false);
+                      }}
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Hover-revealed micro-actions */}
         <div
-          className="absolute top-2.5 right-2.5 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-card/90 backdrop-blur-xs rounded-lg p-0.5 border border-border/40 shadow-xs"
+          className="absolute top-2 right-2 z-10 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-card/90 backdrop-blur-xs rounded-lg p-0.5 border border-border/40 shadow-xs"
           onClick={(e) => e.stopPropagation()}
         >
+          {onUpdateNote && (
+            <Button
+              variant="ghost"
+              size="icon"
+              data-testid="item-note-button"
+              className={cn(
+                "h-6 w-6 transition-colors",
+                item.userNote
+                  ? "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+              onClick={(e) => {
+                e.stopPropagation();
+                setNoteDraft(item.userNote || "");
+                setIsEditingNote((prev) => !prev);
+              }}
+              title={item.userNote ? "Edit context note" : "Add context note"}
+            >
+              <StickyNote className={cn("h-3.5 w-3.5", item.userNote && "fill-amber-400/20")} />
+            </Button>
+          )}
           {onTogglePinDesk && (
             <Button
               variant="ghost"
@@ -1736,6 +1931,33 @@ function ItemRow({
                 <Link2 className="mr-2 h-3.5 w-3.5" />
                 Copy URL
               </DropdownMenuItem>
+              <DropdownMenuItem
+                data-testid="item-export-markdown-menu-item"
+                onClick={() => {
+                  copyMarkdownToClipboard(itemToMarkdown(item), 1);
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title="Copy as Markdown link"
+              >
+                <FileText className="mr-2 h-3.5 w-3.5" />
+                Copy as Markdown
+              </DropdownMenuItem>
+              {onUpdateNote && (
+                <DropdownMenuItem
+                  data-testid="item-edit-note-menu-item"
+                  onClick={() => {
+                    setNoteDraft(item.userNote || "");
+                    setIsEditingNote(true);
+                    setIsMenuOpen(false);
+                  }}
+                  className="cursor-pointer"
+                  title={item.userNote ? "Edit context note" : "Add context note"}
+                >
+                  <StickyNote className="mr-2 h-3.5 w-3.5 text-amber-400" />
+                  {item.userNote ? "Edit context note" : "Add context note"}
+                </DropdownMenuItem>
+              )}
               {onCopyItemShareLink && (
                 <DropdownMenuItem
                   onClick={() => {
@@ -1889,6 +2111,71 @@ function ItemRow({
               {item.description}
             </p>
           )}
+
+          {/* List View Inline Note */}
+          {!isCompact && item.userNote && !isEditingNote && (
+            <div
+              data-testid={`item-note-chip-${item.id}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setNoteDraft(item.userNote || "");
+                setIsEditingNote(true);
+              }}
+              className="mt-1 inline-flex items-center gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 text-[11px] text-amber-200/90 hover:bg-amber-500/20 transition cursor-pointer"
+              title="Click to edit context note"
+            >
+              <StickyNote className="h-3 w-3 text-amber-400 shrink-0 fill-amber-400/20" />
+              <span className="truncate max-w-sm">{item.userNote}</span>
+            </div>
+          )}
+
+          {isEditingNote && (
+            <div
+              data-testid="item-note-editor"
+              className="mt-1 flex items-center gap-1.5 bg-card/90 border border-amber-500/40 p-1.5 rounded-md max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <input
+                data-testid="item-note-input"
+                value={noteDraft}
+                onChange={(e) => setNoteDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    onUpdateNote?.(noteDraft.trim());
+                    setIsEditingNote(false);
+                  } else if (e.key === "Escape") {
+                    setNoteDraft(item.userNote || "");
+                    setIsEditingNote(false);
+                  }
+                }}
+                autoFocus
+                placeholder="Add context note..."
+                className="flex-1 bg-transparent text-xs text-foreground placeholder:text-muted-foreground outline-none font-sans"
+              />
+              <button
+                type="button"
+                data-testid="save-item-note-button"
+                className="rounded bg-amber-500 text-black text-[10px] font-semibold px-2 py-0.5"
+                onClick={() => {
+                  onUpdateNote?.(noteDraft.trim());
+                  setIsEditingNote(false);
+                }}
+              >
+                Save
+              </button>
+              <button
+                type="button"
+                className="text-[10px] text-muted-foreground hover:text-foreground px-1 py-0.5"
+                onClick={() => {
+                  setNoteDraft(item.userNote || "");
+                  setIsEditingNote(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1913,6 +2200,28 @@ function ItemRow({
             title={isPinnedToDesk ? "Unpin from Today's Desk" : "Pin to Today's Desk"}
           >
             <Pin className={cn("h-3.5 w-3.5", isPinnedToDesk && "fill-current")} />
+          </Button>
+        )}
+
+        {onUpdateNote && (
+          <Button
+            variant="ghost"
+            size="icon"
+            data-testid="item-note-button"
+            className={cn(
+              "h-7 w-7 transition-colors",
+              item.userNote
+                ? "text-amber-400 hover:text-amber-500 hover:bg-amber-500/10"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              setNoteDraft(item.userNote || "");
+              setIsEditingNote((prev) => !prev);
+            }}
+            title={item.userNote ? "Edit context note" : "Add context note"}
+          >
+            <StickyNote className={cn("h-3.5 w-3.5", item.userNote && "fill-amber-400/20")} />
           </Button>
         )}
 
@@ -1984,6 +2293,33 @@ function ItemRow({
               <Link2 className="mr-2 h-3.5 w-3.5" />
               Copy URL
             </DropdownMenuItem>
+            <DropdownMenuItem
+              data-testid="item-export-markdown-menu-item"
+              onClick={() => {
+                copyMarkdownToClipboard(itemToMarkdown(item), 1);
+                setIsMenuOpen(false);
+              }}
+              className="cursor-pointer"
+              title="Copy as Markdown link"
+            >
+              <FileText className="mr-2 h-3.5 w-3.5" />
+              Copy as Markdown
+            </DropdownMenuItem>
+            {onUpdateNote && (
+              <DropdownMenuItem
+                data-testid="item-edit-note-menu-item"
+                onClick={() => {
+                  setNoteDraft(item.userNote || "");
+                  setIsEditingNote(true);
+                  setIsMenuOpen(false);
+                }}
+                className="cursor-pointer"
+                title={item.userNote ? "Edit context note" : "Add context note"}
+              >
+                <StickyNote className="mr-2 h-3.5 w-3.5 text-amber-400" />
+                {item.userNote ? "Edit context note" : "Add context note"}
+              </DropdownMenuItem>
+            )}
             {onCopyItemShareLink && (
               <DropdownMenuItem
                 onClick={() => {
@@ -2152,47 +2488,97 @@ function EmptyFilteredDashboard({ onClear }: { onClear?: () => void }) {
 export function TrashPage({
   items,
   onRestore,
+  onPermanentDelete,
+  onEmptyTrash,
 }: {
   items: Array<SavedItem & { collectionName: string; groupName: string }>;
   onRestore: (itemId: string) => void;
+  onPermanentDelete?: (itemId: string) => void;
+  onEmptyTrash?: () => void;
 }) {
   return (
-    <section className="min-h-0 flex-1 overflow-auto p-6">
-      <div className="mb-6">
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-          Recoverable saved links
-        </p>
-        <h1 className="mt-1 text-2xl font-bold md:text-3xl">Trash</h1>
+    <section className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold md:text-3xl">Trash</h1>
+            <span className="rounded-full bg-amber-500/15 text-amber-500 px-2.5 py-0.5 text-xs font-semibold">
+              Auto-purged after 15 days
+            </span>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Soft-deleted links are kept for 15 days before being permanently deleted.
+          </p>
+        </div>
+        {items.length > 0 && onEmptyTrash && (
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={onEmptyTrash}
+            className="self-start sm:self-auto h-8 text-xs font-semibold"
+          >
+            <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+            Empty Trash ({items.length})
+          </Button>
+        )}
       </div>
+
       {items.length ? (
         <div className="rounded-lg border border-border bg-card divide-y divide-border">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between gap-4 p-4 hover:bg-muted/30 transition"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <Favicon url={item.url} size="md" />
-                <div className="min-w-0">
-                  <h3 className="truncate text-sm font-semibold">{item.title}</h3>
-                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                    {item.collectionName} / {item.groupName} &bull; {getHost(item.url)}
-                  </p>
+          {items.map((item) => {
+            const daysLeft = item.deletedAt
+              ? Math.max(
+                  0,
+                  Math.ceil((15 * 86400000 - (Date.now() - new Date(item.deletedAt).getTime())) / 86400000)
+                )
+              : 15;
+
+            return (
+              <div
+                key={item.id}
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 hover:bg-muted/30 transition"
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <Favicon url={item.url} size="md" className="shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="truncate text-sm font-semibold">{item.title}</h3>
+                      <span className="inline-flex items-center rounded bg-amber-500/10 text-amber-400 text-[10px] font-medium px-1.5 py-0.2 shrink-0">
+                        {daysLeft <= 0 ? "Purging soon" : daysLeft === 1 ? "1 day left" : `${daysLeft} days left`}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                      {item.collectionName} / {item.groupName} &bull; {getHost(item.url)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0 self-end sm:self-auto">
+                  <Button variant="outline" size="sm" onClick={() => onRestore(item.id)}>
+                    <ArchiveRestore className="mr-1.5 h-3.5 w-3.5" />
+                    Restore
+                  </Button>
+                  {onPermanentDelete && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onPermanentDelete(item.id)}
+                      className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-8 px-2"
+                      title="Delete permanently"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
                 </div>
               </div>
-              <Button variant="outline" size="sm" onClick={() => onRestore(item.id)}>
-                <ArchiveRestore className="mr-1.5 h-3.5 w-3.5" />
-                Restore
-              </Button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="rounded-lg border border-border bg-card p-12 text-center">
           <Check className="mx-auto mb-3 h-8 w-8 text-emerald-500" />
           <h2 className="text-base font-semibold">Trash is empty</h2>
           <p className="mt-1.5 text-xs text-muted-foreground">
-            Soft-deleted items will appear here and can be restored anytime.
+            Soft-deleted items will appear here and are permanently deleted after 15 days.
           </p>
         </div>
       )}

@@ -145,38 +145,40 @@ export default function WebSettingsPage() {
 
       {/* Main Container */}
       <div className="flex-1 max-w-5xl mx-auto w-full px-4 py-8 sm:py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Navigation Sidebar */}
-        <aside className="md:col-span-1 space-y-1 text-xs">
-          <Link
-            to="/web/account"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <User className="h-4 w-4" /> Account Profile
-          </Link>
-          <Link
-            to="/web/billing"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <CreditCard className="h-4 w-4" /> Billing & Subscription
-          </Link>
-          <Link
-            to="/web/team"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <Users className="h-4 w-4" /> Team & Members
-          </Link>
-          <Link
-            to="/web/import-export"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors"
-          >
-            <Download className="h-4 w-4" /> Import / Export / Backup
-          </Link>
-          <Link
-            to="/web/settings"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground font-semibold"
-          >
-            <Shield className="h-4 w-4" /> Web Portal Settings
-          </Link>
+        {/* Navigation Sidebar / Mobile Nav Bar */}
+        <aside className="md:col-span-1 text-xs flex flex-col">
+          <nav className="flex md:flex-col overflow-x-auto gap-1.5 pb-2 md:pb-0 whitespace-nowrap scrollbar-none shrink-0">
+            <Link
+              to="/web/account"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <User className="h-4 w-4" /> Account Profile
+            </Link>
+            <Link
+              to="/web/billing"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <CreditCard className="h-4 w-4" /> Billing & Subscription
+            </Link>
+            <Link
+              to="/web/team"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <Users className="h-4 w-4" /> Team & Members
+            </Link>
+            <Link
+              to="/web/import-export"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium transition-colors shrink-0"
+            >
+              <Download className="h-4 w-4" /> Import / Export / Backup
+            </Link>
+            <Link
+              to="/web/settings"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary text-primary-foreground font-semibold shrink-0"
+            >
+              <Shield className="h-4 w-4" /> Web Portal Settings
+            </Link>
+          </nav>
         </aside>
 
         {/* Content Area */}
@@ -344,7 +346,7 @@ export default function WebSettingsPage() {
             </div>
 
             {/* Health Stats Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs">
               <div className="rounded-lg border border-border/70 bg-muted/20 p-3 space-y-1">
                 <span className="text-[11px] text-muted-foreground">Total Bookmarks</span>
                 <p className="font-semibold text-sm">{linkHealthStats?.total_items ?? "—"}</p>

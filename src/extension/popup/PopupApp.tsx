@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   ExternalLink,
@@ -28,7 +28,6 @@ import {
 } from "../lib/browserApi";
 import {
   loadPreferences,
-  addItemToNextQueue,
   loadWorkspaceData,
   quickCreateCollection,
   quickCreateGroup,
@@ -70,6 +69,24 @@ export function PopupApp() {
   const [isCreatingGroup, setIsCreatingGroup] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+
+  // Timers cleanup
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const registerTimeout = (fn: () => void, delay: number) => {
+    const id = setTimeout(() => {
+      timeoutsRef.current = timeoutsRef.current.filter((t) => t !== id);
+      fn();
+    }, delay);
+    timeoutsRef.current.push(id);
+    return id;
+  };
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach((id) => clearTimeout(id));
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   // Ensure dark mode class is applied
   useEffect(() => {
@@ -193,18 +210,6 @@ export function PopupApp() {
     );
   }, [data, activeTab, selectedCollectionId]);
 
-  // Save current active tab
-  const handleAddToNext = async () => {
-    if (!activeTab || !activeTab.url || !isSaveableUrl(activeTab.url)) return;
-    try {
-      const updated = await addItemToNextQueue(activeTab);
-      setData(updated);
-      toast.success("Added to Next queue");
-    } catch {
-      toast.error("Failed to add to Next queue");
-    }
-  };
-
   const handleSaveCurrentTab = async () => {
     if (!activeTab || !selectedCollectionId || !selectedGroupId) return;
     setSaveCurrentStatus("loading");
@@ -225,11 +230,11 @@ export function PopupApp() {
 
       // Preferences actions
       if (prefs.openFullTabAfterSave) {
-        setTimeout(() => openExtensionTab(), 600);
+        registerTimeout(() => openExtensionTab(), 600);
       }
 
       // Revert saved button text back to idle after 2.5s
-      setTimeout(() => {
+      registerTimeout(() => {
         setSaveCurrentStatus("idle");
       }, 2500);
     } catch (err: unknown) {
@@ -259,10 +264,10 @@ export function PopupApp() {
       setSaveAllStatus("saved");
 
       if (prefs.openFullTabAfterSave) {
-        setTimeout(() => openExtensionTab(), 600);
+        registerTimeout(() => openExtensionTab(), 600);
       }
 
-      setTimeout(() => setSaveAllStatus("idle"), 2500);
+      registerTimeout(() => setSaveAllStatus("idle"), 2500);
     } catch {
       setSaveAllStatus("error");
     }
@@ -287,10 +292,10 @@ export function PopupApp() {
       setSaveAllStatus("saved");
 
       if (prefs.openFullTabAfterSave) {
-        setTimeout(() => openExtensionTab(), 600);
+        registerTimeout(() => openExtensionTab(), 600);
       }
 
-      setTimeout(() => setSaveAllStatus("idle"), 2500);
+      registerTimeout(() => setSaveAllStatus("idle"), 2500);
     } catch {
       setSaveAllStatus("error");
     }
@@ -366,7 +371,7 @@ export function PopupApp() {
 
   if (isLoading || !data) {
     return (
-      <div className="flex h-[580px] w-[440px] items-center justify-center bg-background text-foreground">
+      <div className="flex h-[580px] w-full max-w-[440px] items-center justify-center bg-background text-foreground">
         <div className="flex flex-col items-center gap-2.5">
           <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
           <span className="text-xs text-muted-foreground font-medium">Loading LetsMarkNow...</span>
@@ -381,7 +386,7 @@ export function PopupApp() {
   return (
     <div
       data-testid="extension-popup-app"
-      className="flex flex-col w-[440px] min-h-[580px] max-w-[440px] bg-background text-foreground antialiased selection:bg-primary/20 mx-auto overflow-hidden border border-white/10 rounded-2xl shadow-obsidian shadow-2xl"
+      className="flex flex-col w-full max-w-[440px] min-h-[580px] bg-background text-foreground antialiased selection:bg-primary/20 mx-auto overflow-hidden border border-white/10 rounded-2xl shadow-obsidian shadow-2xl"
     >
       {/* Header */}
       <ExtensionHeader
@@ -425,7 +430,6 @@ export function PopupApp() {
           errorMessage={saveCurrentError}
           alreadySaved={isAlreadySaved}
           onSave={handleSaveCurrentTab}
-          onAddToNext={handleAddToNext}
         />
 
         {/* Destination Picker */}

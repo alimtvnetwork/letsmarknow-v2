@@ -38,6 +38,7 @@ export interface Space {
   name: string;
   description: string;
   accentClass: string;
+  icon?: string;
 }
 
 export interface SavedItem {
@@ -45,12 +46,15 @@ export interface SavedItem {
   title: string;
   url: string;
   description: string;
+  userNote?: string;
   tags: string[];
   color: ColorLabel;
   addedAt: string;
   faviconUrl?: string;
+  previewImageUrl?: string;
   source?: "manual" | "current-tab" | "session";
   isDeleted?: boolean;
+  deletedAt?: string;
   done?: boolean;
   completedAt?: string;
 }
@@ -97,6 +101,7 @@ export interface Collection {
   isStarred: boolean;
   kind?: "collection" | "next" | "session";
   groups: Group[];
+  icon?: string;
 }
 
 export interface TeamMember {

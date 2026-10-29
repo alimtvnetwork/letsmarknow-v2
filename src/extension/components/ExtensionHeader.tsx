@@ -84,11 +84,11 @@ export function ExtensionHeader({
           variant="outline"
           onClick={onOpenFullTab}
           data-testid="open-full-tab-button"
-          className="h-7 px-2.5 gap-1.5 rounded-lg text-xs font-semibold border-primary/40 bg-primary/10 hover:bg-primary/20 text-foreground transition-colors shadow-2xs"
+          className="h-7 px-2 min-[360px]:px-2.5 gap-1 min-[360px]:gap-1.5 rounded-lg text-xs font-semibold border-primary/40 bg-primary/10 hover:bg-primary/20 text-foreground transition-colors shadow-2xs shrink-0"
           title="Open Full Extension Dashboard"
         >
           <Maximize2 className="h-3.5 w-3.5 text-primary" />
-          <span>Dashboard</span>
+          <span className="hidden min-[360px]:inline">Dashboard</span>
         </Button>
 
         {onOpenAuth && (

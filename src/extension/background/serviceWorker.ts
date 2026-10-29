@@ -49,6 +49,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         });
       });
     }
+
+    // Automatically open app.html when installed for the first time
+    if (details.reason === "install") {
+      chrome.tabs.create({ url: chrome.runtime.getURL("app.html") });
+    }
   } catch (err) {
     console.warn("Failed to initialize storage onInstalled:", err);
   }

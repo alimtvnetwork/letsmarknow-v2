@@ -54,6 +54,7 @@ import {
   generateShareSlug,
   getShareUrl,
 } from "@/lib/shareLinks";
+import { cleanDuplicatesMutation, type DuplicateGroup } from "@/lib/duplicateCleaner";
 import type {
   AppData,
   Collection,
@@ -81,8 +82,9 @@ export const emptySpaceForm: SpaceFormValue = {
   name: "",
   description: "",
   accentClass: "bg-primary",
+  icon: "",
 };
-export const emptyCollectionForm: CollectionFormValue = { name: "", note: "", color: "pink" };
+export const emptyCollectionForm: CollectionFormValue = { name: "", note: "", color: "pink", icon: "" };
 export const emptyGroupForm: GroupFormValue = { name: "" };
 export const emptyItemForm: ItemFormValue = {
   title: "",
@@ -324,6 +326,7 @@ export function useWorkspaceDashboard() {
       name: space.name,
       description: space.description,
       accentClass: space.accentClass,
+      icon: space.icon || "",
     });
     setDialogTarget({ spaceId });
     setSpaceMode("edit");
@@ -340,7 +343,8 @@ export function useWorkspaceDashboard() {
         activeOrganization.id,
         name,
         spaceForm.description,
-        spaceForm.accentClass
+        spaceForm.accentClass,
+        spaceForm.icon
       );
       setData(nextData);
       setActiveSpaceId(newSpace.id);
@@ -352,7 +356,8 @@ export function useWorkspaceDashboard() {
         dialogTarget.spaceId,
         name,
         spaceForm.description,
-        spaceForm.accentClass
+        spaceForm.accentClass,
+        spaceForm.icon
       );
       setData(nextData);
       toast.success("Space updated");
@@ -376,7 +381,7 @@ export function useWorkspaceDashboard() {
 
   // ================= Collection Handlers =================
   const openCreateCollection = () => {
-    setCollectionForm({ name: "", note: "", color: "pink" });
+    setCollectionForm({ name: "", note: "", color: "pink", icon: "" });
     setDialogTarget({});
     setCollectionMode("create");
   };
@@ -384,7 +389,7 @@ export function useWorkspaceDashboard() {
   const openEditCollection = (collectionId: string) => {
     const col = data.collections.find((c) => c.id === collectionId);
     if (!col) return;
-    setCollectionForm({ name: col.name, note: col.note, color: col.color });
+    setCollectionForm({ name: col.name, note: col.note, color: col.color, icon: col.icon || "" });
     setDialogTarget({ collectionId });
     setCollectionMode("edit");
   };
@@ -400,7 +405,8 @@ export function useWorkspaceDashboard() {
         activeSpace.id,
         name,
         collectionForm.note,
-        collectionForm.color
+        collectionForm.color,
+        collectionForm.icon
       );
       setData(nextData);
       toast.success("Collection created");
@@ -410,6 +416,7 @@ export function useWorkspaceDashboard() {
         name,
         note: collectionForm.note.trim() || col.note,
         color: collectionForm.color,
+        icon: collectionForm.icon ? collectionForm.icon.trim() : undefined,
       }));
       setData(nextData);
       toast.success("Collection updated");
@@ -618,6 +625,11 @@ export function useWorkspaceDashboard() {
     toast.success("Item duplicated");
   };
 
+  const updateItemNote = (collectionId: string, groupId: string, itemId: string, note: string) => {
+    setData((current) => updateItemMutation(current, collectionId, groupId, itemId, { userNote: note }));
+    toast.success(note ? "Context note saved" : "Context note removed");
+  };
+
   const softDeleteItem = (collectionId: string, groupId: string, itemId: string) => {
     setData((current) => softDeleteItemMutation(current, collectionId, groupId, itemId));
     toast("Moved to trash", {
@@ -631,6 +643,16 @@ export function useWorkspaceDashboard() {
   const restoreItem = (itemId: string) => {
     setData((current) => restoreItemMutation(current, itemId));
     toast.success("Item restored");
+  };
+
+  const cleanDuplicates = (duplicateGroups: DuplicateGroup[]) => {
+    let count = 0;
+    setData((current) => {
+      const { nextData, cleanedCount } = cleanDuplicatesMutation(current, duplicateGroups, "trash");
+      count = cleanedCount;
+      return nextData;
+    });
+    toast.success(`Cleaned ${count} duplicate ${count === 1 ? "link" : "links"}! Workspace is pristine.`);
   };
 
   const openMoveItem = (collectionId: string, groupId: string, itemId: string) => {
@@ -1046,6 +1068,7 @@ export function useWorkspaceDashboard() {
     openEditItem,
     saveItem,
     duplicateItem,
+    updateItemNote,
     softDeleteItem,
     restoreItem,
     openMoveItem,
@@ -1066,5 +1089,6 @@ export function useWorkspaceDashboard() {
     handleCopyShareLink,
     handleCopyItemLink,
     handleCopyItemShareLink,
+    cleanDuplicates,
   };
 }

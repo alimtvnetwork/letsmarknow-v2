@@ -8,8 +8,6 @@ namespace LetsMarkNowLauncher
 {
     static class Program
     {
-        private const string StaticExtensionId = "pnfhjpjocddcolcnlginjoblglphhgpm";
-
         [STAThread]
         static void Main(string[] args)
         {
@@ -57,14 +55,14 @@ namespace LetsMarkNowLauncher
                     return;
                 }
 
-                string targetUrl = string.Format("chrome-extension://{0}/app.html", StaticExtensionId);
-
-                // Command-line flags to load extension, isolate user profile, and start in fullscreen
+                // Command-line flags to load extension, isolate user profile, and start in fullscreen.
+                // NOTE: We do not pass chrome-extension:// as a command-line argument because Chromium
+                // blocks command-line navigation to extension URLs before the extension is registered (ERR_BLOCKED_BY_CLIENT).
+                // The extension's newtab override and service worker natively launch app.html immediately.
                 string launchArgs = string.Format(
-                    "--load-extension=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check \"{2}\"",
+                    "--disable-extensions-except=\"{0}\" --load-extension=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check",
                     extensionDir,
-                    profileDir,
-                    targetUrl
+                    profileDir
                 );
 
                 ProcessStartInfo startInfo = new ProcessStartInfo

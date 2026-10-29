@@ -161,8 +161,9 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
+$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.2" }
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
-Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value "1.0.1"
+Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value $installedVersion
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "InstallLocation" -Value $installDir
 Set-ItemProperty -Path $regKey -Name "DisplayIcon" -Value (Join-Path $installDir "favicon.ico")

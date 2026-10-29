@@ -50,9 +50,16 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       });
     }
 
-    // Automatically open app.html when installed for the first time
-    if (details.reason === "install") {
-      chrome.tabs.create({ url: chrome.runtime.getURL("app.html") });
+    // Automatically open app.html when installed or updated
+    try {
+      const appUrl = chrome.runtime.getURL("app.html");
+      const tabs = await chrome.tabs.query({});
+      const hasApp = tabs.some(t => t.url && t.url.startsWith(appUrl));
+      if (!hasApp) {
+        await chrome.tabs.create({ url: appUrl });
+      }
+    } catch {
+      // ignore
     }
   } catch (err) {
     console.warn("Failed to initialize storage onInstalled:", err);
@@ -138,3 +145,19 @@ if (typeof chrome !== "undefined" && chrome.runtime?.onMessageExternal) {
 }
 
 
+
+// Auto-open app tab on browser startup
+if (typeof chrome !== "undefined" && chrome.runtime?.onStartup) {
+  chrome.runtime.onStartup.addListener(async () => {
+    try {
+      const appUrl = chrome.runtime.getURL("app.html");
+      const tabs = await chrome.tabs.query({});
+      const hasApp = tabs.some(t => t.url && t.url.startsWith(appUrl));
+      if (!hasApp) {
+        await chrome.tabs.create({ url: appUrl });
+      }
+    } catch {
+      // ignore
+    }
+  });
+}

@@ -44,8 +44,25 @@
         "https://letsmarknow.com/*",
         "https://*.letsmarknow.com/*"
       ],
-      "js": ["contentScript.js"],
+      "js": [
+        "contentScript.js"
+      ],
       "run_at": "document_start"
+    }
+  ],
+  "chrome_url_overrides": {
+    "newtab": "app.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "app.html",
+        "favicon.ico",
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ]
 }

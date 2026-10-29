@@ -16,9 +16,29 @@ Write-Host "==========================================================" -Foregro
 Write-Host "  LetsMarkNow - Windows Installer" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-# 1. Prepare Target Directory
+# 1. Prepare Target Directory & Stop Any Existing Running Instances
 Write-Host ""
 Write-Host "[1/5] Preparing installation directory..." -ForegroundColor Yellow
+
+# Terminate running instances before updating files
+$backendExe = Join-Path $installDir "backend.exe"
+if (Test-Path $backendExe) {
+    try {
+        Start-Process -FilePath $backendExe -ArgumentList "--stop" -Wait -WindowStyle Hidden -ErrorAction SilentlyContinue
+    } catch { }
+}
+Get-Process -Name "LetsMarkNow", "backend" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+
+try {
+    Get-CimInstance Win32_Process -Filter "Name = 'node.exe'" -ErrorAction SilentlyContinue | ForEach-Object {
+        if ($_.CommandLine -and $_.CommandLine.Contains($installDir)) {
+            Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+        }
+    }
+} catch { }
+
+Start-Sleep -Milliseconds 400
+
 if (-not (Test-Path $installDir)) {
     New-Item -ItemType Directory -Path $installDir -Force | Out-Null
 }
@@ -86,42 +106,65 @@ if ($isLocalRepo) {
         }
     }
 } else {
-    Write-Host "  * Downloading package from GitHub ($Repo)..." -ForegroundColor Cyan
-    $headers = @{ "User-Agent" = "LetsMarkNow-Installer" }
-    $apiUrl = "https://api.github.com/repos/$Repo/releases"
+    Write-Host "  * Acquiring package from GitHub ($Repo)..." -ForegroundColor Cyan
+    $tempZip = Join-Path $env:TEMP "LetsMarkNow-Portable.zip"
+    $downloadSuccess = $false
 
-    try {
-        $releases = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method Get
+    # Strategy 1: Direct CDN Asset Download (bypasses GitHub REST API rate limits completely)
+    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.7" }
+    $directUrls = @(
+        "https://github.com/$Repo/releases/download/v$versionTag/LetsMarkNow-Portable-v$versionTag.zip",
+        "https://github.com/$Repo/releases/download/$versionTag/LetsMarkNow-Portable-$versionTag.zip",
+        "https://github.com/$Repo/releases/download/v1.0.6/LetsMarkNow-Portable-v1.0.6.zip"
+    )
 
-        if ($Version -eq "latest") {
-            # Find latest release or pre-release
-            $targetRelease = $releases | Select-Object -First 1
-        } else {
-            $targetRelease = $releases | Where-Object { $_.tag_name -eq "v$Version" -or $_.tag_name -eq $Version } | Select-Object -First 1
+    foreach ($url in $directUrls) {
+        try {
+            Write-Host "  * Trying direct download: $url..." -ForegroundColor DarkGray
+            Invoke-WebRequest -Uri $url -OutFile $tempZip -UseBasicParsing -ErrorAction Stop
+            if ((Test-Path $tempZip) -and ((Get-Item $tempZip).Length -gt 1000000)) {
+                $downloadSuccess = $true
+                Write-Host "  * Downloaded application bundle successfully." -ForegroundColor Green
+                break
+            }
+        } catch {
+            # Try next direct link
         }
-
-        if (-not $targetRelease) {
-            throw "Could not find a valid release for version $Version on GitHub ($Repo)."
-        }
-
-        $portableAsset = $targetRelease.assets | Where-Object { $_.name -like "*Portable*.zip" } | Select-Object -First 1
-        if (-not $portableAsset) {
-            throw "Portable ZIP asset not found in release $($targetRelease.tag_name)."
-        }
-
-        $downloadUrl = $portableAsset.browser_download_url
-        $tempZip = Join-Path $env:TEMP "LetsMarkNow-Portable.zip"
-
-        Write-Host "  * Downloading: $($portableAsset.name)..." -ForegroundColor Cyan
-        Invoke-WebRequest -Uri $downloadUrl -OutFile $tempZip -UseBasicParsing
-
-        Write-Host "  * Extracting to $installDir..." -ForegroundColor Cyan
-        Expand-Archive -Path $tempZip -DestinationPath $installDir -Force
-        Remove-Item -Force $tempZip -ErrorAction SilentlyContinue
-    } catch {
-        Write-Host "[ERROR] Failed to download package from GitHub: $_" -ForegroundColor Red
-        throw $_
     }
+
+    # Strategy 2: Fallback to GitHub REST API if direct CDN download missed
+    if (-not $downloadSuccess) {
+        Write-Host "  * Falling back to GitHub Releases API..." -ForegroundColor DarkGray
+        $headers = @{ "User-Agent" = "LetsMarkNow-Installer" }
+        $apiUrl = "https://api.github.com/repos/$Repo/releases"
+
+        try {
+            $releases = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method Get
+            if ($Version -eq "latest") {
+                $targetRelease = $releases | Select-Object -First 1
+            } else {
+                $targetRelease = $releases | Where-Object { $_.tag_name -eq "v$Version" -or $_.tag_name -eq $Version } | Select-Object -First 1
+            }
+
+            if ($targetRelease) {
+                $portableAsset = $targetRelease.assets | Where-Object { $_.name -like "*Portable*.zip" } | Select-Object -First 1
+                if ($portableAsset) {
+                    Invoke-WebRequest -Uri $portableAsset.browser_download_url -OutFile $tempZip -UseBasicParsing -ErrorAction Stop
+                    $downloadSuccess = $true
+                }
+            }
+        } catch {
+            Write-Host "  [WARN] GitHub API resolution failed: $_" -ForegroundColor DarkYellow
+        }
+    }
+
+    if (-not $downloadSuccess -or -not (Test-Path $tempZip)) {
+        throw "Failed to download LetsMarkNow application bundle. Please download manually from https://github.com/$Repo/releases."
+    }
+
+    Write-Host "  * Extracting package to $installDir..." -ForegroundColor Cyan
+    Expand-Archive -Path $tempZip -DestinationPath $installDir -Force
+    Remove-Item -Force $tempZip -ErrorAction SilentlyContinue
 }
 
 # 3. Ensure Uninstaller Script is in place
@@ -143,6 +186,12 @@ if ((-not (Test-Path $installedUnins)) -and $targetRelease) {
     } catch {
         # proceed with existing files
     }
+}
+if (-not (Test-Path $installedUnins)) {
+    try {
+        $directUninsUrl = "https://github.com/$Repo/releases/download/v$versionTag/uninstall.ps1"
+        Invoke-WebRequest -Uri $directUninsUrl -OutFile $installedUnins -UseBasicParsing -ErrorAction SilentlyContinue
+    } catch { }
 }
 if (Test-Path $installedUnins) {
     Write-Host "  * Uninstaller ready -> $installedUnins" -ForegroundColor Green

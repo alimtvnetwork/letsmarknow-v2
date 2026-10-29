@@ -153,19 +153,36 @@ try {
         Remove-Item -Force $portableZip
     }
 
-    $tarCmd = Get-Command tar.exe -ErrorAction SilentlyContinue
-    if ($tarCmd) {
+    $sevenZip = Get-Command "7z.exe", "7z" -ErrorAction SilentlyContinue
+    if (-not $sevenZip) {
+        $sevenZipPaths = @(
+            "${env:ProgramFiles}\7-Zip\7z.exe",
+            "${env:ProgramFiles(x86)}\7-Zip\7z.exe"
+        )
+        foreach ($sz in $sevenZipPaths) {
+            if (Test-Path $sz) {
+                $sevenZip = Get-Item $sz
+                break
+            }
+        }
+    }
+
+    if ($sevenZip) {
+        Write-Host "  * Packaging with 7-Zip..." -ForegroundColor DarkGray
         Push-Location $portableStageDir
         try {
-            cmd.exe /c "tar.exe -a -c -f `"$portableZip`" LetsMarkNow.exe backend.exe favicon.ico uninstall.ps1 extension web backend < nul"
+            $szCmd = if ($sevenZip -is [System.IO.FileInfo]) { $sevenZip.FullName } else { $sevenZip.Source }
+            & $szCmd a -tzip -mx=3 "$portableZip" * | Out-Null
             if ($LASTEXITCODE -ne 0) {
-                throw "tar.exe packaging failed with exit code $LASTEXITCODE"
+                throw "7-Zip packaging failed with exit code $LASTEXITCODE"
             }
         } finally {
             Pop-Location
         }
     } else {
-        Compress-Archive -Path "$portableStageDir\*" -DestinationPath $portableZip -CompressionLevel Fastest
+        Write-Host "  * Packaging with .NET ZipFile..." -ForegroundColor DarkGray
+        Add-Type -AssemblyName 'System.IO.Compression.FileSystem'
+        [System.IO.Compression.ZipFile]::CreateFromDirectory($portableStageDir, $portableZip, [System.IO.Compression.CompressionLevel]::Fastest, $false)
     }
     Write-Host "  * Portable ZIP created -> dist-installer\LetsMarkNow-Portable-v$Version.zip" -ForegroundColor Green
 

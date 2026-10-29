@@ -54,11 +54,17 @@ namespace LetsMarkNowLauncher
                 }
 
                 bool forceChrome = false;
+                bool openWeb = false;
                 foreach (string arg in args)
                 {
                     if (string.Equals(arg, "--chrome", StringComparison.OrdinalIgnoreCase))
                     {
                         forceChrome = true;
+                    }
+                    else if (string.Equals(arg, "--web", StringComparison.OrdinalIgnoreCase) ||
+                             string.Equals(arg, "-w", StringComparison.OrdinalIgnoreCase))
+                    {
+                        openWeb = true;
                     }
                 }
 
@@ -76,10 +82,12 @@ namespace LetsMarkNowLauncher
 
                 // Launch Chromium browser with unpacked extension loaded into isolated profile in fullscreen.
                 // Microsoft Edge natively supports --load-extension on Windows without the branded Google Chrome 137+ command-line blocking.
+                string initialTarget = openWeb ? "http://localhost:3000" : "about:blank";
                 string launchArgs = string.Format(
-                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check --disable-background-mode about:blank",
+                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check --disable-background-mode {2}",
                     extensionDir,
-                    profileDir
+                    profileDir,
+                    initialTarget
                 );
 
                 ProcessStartInfo startInfo = new ProcessStartInfo

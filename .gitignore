@@ -37,3 +37,6 @@ dist-installer
 bin
 
 backend/node.exe
+
+data/
+*.db

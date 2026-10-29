@@ -3,6 +3,10 @@ import cors from "@fastify/cors";
 import cookie from "@fastify/cookie";
 import helmet from "@fastify/helmet";
 import rateLimit from "@fastify/rate-limit";
+import fastifyStatic from "@fastify/static";
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
 import { env } from "./config/env.js";
 import { globalErrorHandler } from "./middleware/errorHandler.js";
@@ -28,6 +32,37 @@ import { jobRoutes } from "./routes/jobs.js";
 import { flagRoutes } from "./routes/flags.js";
 import { billingRoutes } from "./routes/billing.js";
 import { nextQueueRoutes } from "./routes/nextQueue.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export function locateWebDirectory(): string | null {
+  const candidates = [
+    // Next to backend/ as web/ (installer layout: AppData/Local/LetsMarkNow/web)
+    path.resolve(process.cwd(), "../web"),
+    path.resolve(__dirname, "../../web"),
+    // Inside backend/web
+    path.resolve(process.cwd(), "web"),
+    path.resolve(__dirname, "../web"),
+    path.resolve(__dirname, "web"),
+    // Repository root dist/web (development / build output)
+    path.resolve(process.cwd(), "../dist/web"),
+    path.resolve(process.cwd(), "dist/web"),
+    path.resolve(__dirname, "../../dist/web"),
+    path.resolve(__dirname, "../../../dist/web"),
+    // LocalAppData fallback
+    process.env.LOCALAPPDATA
+      ? path.resolve(process.env.LOCALAPPDATA, "LetsMarkNow/web")
+      : "",
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(path.join(candidate, "index.html"))) {
+      return candidate;
+    }
+  }
+  return null;
+}
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = fastify({
@@ -118,11 +153,30 @@ export async function buildApp(): Promise<FastifyInstance> {
   // Idempotency caching for POST requests (24h TTL)
   await app.register(idempotencyPlugin);
 
+  // Locate and register static web dashboard if available
+  const webDir = locateWebDirectory();
+  if (webDir) {
+    await app.register(fastifyStatic, {
+      root: webDir,
+      prefix: "/",
+    });
+  }
+
   // Uniform Error Handling
   app.setErrorHandler(globalErrorHandler);
 
-  // Uniform 404 Not Found Handling
-  app.setNotFoundHandler((request, reply) => {
+  // Uniform 404 / SPA Fallback Handling
+  app.setNotFoundHandler(async (request, reply) => {
+    const isApiRequest =
+      request.url.startsWith("/v1/") ||
+      request.url === "/v1" ||
+      request.url.startsWith("/health");
+
+    // Serve SPA index.html for non-API GET requests when web dashboard is present
+    if (webDir && !isApiRequest && request.method === "GET") {
+      return reply.sendFile("index.html");
+    }
+
     const requestId =
       (request.headers["x-request-id"] as string) ||
       request.id ||

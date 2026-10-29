@@ -46,6 +46,8 @@ Source: "..\public\favicon.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 ; Pre-built Chrome Extension
 Source: "..\dist\extension\*"; DestDir: "{app}\extension"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Pre-built Web Dashboard SPA
+Source: "..\dist\web\*"; DestDir: "{app}\web"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Backend Service Files (from staged build directory)
 Source: "..\dist-installer\stage\backend\*"; DestDir: "{app}\backend"; Flags: ignoreversion recursesubdirs createallsubdirs
 

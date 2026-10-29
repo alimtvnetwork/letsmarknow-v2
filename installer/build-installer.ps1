@@ -26,11 +26,11 @@ try {
     Write-Host "  Building LetsMarkNow Distribution v$Version" -ForegroundColor Cyan
     Write-Host "==========================================================" -ForegroundColor Cyan
 
-    # 2. Build Chrome Extension
-    Write-Host "`n[1/6] Building Chrome Extension..." -ForegroundColor Yellow
-    npm run build:extension
+    # 2. Build Chrome Extension and Web Dashboard
+    Write-Host "`n[1/6] Building Chrome Extension and Web Dashboard SPA..." -ForegroundColor Yellow
+    npm run build
     if ($LASTEXITCODE -ne 0) {
-        throw "Extension build failed."
+        throw "Frontend build failed."
     }
 
     # 3. Bundle Backend (Fastify + SQLite API)
@@ -100,12 +100,13 @@ try {
     }
     New-Item -ItemType Directory -Path $portableStageDir | Out-Null
 
-    # Copy launcher binaries, shortcuts and extension
+    # Copy launcher binaries, shortcuts, web dashboard and extension
     Copy-Item $launcherOut (Join-Path $portableStageDir "LetsMarkNow.exe")
     Copy-Item $backendOut (Join-Path $portableStageDir "backend.exe")
     Copy-Item $iconPath (Join-Path $portableStageDir "favicon.ico")
     Copy-Item (Join-Path $repoRoot "uninstall.ps1") (Join-Path $portableStageDir "uninstall.ps1")
     Copy-Item -Recurse (Join-Path $repoRoot "dist\extension") (Join-Path $portableStageDir "extension")
+    Copy-Item -Recurse (Join-Path $repoRoot "dist\web") (Join-Path $portableStageDir "web")
 
     # Copy backend service files
     $stageBackend = Join-Path $portableStageDir "backend"
@@ -145,7 +146,7 @@ try {
     if ($tarCmd) {
         Push-Location $portableStageDir
         try {
-            cmd.exe /c "tar.exe -a -c -f `"$portableZip`" LetsMarkNow.exe backend.exe favicon.ico uninstall.ps1 extension backend < nul"
+            cmd.exe /c "tar.exe -a -c -f `"$portableZip`" LetsMarkNow.exe backend.exe favicon.ico uninstall.ps1 extension web backend < nul"
             if ($LASTEXITCODE -ne 0) {
                 throw "tar.exe packaging failed with exit code $LASTEXITCODE"
             }

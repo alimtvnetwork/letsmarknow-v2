@@ -76,6 +76,17 @@ if ($isLocalRepo) {
     }
     Copy-Item -Recurse $localExt $targetExtDir -Force
 
+    # Copy web dashboard SPA
+    $localWeb = Join-Path $PSScriptRoot "dist\web"
+    if (Test-Path $localWeb) {
+        $targetWebDir = Join-Path $installDir "web"
+        if (Test-Path $targetWebDir) {
+            Remove-Item -Recurse -Force $targetWebDir
+        }
+        Copy-Item -Recurse $localWeb $targetWebDir -Force
+        Write-Host "  * Web dashboard SPA copied -> $targetWebDir" -ForegroundColor DarkGray
+    }
+
     # Copy backend service files
     $localBackend = Join-Path $PSScriptRoot "backend"
     if (Test-Path $localBackend) {
@@ -111,11 +122,11 @@ if ($isLocalRepo) {
     $downloadSuccess = $false
 
     # Strategy 1: Direct CDN Asset Download (bypasses GitHub REST API rate limits completely)
-    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.7" }
+    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.8" }
     $directUrls = @(
         "https://github.com/$Repo/releases/download/v$versionTag/LetsMarkNow-Portable-v$versionTag.zip",
         "https://github.com/$Repo/releases/download/$versionTag/LetsMarkNow-Portable-$versionTag.zip",
-        "https://github.com/$Repo/releases/download/v1.0.6/LetsMarkNow-Portable-v1.0.6.zip"
+        "https://github.com/$Repo/releases/download/v1.0.7/LetsMarkNow-Portable-v1.0.7.zip"
     )
 
     foreach ($url in $directUrls) {
@@ -250,7 +261,7 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
-$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.4" }
+$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.8" }
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value $installedVersion
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"
@@ -287,7 +298,7 @@ if (-not $SkipLaunch) {
             try {
                 $resp = Invoke-RestMethod -Uri "http://localhost:3000/v1/health" -TimeoutSec 1 -ErrorAction SilentlyContinue
                 if ($resp -and $resp.status -eq "ok") {
-                    Write-Host "  * Backend service online at http://localhost:3000 (Health: OK)" -ForegroundColor Green
+                    Write-Host "  * Backend & Web App online at http://localhost:3000 (Health: OK)" -ForegroundColor Green
                     break
                 }
             } catch { }

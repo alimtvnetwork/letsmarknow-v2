@@ -106,25 +106,17 @@ export default defineConfig(({ mode }) => {
             }
             return "assets/[name]-[hash].js";
           },
+          // Single vendor chunk for the web build. Splitting node_modules by
+          // package-name prefixes previously created CIRCULAR chunk imports
+          // (vendor-react <-> vendor-core), so packages like next-themes
+          // evaluated `react.createContext` while the react chunk was still
+          // uninitialized -> "Cannot read properties of undefined
+          // (reading 'createContext')" and a black screen. One vendor chunk
+          // keeps app/vendor caching split without any cross-chunk cycles.
           manualChunks: isWeb
             ? (id) => {
                 if (id.includes("node_modules")) {
-                  if (id.includes("react-router")) {
-                    return "vendor-router";
-                  }
-                  if (id.includes("react") || id.includes("react-dom") || id.includes("scheduler")) {
-                    return "vendor-react";
-                  }
-                  if (id.includes("@radix-ui")) {
-                    return "vendor-radix";
-                  }
-                  if (id.includes("lucide-react")) {
-                    return "vendor-lucide";
-                  }
-                  if (id.includes("@tanstack")) {
-                    return "vendor-query";
-                  }
-                  return "vendor-core";
+                  return "vendor";
                 }
               }
             : undefined,

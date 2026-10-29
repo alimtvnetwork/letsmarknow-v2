@@ -71,6 +71,7 @@ jobs:
       - name: Build Extension, Launcher & Inno Setup Installer
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
           .\installer\build-installer.ps1 -Version "${{ env.APP_VERSION }}"
 
       - name: Verify Distributable Artifacts

@@ -53,26 +53,26 @@ namespace LetsMarkNowLauncher
                     Directory.CreateDirectory(profileDir);
                 }
 
-                bool forceChrome = false;
-                bool openWeb = false;
+                string initialTarget = "http://localhost:3000";
+                bool forceEdge = false;
                 foreach (string arg in args)
                 {
-                    if (string.Equals(arg, "--chrome", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(arg, "--edge", StringComparison.OrdinalIgnoreCase))
                     {
-                        forceChrome = true;
+                        forceEdge = true;
                     }
-                    else if (string.Equals(arg, "--web", StringComparison.OrdinalIgnoreCase) ||
-                             string.Equals(arg, "-w", StringComparison.OrdinalIgnoreCase))
+                    else if (arg.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                             arg.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                     {
-                        openWeb = true;
+                        initialTarget = arg;
                     }
                 }
 
-                string browserExe = FindChromiumBrowser(forceChrome);
+                string browserExe = FindChromiumBrowser(forceEdge);
                 if (string.IsNullOrEmpty(browserExe))
                 {
                     MessageBox.Show(
-                        "No Chromium browser (Microsoft Edge or Google Chrome) was found on your system.\nPlease install Microsoft Edge or Google Chrome to run LetsMarkNow.",
+                        "No Chromium browser (Google Chrome or Microsoft Edge) was found on your system.\nPlease install Google Chrome to run LetsMarkNow.",
                         "Browser Not Found",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
@@ -80,9 +80,8 @@ namespace LetsMarkNowLauncher
                     return;
                 }
 
-                // Launch Chromium browser with unpacked extension loaded into isolated profile in fullscreen.
-                // Microsoft Edge natively supports --load-extension on Windows without the branded Google Chrome 137+ command-line blocking.
-                string initialTarget = openWeb ? "http://localhost:3000" : "about:blank";
+                // Launch Chromium browser (Google Chrome preferred) with unpacked extension loaded into isolated profile in fullscreen.
+                // Defaults to opening the local Web App dashboard at http://localhost:3000
                 string launchArgs = string.Format(
                     "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check --disable-background-mode {2}",
                     extensionDir,
@@ -191,22 +190,22 @@ namespace LetsMarkNowLauncher
             }
         }
 
-        private static string FindChromiumBrowser(bool forceChrome)
+        private static string FindChromiumBrowser(bool forceEdge)
         {
-            if (forceChrome)
+            if (forceEdge)
             {
-                string chrome = GetChromePath();
-                if (!string.IsNullOrEmpty(chrome)) return chrome;
                 string edge = GetEdgePath();
                 if (!string.IsNullOrEmpty(edge)) return edge;
+                string chrome = GetChromePath();
+                if (!string.IsNullOrEmpty(chrome)) return chrome;
             }
             else
             {
-                // Edge natively supports --load-extension on Windows without branded Google Chrome 137+ command-line blocking
-                string edge = GetEdgePath();
-                if (!string.IsNullOrEmpty(edge)) return edge;
+                // Prefer Google Chrome by default; fallback to Microsoft Edge if Chrome is not installed
                 string chrome = GetChromePath();
                 if (!string.IsNullOrEmpty(chrome)) return chrome;
+                string edge = GetEdgePath();
+                if (!string.IsNullOrEmpty(edge)) return edge;
             }
 
             return null;

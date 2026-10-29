@@ -7,6 +7,9 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+if (Get-Variable -Name PSNativeCommandUseErrorActionPreference -ErrorAction SilentlyContinue) {
+    $PSNativeCommandUseErrorActionPreference = $false
+}
 
 $repoRoot = (Resolve-Path "$PSScriptRoot\..").Path
 Push-Location $repoRoot
@@ -28,9 +31,13 @@ try {
 
     # 2. Build Chrome Extension and Web Dashboard
     Write-Host "`n[1/6] Building Chrome Extension and Web Dashboard SPA..." -ForegroundColor Yellow
-    npm run build
+    npm run build:extension
     if ($LASTEXITCODE -ne 0) {
-        throw "Frontend build failed."
+        throw "Chrome Extension build failed."
+    }
+    npm run build:web
+    if ($LASTEXITCODE -ne 0) {
+        throw "Web Dashboard build failed."
     }
 
     # 3. Bundle Backend (Fastify + SQLite API)
@@ -124,11 +131,11 @@ try {
     $backendNM = Join-Path $repoRoot "backend\node_modules"
     $stageNM = Join-Path $stageBackend "node_modules"
     if (Test-Path $backendNM) {
-        & robocopy "$backendNM" "$stageNM" /E /XJ /NFL /NDL /NJH /NJS /NC /NS /NP /MT:16
-        # In robocopy, exit codes < 8 indicate success
+        cmd.exe /c "robocopy `"$backendNM`" `"$stageNM`" /E /XJ /NFL /NDL /NJH /NJS /NC /NS /NP /MT:16 & if %ERRORLEVEL% lss 8 (exit /b 0) else (exit /b %ERRORLEVEL%)"
         if ($LASTEXITCODE -ge 8) {
             throw "robocopy node_modules failed with code $LASTEXITCODE"
         }
+        $global:LASTEXITCODE = 0
     }
 
     # Copy install.ps1 and uninstall.ps1 into dist-installer

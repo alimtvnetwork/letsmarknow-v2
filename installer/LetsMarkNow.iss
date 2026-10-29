@@ -35,9 +35,6 @@ CloseApplications=yes
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-[Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
-
 [Files]
 ; Main Launcher
 Source: "..\bin\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
@@ -49,14 +46,18 @@ Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\dist\extension\*"; DestDir: "{app}\extension"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\favicon.ico"
-Name: "{autoprograms}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"; IconFilename: "{app}\favicon.ico"
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\favicon.ico"; Tasks: desktopicon
+; Start Menu App Shortcut
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; IconFilename: "{app}\favicon.ico"
+; Start Menu Uninstaller Shortcut
+Name: "{autoprograms}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"; WorkingDir: "{app}"; IconFilename: "{app}\favicon.ico"
+; Desktop Shortcut (ALWAYS created unconditionally)
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; IconFilename: "{app}\favicon.ico"
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\Profile"
 Type: filesandordirs; Name: "{app}\extension"
 Type: filesandordirs; Name: "{app}"
+Type: files; Name: "{autodesktop}\{#MyAppName}.lnk"
 
 [Run]
 ; Auto-launch browser with extension loaded in fullscreen immediately upon setup completion

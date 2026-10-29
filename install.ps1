@@ -54,7 +54,7 @@ if ($isLocalRepo) {
         }
 
         if (-not $targetRelease) {
-            throw "Could not find a valid release for version '$Version' on GitHub ($Repo)."
+            throw "Could not find a valid release for version $Version on GitHub ($Repo)."
         }
 
         $portableAsset = $targetRelease.assets | Where-Object { $_.name -like "*Portable*.zip" } | Select-Object -First 1
@@ -96,21 +96,30 @@ try {
     $wsh = New-Object -ComObject WScript.Shell
     $uninsFilePath = Join-Path $installDir "uninstall.ps1"
 
-    # Desktop Shortcut
-    $desktopPath = [Environment]::GetFolderPath('Desktop')
-    $desktopLink = Join-Path $desktopPath "LetsMarkNow.lnk"
-    $shortcut = $wsh.CreateShortcut($desktopLink)
-    $shortcut.TargetPath = Join-Path $installDir "LetsMarkNow.exe"
-    $shortcut.IconLocation = Join-Path $installDir "favicon.ico"
-    $shortcut.Description = "LetsMarkNow - Browser Tab Workspace"
-    $shortcut.Save()
-    Write-Host "  * Created Desktop shortcut: $desktopLink" -ForegroundColor DarkGray
+    # Desktop Shortcut (creates on standard Desktop & OneDrive Desktop if present)
+    $desktopDirs = @(
+        [Environment]::GetFolderPath('Desktop'),
+        (Join-Path $env:USERPROFILE "Desktop"),
+        (Join-Path $env:USERPROFILE "OneDrive\Desktop")
+    ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -Unique
+
+    foreach ($dp in $desktopDirs) {
+        $desktopLink = Join-Path $dp "LetsMarkNow.lnk"
+        $shortcut = $wsh.CreateShortcut($desktopLink)
+        $shortcut.TargetPath = Join-Path $installDir "LetsMarkNow.exe"
+        $shortcut.WorkingDirectory = $installDir
+        $shortcut.IconLocation = Join-Path $installDir "favicon.ico"
+        $shortcut.Description = "LetsMarkNow - Browser Tab Workspace"
+        $shortcut.Save()
+        Write-Host "  * Created Desktop shortcut: $desktopLink" -ForegroundColor DarkGray
+    }
 
     # Start Menu Shortcuts
     $programsPath = [Environment]::GetFolderPath('Programs')
     $appLink = Join-Path $programsPath "LetsMarkNow.lnk"
     $appShortcut = $wsh.CreateShortcut($appLink)
     $appShortcut.TargetPath = Join-Path $installDir "LetsMarkNow.exe"
+    $appShortcut.WorkingDirectory = $installDir
     $appShortcut.IconLocation = Join-Path $installDir "favicon.ico"
     $appShortcut.Save()
     Write-Host "  * Created Start Menu shortcut: $appLink" -ForegroundColor DarkGray
@@ -118,6 +127,7 @@ try {
     $uninsLink = Join-Path $programsPath "Uninstall LetsMarkNow.lnk"
     $uninsShortcut = $wsh.CreateShortcut($uninsLink)
     $uninsShortcut.TargetPath = "powershell.exe"
+    $uninsShortcut.WorkingDirectory = $installDir
     $uninsShortcut.Arguments = '-ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
     $uninsShortcut.IconLocation = Join-Path $installDir "favicon.ico"
     $uninsShortcut.Save()

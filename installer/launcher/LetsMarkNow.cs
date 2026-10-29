@@ -91,8 +91,10 @@ namespace LetsMarkNowLauncher
                     ? string.Format("\"{0}\"", initialTarget)
                     : string.Format("\"{0}\" \"{1}\"", extensionTabUrl, initialTarget);
 
+                // Chrome 137+ disables --load-extension by default; without this the
+                // extension silently fails to load (no extension tab, no service worker).
                 string launchArgs = string.Format(
-                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-maximized --no-first-run --no-default-browser-check --disable-background-mode {2}",
+                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --disable-features=DisableLoadExtensionCommandLineSwitch --user-data-dir=\"{1}\" --start-maximized --no-first-run --no-default-browser-check --disable-background-mode {2}",
                     extensionDir,
                     profileDir,
                     tabsArg

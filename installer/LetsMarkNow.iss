@@ -1,8 +1,8 @@
 ; Inno Setup Script for LetsMarkNow
-; Produces standalone one-click installer for Windows (x64/x86)
+; Produces standalone one-click installer and uninstaller for Windows (x64/x86)
 
 #ifndef MyAppVersion
-  #define MyAppVersion "0.2.11"
+  #define MyAppVersion "1.0.0"
 #endif
 
 #define MyAppName "LetsMarkNow"
@@ -27,6 +27,7 @@ Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 SetupIconFile=..\public\favicon.ico
+UninstallDisplayName={#MyAppName}
 UninstallDisplayIcon={app}\favicon.ico
 ArchitecturesInstallIn64BitMode=x64compatible
 CloseApplications=yes
@@ -42,12 +43,20 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "..\bin\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ; App Icon
 Source: "..\public\favicon.ico"; DestDir: "{app}"; Flags: ignoreversion
+; Uninstaller script
+Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 ; Pre-built Chrome Extension
 Source: "..\dist\extension\*"; DestDir: "{app}\extension"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\favicon.ico"
+Name: "{autoprograms}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"; IconFilename: "{app}\favicon.ico"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\favicon.ico"; Tasks: desktopicon
+
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}\Profile"
+Type: filesandordirs; Name: "{app}\extension"
+Type: filesandordirs; Name: "{app}"
 
 [Run]
 ; Auto-launch browser with extension loaded in fullscreen immediately upon setup completion

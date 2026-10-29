@@ -19,7 +19,7 @@ try {
             $Version = $pkg.version
         }
         if (-not $Version) {
-            $Version = "0.2.11"
+            $Version = "1.0.0"
         }
     }
     Write-Host "==========================================================" -ForegroundColor Cyan
@@ -67,6 +67,10 @@ try {
         New-Item -ItemType Directory -Path $distInstallerDir | Out-Null
     }
 
+    # Copy install.ps1 and uninstall.ps1 into dist-installer
+    Copy-Item (Join-Path $repoRoot "install.ps1") (Join-Path $distInstallerDir "install.ps1") -Force
+    Copy-Item (Join-Path $repoRoot "uninstall.ps1") (Join-Path $distInstallerDir "uninstall.ps1") -Force
+
     # 5. Create Portable Package (.zip)
     Write-Host "`n[3/5] Packaging Portable ZIP..." -ForegroundColor Yellow
     $portableStageDir = Join-Path $env:TEMP "LetsMarkNow-Portable"
@@ -77,6 +81,7 @@ try {
 
     Copy-Item $launcherOut (Join-Path $portableStageDir "LetsMarkNow.exe")
     Copy-Item $iconPath (Join-Path $portableStageDir "favicon.ico")
+    Copy-Item (Join-Path $repoRoot "uninstall.ps1") (Join-Path $portableStageDir "uninstall.ps1")
     Copy-Item -Recurse (Join-Path $repoRoot "dist\extension") (Join-Path $portableStageDir "extension")
 
     $portableZip = Join-Path $distInstallerDir "LetsMarkNow-Portable-v$Version.zip"

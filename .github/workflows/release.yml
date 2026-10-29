@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version (e.g. 0.2.11)'
+        description: 'Release version (e.g. 1.0.0)'
         required: false
         default: ''
 
@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   build-and-release:
-    name: Build Installer & Publish GitHub Release
+    name: Build Installer & Publish GitHub Pre-Release
     runs-on: windows-latest
 
     steps:
@@ -44,14 +44,14 @@ jobs:
         run: |
           $ver = "${{ github.event.inputs.version }}"
           if (-not $ver) {
-            if ($env:GITHUB_REF_TYPE -eq "tag" -and $env:GITHUB_REF_NAME -match "^v(.+)$") {
+            if ($env:GITHUB_REF_TYPE -eq "tag" -and $env:GITHUB_REF_NAME -match "^v*(.+)$") {
               $ver = $Matches[1]
             } else {
               $pkg = Get-Content "package.json" -Raw | ConvertFrom-Json
               $ver = $pkg.version
             }
           }
-          if (-not $ver) { $ver = "0.2.11" }
+          if (-not $ver) { $ver = "1.0.0" }
           Write-Host "Resolved Version: $ver"
           "APP_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
           "TAG_NAME=v$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
@@ -86,17 +86,19 @@ jobs:
           Write-Host "  * $($portable.Name) ($([Math]::Round($portable.Length / 1MB, 2)) MB)"
           Write-Host "  * $($checksums.Name)"
 
-      - name: Publish GitHub Release
+      - name: Publish GitHub Pre-Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
           name: LetsMarkNow v${{ env.APP_VERSION }}
           draft: false
-          prerelease: false
+          prerelease: true
           generate_release_notes: true
           files: |
             dist-installer/LetsMarkNow-Setup-v*.exe
             dist-installer/LetsMarkNow-Portable-v*.zip
+            dist-installer/install.ps1
+            dist-installer/uninstall.ps1
             dist-installer/checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

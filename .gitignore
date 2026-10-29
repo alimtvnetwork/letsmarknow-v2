@@ -35,3 +35,5 @@ antigravity_resume_task.json
 
 dist-installer
 bin
+
+backend/node.exe

@@ -38,6 +38,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Files]
 ; Main Launcher
 Source: "..\bin\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+; Backend Executable
+Source: "..\bin\backend.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; App Icon
 Source: "..\public\favicon.ico"; DestDir: "{app}"; Flags: ignoreversion
 ; Launch startup bridge
@@ -46,6 +48,8 @@ Source: "launcher\launch.html"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 ; Pre-built Chrome Extension
 Source: "..\dist\extension\*"; DestDir: "{app}\extension"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Backend Service Files (from staged build directory)
+Source: "..\dist-installer\stage\backend\*"; DestDir: "{app}\backend"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 ; Start Menu App Shortcut
@@ -55,12 +59,18 @@ Name: "{autoprograms}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"; Worki
 ; Desktop Shortcut (ALWAYS created unconditionally)
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; IconFilename: "{app}\favicon.ico"
 
+[UninstallRun]
+Filename: "{app}\backend.exe"; Parameters: "--stop"; Flags: runhidden
+
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\Profile"
 Type: filesandordirs; Name: "{app}\extension"
+Type: filesandordirs; Name: "{app}\backend"
 Type: filesandordirs; Name: "{app}"
 Type: files; Name: "{autodesktop}\{#MyAppName}.lnk"
 
 [Run]
-; Auto-launch browser with extension loaded in fullscreen immediately upon setup completion
+; Auto-launch backend server in background
+Filename: "{app}\backend.exe"; Flags: nowait skipifsilent
+; Auto-launch Google Chrome with extension loaded in fullscreen immediately upon setup completion
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

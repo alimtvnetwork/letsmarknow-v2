@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -9,6 +11,7 @@ namespace LetsMarkNowLauncher
     static class Program
     {
         private const string StaticExtensionId = "pnfhjpjocddcolcnlginjoblglphhgpm";
+        private const string HealthCheckUrl = "http://localhost:3000/v1/health";
 
         private const string LaunchHtmlContent = @"<!DOCTYPE html>
 <html>
@@ -63,6 +66,11 @@ namespace LetsMarkNowLauncher
             try
             {
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+                // 1. Ensure backend service is running before browser launch
+                EnsureBackendRunning(baseDir);
+
+                // 2. Locate extension directory
                 string extensionDir = Path.Combine(baseDir, "extension");
 
                 // In case running from bin/ or repo during development
@@ -105,20 +113,21 @@ namespace LetsMarkNowLauncher
                     File.WriteAllText(launchHtmlPath, LaunchHtmlContent);
                 }
 
-                bool preferChrome = false;
+                bool forceEdge = false;
                 foreach (string arg in args)
                 {
-                    if (string.Equals(arg, "--chrome", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(arg, "--edge", StringComparison.OrdinalIgnoreCase))
                     {
-                        preferChrome = true;
+                        forceEdge = true;
                     }
                 }
 
-                string browserExe = FindChromiumBrowser(preferChrome);
+                // Primary browser is Google Chrome
+                string browserExe = FindChromiumBrowser(forceEdge);
                 if (string.IsNullOrEmpty(browserExe))
                 {
                     MessageBox.Show(
-                        "Microsoft Edge or Google Chrome was not found on your system.\nPlease install Google Chrome or Microsoft Edge to run LetsMarkNow.",
+                        "Google Chrome was not found on your system.\nPlease install Google Chrome to run LetsMarkNow.",
                         "Browser Not Found",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
@@ -155,48 +164,103 @@ namespace LetsMarkNowLauncher
             }
         }
 
-        private static string FindChromiumBrowser(bool preferChrome)
+        private static void EnsureBackendRunning(string baseDir)
         {
-            if (preferChrome)
+            try
             {
-                string chrome = GetChromePath();
-                if (!string.IsNullOrEmpty(chrome)) return chrome;
-                string edge = GetEdgePath();
-                if (!string.IsNullOrEmpty(edge)) return edge;
+                if (IsBackendHealthy(HealthCheckUrl))
+                {
+                    return;
+                }
+
+                string backendExe = LocateBackendExe(baseDir);
+                if (!string.IsNullOrEmpty(backendExe) && File.Exists(backendExe))
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = backendExe,
+                        WorkingDirectory = Path.GetDirectoryName(backendExe),
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process.Start(psi);
+
+                    // Wait up to 6 seconds for backend to become ready
+                    for (int i = 0; i < 30; i++)
+                    {
+                        Thread.Sleep(200);
+                        if (IsBackendHealthy(HealthCheckUrl))
+                        {
+                            break;
+                        }
+                    }
+                }
             }
-            else
+            catch
             {
-                // Edge natively supports --load-extension on Windows without branded Chrome restrictions
-                string edge = GetEdgePath();
-                if (!string.IsNullOrEmpty(edge)) return edge;
-                string chrome = GetChromePath();
-                if (!string.IsNullOrEmpty(chrome)) return chrome;
+                // Non-blocking; continue to browser launch
+            }
+        }
+
+        private static string LocateBackendExe(string baseDir)
+        {
+            string[] candidates = new string[]
+            {
+                Path.Combine(baseDir, "backend.exe"),
+                Path.Combine(baseDir, @"backend\backend.exe"),
+                Path.Combine(baseDir, @"bin\backend.exe"),
+                Path.Combine(baseDir, @"..\bin\backend.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"LetsMarkNow\backend.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"LetsMarkNow\backend\backend.exe")
+            };
+
+            foreach (string c in candidates)
+            {
+                if (File.Exists(c))
+                {
+                    return c;
+                }
             }
 
             return null;
         }
 
-        private static string GetEdgePath()
+        private static bool IsBackendHealthy(string url)
         {
-            string edgePath = GetAppPathFromRegistry("msedge.exe");
-            if (!string.IsNullOrEmpty(edgePath) && File.Exists(edgePath))
+            try
             {
-                return edgePath;
-            }
-
-            string[] edgePaths = new string[]
-            {
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Microsoft\Edge\Application\msedge.exe"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Microsoft\Edge\Application\msedge.exe"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Edge\Application\msedge.exe")
-            };
-
-            foreach (string path in edgePaths)
-            {
-                if (File.Exists(path))
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Timeout = 800;
+                request.Method = "GET";
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
                 {
-                    return path;
+                    return response.StatusCode == HttpStatusCode.OK;
                 }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static string FindChromiumBrowser(bool forceEdge)
+        {
+            if (forceEdge)
+            {
+                string edge = GetEdgePath();
+                if (!string.IsNullOrEmpty(edge)) return edge;
+                string chrome = GetChromePath();
+                if (!string.IsNullOrEmpty(chrome)) return chrome;
+            }
+            else
+            {
+                // Prioritize Google Chrome first
+                string chrome = GetChromePath();
+                if (!string.IsNullOrEmpty(chrome)) return chrome;
+                // Fallback to Edge only if Chrome is not installed
+                string edge = GetEdgePath();
+                if (!string.IsNullOrEmpty(edge)) return edge;
             }
 
             return null;
@@ -218,6 +282,32 @@ namespace LetsMarkNowLauncher
             };
 
             foreach (string path in chromePaths)
+            {
+                if (File.Exists(path))
+                {
+                    return path;
+                }
+            }
+
+            return null;
+        }
+
+        private static string GetEdgePath()
+        {
+            string edgePath = GetAppPathFromRegistry("msedge.exe");
+            if (!string.IsNullOrEmpty(edgePath) && File.Exists(edgePath))
+            {
+                return edgePath;
+            }
+
+            string[] edgePaths = new string[]
+            {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Microsoft\Edge\Application\msedge.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Microsoft\Edge\Application\msedge.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Edge\Application\msedge.exe")
+            };
+
+            foreach (string path in edgePaths)
             {
                 if (File.Exists(path))
                 {

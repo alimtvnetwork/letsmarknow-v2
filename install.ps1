@@ -1,5 +1,5 @@
 # install.ps1 - Windows One-Liner / Standalone Installer for LetsMarkNow
-# Installs to %LOCALAPPDATA%\LetsMarkNow without administrative privileges and auto-launches in fullscreen.
+# Installs to %LOCALAPPDATA%\LetsMarkNow without administrative privileges and auto-launches in Google Chrome fullscreen.
 
 [CmdletBinding()]
 param(
@@ -44,14 +44,51 @@ if ($isLocalRepo) {
     Write-Host "  * Installing from local repository files..." -ForegroundColor Cyan
     Copy-Item $localBin (Join-Path $installDir "LetsMarkNow.exe") -Force
     Copy-Item $localIco (Join-Path $installDir "favicon.ico") -Force
+
+    $localBackendExe = Join-Path $PSScriptRoot "bin\backend.exe"
+    if (Test-Path $localBackendExe) {
+        Copy-Item $localBackendExe (Join-Path $installDir "backend.exe") -Force
+    }
+
     $targetExtDir = Join-Path $installDir "extension"
     if (Test-Path $targetExtDir) {
         Remove-Item -Recurse -Force $targetExtDir
     }
     Copy-Item -Recurse $localExt $targetExtDir -Force
+
     $localLaunch = Join-Path $PSScriptRoot "installer\launcher\launch.html"
     if (Test-Path $localLaunch) {
         Copy-Item $localLaunch (Join-Path $installDir "launch.html") -Force
+    }
+
+    # Copy backend service files
+    $localBackend = Join-Path $PSScriptRoot "backend"
+    if (Test-Path $localBackend) {
+        $targetBackend = Join-Path $installDir "backend"
+        if (-not (Test-Path $targetBackend)) {
+            New-Item -ItemType Directory -Path $targetBackend -Force | Out-Null
+        }
+        $targetDist = Join-Path $targetBackend "dist"
+        if (-not (Test-Path $targetDist)) {
+            New-Item -ItemType Directory -Path $targetDist -Force | Out-Null
+        }
+        if (Test-Path (Join-Path $localBackend "dist\server.js")) {
+            Copy-Item (Join-Path $localBackend "dist\server.js") (Join-Path $targetDist "server.js") -Force
+        }
+        if (Test-Path (Join-Path $localBackend "package.json")) {
+            Copy-Item (Join-Path $localBackend "package.json") (Join-Path $targetBackend "package.json") -Force
+        }
+        if (Test-Path (Join-Path $localBackend ".env")) {
+            Copy-Item (Join-Path $localBackend ".env") (Join-Path $targetBackend ".env") -Force
+        }
+        if (Test-Path (Join-Path $localBackend "node.exe")) {
+            Copy-Item (Join-Path $localBackend "node.exe") (Join-Path $targetBackend "node.exe") -Force
+        }
+        $localNodeModules = Join-Path $localBackend "node_modules"
+        $targetNodeModules = Join-Path $targetBackend "node_modules"
+        if ((Test-Path $localNodeModules) -and (-not (Test-Path $targetNodeModules))) {
+            Copy-Item -Recurse $localNodeModules $targetNodeModules -Force
+        }
     }
 } else {
     Write-Host "  * Downloading package from GitHub ($Repo)..." -ForegroundColor Cyan
@@ -169,7 +206,7 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
-$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.2" }
+$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.4" }
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value $installedVersion
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"
@@ -185,8 +222,27 @@ Write-Host "==========================================================" -Foregro
 Write-Host "  [SUCCESS] LetsMarkNow installed successfully!" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green
 
-# 6. Auto-Launch Chrome in Fullscreen with Extension Loaded
+# 6. Auto-Launch Backend Service & Google Chrome in Fullscreen
 if (-not $SkipLaunch) {
+    # 6a. Start Backend Service
+    $backendExe = Join-Path $installDir "backend.exe"
+    if (Test-Path $backendExe) {
+        Write-Host ""
+        Write-Host "[LAUNCH] Starting LetsMarkNow Backend Service..." -ForegroundColor Cyan
+        Start-Process -FilePath $backendExe
+        for ($i = 0; $i -lt 30; $i++) {
+            Start-Sleep -Milliseconds 200
+            try {
+                $resp = Invoke-RestMethod -Uri "http://localhost:3000/v1/health" -TimeoutSec 1 -ErrorAction SilentlyContinue
+                if ($resp -and $resp.status -eq "ok") {
+                    Write-Host "  * Backend service online at http://localhost:3000 (Health: OK)" -ForegroundColor Green
+                    break
+                }
+            } catch { }
+        }
+    }
+
+    # 6b. Start Chrome in Fullscreen
     Write-Host ""
     Write-Host "[LAUNCH] Starting LetsMarkNow in Google Chrome fullscreen mode..." -ForegroundColor Cyan
     $exeToLaunch = Join-Path $installDir "LetsMarkNow.exe"

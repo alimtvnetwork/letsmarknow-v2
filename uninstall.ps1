@@ -1,5 +1,5 @@
 # uninstall.ps1 - Uninstaller for LetsMarkNow
-# Removes application files, shortcuts, isolated profiles, and Windows Registry entries.
+# Removes application files, shortcuts, isolated profiles, backend daemons, and Windows Registry entries.
 
 [CmdletBinding()]
 param(
@@ -25,7 +25,27 @@ if (-not $Silent -and -not $Force) {
 
 Write-Host ""
 Write-Host "[1/4] Closing any running LetsMarkNow processes..." -ForegroundColor Yellow
-Get-Process -Name "LetsMarkNow" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+
+# Stop backend process cleanly
+$backendExe = Join-Path $installDir "backend.exe"
+if (Test-Path $backendExe) {
+    try {
+        Start-Process -FilePath $backendExe -ArgumentList "--stop" -Wait -WindowStyle Hidden
+    } catch { }
+}
+
+# Terminate launcher and backend binaries
+Get-Process -Name "LetsMarkNow", "backend" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+
+# Terminate any node.exe process spawned from the install directory
+try {
+    Get-CimInstance Win32_Process -Filter "Name = 'node.exe'" -ErrorAction SilentlyContinue | ForEach-Object {
+        if ($_.CommandLine -and $_.CommandLine.Contains($installDir)) {
+            Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue
+        }
+    }
+} catch { }
+
 Start-Sleep -Milliseconds 500
 
 Write-Host "[2/4] Removing desktop and start menu shortcuts..." -ForegroundColor Yellow

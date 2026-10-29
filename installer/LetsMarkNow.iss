@@ -42,8 +42,6 @@ Source: "..\bin\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\bin\backend.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; App Icon
 Source: "..\public\favicon.ico"; DestDir: "{app}"; Flags: ignoreversion
-; Launch startup bridge
-Source: "launcher\launch.html"; DestDir: "{app}"; Flags: ignoreversion
 ; Uninstaller script
 Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 ; Pre-built Chrome Extension
@@ -58,6 +56,9 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingD
 Name: "{autoprograms}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"; WorkingDir: "{app}"; IconFilename: "{app}\favicon.ico"
 ; Desktop Shortcut (ALWAYS created unconditionally)
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"; IconFilename: "{app}\favicon.ico"
+
+[Registry]
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "LetsMarkNowBackend"; ValueData: """{app}\backend.exe"""; Flags: uninsdeletevalue
 
 [UninstallRun]
 Filename: "{app}\backend.exe"; Parameters: "--stop"; Flags: runhidden

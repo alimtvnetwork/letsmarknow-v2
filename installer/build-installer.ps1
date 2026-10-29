@@ -104,7 +104,6 @@ try {
     Copy-Item $launcherOut (Join-Path $portableStageDir "LetsMarkNow.exe")
     Copy-Item $backendOut (Join-Path $portableStageDir "backend.exe")
     Copy-Item $iconPath (Join-Path $portableStageDir "favicon.ico")
-    Copy-Item (Join-Path $repoRoot "installer\launcher\launch.html") (Join-Path $portableStageDir "launch.html")
     Copy-Item (Join-Path $repoRoot "uninstall.ps1") (Join-Path $portableStageDir "uninstall.ps1")
     Copy-Item -Recurse (Join-Path $repoRoot "dist\extension") (Join-Path $portableStageDir "extension")
 
@@ -146,7 +145,7 @@ try {
     if ($tarCmd) {
         Push-Location $portableStageDir
         try {
-            cmd.exe /c "tar.exe -a -c -f `"$portableZip`" LetsMarkNow.exe backend.exe favicon.ico launch.html uninstall.ps1 extension backend < nul"
+            cmd.exe /c "tar.exe -a -c -f `"$portableZip`" LetsMarkNow.exe backend.exe favicon.ico uninstall.ps1 extension backend < nul"
             if ($LASTEXITCODE -ne 0) {
                 throw "tar.exe packaging failed with exit code $LASTEXITCODE"
             }

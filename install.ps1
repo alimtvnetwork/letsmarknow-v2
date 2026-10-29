@@ -56,11 +56,6 @@ if ($isLocalRepo) {
     }
     Copy-Item -Recurse $localExt $targetExtDir -Force
 
-    $localLaunch = Join-Path $PSScriptRoot "installer\launcher\launch.html"
-    if (Test-Path $localLaunch) {
-        Copy-Item $localLaunch (Join-Path $installDir "launch.html") -Force
-    }
-
     # Copy backend service files
     $localBackend = Join-Path $PSScriptRoot "backend"
     if (Test-Path $localBackend) {
@@ -217,12 +212,20 @@ Set-ItemProperty -Path $regKey -Name "NoModify" -Value 1 -Type DWord
 Set-ItemProperty -Path $regKey -Name "NoRepair" -Value 1 -Type DWord
 Write-Host "  * Registered in Windows Programs and Features" -ForegroundColor DarkGray
 
+# 5b. Register Backend Service to auto-start on Windows Logon (Zero External Dependencies)
+$startupKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+$backendExePath = Join-Path $installDir "backend.exe"
+if (Test-Path $backendExePath) {
+    Set-ItemProperty -Path $startupKey -Name "LetsMarkNowBackend" -Value "`"$backendExePath`"" -Force
+    Write-Host "  * Registered backend service to auto-start on Windows startup (Zero Dependencies)" -ForegroundColor DarkGray
+}
+
 Write-Host ""
 Write-Host "==========================================================" -ForegroundColor Green
 Write-Host "  [SUCCESS] LetsMarkNow installed successfully!" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Green
 
-# 6. Auto-Launch Backend Service & Google Chrome in Fullscreen
+# 6. Auto-Launch Backend Service & Chromium Fullscreen Workspace
 if (-not $SkipLaunch) {
     # 6a. Start Backend Service
     $backendExe = Join-Path $installDir "backend.exe"
@@ -242,9 +245,9 @@ if (-not $SkipLaunch) {
         }
     }
 
-    # 6b. Start Chrome in Fullscreen
+    # 6b. Start Chromium in Fullscreen
     Write-Host ""
-    Write-Host "[LAUNCH] Starting LetsMarkNow in Google Chrome fullscreen mode..." -ForegroundColor Cyan
+    Write-Host "[LAUNCH] Starting LetsMarkNow in Chromium fullscreen workspace..." -ForegroundColor Cyan
     $exeToLaunch = Join-Path $installDir "LetsMarkNow.exe"
     Start-Process -FilePath $exeToLaunch
 }

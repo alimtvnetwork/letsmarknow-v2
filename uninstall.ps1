@@ -66,6 +66,10 @@ foreach ($sc in $shortcuts) {
 }
 
 Write-Host "[3/4] Removing Windows Registry entries..." -ForegroundColor Yellow
+
+# Remove startup entry
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "LetsMarkNowBackend" -Force -ErrorAction SilentlyContinue
+
 $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\LetsMarkNow"
 if (Test-Path $regPath) {
     Remove-Item -Path $regPath -Recurse -Force -ErrorAction SilentlyContinue

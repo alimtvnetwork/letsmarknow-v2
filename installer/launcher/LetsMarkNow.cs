@@ -13,53 +13,6 @@ namespace LetsMarkNowLauncher
         private const string StaticExtensionId = "pnfhjpjocddcolcnlginjoblglphhgpm";
         private const string HealthCheckUrl = "http://localhost:3000/v1/health";
 
-        private const string LaunchHtmlContent = @"<!DOCTYPE html>
-<html>
-<head>
-  <meta charset=""utf-8"">
-  <title>Starting LetsMarkNow...</title>
-  <style>
-    body {
-      background: #090A0F;
-      color: #94a3b8;
-      font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      user-select: none;
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(255,255,255,0.1);
-      border-radius: 50%;
-      border-top-color: #6366f1;
-      animation: spin 0.8s ease-in-out infinite;
-      margin-bottom: 16px;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .text {
-      font-size: 14px;
-      letter-spacing: 0.05em;
-    }
-  </style>
-  <script>
-    setTimeout(function() {
-      window.location.replace(""chrome-extension://pnfhjpjocddcolcnlginjoblglphhgpm/app.html"");
-    }, 400);
-  </script>
-</head>
-<body>
-  <div class=""spinner""></div>
-  <div class=""text"">Launching LetsMarkNow...</div>
-</body>
-</html>";
-
         [STAThread]
         static void Main(string[] args)
         {
@@ -100,34 +53,20 @@ namespace LetsMarkNowLauncher
                     Directory.CreateDirectory(profileDir);
                 }
 
-                // Ensure launch.html exists in baseDir as a startup bridge to eliminate race condition
-                string launchHtmlPath = Path.Combine(baseDir, "launch.html");
-                try
-                {
-                    File.WriteAllText(launchHtmlPath, LaunchHtmlContent);
-                }
-                catch
-                {
-                    // If write fails, try Temp directory
-                    launchHtmlPath = Path.Combine(Path.GetTempPath(), "LetsMarkNow-launch.html");
-                    File.WriteAllText(launchHtmlPath, LaunchHtmlContent);
-                }
-
-                bool forceEdge = false;
+                bool forceChrome = false;
                 foreach (string arg in args)
                 {
-                    if (string.Equals(arg, "--edge", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(arg, "--chrome", StringComparison.OrdinalIgnoreCase))
                     {
-                        forceEdge = true;
+                        forceChrome = true;
                     }
                 }
 
-                // Primary browser is Google Chrome
-                string browserExe = FindChromiumBrowser(forceEdge);
+                string browserExe = FindChromiumBrowser(forceChrome);
                 if (string.IsNullOrEmpty(browserExe))
                 {
                     MessageBox.Show(
-                        "Google Chrome was not found on your system.\nPlease install Google Chrome to run LetsMarkNow.",
+                        "No Chromium browser (Microsoft Edge or Google Chrome) was found on your system.\nPlease install Microsoft Edge or Google Chrome to run LetsMarkNow.",
                         "Browser Not Found",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
@@ -135,12 +74,12 @@ namespace LetsMarkNowLauncher
                     return;
                 }
 
-                // Launch browser with unpacked extension loaded into isolated profile in fullscreen
+                // Launch Chromium browser with unpacked extension loaded into isolated profile in fullscreen.
+                // Microsoft Edge natively supports --load-extension on Windows without the branded Google Chrome 137+ command-line blocking.
                 string launchArgs = string.Format(
-                    "--load-extension=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check \"{2}\"",
+                    "--load-extension=\"{0}\" --disable-extensions-except=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check",
                     extensionDir,
-                    profileDir,
-                    launchHtmlPath
+                    profileDir
                 );
 
                 ProcessStartInfo startInfo = new ProcessStartInfo
@@ -244,23 +183,22 @@ namespace LetsMarkNowLauncher
             }
         }
 
-        private static string FindChromiumBrowser(bool forceEdge)
+        private static string FindChromiumBrowser(bool forceChrome)
         {
-            if (forceEdge)
+            if (forceChrome)
             {
-                string edge = GetEdgePath();
-                if (!string.IsNullOrEmpty(edge)) return edge;
                 string chrome = GetChromePath();
                 if (!string.IsNullOrEmpty(chrome)) return chrome;
+                string edge = GetEdgePath();
+                if (!string.IsNullOrEmpty(edge)) return edge;
             }
             else
             {
-                // Prioritize Google Chrome first
-                string chrome = GetChromePath();
-                if (!string.IsNullOrEmpty(chrome)) return chrome;
-                // Fallback to Edge only if Chrome is not installed
+                // Edge natively supports --load-extension on Windows without branded Google Chrome 137+ command-line blocking
                 string edge = GetEdgePath();
                 if (!string.IsNullOrEmpty(edge)) return edge;
+                string chrome = GetChromePath();
+                if (!string.IsNullOrEmpty(chrome)) return chrome;
             }
 
             return null;

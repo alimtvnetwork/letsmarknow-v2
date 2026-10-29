@@ -40,6 +40,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "..\bin\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ; App Icon
 Source: "..\public\favicon.ico"; DestDir: "{app}"; Flags: ignoreversion
+; Launch startup bridge
+Source: "launcher\launch.html"; DestDir: "{app}"; Flags: ignoreversion
 ; Uninstaller script
 Source: "..\uninstall.ps1"; DestDir: "{app}"; Flags: ignoreversion
 ; Pre-built Chrome Extension

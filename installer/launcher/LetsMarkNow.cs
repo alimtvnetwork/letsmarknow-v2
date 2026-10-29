@@ -8,6 +8,55 @@ namespace LetsMarkNowLauncher
 {
     static class Program
     {
+        private const string StaticExtensionId = "pnfhjpjocddcolcnlginjoblglphhgpm";
+
+        private const string LaunchHtmlContent = @"<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=""utf-8"">
+  <title>Starting LetsMarkNow...</title>
+  <style>
+    body {
+      background: #090A0F;
+      color: #94a3b8;
+      font-family: -apple-system, BlinkMacSystemFont, ""Segoe UI"", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      user-select: none;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      border-top-color: #6366f1;
+      animation: spin 0.8s ease-in-out infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .text {
+      font-size: 14px;
+      letter-spacing: 0.05em;
+    }
+  </style>
+  <script>
+    setTimeout(function() {
+      window.location.replace(""chrome-extension://pnfhjpjocddcolcnlginjoblglphhgpm/app.html"");
+    }, 400);
+  </script>
+</head>
+<body>
+  <div class=""spinner""></div>
+  <div class=""text"">Launching LetsMarkNow...</div>
+</body>
+</html>";
+
         [STAThread]
         static void Main(string[] args)
         {
@@ -43,11 +92,33 @@ namespace LetsMarkNowLauncher
                     Directory.CreateDirectory(profileDir);
                 }
 
-                string browserExe = FindChromiumBrowser();
+                // Ensure launch.html exists in baseDir as a startup bridge to eliminate race condition
+                string launchHtmlPath = Path.Combine(baseDir, "launch.html");
+                try
+                {
+                    File.WriteAllText(launchHtmlPath, LaunchHtmlContent);
+                }
+                catch
+                {
+                    // If write fails, try Temp directory
+                    launchHtmlPath = Path.Combine(Path.GetTempPath(), "LetsMarkNow-launch.html");
+                    File.WriteAllText(launchHtmlPath, LaunchHtmlContent);
+                }
+
+                bool preferChrome = false;
+                foreach (string arg in args)
+                {
+                    if (string.Equals(arg, "--chrome", StringComparison.OrdinalIgnoreCase))
+                    {
+                        preferChrome = true;
+                    }
+                }
+
+                string browserExe = FindChromiumBrowser(preferChrome);
                 if (string.IsNullOrEmpty(browserExe))
                 {
                     MessageBox.Show(
-                        "Google Chrome or Microsoft Edge was not found on your system.\nPlease install Google Chrome to run LetsMarkNow.",
+                        "Microsoft Edge or Google Chrome was not found on your system.\nPlease install Google Chrome or Microsoft Edge to run LetsMarkNow.",
                         "Browser Not Found",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
@@ -55,14 +126,12 @@ namespace LetsMarkNowLauncher
                     return;
                 }
 
-                // Command-line flags to load extension, isolate user profile, and start in fullscreen.
-                // NOTE: We do not pass chrome-extension:// as a command-line argument because Chromium
-                // blocks command-line navigation to extension URLs before the extension is registered (ERR_BLOCKED_BY_CLIENT).
-                // The extension's newtab override and service worker natively launch app.html immediately.
+                // Launch browser with unpacked extension loaded into isolated profile in fullscreen
                 string launchArgs = string.Format(
-                    "--disable-extensions-except=\"{0}\" --load-extension=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check",
+                    "--load-extension=\"{0}\" --user-data-dir=\"{1}\" --start-fullscreen --no-first-run --no-default-browser-check \"{2}\"",
                     extensionDir,
-                    profileDir
+                    profileDir,
+                    launchHtmlPath
                 );
 
                 ProcessStartInfo startInfo = new ProcessStartInfo
@@ -86,16 +155,61 @@ namespace LetsMarkNowLauncher
             }
         }
 
-        private static string FindChromiumBrowser()
+        private static string FindChromiumBrowser(bool preferChrome)
         {
-            // 1. Check Google Chrome via Registry
+            if (preferChrome)
+            {
+                string chrome = GetChromePath();
+                if (!string.IsNullOrEmpty(chrome)) return chrome;
+                string edge = GetEdgePath();
+                if (!string.IsNullOrEmpty(edge)) return edge;
+            }
+            else
+            {
+                // Edge natively supports --load-extension on Windows without branded Chrome restrictions
+                string edge = GetEdgePath();
+                if (!string.IsNullOrEmpty(edge)) return edge;
+                string chrome = GetChromePath();
+                if (!string.IsNullOrEmpty(chrome)) return chrome;
+            }
+
+            return null;
+        }
+
+        private static string GetEdgePath()
+        {
+            string edgePath = GetAppPathFromRegistry("msedge.exe");
+            if (!string.IsNullOrEmpty(edgePath) && File.Exists(edgePath))
+            {
+                return edgePath;
+            }
+
+            string[] edgePaths = new string[]
+            {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Microsoft\Edge\Application\msedge.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Microsoft\Edge\Application\msedge.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Microsoft\Edge\Application\msedge.exe")
+            };
+
+            foreach (string path in edgePaths)
+            {
+                if (File.Exists(path))
+                {
+                    return path;
+                }
+            }
+
+            return null;
+        }
+
+        private static string GetChromePath()
+        {
             string chromePath = GetAppPathFromRegistry("chrome.exe");
             if (!string.IsNullOrEmpty(chromePath) && File.Exists(chromePath))
             {
                 return chromePath;
             }
 
-            // 2. Check Google Chrome via standard file paths
             string[] chromePaths = new string[]
             {
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Google\Chrome\Application\chrome.exe"),
@@ -104,28 +218,6 @@ namespace LetsMarkNowLauncher
             };
 
             foreach (string path in chromePaths)
-            {
-                if (File.Exists(path))
-                {
-                    return path;
-                }
-            }
-
-            // 3. Fallback: Check Microsoft Edge via Registry
-            string edgePath = GetAppPathFromRegistry("msedge.exe");
-            if (!string.IsNullOrEmpty(edgePath) && File.Exists(edgePath))
-            {
-                return edgePath;
-            }
-
-            // 4. Fallback: Check Microsoft Edge via standard file paths
-            string[] edgePaths = new string[]
-            {
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"Microsoft\Edge\Application\msedge.exe"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"Microsoft\Edge\Application\msedge.exe")
-            };
-
-            foreach (string path in edgePaths)
             {
                 if (File.Exists(path))
                 {

@@ -81,6 +81,7 @@ try {
 
     Copy-Item $launcherOut (Join-Path $portableStageDir "LetsMarkNow.exe")
     Copy-Item $iconPath (Join-Path $portableStageDir "favicon.ico")
+    Copy-Item (Join-Path $repoRoot "installer\launcher\launch.html") (Join-Path $portableStageDir "launch.html")
     Copy-Item (Join-Path $repoRoot "uninstall.ps1") (Join-Path $portableStageDir "uninstall.ps1")
     Copy-Item -Recurse (Join-Path $repoRoot "dist\extension") (Join-Path $portableStageDir "extension")
 

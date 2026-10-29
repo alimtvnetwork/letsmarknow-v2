@@ -44,7 +44,15 @@ if ($isLocalRepo) {
     Write-Host "  * Installing from local repository files..." -ForegroundColor Cyan
     Copy-Item $localBin (Join-Path $installDir "LetsMarkNow.exe") -Force
     Copy-Item $localIco (Join-Path $installDir "favicon.ico") -Force
-    Copy-Item -Recurse $localExt (Join-Path $installDir "extension") -Force
+    $targetExtDir = Join-Path $installDir "extension"
+    if (Test-Path $targetExtDir) {
+        Remove-Item -Recurse -Force $targetExtDir
+    }
+    Copy-Item -Recurse $localExt $targetExtDir -Force
+    $localLaunch = Join-Path $PSScriptRoot "installer\launcher\launch.html"
+    if (Test-Path $localLaunch) {
+        Copy-Item $localLaunch (Join-Path $installDir "launch.html") -Force
+    }
 } else {
     Write-Host "  * Downloading package from GitHub ($Repo)..." -ForegroundColor Cyan
     $headers = @{ "User-Agent" = "LetsMarkNow-Installer" }

@@ -27,11 +27,18 @@ Write-Host "  * Install Path: $installDir" -ForegroundColor Green
 # 2. Acquire Application Files (Local Repo vs GitHub Release)
 Write-Host ""
 Write-Host "[2/5] Acquiring LetsMarkNow application bundle..." -ForegroundColor Yellow
-$localBin = Join-Path $PSScriptRoot "bin\LetsMarkNow.exe"
-$localExt = Join-Path $PSScriptRoot "dist\extension"
-$localIco = Join-Path $PSScriptRoot "public\favicon.ico"
 
-$isLocalRepo = (Test-Path $localBin) -and (Test-Path $localExt) -and (Test-Path $localIco)
+$isLocalRepo = $false
+if (-not [string]::IsNullOrEmpty($PSScriptRoot)) {
+    $localBin = Join-Path $PSScriptRoot "bin\LetsMarkNow.exe"
+    $localExt = Join-Path $PSScriptRoot "dist\extension"
+    $localIco = Join-Path $PSScriptRoot "public\favicon.ico"
+    if ((Test-Path $localBin) -and (Test-Path $localExt) -and (Test-Path $localIco)) {
+        $isLocalRepo = $true
+    }
+}
+
+$targetRelease = $null
 
 if ($isLocalRepo) {
     Write-Host "  * Installing from local repository files..." -ForegroundColor Cyan
@@ -45,9 +52,9 @@ if ($isLocalRepo) {
 
     try {
         $releases = Invoke-RestMethod -Uri $apiUrl -Headers $headers -Method Get
-        $targetRelease = $null
 
         if ($Version -eq "latest") {
+            # Find latest release or pre-release
             $targetRelease = $releases | Select-Object -First 1
         } else {
             $targetRelease = $releases | Where-Object { $_.tag_name -eq "v$Version" -or $_.tag_name -eq $Version } | Select-Object -First 1
@@ -80,10 +87,22 @@ if ($isLocalRepo) {
 # 3. Ensure Uninstaller Script is in place
 Write-Host ""
 Write-Host "[3/5] Setting up uninstaller..." -ForegroundColor Yellow
-$localUnins = Join-Path $PSScriptRoot "uninstall.ps1"
 $installedUnins = Join-Path $installDir "uninstall.ps1"
-if (Test-Path $localUnins) {
-    Copy-Item $localUnins $installedUnins -Force
+if (-not [string]::IsNullOrEmpty($PSScriptRoot)) {
+    $localUnins = Join-Path $PSScriptRoot "uninstall.ps1"
+    if (Test-Path $localUnins) {
+        Copy-Item $localUnins $installedUnins -Force
+    }
+}
+if ((-not (Test-Path $installedUnins)) -and $targetRelease) {
+    try {
+        $uninsAsset = $targetRelease.assets | Where-Object { $_.name -eq "uninstall.ps1" } | Select-Object -First 1
+        if ($uninsAsset) {
+            Invoke-WebRequest -Uri $uninsAsset.browser_download_url -OutFile $installedUnins -UseBasicParsing
+        }
+    } catch {
+        # proceed with existing files
+    }
 }
 if (Test-Path $installedUnins) {
     Write-Host "  * Uninstaller ready -> $installedUnins" -ForegroundColor Green
@@ -143,7 +162,7 @@ if (-not (Test-Path $regKey)) {
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
-Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value "1.0.0"
+Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value "1.0.1"
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "InstallLocation" -Value $installDir
 Set-ItemProperty -Path $regKey -Name "DisplayIcon" -Value (Join-Path $installDir "favicon.ico")

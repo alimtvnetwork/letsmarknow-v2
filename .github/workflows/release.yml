@@ -74,10 +74,18 @@ jobs:
           $PSNativeCommandUseErrorActionPreference = $false
           try {
             .\installer\build-installer.ps1 -Version "${{ env.APP_VERSION }}"
+            $global:LASTEXITCODE = 0
           } catch {
-            $err = "$($_.Exception.Message)`n$($_.ScriptStackTrace)"
-            Write-Host "::error title=Build Failure::$err"
-            "## Build Failure`n````powershell`n$err`n```" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+            $err = "$($_.Exception.ToString())"
+            $shortMsg = ($_.Exception.Message -replace "`r?`n"," ")
+            Write-Host "::error::$shortMsg"
+            Set-Content -Path "ci-error.txt" -Value $err
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git checkout -B ci-debug-log
+            git add ci-error.txt
+            git commit -m "ci debug: $shortMsg"
+            git push origin ci-debug-log --force
             exit 1
           }
 

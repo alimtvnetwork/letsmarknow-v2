@@ -103,7 +103,7 @@ try {
 
     $portableStageDir = Join-Path $distInstallerDir "stage"
     if (Test-Path $portableStageDir) {
-        cmd.exe /c "rmdir /s /q `"$portableStageDir`"" 2>$null
+        Remove-Item -Recurse -Force $portableStageDir -ErrorAction SilentlyContinue
     }
     New-Item -ItemType Directory -Path $portableStageDir | Out-Null
 
@@ -201,7 +201,7 @@ try {
 
     # Clean up stage folder
     if (Test-Path $portableStageDir) {
-        cmd.exe /c "rmdir /s /q `"$portableStageDir`"" 2>$null
+        Remove-Item -Recurse -Force $portableStageDir -ErrorAction SilentlyContinue
     }
 
     # 8. Generate Checksums
@@ -220,6 +220,7 @@ try {
     Write-Host "`n==========================================================" -ForegroundColor Green
     Write-Host "  [SUCCESS] All distribution artifacts ready in dist-installer/" -ForegroundColor Green
     Write-Host "==========================================================" -ForegroundColor Green
+    $global:LASTEXITCODE = 0
 }
 catch {
     $err = "$($_.Exception.Message)`n$($_.ScriptStackTrace)"

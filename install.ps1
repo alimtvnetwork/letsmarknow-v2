@@ -122,10 +122,11 @@ if ($isLocalRepo) {
     $downloadSuccess = $false
 
     # Strategy 1: Direct CDN Asset Download (bypasses GitHub REST API rate limits completely)
-    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.9" }
+    $versionTag = if ($Version -and $Version -ne "latest") { $Version -replace '^v','' } else { "1.0.10" }
     $directUrls = @(
         "https://github.com/$Repo/releases/download/v$versionTag/LetsMarkNow-Portable-v$versionTag.zip",
         "https://github.com/$Repo/releases/download/$versionTag/LetsMarkNow-Portable-$versionTag.zip",
+        "https://github.com/$Repo/releases/download/v1.0.9/LetsMarkNow-Portable-v1.0.9.zip",
         "https://github.com/$Repo/releases/download/v1.0.8/LetsMarkNow-Portable-v1.0.8.zip",
         "https://github.com/$Repo/releases/download/v1.0.7/LetsMarkNow-Portable-v1.0.7.zip"
     )
@@ -262,7 +263,7 @@ if (-not (Test-Path $regKey)) {
     New-Item -Path $regKey -Force | Out-Null
 }
 $uninsCommand = 'powershell.exe -ExecutionPolicy Bypass -File ' + [char]34 + $uninsFilePath + [char]34
-$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.9" }
+$installedVersion = if ($targetRelease -and $targetRelease.tag_name) { $targetRelease.tag_name -replace '^v','' } elseif ($Version -ne "latest") { $Version -replace '^v','' } else { "1.0.10" }
 Set-ItemProperty -Path $regKey -Name "DisplayName" -Value "LetsMarkNow"
 Set-ItemProperty -Path $regKey -Name "DisplayVersion" -Value $installedVersion
 Set-ItemProperty -Path $regKey -Name "Publisher" -Value "LetsMarkNow"

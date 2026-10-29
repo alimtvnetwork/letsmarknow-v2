@@ -65,14 +65,21 @@ jobs:
           choco install innosetup --no-progress
           $innoDir = "${env:ProgramFiles(x86)}\Inno Setup 6"
           if (Test-Path $innoDir) {
-            $innoDir | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            [System.IO.File]::AppendAllText($env:GITHUB_PATH, "$innoDir`n")
           }
 
       - name: Build Extension, Launcher & Inno Setup Installer
         shell: pwsh
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
-          .\installer\build-installer.ps1 -Version "${{ env.APP_VERSION }}"
+          try {
+            .\installer\build-installer.ps1 -Version "${{ env.APP_VERSION }}"
+          } catch {
+            $err = "$($_.Exception.Message)`n$($_.ScriptStackTrace)"
+            Write-Host "::error title=Build Failure::$err"
+            "## Build Failure`n````powershell`n$err`n```" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+            exit 1
+          }
 
       - name: Verify Distributable Artifacts
         shell: pwsh

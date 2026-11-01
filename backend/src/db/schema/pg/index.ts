@@ -14,3 +14,4 @@ export * from "./billing.js";
 export * from "./idempotency.js";
 export * from "./jobs.js";
 export * from "./flags.js";
+export * from "./bugSessions.js";

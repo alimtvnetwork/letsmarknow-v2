@@ -32,6 +32,7 @@ import { jobRoutes } from "./routes/jobs.js";
 import { flagRoutes } from "./routes/flags.js";
 import { billingRoutes } from "./routes/billing.js";
 import { nextQueueRoutes } from "./routes/nextQueue.js";
+import { bugReportRoutes } from "./routes/bugReports.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -213,6 +214,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(flagRoutes);
   await app.register(billingRoutes);
   await app.register(nextQueueRoutes);
+  await app.register(bugReportRoutes);
 
   return app;
 }

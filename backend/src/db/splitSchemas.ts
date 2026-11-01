@@ -41,6 +41,8 @@ export const TABLE_TO_DOMAIN: Record<string, DbDomain> = {
   jobs: "history",
   idempotency_keys: "history",
   feature_flags: "history",
+  bug_sessions: "history",
+  bug_screenshots: "history",
 };
 
 export const SPLIT_DDL: Record<DbDomain, string> = {
@@ -387,5 +389,39 @@ CREATE TABLE IF NOT EXISTS feature_flags (
   created_at INTEGER NOT NULL,
   updated_at INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS bug_sessions (
+  id TEXT PRIMARY KEY,
+  account_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL,
+  description TEXT,
+  expected_behavior TEXT,
+  actual_behavior TEXT,
+  initial_route TEXT NOT NULL,
+  final_route TEXT,
+  duration_ms INTEGER,
+  events_json TEXT DEFAULT '[]' NOT NULL,
+  event_count INTEGER DEFAULT 0 NOT NULL,
+  screenshot_count INTEGER DEFAULT 0 NOT NULL,
+  error_count INTEGER DEFAULT 0 NOT NULL,
+  created_at INTEGER NOT NULL,
+  updated_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS bug_sessions_account_id_idx ON bug_sessions(account_id);
+CREATE INDEX IF NOT EXISTS bug_sessions_account_created_idx ON bug_sessions(account_id, created_at);
+
+CREATE TABLE IF NOT EXISTS bug_screenshots (
+  id TEXT PRIMARY KEY,
+  session_id TEXT NOT NULL REFERENCES bug_sessions(id) ON DELETE CASCADE,
+  seq_number INTEGER,
+  title TEXT,
+  data_url TEXT NOT NULL,
+  source TEXT,
+  created_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS bug_screenshots_session_id_idx ON bug_screenshots(session_id);
 `,
 };

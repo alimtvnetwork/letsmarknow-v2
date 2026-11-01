@@ -31,3 +31,5 @@ export const subscriptions = activeSchema.subscriptions;
 export const idempotencyKeys = activeSchema.idempotencyKeys;
 export const jobs = activeSchema.jobs;
 export const featureFlags = activeSchema.featureFlags;
+export const bugSessions = activeSchema.bugSessions;
+export const bugScreenshots = activeSchema.bugScreenshots;

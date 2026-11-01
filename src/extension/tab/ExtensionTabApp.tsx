@@ -167,6 +167,8 @@ import { parseExtensionTabRoute, type ExtensionTabRoute } from "../lib/extension
 import { WorkspaceSettingsView } from "../components/WorkspaceSettingsView";
 import { OpenTabsList } from "../components/OpenTabsList";
 import { SaveSessionBar } from "../components/SaveSessionBar";
+import { ActivityRecorderRoot } from "@/components/recorder/ActivityRecorderRoot";
+import { RecorderLauncherButton } from "@/components/recorder/RecorderLauncherButton";
 import { spaceToMarkdown, copyMarkdownToClipboard } from "@/lib/markdownExport";
 
 export function ExtensionTabApp() {
@@ -1344,6 +1346,9 @@ export function ExtensionTabApp() {
       data-testid="extension-tab-app"
       className="flex h-screen w-screen overflow-hidden bg-background text-foreground antialiased selection:bg-primary/20 font-sans"
     >
+      {/* Bug recorder: global overlays (HUD, export/previous-bugs modals, click animation) */}
+      <ActivityRecorderRoot />
+
       {/* Mobile backdrop */}
       {isSidebarOpen && (
         <div
@@ -1791,6 +1796,11 @@ export function ExtensionTabApp() {
               )}
             </button>
           </div>
+        </div>
+
+        {/* Bug Recorder Launcher — persistent on every view */}
+        <div className="border-t border-border/80 px-3 py-2 [&>div]:flex-wrap">
+          <RecorderLauncherButton />
         </div>
 
         {/* User Profile Footer */}
